@@ -31,6 +31,13 @@ class WorldState:
                 f"Unknown water body: {normalized_name!r}."
             ) from error
 
+    def list_water_bodies(self) -> tuple[WaterBodyState, ...]:
+        """Return every water body ordered by name."""
+        return tuple(
+            self._water_bodies[name]
+            for name in sorted(self._water_bodies)
+        )
+
     def handle_event(self, event: Event) -> None:
         """Apply one supported event to the current world state."""
         event_id = str(event.event_id)
