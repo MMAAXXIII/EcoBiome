@@ -7,6 +7,7 @@ from ecobiome.reasoning.rules.engine import (
 )
 from ecobiome.reasoning.rules.hardware import (
     FrozenSensorRule,
+    PlausibleRangeRule,
     StaleObservationRule,
 )
 from ecobiome.reasoning.rules.rule import (
@@ -16,6 +17,7 @@ from ecobiome.reasoning.rules.rule import (
 
 __all__ = [
     "FrozenSensorRule",
+    "PlausibleRangeRule",
     "RuleDomain",
     "RuleEngine",
     "RuleExecutionReport",
