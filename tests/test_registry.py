@@ -7,28 +7,50 @@ from ecobiome.knowledge import (
 )
 
 
-def test_registry_accepts_relation() -> None:
+def make_registry() -> KnowledgeRegistry:
     registry = KnowledgeRegistry()
 
     registry.add_variable(
         ScientificVariable(
             identifier="physics.water_volume",
-            name="Water volume",
-            description="Volume of water",
+            name="Water Volume",
+            description="Volume of water.",
         )
     )
 
-    relation = ScientificRelation(
-        identifier="physics.water_volume.increases_thermal_inertia",
-        source="physics.water_volume",
-        target="physics.thermal_inertia",
-        effect="increases",
-        strength="strong",
-        confidence="high",
-        explanation="Volume increases thermal inertia.",
+    registry.add_relation(
+        ScientificRelation(
+            identifier="physics.water_volume.increases_thermal_inertia",
+            source="physics.water_volume",
+            target="physics.thermal_inertia",
+            effect="increases",
+            strength="strong",
+            confidence="high",
+            explanation="Volume increases thermal inertia.",
+        )
     )
 
-    registry.add_relation(relation)
+    return registry
 
-    assert len(registry.relations) == 1
-    assert registry.relations[0].source == "physics.water_volume"
+
+def test_find_relations_from_variable() -> None:
+    registry = make_registry()
+
+    relations = registry.relations_from(
+        "physics.water_volume"
+    )
+
+    assert len(relations) == 1
+
+    assert (
+        relations[0].target
+        == "physics.thermal_inertia"
+    )
+
+
+def test_unknown_variable_has_no_relations() -> None:
+    registry = make_registry()
+
+    assert registry.relations_from(
+        "physics.unknown"
+    ) == []
