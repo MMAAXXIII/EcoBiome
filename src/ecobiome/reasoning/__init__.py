@@ -21,6 +21,11 @@ from ecobiome.reasoning.hypothesis import (
     Hypothesis,
     HypothesisStatus,
 )
+from ecobiome.reasoning.inference_engine import (
+    InferenceEngine,
+    InferenceResult,
+    InferenceThresholds,
+)
 
 __all__ = [
     "CausalChainEngine",
@@ -34,4 +39,7 @@ __all__ = [
     "FindingSeverity",
     "Hypothesis",
     "HypothesisStatus",
+    "InferenceEngine",
+    "InferenceResult",
+    "InferenceThresholds",
 ]
