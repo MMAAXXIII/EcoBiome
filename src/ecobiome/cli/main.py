@@ -4,6 +4,10 @@ import argparse
 from collections.abc import Sequence
 from pathlib import Path
 
+from ecobiome.cli.water_level import (
+    add_water_level_parser,
+    water_level_command,
+)
 from ecobiome.knowledge.directory_loader import load_knowledge_directory
 from ecobiome.knowledge_acquisition.cli import main as acquisition_main
 from ecobiome.reasoning import CausalChainEngine
@@ -20,36 +24,27 @@ def build_parser() -> argparse.ArgumentParser:
 
     explain_parser = subparsers.add_parser(
         "explain",
-        help="Explain the upstream causal chain of a scientific variable.",
+        help="Explain the upstream causal chain of a variable.",
     )
-
-    explain_parser.add_argument(
-        "target",
-        help=(
-            "Stable identifier of the target variable, for example "
-            "physics.temperature_fluctuation."
-        ),
-    )
-
+    explain_parser.add_argument("target")
     explain_parser.add_argument(
         "--knowledge-base",
         type=Path,
         default=Path("src/ecobiome/knowledge/base"),
-        help="Path to the EcoBiome YAML knowledge base.",
     )
-
     explain_parser.add_argument(
         "--maximum-depth",
         type=int,
         default=8,
-        help="Maximum number of upstream causal levels.",
     )
+
+    add_water_level_parser(subparsers)
 
     return parser
 
 
 def explain_command(args: argparse.Namespace) -> int:
-    """Load scientific knowledge and print one causal explanation."""
+    """Load scientific knowledge and print a causal explanation."""
     registry = load_knowledge_directory(args.knowledge_base)
     engine = CausalChainEngine(registry)
 
@@ -81,6 +76,9 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "explain":
         return explain_command(args)
+
+    if args.command == "water-level":
+        return water_level_command(args)
 
     parser.print_help()
     return 0
