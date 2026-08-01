@@ -2,7 +2,13 @@
 
 import argparse
 from collections.abc import Sequence
+from pathlib import Path
 
+from ecobiome.world.events import (
+    WaterLevelEventType,
+    append_event_jsonl,
+    create_water_level_event,
+)
 from ecobiome.world.water_geometry import (
     CylindricalGeometry,
     RectangularGeometry,
@@ -18,7 +24,7 @@ def add_water_level_parser(
     """Add the water-level command to the main parser."""
     parser = subparsers.add_parser(
         "water-level",
-        help="Calculate the effects of lowering a water level.",
+        help="Calculate and record the effects of lowering a water level.",
     )
 
     parser.add_argument(
@@ -30,23 +36,29 @@ def add_water_level_parser(
         "--shape",
         required=True,
         choices=("rectangular", "cylindrical", "spherical"),
-        help="Geometry of the body of water.",
     )
     parser.add_argument("--length", type=float)
     parser.add_argument("--width", type=float)
     parser.add_argument("--radius", type=float)
     parser.add_argument("--container-height", type=float)
+    parser.add_argument("--current-height", required=True, type=float)
+    parser.add_argument("--remove", required=True, type=float)
     parser.add_argument(
-        "--current-height",
-        required=True,
-        type=float,
-        help="Current water height in meters.",
+        "--cause",
+        choices=[event_type.value for event_type in WaterLevelEventType],
+        default=WaterLevelEventType.USER_REMOVAL.value,
+        help="Cause of the water-level reduction.",
     )
     parser.add_argument(
-        "--remove",
-        required=True,
-        type=float,
-        help="Water-height reduction in meters.",
+        "--note",
+        default="",
+        help="Optional observation associated with the event.",
+    )
+    parser.add_argument(
+        "--event-log",
+        type=Path,
+        default=None,
+        help="Optional JSONL history file receiving the event.",
     )
 
 
@@ -54,7 +66,7 @@ def _required_dimension(
     value: float | None,
     option_name: str,
 ) -> float:
-    """Require one geometry-specific command-line dimension."""
+    """Require one geometry-specific dimension."""
     if value is None:
         raise ValueError(
             f"{option_name} is required for the selected shape."
@@ -64,7 +76,7 @@ def _required_dimension(
 
 
 def build_geometry(args: argparse.Namespace) -> WaterGeometry:
-    """Construct the requested geometry from command-line arguments."""
+    """Construct the requested geometry."""
     if args.shape == "rectangular":
         return RectangularGeometry(
             length_m=_required_dimension(args.length, "--length"),
@@ -93,7 +105,7 @@ def build_geometry(args: argparse.Namespace) -> WaterGeometry:
 
 
 def water_level_command(args: argparse.Namespace) -> int:
-    """Calculate and display one water-level reduction."""
+    """Calculate, display, and optionally record a level reduction."""
     geometry = build_geometry(args)
 
     previous_state = WaterBodyState(
@@ -104,15 +116,26 @@ def water_level_command(args: argparse.Namespace) -> int:
 
     updated_state, result = previous_state.remove_height(args.remove)
 
+    event = create_water_level_event(
+        water_body_name=previous_state.name,
+        event_type=WaterLevelEventType(args.cause),
+        change=result,
+        note=args.note,
+    )
+
+    if args.event_log is not None:
+        append_event_jsonl(event, args.event_log)
+
     print("=" * 64)
     print("EcoBiome — Changement du niveau d'eau")
     print("=" * 64)
     print(f"Plan d'eau             : {previous_state.name}")
     print(f"Forme                  : {args.shape}")
+    print(f"Cause                  : {event.event_type.value}")
+    print(f"Date UTC               : {event.occurred_at.isoformat()}")
+    print(f"Identifiant événement  : {event.event_id}")
     print(f"Ancien niveau          : {result.previous_height_m:.3f} m")
     print(f"Nouveau niveau         : {updated_state.water_height_m:.3f} m")
-    print(f"Hauteur réellement ôtée: {result.removed_height_m:.3f} m")
-    print(f"Volume initial         : {result.previous_volume_m3 * 1000:.2f} L")
     print(f"Volume retiré          : {result.removed_volume_liters:.2f} L")
     print(f"Volume restant         : {updated_state.volume_liters:.2f} L")
     print(
@@ -124,12 +147,11 @@ def water_level_command(args: argparse.Namespace) -> int:
         f"{updated_state.wetted_surface_area_m2:.4f} m²"
     )
 
-    ratio = result.surface_to_volume_ratio
+    if args.note:
+        print(f"Observation            : {args.note}")
 
-    if ratio is None:
-        print("Rapport surface/volume : non défini (plan d'eau vide)")
-    else:
-        print(f"Rapport surface/volume : {ratio:.4f} m⁻¹")
+    if args.event_log is not None:
+        print(f"Historique             : {args.event_log}")
 
     return 0
 
@@ -144,3 +166,4 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(arguments)
 
     return water_level_command(args)
+
