@@ -10,6 +10,7 @@ from ecobiome.core.observation.observation import Observation
 from ecobiome.reasoning.diagnostic_pipeline import (
     DiagnosticInvestigationPipeline,
 )
+from ecobiome.reasoning.results.diagnostic_result import DiagnosticResult
 from ecobiome.reasoning.session.models import (
     DiagnosticSessionMetadata,
     DiagnosticSessionResult,
@@ -62,7 +63,7 @@ class DiagnosticSession:
         session_id: UUID | None = None,
         tags: tuple[str, ...] = (),
         attributes: tuple[tuple[str, str], ...] = (),
-    ) -> DiagnosticSessionResult:
+    ) -> DiagnosticResult:
         """Run the complete pipeline and preserve session metadata."""
         started_at = self._clock()
 
@@ -102,9 +103,13 @@ class DiagnosticSession:
             finished_at - started_at
         ).total_seconds()
 
-        return DiagnosticSessionResult(
+        session_result = DiagnosticSessionResult(
             metadata=metadata,
             finished_at=finished_at,
             duration_seconds=duration_seconds,
             investigation=investigation,
+        )
+
+        return DiagnosticResult.from_session_result(
+            session_result
         )
