@@ -7,7 +7,9 @@ authors = [
     { name = "MMAAXXIII", email = "160916593+MMAAXXIII@users.noreply.github.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "pyyaml>=6.0.3",
+]
 
 [build-system]
 requires = ["uv_build>=0.12.1,<0.13.0"]
@@ -18,4 +20,5 @@ dev = [
     "mypy>=2.3.0",
     "pytest>=9.1.1",
     "ruff>=0.16.1",
+    "types-pyyaml>=6.0.12.20260724",
 ]
