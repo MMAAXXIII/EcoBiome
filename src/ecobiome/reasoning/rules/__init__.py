@@ -5,6 +5,9 @@ from ecobiome.reasoning.rules.engine import (
     RuleExecutionReport,
     RuleFailure,
 )
+from ecobiome.reasoning.rules.hardware import (
+    StaleObservationRule,
+)
 from ecobiome.reasoning.rules.rule import (
     RuleDomain,
     ScientificRule,
@@ -16,4 +19,5 @@ __all__ = [
     "RuleExecutionReport",
     "RuleFailure",
     "ScientificRule",
+    "StaleObservationRule",
 ]
