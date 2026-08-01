@@ -1,52 +1,21 @@
-"""In-memory registry for scientific knowledge."""
+"""Scientific knowledge registry."""
 
+from ecobiome.knowledge.relation import ScientificRelation
 from ecobiome.knowledge.variable import ScientificVariable
 
 
 class KnowledgeRegistry:
-    """Store validated scientific knowledge in memory."""
+    """Central registry for scientific knowledge."""
 
     def __init__(self) -> None:
-        self._variables: dict[str, ScientificVariable] = {}
+        self.variables: dict[str, ScientificVariable] = {}
+        self.relations: list[ScientificRelation] = []
 
     def add_variable(self, variable: ScientificVariable) -> None:
-        """Register a variable while preventing duplicate identifiers."""
-        if variable.identifier in self._variables:
-            raise ValueError(
-                f"Scientific variable {variable.identifier!r} "
-                "is already registered."
-            )
+        self.variables[variable.identifier] = variable
 
-        self._variables[variable.identifier] = variable
+    def add_relation(self, relation: ScientificRelation) -> None:
+        self.relations.append(relation)
 
-    def get_variable(self, identifier: str) -> ScientificVariable:
-        """Return one variable by its stable identifier."""
-        try:
-            return self._variables[identifier]
-        except KeyError as error:
-            raise KeyError(
-                f"Unknown scientific variable: {identifier!r}."
-            ) from error
-
-    def list_variables(self) -> tuple[ScientificVariable, ...]:
-        """Return all variables ordered by identifier."""
-        return tuple(
-            self._variables[identifier]
-            for identifier in sorted(self._variables)
-        )
-
-    def find_by_category(
-        self,
-        category: str,
-    ) -> tuple[ScientificVariable, ...]:
-        """Return variables belonging to one category."""
-        return tuple(
-            variable
-            for variable in self.list_variables()
-            if variable.category == category
-        )
-
-    @property
-    def variable_count(self) -> int:
-        """Return the number of registered variables."""
-        return len(self._variables)
+    def get_variable(self, identifier: str) -> ScientificVariable | None:
+        return self.variables.get(identifier)
