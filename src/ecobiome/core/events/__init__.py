@@ -10,6 +10,12 @@ from ecobiome.core.events.event_store import (
     EventStore,
     InMemoryEventStore,
 )
+from ecobiome.core.events.serializer import (
+    JsonValue,
+    event_to_json,
+    event_to_record,
+    event_type_name,
+)
 
 __all__ = [
     "Event",
@@ -17,6 +23,10 @@ __all__ = [
     "EventHandler",
     "EventStore",
     "InMemoryEventStore",
+    "JsonValue",
     "Subscription",
     "WaterRemovedEvent",
+    "event_to_json",
+    "event_to_record",
+    "event_type_name",
 ]
