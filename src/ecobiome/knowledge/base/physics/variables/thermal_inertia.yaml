@@ -1,0 +1,7 @@
+id: physics.thermal_inertia
+name: Thermal Inertia
+description: >
+  Capacity of a physical system to resist rapid temperature changes.
+unit: null
+display_unit: null
+category: physics
