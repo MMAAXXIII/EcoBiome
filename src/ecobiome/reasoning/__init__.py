@@ -9,6 +9,10 @@ from ecobiome.reasoning.explanation import (
     ExplanationEngine,
     ExplanationResult,
 )
+from ecobiome.reasoning.hypothesis import (
+    Hypothesis,
+    HypothesisStatus,
+)
 
 __all__ = [
     "CausalChainEngine",
@@ -16,4 +20,6 @@ __all__ = [
     "CausalStep",
     "ExplanationEngine",
     "ExplanationResult",
+    "Hypothesis",
+    "HypothesisStatus",
 ]
