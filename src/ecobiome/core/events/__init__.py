@@ -6,11 +6,17 @@ from ecobiome.core.events.event_bus import (
     EventHandler,
     Subscription,
 )
+from ecobiome.core.events.event_store import (
+    EventStore,
+    InMemoryEventStore,
+)
 
 __all__ = [
     "Event",
     "EventBus",
     "EventHandler",
+    "EventStore",
+    "InMemoryEventStore",
     "Subscription",
     "WaterRemovedEvent",
 ]
