@@ -10,11 +10,15 @@ from ecobiome.reasoning.consistency.engine import (
     ConsistencyRule,
     ConsistencyRuleFailure,
 )
+from ecobiome.reasoning.consistency.evidence_bridge import (
+    ConsistencyEvidenceBridge,
+)
 
 __all__ = [
     "ConsistencyAssessment",
     "ConsistencyEngine",
     "ConsistencyEvaluationReport",
+    "ConsistencyEvidenceBridge",
     "ConsistencyRule",
     "ConsistencyRuleFailure",
     "ConsistencyStatus",

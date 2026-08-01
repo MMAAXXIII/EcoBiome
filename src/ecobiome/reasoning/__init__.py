@@ -9,6 +9,7 @@ from ecobiome.reasoning.consistency import (
     ConsistencyAssessment,
     ConsistencyEngine,
     ConsistencyEvaluationReport,
+    ConsistencyEvidenceBridge,
     ConsistencyRule,
     ConsistencyRuleFailure,
     ConsistencyStatus,
@@ -49,6 +50,7 @@ __all__ = [
     "ConsistencyAssessment",
     "ConsistencyEngine",
     "ConsistencyEvaluationReport",
+    "ConsistencyEvidenceBridge",
     "ConsistencyRule",
     "ConsistencyRuleFailure",
     "ConsistencyStatus",
@@ -69,4 +71,5 @@ __all__ = [
     "RuleFailure",
     "ScientificRule",
 ]
+
 
