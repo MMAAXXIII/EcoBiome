@@ -2,7 +2,7 @@
 
 import pytest
 
-from ecobiome.models import WaterBody, WaterBodyShape, WaterBodyType
+from ecobiome.world import WaterBody, WaterBodyShape, WaterBodyType
 
 
 def test_rectangular_volume_is_calculated() -> None:

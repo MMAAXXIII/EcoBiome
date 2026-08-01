@@ -6,7 +6,7 @@ from ecobiome.knowledge.loader import load_yaml
 def test_load_yaml() -> None:
     data = load_yaml(
         Path(
-            "src/ecobiome/knowledge_base/physics/variables/water_volume.yaml"
+            "src/ecobiome/knowledge/base/physics/variables/water_volume.yaml"
         )
     )
 

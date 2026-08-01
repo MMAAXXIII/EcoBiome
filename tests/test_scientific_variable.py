@@ -1,6 +1,6 @@
 """Tests for ScientificVariable."""
 
-from ecobiome.scientific.variable import ScientificVariable
+from ecobiome.knowledge.variable import ScientificVariable
 
 
 def test_create_scientific_variable() -> None:
