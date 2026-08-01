@@ -16,8 +16,10 @@ from ecobiome.reasoning.rules.rule import (
     RuleDomain,
     ScientificRule,
 )
+from ecobiome.reasoning.rules.vision import BlackFrameRule
 
 __all__ = [
+    "BlackFrameRule",
     "EvidenceRule",
     "FrozenSensorRule",
     "PlausibleRangeRule",
@@ -29,3 +31,4 @@ __all__ = [
     "ScientificRule",
     "StaleObservationRule",
 ]
+
