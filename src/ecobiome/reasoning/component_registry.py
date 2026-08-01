@@ -19,7 +19,10 @@ from ecobiome.reasoning.experiment.planner import (
 class IdentifiedComponent(Protocol):
     """Structural contract for components with an identifier."""
 
-    identifier: str
+    @property
+    def identifier(self) -> str:
+        """Return the component identifier."""
+        ...
 
 
 ComponentT = TypeVar(

@@ -14,7 +14,10 @@ from ecobiome.reasoning.consistency.consistency import (
 class ConsistencyRule(Protocol):
     """Rule capable of comparing multiple observations."""
 
-    identifier: str
+    @property
+    def identifier(self) -> str:
+        """Return the component identifier."""
+        ...
 
     def evaluate(
         self,

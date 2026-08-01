@@ -12,7 +12,10 @@ if TYPE_CHECKING:
 class QualityRule(Protocol):
     """Structurally describe an observation-quality rule."""
 
-    identifier: str
+    @property
+    def identifier(self) -> str:
+        """Return the component identifier."""
+        ...
 
     def assess(
         self,

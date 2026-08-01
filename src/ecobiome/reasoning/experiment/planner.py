@@ -11,7 +11,10 @@ from ecobiome.reasoning.experiment.experiment import Experiment
 class ExperimentPlanningRule(Protocol):
     """Rule capable of proposing experiments for hypotheses."""
 
-    identifier: str
+    @property
+    def identifier(self) -> str:
+        """Return the component identifier."""
+        ...
 
     def plan(
         self,

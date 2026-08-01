@@ -16,7 +16,10 @@ from ecobiome.reasoning.consistency import (
 class HypothesisGenerationRule(Protocol):
     """Rule capable of proposing explanations for an assessment."""
 
-    identifier: str
+    @property
+    def identifier(self) -> str:
+        """Return the component identifier."""
+        ...
 
     def generate(
         self,
