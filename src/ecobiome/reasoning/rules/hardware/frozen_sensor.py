@@ -4,8 +4,11 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from ecobiome.core.observation import (
+    DataQuality,
+    DiagnosticCode,
     Observation,
     ObservationStore,
+    QualityAssessment,
     ScientificMeasurement,
 )
 from ecobiome.reasoning.evidence import (
@@ -27,7 +30,7 @@ class FrozenSensorRule(ScientificRule):
     evidence_weight: float = 0.75
 
     def __post_init__(self) -> None:
-        """Validate rule metadata and detection parameters."""
+        """Validate metadata and detection parameters."""
         super().__post_init__()
 
         if self.minimum_observation_count < 2:
@@ -48,56 +51,50 @@ class FrozenSensorRule(ScientificRule):
                 "evidence_weight must be between 0 and 1."
             )
 
+    def assess(
+        self,
+        observation: Observation,
+    ) -> QualityAssessment:
+        """Assess whether the observation belongs to a frozen sequence."""
+        context = self._frozen_context(observation)
+
+        if context is None:
+            return QualityAssessment.valid(
+                observation.observation_id
+            )
+
+        count, duration_seconds, variation = context
+
+        return QualityAssessment(
+            observation_id=observation.observation_id,
+            quality=DataQuality.SUSPECT,
+            score=max(0.0, 1.0 - self.evidence_weight),
+            diagnostics=(DiagnosticCode.FROZEN_SENSOR,),
+            reasons=(
+                (
+                    f"Source {observation.source!r} returned {count} "
+                    f"nearly identical values over {duration_seconds:.1f} "
+                    f"seconds. Variation was {variation:.6g}, within "
+                    f"the tolerance of {self.tolerance:.6g}."
+                ),
+            ),
+        )
+
     def evaluate(
         self,
         observation: Observation,
     ) -> tuple[Evidence, ...]:
         """Generate contradictory evidence for a probably frozen sensor."""
-        current_value = self._numeric_value(
-            observation,
-            target_unit=None,
-        )
+        assessment = self.assess(observation)
 
-        if current_value is None:
+        if assessment.quality is DataQuality.VALID:
             return ()
 
         history = self._matching_history(observation)
-
-        observations = (
+        selected = (
             *history,
             observation,
-        )
-
-        if len(observations) < self.minimum_observation_count:
-            return ()
-
-        selected = observations[-self.minimum_observation_count :]
-        oldest = selected[0]
-        duration_seconds = (
-            observation.observed_at - oldest.observed_at
-        ).total_seconds()
-
-        if duration_seconds < self.minimum_frozen_duration_seconds:
-            return ()
-
-        target_unit = self._measurement_unit(observation)
-        values: list[float] = []
-
-        for item in selected:
-            value = self._numeric_value(
-                item,
-                target_unit=target_unit,
-            )
-
-            if value is None:
-                return ()
-
-            values.append(value)
-
-        variation = max(values) - min(values)
-
-        if variation > self.tolerance:
-            return ()
+        )[-self.minimum_observation_count :]
 
         quality_score = min(
             item.confidence
@@ -111,16 +108,58 @@ class FrozenSensorRule(ScientificRule):
                 relation=EvidenceRelation.CONTRADICTS,
                 weight=self.evidence_weight,
                 quality_score=quality_score,
-                explanation=(
-                    f"Source {observation.source!r} returned "
-                    f"{len(selected)} nearly identical values over "
-                    f"{duration_seconds:.1f} seconds. Observed variation "
-                    f"was {variation:.6g}, within the configured "
-                    f"tolerance of {self.tolerance:.6g}."
-                ),
+                explanation=assessment.reasons[0],
                 source_rule=self.identifier,
             ),
         )
+
+    def _frozen_context(
+        self,
+        observation: Observation,
+    ) -> tuple[int, float, float] | None:
+        """Return frozen-sequence details when detection succeeds."""
+        if self._numeric_value(
+            observation,
+            target_unit=None,
+        ) is None:
+            return None
+
+        observations = (
+            *self._matching_history(observation),
+            observation,
+        )
+
+        if len(observations) < self.minimum_observation_count:
+            return None
+
+        selected = observations[-self.minimum_observation_count :]
+        duration_seconds = (
+            observation.observed_at - selected[0].observed_at
+        ).total_seconds()
+
+        if duration_seconds < self.minimum_frozen_duration_seconds:
+            return None
+
+        target_unit = self._measurement_unit(observation)
+        values: list[float] = []
+
+        for item in selected:
+            value = self._numeric_value(
+                item,
+                target_unit=target_unit,
+            )
+
+            if value is None:
+                return None
+
+            values.append(value)
+
+        variation = max(values) - min(values)
+
+        if variation > self.tolerance:
+            return None
+
+        return len(selected), duration_seconds, variation
 
     def _matching_history(
         self,
@@ -150,7 +189,7 @@ class FrozenSensorRule(ScientificRule):
     def _measurement_unit(
         observation: Observation,
     ) -> str | None:
-        """Return the unit used by a quantitative measurement."""
+        """Return the unit of a quantitative measurement."""
         if isinstance(observation.value, ScientificMeasurement):
             return observation.value.quantity.unit
 
@@ -183,3 +222,4 @@ class FrozenSensorRule(ScientificRule):
             return quantity.value
 
         return None
+
