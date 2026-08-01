@@ -1,4 +1,4 @@
-﻿"""Scientific variable definitions."""
+"""Scientific variable definitions."""
 
 from dataclasses import dataclass
 

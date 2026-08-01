@@ -1,0 +1,9 @@
+id: physics.water_volume.increases_thermal_inertia
+source: physics.water_volume
+target: physics.thermal_inertia
+effect: increases
+strength: strong
+confidence: high
+explanation: >
+  A larger volume of water stores more thermal energy,
+  increasing thermal inertia and reducing temperature fluctuations.
