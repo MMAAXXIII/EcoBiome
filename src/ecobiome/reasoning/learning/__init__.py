@@ -8,6 +8,9 @@ from ecobiome.reasoning.learning.event import (
     LearningEvent,
     LearningOutcome,
 )
+from ecobiome.reasoning.learning.jsonl_store import (
+    JsonlLearningEventStore,
+)
 from ecobiome.reasoning.learning.store import (
     InMemoryLearningEventStore,
     LearningEventStore,
@@ -15,6 +18,7 @@ from ecobiome.reasoning.learning.store import (
 
 __all__ = [
     "InMemoryLearningEventStore",
+    "JsonlLearningEventStore",
     "LearningEngine",
     "LearningEvent",
     "LearningEventStore",
