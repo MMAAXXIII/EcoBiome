@@ -1,4 +1,4 @@
-"""Backward-compatible export of the neutral quality-rule contract."""
+"""Shared structural contracts used across EcoBiome subsystems."""
 
 from ecobiome.contracts.quality_rule import QualityRule
 

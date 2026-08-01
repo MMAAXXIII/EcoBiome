@@ -3,8 +3,8 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from ecobiome.core.observation import (
-    Observation,
+from ecobiome.core.observation.observation import Observation
+from ecobiome.core.observation.quality_engine import (
     ObservationQualityEngine,
     QualityEvaluationReport,
 )
@@ -64,7 +64,11 @@ class DiagnosticInvestigationReport:
     def succeeded(self) -> bool:
         """Return whether every pipeline stage completed without failure."""
         return (
-            self.consistency_report.succeeded
+            all(
+                report.succeeded
+                for report in self.quality_reports
+            )
+            and self.consistency_report.succeeded
             and not self.hypothesis_failures
             and not self.experiment_failures
         )

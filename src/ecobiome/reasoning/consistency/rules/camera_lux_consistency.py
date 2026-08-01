@@ -22,6 +22,7 @@ class CameraLuxConsistencyRule:
     maximum_black_luminance: float = 0.02
     maximum_dark_lux: float = 2.0
     minimum_daylight_lux: float = 20_000.0
+    maximum_time_delta_seconds: float = 5.0
     consistent_confidence: float = 0.95
     inconsistent_confidence: float = 0.98
 
@@ -54,6 +55,11 @@ class CameraLuxConsistencyRule:
             raise ValueError(
                 "minimum_daylight_lux must be greater than "
                 "maximum_dark_lux."
+            )
+
+        if self.maximum_time_delta_seconds <= 0:
+            raise ValueError(
+                "maximum_time_delta_seconds must be greater than zero."
             )
 
         for name, value in (
@@ -108,6 +114,27 @@ class CameraLuxConsistencyRule:
                 reason=(
                     "Camera luminance and ambient-light observations "
                     "are both required."
+                ),
+            )
+
+        time_delta_seconds = abs(
+            (
+                camera_observation.observed_at
+                - lux_observation.observed_at
+            ).total_seconds()
+        )
+
+        if time_delta_seconds > self.maximum_time_delta_seconds:
+            return ConsistencyAssessment(
+                status=ConsistencyStatus.INSUFFICIENT_DATA,
+                confidence=0.0,
+                involved_observations=involved_ids,
+                reason=(
+                    f"Camera and ambient-light observations differ "
+                    f"by {time_delta_seconds:.1f} seconds, exceeding "
+                    f"the allowed "
+                    f"{self.maximum_time_delta_seconds:.1f}-second "
+                    "synchronization window."
                 ),
             )
 

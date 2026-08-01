@@ -3,13 +3,13 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
 
+from ecobiome.contracts.quality_rule import QualityRule
 from ecobiome.core.observation.observation import Observation
 from ecobiome.core.observation.quality import (
     DataQuality,
     DiagnosticCode,
     QualityAssessment,
 )
-from ecobiome.reasoning.rules.quality_rule import QualityRule
 
 ObservationQualityRule = QualityRule
 
