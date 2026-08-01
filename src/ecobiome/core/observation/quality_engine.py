@@ -2,7 +2,6 @@
 
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Protocol
 
 from ecobiome.core.observation.observation import Observation
 from ecobiome.core.observation.quality import (
@@ -10,18 +9,10 @@ from ecobiome.core.observation.quality import (
     DiagnosticCode,
     QualityAssessment,
 )
+from ecobiome.reasoning.rules.quality_rule import QualityRule
 
+ObservationQualityRule = QualityRule
 
-class ObservationQualityRule(Protocol):
-    """Rule capable of assessing observation quality."""
-
-    identifier: str
-
-    def assess(
-        self,
-        observation: Observation,
-    ) -> QualityAssessment:
-        """Assess one observation."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -129,19 +120,25 @@ class ObservationQualityEngine:
 
     def __init__(
         self,
-        rules: Iterable[ObservationQualityRule] = (),
+        rules: Iterable[QualityRule] = (),
     ) -> None:
         self._rules = self._prepare_rules(rules)
 
     @staticmethod
     def _prepare_rules(
-        rules: Iterable[ObservationQualityRule],
-    ) -> tuple[ObservationQualityRule, ...]:
+        rules: Iterable[QualityRule],
+    ) -> tuple[QualityRule, ...]:
         """Validate unique quality-rule identifiers."""
         materialized = tuple(rules)
         identifiers: set[str] = set()
 
         for rule in materialized:
+            if not callable(getattr(rule, "assess", None)):
+                raise TypeError(
+                    f"Quality rule {rule.identifier!r} "
+                    "must implement assess()."
+                )
+
             if rule.identifier in identifiers:
                 raise ValueError(
                     "Duplicate quality-rule identifier: "
@@ -203,4 +200,5 @@ class ObservationQualityEngine:
             executed_rule_ids=tuple(executed_rule_ids),
             failures=tuple(failures),
         )
+
 

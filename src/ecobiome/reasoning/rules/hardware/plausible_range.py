@@ -10,7 +10,6 @@ from ecobiome.core.observation import (
     ScientificMeasurement,
 )
 from ecobiome.core.units import Measurement
-from ecobiome.reasoning.evidence import Evidence
 from ecobiome.reasoning.rules.rule import ScientificRule
 
 
@@ -114,14 +113,6 @@ class PlausibleRangeRule(ScientificRule):
             ),
         )
 
-    def evaluate(
-        self,
-        observation: Observation,
-    ) -> tuple[Evidence, ...]:
-        """Produce no inference evidence for this quality-only rule."""
-        self.assess(observation)
-        return ()
-
     @staticmethod
     def _extract_quantity(
         observation: Observation,
@@ -153,4 +144,5 @@ class PlausibleRangeRule(ScientificRule):
             )
 
         return None
+
 

@@ -1,11 +1,7 @@
-"""Base abstractions for extensible scientific rules."""
+"""Shared metadata for extensible EcoBiome rules."""
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import StrEnum
-
-from ecobiome.core.observation import Observation
-from ecobiome.reasoning.evidence import Evidence
 
 
 class RuleDomain(StrEnum):
@@ -23,8 +19,8 @@ class RuleDomain(StrEnum):
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
-class ScientificRule(ABC):
-    """Base class implemented by every scientific rule."""
+class ScientificRule:
+    """Shared metadata for every EcoBiome rule."""
 
     identifier: str
     name: str
@@ -58,10 +54,3 @@ class ScientificRule(ABC):
         object.__setattr__(self, "identifier", identifier)
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "description", description)
-
-    @abstractmethod
-    def evaluate(
-        self,
-        observation: Observation,
-    ) -> tuple[Evidence, ...]:
-        """Evaluate one observation and return generated evidence."""

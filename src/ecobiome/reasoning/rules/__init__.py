@@ -5,19 +5,23 @@ from ecobiome.reasoning.rules.engine import (
     RuleExecutionReport,
     RuleFailure,
 )
+from ecobiome.reasoning.rules.evidence_rule import EvidenceRule
 from ecobiome.reasoning.rules.hardware import (
     FrozenSensorRule,
     PlausibleRangeRule,
     StaleObservationRule,
 )
+from ecobiome.reasoning.rules.quality_rule import QualityRule
 from ecobiome.reasoning.rules.rule import (
     RuleDomain,
     ScientificRule,
 )
 
 __all__ = [
+    "EvidenceRule",
     "FrozenSensorRule",
     "PlausibleRangeRule",
+    "QualityRule",
     "RuleDomain",
     "RuleEngine",
     "RuleExecutionReport",

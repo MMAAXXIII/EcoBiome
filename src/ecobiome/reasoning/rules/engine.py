@@ -1,4 +1,4 @@
-"""Execution engine for independent scientific rules."""
+"""Execution engine for independent scientific evidence rules."""
 
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -6,10 +6,8 @@ from time import perf_counter
 
 from ecobiome.core.observation import Observation
 from ecobiome.reasoning.evidence import Evidence
-from ecobiome.reasoning.rules.rule import (
-    RuleDomain,
-    ScientificRule,
-)
+from ecobiome.reasoning.rules.evidence_rule import EvidenceRule
+from ecobiome.reasoning.rules.rule import RuleDomain
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,7 +21,7 @@ class RuleFailure:
 
 @dataclass(frozen=True, slots=True)
 class RuleExecutionReport:
-    """Summarize one complete rule-engine evaluation."""
+    """Summarize one complete evidence-rule evaluation."""
 
     evidence: tuple[Evidence, ...]
     executed_rule_ids: tuple[str, ...]
@@ -38,7 +36,7 @@ class RuleExecutionReport:
 
     @property
     def skipped_rule_count(self) -> int:
-        """Return the number of rules that were skipped."""
+        """Return the number of skipped rules."""
         return len(self.skipped_rule_ids)
 
     @property
@@ -58,11 +56,11 @@ class RuleExecutionReport:
 
 
 class RuleEngine:
-    """Evaluate observations using ordered independent rules."""
+    """Evaluate observations using ordered evidence-producing rules."""
 
     def __init__(
         self,
-        rules: Iterable[ScientificRule] = (),
+        rules: Iterable[EvidenceRule] = (),
         *,
         enabled_domains: Iterable[RuleDomain] | None = None,
     ) -> None:
@@ -75,13 +73,19 @@ class RuleEngine:
 
     @staticmethod
     def _prepare_rules(
-        rules: Iterable[ScientificRule],
-    ) -> tuple[ScientificRule, ...]:
-        """Validate identifiers and sort rules by priority."""
+        rules: Iterable[EvidenceRule],
+    ) -> tuple[EvidenceRule, ...]:
+        """Validate contracts, identifiers, and execution order."""
         materialized = tuple(rules)
         identifiers: set[str] = set()
 
         for rule in materialized:
+            if not callable(getattr(rule, "evaluate", None)):
+                raise TypeError(
+                    f"Evidence rule {rule.identifier!r} "
+                    "must implement evaluate()."
+                )
+
             if rule.identifier in identifiers:
                 raise ValueError(
                     f"Duplicate rule identifier: {rule.identifier!r}."
@@ -103,7 +107,7 @@ class RuleEngine:
         self,
         observation: Observation,
     ) -> RuleExecutionReport:
-        """Evaluate one observation without allowing one rule to stop others."""
+        """Evaluate one observation while isolating rule failures."""
         started_at = perf_counter()
 
         evidence: list[Evidence] = []
@@ -140,7 +144,7 @@ class RuleEngine:
             duration_seconds=perf_counter() - started_at,
         )
 
-    def _should_execute(self, rule: ScientificRule) -> bool:
+    def _should_execute(self, rule: EvidenceRule) -> bool:
         """Return whether one rule is enabled for this engine."""
         if not rule.enabled:
             return False
@@ -151,6 +155,6 @@ class RuleEngine:
         return rule.domain in self._enabled_domains
 
     @property
-    def rules(self) -> tuple[ScientificRule, ...]:
+    def rules(self) -> tuple[EvidenceRule, ...]:
         """Return registered rules in execution order."""
         return self._rules
