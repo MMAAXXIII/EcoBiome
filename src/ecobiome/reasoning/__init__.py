@@ -5,6 +5,10 @@ from ecobiome.reasoning.causal_chain import (
     CausalChainResult,
     CausalStep,
 )
+from ecobiome.reasoning.evidence import (
+    Evidence,
+    EvidenceRelation,
+)
 from ecobiome.reasoning.explanation import (
     ExplanationEngine,
     ExplanationResult,
@@ -22,6 +26,8 @@ __all__ = [
     "CausalChainEngine",
     "CausalChainResult",
     "CausalStep",
+    "Evidence",
+    "EvidenceRelation",
     "ExplanationEngine",
     "ExplanationResult",
     "Finding",
