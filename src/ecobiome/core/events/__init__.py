@@ -21,6 +21,10 @@ from ecobiome.core.events.event_store import (
 from ecobiome.core.events.jsonl_event_store import (
     JsonLinesEventStore,
 )
+from ecobiome.core.events.replay import (
+    ReplayResult,
+    replay_event_store,
+)
 from ecobiome.core.events.serializer import (
     JsonValue,
     event_to_json,
@@ -40,6 +44,7 @@ __all__ = [
     "InMemoryEventStore",
     "JsonLinesEventStore",
     "JsonValue",
+    "ReplayResult",
     "Subscription",
     "WaterRemovedEvent",
     "create_default_event_registry",
@@ -47,4 +52,5 @@ __all__ = [
     "event_to_json",
     "event_to_record",
     "event_type_name",
+    "replay_event_store",
 ]
