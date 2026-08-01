@@ -1,0 +1,6 @@
+"""Entry point for EcoBiome."""
+
+from ecobiome.app import run
+
+if __name__ == "__main__":
+    run()
