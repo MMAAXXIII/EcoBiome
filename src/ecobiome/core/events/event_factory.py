@@ -1,5 +1,6 @@
 """Secure reconstruction of explicitly authorized EcoBiome events."""
 
+import json
 from collections.abc import Callable
 from datetime import datetime
 from uuid import UUID
@@ -176,6 +177,25 @@ class EventTypeRegistry:
         }
 
         return decoder(payload)
+
+    def create_from_json(self, serialized: str) -> Event:
+        """Reconstruct one authorized event from JSON text."""
+        try:
+            raw_record = json.loads(serialized)
+        except json.JSONDecodeError as error:
+            raise ValueError("Invalid event JSON.") from error
+
+        if not isinstance(raw_record, dict):
+            raise TypeError(
+                "Serialized event must contain a JSON object."
+            )
+
+        record: EventRecord = {
+            str(key): value
+            for key, value in raw_record.items()
+        }
+
+        return self.create(record)
 
     def is_registered(
         self,
