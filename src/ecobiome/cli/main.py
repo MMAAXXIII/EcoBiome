@@ -4,6 +4,10 @@ import argparse
 from collections.abc import Sequence
 from pathlib import Path
 
+from ecobiome.cli.replay_events import (
+    add_replay_events_parser,
+    replay_events_command,
+)
 from ecobiome.cli.water_level import (
     add_water_level_parser,
     water_level_command,
@@ -39,6 +43,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     add_water_level_parser(subparsers)
+    add_replay_events_parser(subparsers)
 
     return parser
 
@@ -79,6 +84,9 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "water-level":
         return water_level_command(args)
+
+    if args.command == "replay-events":
+        return replay_events_command(args)
 
     parser.print_help()
     return 0
