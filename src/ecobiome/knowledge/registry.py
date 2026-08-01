@@ -17,19 +17,32 @@ class KnowledgeRegistry:
     def add_relation(self, relation: ScientificRelation) -> None:
         self.relations.append(relation)
 
-    def get_variable(
-        self,
-        identifier: str,
-    ) -> ScientificVariable | None:
-        return self.variables.get(identifier)
-
     def relations_from(
         self,
         source: str,
     ) -> list[ScientificRelation]:
-        """Return every outgoing relation."""
         return [
             relation
             for relation in self.relations
             if relation.source == source
         ]
+
+    def explain(self, variable: str) -> str:
+        """Return a human-readable explanation."""
+
+        relations = self.relations_from(variable)
+
+        if not relations:
+            return f"No scientific relation found for {variable}."
+
+        lines = []
+
+        for relation in relations:
+            lines.append(
+                f"{relation.source}\n"
+                f"  ↓ ({relation.effect})\n"
+                f"{relation.target}\n\n"
+                f"{relation.explanation}"
+            )
+
+        return "\n\n".join(lines)
