@@ -5,6 +5,14 @@ from ecobiome.reasoning.causal_chain import (
     CausalChainResult,
     CausalStep,
 )
+from ecobiome.reasoning.consistency import (
+    ConsistencyAssessment,
+    ConsistencyEngine,
+    ConsistencyEvaluationReport,
+    ConsistencyRule,
+    ConsistencyRuleFailure,
+    ConsistencyStatus,
+)
 from ecobiome.reasoning.evidence import (
     Evidence,
     EvidenceRelation,
@@ -38,6 +46,12 @@ __all__ = [
     "CausalChainEngine",
     "CausalChainResult",
     "CausalStep",
+    "ConsistencyAssessment",
+    "ConsistencyEngine",
+    "ConsistencyEvaluationReport",
+    "ConsistencyRule",
+    "ConsistencyRuleFailure",
+    "ConsistencyStatus",
     "Evidence",
     "EvidenceRelation",
     "ExplanationEngine",
@@ -55,3 +69,4 @@ __all__ = [
     "RuleFailure",
     "ScientificRule",
 ]
+
