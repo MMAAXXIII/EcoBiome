@@ -6,10 +6,16 @@ from ecobiome.core.observation.observation import (
     Observation,
     ObservationValue,
 )
+from ecobiome.core.observation.observation_store import (
+    InMemoryObservationStore,
+    ObservationStore,
+)
 
 __all__ = [
     "AcquisitionMethod",
+    "InMemoryObservationStore",
     "Observation",
+    "ObservationStore",
     "ObservationValue",
     "ScientificMeasurement",
 ]
