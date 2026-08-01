@@ -26,6 +26,13 @@ from ecobiome.reasoning.inference_engine import (
     InferenceResult,
     InferenceThresholds,
 )
+from ecobiome.reasoning.rules import (
+    RuleDomain,
+    RuleEngine,
+    RuleExecutionReport,
+    RuleFailure,
+    ScientificRule,
+)
 
 __all__ = [
     "CausalChainEngine",
@@ -42,4 +49,9 @@ __all__ = [
     "InferenceEngine",
     "InferenceResult",
     "InferenceThresholds",
+    "RuleDomain",
+    "RuleEngine",
+    "RuleExecutionReport",
+    "RuleFailure",
+    "ScientificRule",
 ]
