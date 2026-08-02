@@ -68,17 +68,19 @@ def typography_font(
             "Segoe UI Semibold",
             25,
         ),
+        # Slightly larger section titles for clearer hierarchy
         TypographyRole.SECTION_TITLE: (
             "Segoe UI Semibold",
-            13,
+            15,
         ),
+        # Emphasize KPI values a bit more for readability on dashboards
         TypographyRole.KPI_VALUE: (
             "Segoe UI Semibold",
-            23,
+            26,
         ),
         TypographyRole.PRIMARY_LABEL: (
             "Segoe UI Semibold",
-            10,
+            11,
         ),
         TypographyRole.BODY: (
             "Segoe UI",
