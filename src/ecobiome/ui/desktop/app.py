@@ -4,6 +4,10 @@ from __future__ import annotations
 
 import tkinter as tk
 from collections.abc import Callable
+from datetime import UTC, datetime
+from html import escape
+from pathlib import Path
+from tkinter import filedialog, messagebox
 
 from PIL import Image, ImageTk
 
@@ -15,6 +19,15 @@ from ecobiome.ui.desktop.analytics_panel import (
 )
 from ecobiome.ui.desktop.gallery import (
     MediaGalleryItem,
+    build_media_gallery,
+)
+from ecobiome.ui.desktop.gallery_viewer import (
+    GalleryViewerDialog,
+)
+from ecobiome.ui.desktop.hero import (
+    DashboardHeroBanner,
+    resolve_project_title,
+    select_hero_image_path,
 )
 from ecobiome.ui.desktop.icons import (
     DesktopIcon,
@@ -27,6 +40,12 @@ from ecobiome.ui.desktop.layout import (
 )
 from ecobiome.ui.desktop.layout_dialog import (
     DashboardLayoutDialog,
+)
+from ecobiome.ui.desktop.navigation import (
+    bind_gallery_navigation,
+)
+from ecobiome.ui.desktop.responsive import (
+    ResponsiveDashboardViewport,
 )
 from ecobiome.ui.desktop.theme import (
     ThemeIdentifier,
@@ -49,15 +68,17 @@ class EcoBiomeDesktopApp:
         view_model: DesktopDashboardViewModel,
         *,
         gallery_items: tuple[MediaGalleryItem, ...] = (),
+        gallery_directory: Path | None = None,
+        on_import_gallery_files: (
+            Callable[[tuple[Path, ...]], None] | None
+        ) = None,
         analytics_view_model: (
             DiagnosticAnalyticsViewModel | None
         ) = None,
         layout_preferences: (
             DashboardLayoutPreferences | None
         ) = None,
-        layout_store: (
-            DashboardLayoutStore | None
-        ) = None,
+        layout_store: DashboardLayoutStore | None = None,
         initial_theme: ThemeIdentifier = (
             ThemeIdentifier.ECOBIOME_NIGHT
         ),
@@ -67,6 +88,14 @@ class EcoBiomeDesktopApp:
     ) -> None:
         self._view_model = view_model
         self._gallery_items = gallery_items
+        self._gallery_directory = (
+            Path(gallery_directory)
+            if gallery_directory is not None
+            else None
+        )
+        self._on_import_gallery_files = (
+            on_import_gallery_files
+        )
         self._analytics_view_model = analytics_view_model
         self._layout_store = layout_store
         self._layout_preferences = (
@@ -83,9 +112,13 @@ class EcoBiomeDesktopApp:
             tk.Frame,
         ] = {}
         self._layout_summary_label: tk.Label | None = None
+        self._footer_container: tk.Frame | None = None
         self._gallery_images: list[ImageTk.PhotoImage] = []
         self._theme = get_desktop_theme(initial_theme)
         self._on_theme_changed = on_theme_changed
+        self._viewport: ResponsiveDashboardViewport | None = None
+        self._hero_banner: DashboardHeroBanner | None = None
+        self._layout_region: tk.Frame | None = None
 
         self._root = tk.Tk()
         self._root.title(
@@ -100,32 +133,55 @@ class EcoBiomeDesktopApp:
         }
 
         self._build_interface()
+        self._wire_gallery_entries()
+        self._root.after_idle(
+            self._maximize_window
+        )
+
 
     def run(self) -> None:
         """Start the desktop event loop."""
         self._root.mainloop()
 
     def _build_interface(self) -> None:
-        """Build the complete interface."""
+        """Build a fixed sidebar and an independent main viewport."""
         self._root.configure(
             background=self._theme.background
+        )
+        self._root.grid_columnconfigure(
+            0,
+            weight=1,
+        )
+        self._root.grid_rowconfigure(
+            0,
+            weight=1,
         )
 
         shell = tk.Frame(
             self._root,
             background=self._theme.background,
         )
-        shell.pack(
-            fill=tk.BOTH,
-            expand=True,
+        shell.grid(
+            row=0,
+            column=0,
+            sticky="nsew",
         )
-
-        shell.grid_columnconfigure(0, minsize=245)
-        shell.grid_columnconfigure(1, weight=1)
-        shell.grid_rowconfigure(0, weight=1)
+        shell.grid_columnconfigure(
+            0,
+            minsize=270,
+        )
+        shell.grid_columnconfigure(
+            1,
+            weight=1,
+        )
+        shell.grid_rowconfigure(
+            0,
+            weight=1,
+        )
 
         self._build_sidebar(shell)
         self._build_main_area(shell)
+
 
     def _build_sidebar(
         self,
@@ -498,7 +554,7 @@ class EcoBiomeDesktopApp:
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build scrollable main dashboard area."""
+        """Build one scrollable dashboard beside the fixed sidebar."""
         container = tk.Frame(
             parent,
             background=self._theme.background,
@@ -508,215 +564,85 @@ class EcoBiomeDesktopApp:
             column=1,
             sticky="nsew",
         )
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        container.grid_columnconfigure(
+            0,
+            weight=1,
+        )
+        container.grid_rowconfigure(
+            0,
+            weight=1,
+        )
 
-        canvas = tk.Canvas(
+        viewport = ResponsiveDashboardViewport(
             container,
             background=self._theme.background,
-            highlightthickness=0,
         )
-        scrollbar = tk.Scrollbar(
-            container,
-            orient=tk.VERTICAL,
-            command=canvas.yview,
-        )
-
-        canvas.configure(
-            yscrollcommand=scrollbar.set
-        )
-
-        canvas.grid(
+        viewport.grid(
             row=0,
             column=0,
             sticky="nsew",
         )
-        scrollbar.grid(
-            row=0,
-            column=1,
-            sticky="ns",
+        viewport.bind_scrolling(
+            self._root
         )
+        self._viewport = viewport
 
-        body = tk.Frame(
-            canvas,
-            background=self._theme.background,
+        body = viewport.content
+        body.grid_columnconfigure(
+            0,
+            weight=1,
         )
-
-        window_id = canvas.create_window(
-            (0, 0),
-            window=body,
-            anchor="nw",
-        )
-
-        body.bind(
-            "<Configure>",
-            lambda _event: canvas.configure(
-                scrollregion=canvas.bbox("all")
-            ),
-        )
-
-        canvas.bind(
-            "<Configure>",
-            lambda event: canvas.itemconfigure(
-                window_id,
-                width=event.width,
-            ),
-        )
-
-        body.grid_columnconfigure(0, weight=1)
 
         self._gallery_images.clear()
         self._section_frames.clear()
+        self._footer_container = None
+        self._layout_region = None
 
-        self._build_header(body)
-        self._build_metric_row(body)
-        self._build_analysis_row(body)
-        self._build_layout_toolbar(body)
-        self._build_customizable_sections(body)
-        self._build_footer_container(body)
-
-    def _build_header(
-        self,
-        parent: tk.Widget,
-    ) -> None:
-        """Build the aquarium-inspired project hero."""
-        hero = tk.Frame(
-            parent,
-            background=self._blend(
-                self._theme.surface,
-                self._theme.success,
-                0.10,
+        self._hero_banner = DashboardHeroBanner(
+            body,
+            theme=self._theme,
+            title=resolve_project_title(
+                self._view_model
             ),
-            height=145,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
+            subtitle=(
+                self._view_model.description
+                or (
+                    "Diagnostic intelligent · observations, "
+                    "hypothèses et expériences"
+                )
+            ),
+            image_path=self._select_hero_image_path(),
+            on_open_gallery=self._open_gallery_dialog,
+            on_export_report=self._export_report,
+            on_customize_layout=self._open_layout_dialog,
+            theme_names=tuple(
+                self._theme_name_by_display
+            ),
+            current_theme=self._theme.display_name,
+            on_theme_changed=self._change_theme,
         )
-        hero.grid(
+        self._hero_banner.grid(
             row=0,
             column=0,
             sticky="ew",
             padx=20,
-            pady=(18, 14),
-        )
-        hero.grid_propagate(False)
-
-        hero.grid_columnconfigure(0, weight=1)
-
-        left = tk.Frame(
-            hero,
-            background=hero["background"],
-        )
-        left.grid(
-            row=0,
-            column=0,
-            sticky="nw",
-            padx=24,
-            pady=20,
+            pady=(14, 0),
         )
 
-        tk.Label(
-            left,
-            text=self._view_model.project_name,
-            background=left["background"],
-            foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 26),
-        ).pack(anchor="w")
+        self._build_metric_row(body)
+        self._build_analysis_row(body)
+        self._build_customizable_sections(body)
+        self._build_footer_container(body)
+        self._apply_layout_preferences()
+        viewport.refresh()
 
-        tk.Label(
-            left,
-            text=(
-                f"{DesktopIcon.STATUS.value}  "
-                f"{self._view_model.status_title}"
-            ),
-            background=left["background"],
-            foreground=self._theme.success,
-            font=("Segoe UI Semibold", 10),
-        ).pack(
-            anchor="w",
-            pady=(8, 0),
-        )
 
-        tk.Label(
-            left,
-            text=self._view_model.description,
-            background=left["background"],
-            foreground=self._theme.text_secondary,
-            font=("Segoe UI", 10),
-            wraplength=620,
-            justify=tk.LEFT,
-        ).pack(
-            anchor="w",
-            pady=(8, 0),
-        )
-
-        right = tk.Frame(
-            hero,
-            background=hero["background"],
-        )
-        right.grid(
-            row=0,
-            column=1,
-            sticky="ne",
-            padx=24,
-            pady=20,
-        )
-
-        theme_variable = tk.StringVar(
-            value=self._theme.display_name
-        )
-
-        theme_menu = tk.OptionMenu(
-            right,
-            theme_variable,
-            *tuple(self._theme_name_by_display),
-        )
-
-        def handle_theme_change(
-            *_arguments: str,
-        ) -> None:
-            self._change_theme(
-                theme_variable.get()
-            )
-
-        theme_variable.trace_add(
-            "write",
-            handle_theme_change,
-        )
-        theme_menu.configure(
-            background=self._theme.surface_elevated,
-            foreground=self._theme.text_primary,
-            activebackground=self._theme.surface,
-            activeforeground=self._theme.text_primary,
-            relief=tk.FLAT,
-            borderwidth=0,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
-            font=("Segoe UI", 9),
-        )
-        theme_menu["menu"].configure(
-            background=self._theme.surface,
-            foreground=self._theme.text_primary,
-            activebackground=self._theme.accent,
-        )
-        theme_menu.pack(
-            anchor="e",
-            pady=(0, 10),
-        )
-
-        self._action_button(
-            right,
-            text=icon_text(
-                DesktopIcon.EXPORT,
-                "Exporter le rapport",
-            ),
-            accent=self._theme.success,
-        ).pack(anchor="e")
 
     def _build_metric_row(
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build top KPI cards."""
+        """Build the five diagnostic KPI cards."""
         row = tk.Frame(
             parent,
             background=self._theme.background,
@@ -726,6 +652,7 @@ class EcoBiomeDesktopApp:
             column=0,
             sticky="ew",
             padx=20,
+            pady=(12, 0),
         )
 
         for index, metric in enumerate(
@@ -758,11 +685,10 @@ class EcoBiomeDesktopApp:
         parent: tk.Widget,
         metric: DashboardMetricViewModel,
     ) -> tk.Frame:
-        """Build one colored metric card."""
+        """Build one image-forward diagnostic metric card."""
         accent = self._accent_for_role(
             metric.accent_role
         )
-
         card = tk.Frame(
             parent,
             background=self._blend(
@@ -780,60 +706,96 @@ class EcoBiomeDesktopApp:
             pady=14,
         )
 
-        header = tk.Frame(
+        content = tk.Frame(
             card,
             background=card["background"],
         )
-        header.pack(fill=tk.X)
+        content.pack(
+            fill=tk.BOTH,
+            expand=True,
+        )
+
+        text = tk.Frame(
+            content,
+            background=content["background"],
+        )
+        text.pack(
+            side=tk.LEFT,
+            fill=tk.BOTH,
+            expand=True,
+        )
 
         tk.Label(
-            header,
+            text,
             text=metric.label,
-            background=header["background"],
+            background=text["background"],
             foreground=self._theme.text_primary,
             font=("Segoe UI Semibold", 10),
-        ).pack(side=tk.LEFT)
-
-        tk.Label(
-            header,
-            text=metric.symbol,
-            background=self._blend(
-                card["background"],
-                accent,
-                0.35,
-            ),
-            foreground=accent,
-            font=("Segoe UI Symbol", 18),
-            padx=10,
-            pady=6,
-        ).pack(side=tk.RIGHT)
-
-        tk.Label(
-            card,
-            text=metric.value,
-            background=card["background"],
-            foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 25),
         ).pack(anchor="w")
 
         tk.Label(
-            card,
+            text,
+            text=metric.value,
+            background=text["background"],
+            foreground=self._theme.text_primary,
+            font=("Segoe UI Semibold", 26),
+        ).pack(
+            anchor="w",
+            pady=(5, 0),
+        )
+
+        tk.Label(
+            text,
             text=metric.detail,
-            background=card["background"],
+            background=text["background"],
             foreground=accent,
             font=("Segoe UI", 9),
         ).pack(
             anchor="w",
-            pady=(4, 0),
+            pady=(5, 0),
+        )
+
+        badge = tk.Canvas(
+            content,
+            width=54,
+            height=54,
+            background=content["background"],
+            highlightthickness=0,
+        )
+        badge.pack(
+            side=tk.RIGHT,
+            anchor="n",
+            padx=(12, 0),
+        )
+        badge.create_oval(
+            3,
+            3,
+            51,
+            51,
+            fill=self._blend(
+                card["background"],
+                accent,
+                0.28,
+            ),
+            outline=accent,
+            width=2,
+        )
+        badge.create_text(
+            27,
+            27,
+            text=metric.symbol,
+            fill=accent,
+            font=("Segoe UI Symbol", 18),
         )
 
         return card
+
 
     def _build_analysis_row(
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build causal chain and distribution panels."""
+        """Build the causal chain and the single ranked hypothesis view."""
         row = tk.Frame(
             parent,
             background=self._theme.background,
@@ -843,20 +805,21 @@ class EcoBiomeDesktopApp:
             column=0,
             sticky="ew",
             padx=20,
-            pady=(14, 0),
+            pady=(12, 0),
         )
-
         row.grid_columnconfigure(0, weight=3)
         row.grid_columnconfigure(1, weight=2)
 
-        chain_card = self._card(row, padding=18)
+        chain_card = self._card(
+            row,
+            padding=16,
+        )
         chain_card.grid(
             row=0,
             column=0,
             sticky="nsew",
-            padx=(0, 7),
+            padx=(0, 6),
         )
-
         self._section_title(
             chain_card,
             "Chaîne causale principale",
@@ -869,7 +832,7 @@ class EcoBiomeDesktopApp:
         chain.pack(
             fill=tk.BOTH,
             expand=True,
-            pady=(18, 5),
+            pady=(14, 2),
         )
 
         stages = (
@@ -921,19 +884,34 @@ class EcoBiomeDesktopApp:
                 expand=True,
             )
 
-            tk.Label(
+            badge = tk.Canvas(
                 stage,
-                text=icon.value,
-                background=self._blend(
-                    chain["background"],
+                width=58,
+                height=58,
+                background=stage["background"],
+                highlightthickness=0,
+            )
+            badge.pack()
+            badge.create_oval(
+                4,
+                4,
+                54,
+                54,
+                fill=self._blend(
+                    chain_card["background"],
                     accent,
-                    0.22,
+                    0.20,
                 ),
-                foreground=accent,
-                font=("Segoe UI Symbol", 24),
-                padx=15,
-                pady=12,
-            ).pack()
+                outline=accent,
+                width=2,
+            )
+            badge.create_text(
+                29,
+                29,
+                text=icon.value,
+                fill=accent,
+                font=("Segoe UI Symbol", 19),
+            )
 
             tk.Label(
                 stage,
@@ -941,8 +919,7 @@ class EcoBiomeDesktopApp:
                 background=stage["background"],
                 foreground=accent,
                 font=("Segoe UI Semibold", 10),
-            ).pack(pady=(8, 2))
-
+            ).pack(pady=(5, 1))
             tk.Label(
                 stage,
                 text=subtitle,
@@ -957,66 +934,158 @@ class EcoBiomeDesktopApp:
                     text=DesktopIcon.ARROW.value,
                     background=chain["background"],
                     foreground=accent,
-                    font=("Segoe UI Symbol", 18),
+                    font=("Segoe UI Symbol", 16),
                 ).pack(
                     side=tk.LEFT,
-                    padx=3,
+                    padx=1,
                 )
 
-        distribution = self._card(row, padding=18)
-        distribution.grid(
+        hypotheses = self._card(
+            row,
+            padding=16,
+        )
+        hypotheses.grid(
             row=0,
             column=1,
             sticky="nsew",
-            padx=(7, 0),
+            padx=(6, 0),
         )
-
         self._section_title(
-            distribution,
-            "Répartition du journal",
+            hypotheses,
+            "Hypothèses principales",
         )
 
-        if not self._view_model.event_distribution:
+        if (
+            self._analytics_view_model is None
+            or not self._analytics_view_model.probability_bars
+        ):
             self._muted_label(
-                distribution,
-                "Aucune donnée disponible.",
-            ).pack(anchor="w", pady=(16, 0))
-        else:
-            for label, count in (
-                self._view_model.event_distribution
-            ):
-                self._distribution_row(
-                    distribution,
-                    label,
-                    count,
+                hypotheses,
+                "Aucune hypothèse disponible.",
+            ).pack(
+                anchor="w",
+                pady=(14, 0),
+            )
+            return
+
+        for probability in (
+            self._analytics_view_model.probability_bars[:5]
+        ):
+            hypothesis_row = tk.Frame(
+                hypotheses,
+                background=hypotheses["background"],
+            )
+            hypothesis_row.pack(
+                fill=tk.X,
+                pady=(9, 0),
+            )
+
+            header = tk.Frame(
+                hypothesis_row,
+                background=hypothesis_row["background"],
+            )
+            header.pack(fill=tk.X)
+
+            tk.Label(
+                header,
+                text=probability.identifier,
+                background=self._theme.surface_elevated,
+                foreground=probability.accent,
+                font=("Segoe UI Semibold", 9),
+                padx=7,
+                pady=2,
+            ).pack(side=tk.LEFT)
+            tk.Label(
+                header,
+                text=probability.label,
+                background=header["background"],
+                foreground=self._theme.text_primary,
+                font=("Segoe UI", 9),
+            ).pack(
+                side=tk.LEFT,
+                padx=(8, 0),
+            )
+            tk.Label(
+                header,
+                text=f"{probability.probability}%",
+                background=header["background"],
+                foreground=self._theme.text_primary,
+                font=("Segoe UI Semibold", 9),
+            ).pack(side=tk.RIGHT)
+
+            bar = tk.Canvas(
+                hypothesis_row,
+                height=6,
+                background=hypothesis_row["background"],
+                highlightthickness=0,
+            )
+            bar.pack(
+                fill=tk.X,
+                pady=(5, 0),
+            )
+
+            def redraw_bar(
+                event: tk.Event,
+                *,
+                canvas: tk.Canvas = bar,
+                value: int = probability.probability,
+                color: str = probability.accent,
+            ) -> None:
+                bar_width = max(
+                    1,
+                    event.width,
                 )
+                canvas.delete("all")
+                canvas.create_rectangle(
+                    0,
+                    1,
+                    bar_width,
+                    5,
+                    fill=self._theme.surface_elevated,
+                    outline="",
+                )
+                canvas.create_rectangle(
+                    0,
+                    1,
+                    bar_width * value / 100,
+                    5,
+                    fill=color,
+                    outline="",
+                )
+
+            bar.bind(
+                "<Configure>",
+                redraw_bar,
+            )
+
 
     def _build_activity_row(
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build recent activity and recommendation panels."""
+        """Build recent observations and the recommended experiment."""
         row = tk.Frame(
             parent,
             background=self._theme.background,
         )
         row.grid(
-            row=3,
+            row=0,
             column=0,
-            sticky="ew",
-            padx=20,
-            pady=(14, 0),
+            sticky="nsew",
         )
-
         row.grid_columnconfigure(0, weight=3)
         row.grid_columnconfigure(1, weight=2)
+        row.grid_rowconfigure(0, weight=1)
 
-        activity = self._card(row, padding=18)
+        activity = self._card(
+            row,
+            padding=15,
+        )
         activity.grid(
             row=0,
             column=0,
             sticky="nsew",
-            padx=(0, 7),
+            padx=(0, 6),
         )
 
         self._section_title(
@@ -1028,7 +1097,7 @@ class EcoBiomeDesktopApp:
             self._muted_label(
                 activity,
                 "Votre activité apparaîtra ici.",
-            ).pack(anchor="w", pady=(16, 0))
+            ).pack(anchor="w", pady=(14, 0))
         else:
             for item in self._view_model.latest_activity[:5]:
                 self._activity_item(
@@ -1038,13 +1107,13 @@ class EcoBiomeDesktopApp:
 
         recommendation = self._card(
             row,
-            padding=18,
+            padding=15,
         )
         recommendation.grid(
             row=0,
             column=1,
             sticky="nsew",
-            padx=(7, 0),
+            padx=(6, 0),
         )
 
         self._section_title(
@@ -1062,12 +1131,12 @@ class EcoBiomeDesktopApp:
             ),
             foreground=self._theme.hypothesis,
             font=("Segoe UI Semibold", 9),
-            padx=10,
-            pady=6,
+            padx=9,
+            pady=5,
         )
         badge.pack(
             anchor="w",
-            pady=(14, 12),
+            pady=(12, 9),
         )
 
         self._body_label(
@@ -1082,10 +1151,10 @@ class EcoBiomeDesktopApp:
                 "Vérifier la présence de lumière résiduelle "
                 "dans l'environnement contrôlé."
             ),
-            wraplength=360,
+            wraplength=310,
         ).pack(
             anchor="w",
-            pady=(10, 14),
+            pady=(7, 10),
         )
 
         self._body_label(
@@ -1102,10 +1171,10 @@ class EcoBiomeDesktopApp:
                 "• Sources lumineuses de test\n\n"
                 "Durée estimée : 15–30 minutes"
             ),
-            wraplength=360,
+            wraplength=310,
         ).pack(
             anchor="w",
-            pady=(8, 14),
+            pady=(6, 10),
         )
 
         self._action_button(
@@ -1117,68 +1186,35 @@ class EcoBiomeDesktopApp:
 
 
 
-    def _build_layout_toolbar(
-        self,
-        parent: tk.Widget,
-    ) -> None:
-        """Build dashboard-layout controls."""
-        toolbar = tk.Frame(
-            parent,
-            background=self._theme.surface,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
-            padx=16,
-            pady=10,
-        )
-
-        toolbar.grid(
-            row=3,
-            column=0,
-            sticky="ew",
-            padx=20,
-            pady=(14, 0),
-        )
-
-        tk.Label(
-            toolbar,
-            text="Disposition personnalisée",
-            background=toolbar["background"],
-            foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 10),
-        ).pack(side=tk.LEFT)
-
-        self._layout_summary_label = tk.Label(
-            toolbar,
-            text=self._layout_summary_text(),
-            background=toolbar["background"],
-            foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
-        )
-
-        self._layout_summary_label.pack(
-            side=tk.LEFT,
-            padx=(12, 0),
-        )
-
-        tk.Button(
-            toolbar,
-            text="Personnaliser",
-            command=self._open_layout_dialog,
-            background=self._theme.surface_elevated,
-            foreground=self._theme.accent,
-            activebackground=self._theme.border,
-            activeforeground=self._theme.text_primary,
-            relief=tk.FLAT,
-            padx=13,
-            pady=6,
-            cursor="hand2",
-        ).pack(side=tk.RIGHT)
 
     def _build_customizable_sections(
         self,
         parent: tk.Widget,
     ) -> None:
-        """Create section containers and apply their order."""
+        """Create the compact customizable dashboard region."""
+        region = tk.Frame(
+            parent,
+            background=self._theme.background,
+        )
+        region.grid(
+            row=3,
+            column=0,
+            sticky="ew",
+            padx=20,
+            pady=(12, 0),
+        )
+        region.grid_columnconfigure(
+            0,
+            weight=2,
+            uniform="dashboard-section",
+        )
+        region.grid_columnconfigure(
+            1,
+            weight=1,
+            uniform="dashboard-section",
+        )
+        self._layout_region = region
+
         builders = {
             DashboardSection.ACTIVITY: (
                 self._build_activity_row
@@ -1196,78 +1232,168 @@ class EcoBiomeDesktopApp:
 
         for section in DashboardSection:
             container = tk.Frame(
-                parent,
+                region,
                 background=self._theme.background,
             )
-
             container.grid_columnconfigure(
                 0,
                 weight=1,
             )
-
+            container.grid_rowconfigure(
+                0,
+                weight=1,
+            )
             self._section_frames[
                 section
             ] = container
-
             builders[section](
                 container
             )
 
-        self._apply_layout_preferences()
 
     def _build_footer_container(
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build the footer in an isolated container."""
+        """Create the footer below the compact dashboard region."""
         container = tk.Frame(
             parent,
             background=self._theme.background,
         )
-
-        container.grid(
-            row=8,
-            column=0,
-            sticky="ew",
-        )
-
         container.grid_columnconfigure(
             0,
             weight=1,
         )
-
+        container.grid(
+            row=4,
+            column=0,
+            sticky="ew",
+        )
+        self._footer_container = container
         self._build_footer(
             container
         )
 
+
     def _apply_layout_preferences(
         self,
     ) -> None:
-        """Apply visibility and order without rebuilding widgets."""
+        """Apply visibility and pair adjacent complementary sections."""
         for section_frame in self._section_frames.values():
             section_frame.grid_forget()
 
-        row = 4
-
-        for section in (
+        visible_sections = list(
             self._layout_preferences.visible_sections
-        ):
-            section_frame = self._section_frames[
-                section
-            ]
+        )
+        processed: set[DashboardSection] = set()
+        row = 0
 
-            section_frame.grid(
-                row=row,
-                column=0,
-                sticky="ew",
+        pair_definitions = (
+            (
+                frozenset(
+                    {
+                        DashboardSection.ACTIVITY,
+                        DashboardSection.ANALYTICS,
+                    }
+                ),
+                DashboardSection.ACTIVITY,
+                DashboardSection.ANALYTICS,
+            ),
+            (
+                frozenset(
+                    {
+                        DashboardSection.MEMORIES,
+                        DashboardSection.GALLERY,
+                    }
+                ),
+                DashboardSection.MEMORIES,
+                DashboardSection.GALLERY,
+            ),
+        )
+
+        for index, section in enumerate(
+            visible_sections
+        ):
+            if section in processed:
+                continue
+
+            next_section = (
+                visible_sections[index + 1]
+                if index + 1 < len(visible_sections)
+                else None
             )
 
+            matched_pair: tuple[
+                DashboardSection,
+                DashboardSection,
+            ] | None = None
+
+            if next_section is not None:
+                adjacent_pair = frozenset(
+                    {
+                        section,
+                        next_section,
+                    }
+                )
+
+                for (
+                    pair_members,
+                    left_section,
+                    right_section,
+                ) in pair_definitions:
+                    if adjacent_pair == pair_members:
+                        matched_pair = (
+                            left_section,
+                            right_section,
+                        )
+                        break
+
+            if matched_pair is None:
+                self._section_frames[
+                    section
+                ].grid(
+                    row=row,
+                    column=0,
+                    columnspan=2,
+                    sticky="nsew",
+                    pady=(0, 12),
+                )
+                processed.add(section)
+                row += 1
+                continue
+
+            left_section, right_section = matched_pair
+
+            self._section_frames[
+                left_section
+            ].grid(
+                row=row,
+                column=0,
+                sticky="nsew",
+                padx=(0, 6),
+                pady=(0, 12),
+            )
+            self._section_frames[
+                right_section
+            ].grid(
+                row=row,
+                column=1,
+                sticky="nsew",
+                padx=(6, 0),
+                pady=(0, 12),
+            )
+            processed.update(
+                matched_pair
+            )
             row += 1
 
         if self._layout_summary_label is not None:
             self._layout_summary_label.configure(
                 text=self._layout_summary_text()
             )
+
+        self._refresh_viewport()
+
 
 
     def _layout_summary_text(self) -> str:
@@ -1313,7 +1439,7 @@ class EcoBiomeDesktopApp:
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build interactive diagnostic analytics."""
+        """Build the compact quality panel without duplicate hypotheses."""
         if self._analytics_view_model is None:
             return
 
@@ -1321,31 +1447,28 @@ class EcoBiomeDesktopApp:
             parent,
             view_model=self._analytics_view_model,
             theme=self._theme,
+            quality_only=True,
         )
 
         panel.grid(
-            row=4,
+            row=0,
             column=0,
-            sticky="ew",
-            padx=20,
-            pady=(14, 0),
+            sticky="nsew",
         )
 
     def _build_gallery(
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build a real image gallery from project media."""
+        """Build a compact quick gallery for the dashboard."""
         card = self._card(
             parent,
-            padding=16,
+            padding=14,
         )
         card.grid(
-            row=5,
+            row=0,
             column=0,
-            sticky="ew",
-            padx=20,
-            pady=(14, 0),
+            sticky="nsew",
         )
 
         header = tk.Frame(
@@ -1356,7 +1479,7 @@ class EcoBiomeDesktopApp:
 
         tk.Label(
             header,
-            text="Galerie du projet",
+            text="Galerie rapide",
             background=header["background"],
             foreground=self._theme.text_primary,
             font=("Segoe UI Semibold", 13),
@@ -1376,12 +1499,13 @@ class EcoBiomeDesktopApp:
                 background=self._theme.surface_elevated,
                 highlightthickness=1,
                 highlightbackground=self._theme.border,
-                padx=20,
-                pady=24,
+                padx=16,
+                pady=18,
             )
             empty.pack(
-                fill=tk.X,
-                pady=(14, 0),
+                fill=tk.BOTH,
+                expand=True,
+                pady=(12, 0),
             )
 
             tk.Label(
@@ -1389,86 +1513,64 @@ class EcoBiomeDesktopApp:
                 text=DesktopIcon.GALLERY.value,
                 background=empty["background"],
                 foreground=self._theme.accent,
-                font=("Segoe UI Symbol", 24),
+                font=("Segoe UI Symbol", 22),
             ).pack()
 
             self._muted_label(
                 empty,
-                "Aucune photo enregistrée dans ce projet.",
-            ).pack(pady=(8, 0))
-
-            return
-
-        gallery_row = tk.Frame(
-            card,
-            background=card["background"],
-        )
-        gallery_row.pack(
-            fill=tk.X,
-            pady=(14, 0),
-        )
-
-        visible_items = self._gallery_items[:4]
-
-        for index, item in enumerate(visible_items):
-            gallery_row.grid_columnconfigure(
-                index,
-                weight=1,
-                uniform="gallery",
+                "Aucune photo enregistrée.",
+            ).pack(pady=(6, 0))
+        else:
+            gallery_row = tk.Frame(
+                card,
+                background=card["background"],
             )
-
-            tile = tk.Frame(
-                gallery_row,
-                background=self._theme.surface_elevated,
-                highlightthickness=1,
-                highlightbackground=self._theme.border,
-                padx=8,
-                pady=8,
-            )
-            tile.grid(
-                row=0,
-                column=index,
-                sticky="nsew",
-                padx=(
-                    0 if index == 0 else 5,
-                    0
-                    if index == len(visible_items) - 1
-                    else 5,
-                ),
-            )
-
-            image_widget = self._gallery_thumbnail(
-                tile,
-                item,
-            )
-            image_widget.pack(
+            gallery_row.pack(
                 fill=tk.X,
-                expand=True,
+                pady=(12, 0),
             )
 
-            tk.Label(
-                tile,
-                text=item.title,
-                background=tile["background"],
-                foreground=self._theme.text_primary,
-                font=("Segoe UI Semibold", 9),
-                anchor="w",
-            ).pack(
-                fill=tk.X,
-                pady=(9, 2),
-            )
+            visible_items = self._gallery_items[:3]
 
-            tk.Label(
-                tile,
-                text=(
-                    f"{item.date_label}  ·  "
-                    f"{item.size_label}"
-                ),
-                background=tile["background"],
-                foreground=self._theme.text_secondary,
-                font=("Segoe UI", 8),
-                anchor="w",
-            ).pack(fill=tk.X)
+            for index, item in enumerate(
+                visible_items
+            ):
+                gallery_row.grid_columnconfigure(
+                    index,
+                    weight=1,
+                    uniform="quick-gallery",
+                )
+
+                tile = tk.Frame(
+                    gallery_row,
+                    background=self._theme.surface_elevated,
+                    highlightthickness=1,
+                    highlightbackground=self._theme.border,
+                    padx=4,
+                    pady=4,
+                )
+                tile.grid(
+                    row=0,
+                    column=index,
+                    sticky="nsew",
+                    padx=(
+                        0 if index == 0 else 3,
+                        0
+                        if index == len(visible_items) - 1
+                        else 3,
+                    ),
+                )
+
+                image_widget = self._gallery_thumbnail(
+                    tile,
+                    item,
+                    width=96,
+                    height=64,
+                )
+                image_widget.pack(
+                    fill=tk.X,
+                    expand=True,
+                )
 
         actions = tk.Frame(
             card,
@@ -1476,46 +1578,328 @@ class EcoBiomeDesktopApp:
         )
         actions.pack(
             fill=tk.X,
-            pady=(14, 0),
+            pady=(12, 0),
         )
 
-        self._action_button(
+        def import_gallery_files(
+            _event: tk.Event,
+        ) -> None:
+            self._import_gallery_files()
+
+        def open_gallery(
+            _event: tk.Event,
+        ) -> None:
+            self._open_gallery_dialog()
+
+        import_button = self._action_button(
             actions,
             text=icon_text(
                 DesktopIcon.ADD,
-                "Ajouter une photo",
+                "Ajouter",
             ),
             accent=self._theme.success,
-        ).pack(side=tk.LEFT)
+        )
+        import_button.bind(
+            "<Button-1>",
+            import_gallery_files,
+            add="+",
+        )
+        import_button.pack(side=tk.LEFT)
 
-        self._action_button(
+        open_button = self._action_button(
             actions,
-            text=icon_text(
-                DesktopIcon.GALLERY,
-                "Ouvrir la galerie",
-            ),
+            text="Ouvrir la galerie  →",
             accent=self._theme.accent,
-        ).pack(
+        )
+        open_button.bind(
+            "<Button-1>",
+            open_gallery,
+            add="+",
+        )
+        open_button.pack(
             side=tk.RIGHT,
         )
+
+
+
+
+    def _wire_gallery_entries(self) -> None:
+        """Make every gallery navigation entry functional."""
+        bind_gallery_navigation(
+            self._root,
+            self._open_gallery_dialog,
+        )
+
+    def _select_hero_image_path(
+        self,
+    ) -> Path | None:
+        """Select a genuinely panoramic project image for the hero."""
+        return select_hero_image_path(
+            tuple(
+                item.path
+                for item in self._gallery_items
+            )
+        )
+
+    def _refresh_hero_banner(self) -> None:
+        """Synchronize the hero with the best panoramic gallery item."""
+        if self._hero_banner is None:
+            return
+
+        self._hero_banner.set_image_path(
+            self._select_hero_image_path()
+        )
+        self._refresh_viewport()
+
+    def _export_report(self) -> None:
+        """Export a readable HTML project report."""
+        destination = filedialog.asksaveasfilename(
+            parent=self._root,
+            title="Exporter le rapport EcoBiome",
+            defaultextension=".html",
+            filetypes=(
+                ("Rapport HTML", "*.html"),
+                ("Tous les fichiers", "*.*"),
+            ),
+            initialfile=(
+                f"{self._view_model.project_name}"
+                "-rapport.html"
+            ),
+        )
+
+        if not destination:
+            return
+
+        metric_rows = "".join(
+            (
+                "<tr>"
+                f"<th>{escape(metric.label)}</th>"
+                f"<td>{escape(metric.value)}</td>"
+                f"<td>{escape(metric.detail)}</td>"
+                "</tr>"
+            )
+            for metric in self._view_model.metrics
+        )
+
+        activity_rows = "".join(
+            (
+                "<li>"
+                f"<strong>{escape(item.title)}</strong>"
+                f" — {escape(item.description)}"
+                "</li>"
+            )
+            for item in self._view_model.latest_activity[:10]
+        )
+
+        generated_at = datetime.now(
+            tz=UTC
+        ).strftime(
+            "%d/%m/%Y %H:%M UTC"
+        )
+
+        report = f"""<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>{escape(self._view_model.project_name)} — Rapport EcoBiome</title>
+<style>
+body {{
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 0 24px;
+    color: #173239;
+    font: 16px/1.55 "Segoe UI", sans-serif;
+}}
+h1, h2 {{ color: #0b5d4b; }}
+table {{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0 28px;
+}}
+th, td {{
+    border: 1px solid #bfd7d1;
+    padding: 10px 12px;
+    text-align: left;
+}}
+th {{ background: #eaf6f0; }}
+small {{ color: #607980; }}
+</style>
+</head>
+<body>
+<h1>{escape(self._view_model.project_name)}</h1>
+<p>{escape(self._view_model.description)}</p>
+<p><small>Rapport généré le {generated_at}</small></p>
+<h2>Indicateurs</h2>
+<table>
+<thead><tr><th>Indicateur</th><th>Valeur</th><th>Détail</th></tr></thead>
+<tbody>{metric_rows}</tbody>
+</table>
+<h2>Activité récente</h2>
+<ul>{activity_rows or "<li>Aucune activité récente.</li>"}</ul>
+</body>
+</html>
+"""
+
+        try:
+            Path(destination).write_text(
+                report,
+                encoding="utf-8",
+            )
+        except OSError as error:
+            messagebox.showerror(
+                "Export impossible",
+                str(error),
+                parent=self._root,
+            )
+            return
+
+        messagebox.showinfo(
+            "Rapport exporté",
+            (
+                "Le rapport HTML a été enregistré. "
+                "Il peut être imprimé en PDF depuis le navigateur."
+            ),
+            parent=self._root,
+        )
+
+
+    def _open_gallery_dialog(self) -> None:
+        """Open the project gallery in a larger viewer."""
+        if not self._gallery_items:
+            messagebox.showinfo(
+                "Galerie vide",
+                "Aucune image n'est disponible dans ce projet.",
+                parent=self._root,
+            )
+            return
+
+        GalleryViewerDialog(
+            self._root,
+            items=self._gallery_items,
+            theme=self._theme,
+        )
+
+    def _import_gallery_files(self) -> None:
+        """Select images and delegate their import to the project."""
+        if (
+            self._gallery_directory is None
+            or self._on_import_gallery_files is None
+        ):
+            messagebox.showinfo(
+                "Import indisponible",
+                (
+                    "Aucun gestionnaire d'import de médias "
+                    "n'est configuré pour ce tableau de bord."
+                ),
+                parent=self._root,
+            )
+            return
+
+        selected_files = filedialog.askopenfilenames(
+            parent=self._root,
+            title="Ajouter des images au projet",
+            filetypes=(
+                (
+                    "Images",
+                    (
+                        "*.png *.jpg *.jpeg *.webp "
+                        "*.bmp *.gif *.tif *.tiff"
+                    ),
+                ),
+                (
+                    "Tous les fichiers",
+                    "*.*",
+                ),
+            ),
+        )
+
+        if not selected_files:
+            return
+
+        source_paths = tuple(
+            Path(value)
+            for value in selected_files
+        )
+
+        try:
+            self._on_import_gallery_files(
+                source_paths
+            )
+
+        except (OSError, ValueError) as error:
+            messagebox.showerror(
+                "Import impossible",
+                str(error),
+                parent=self._root,
+            )
+            return
+
+        self._refresh_gallery_section()
+
+        messagebox.showinfo(
+            "Import terminé",
+            (
+                f"{len(source_paths)} image(s) "
+                "ajoutée(s) au projet."
+            ),
+            parent=self._root,
+        )
+
+    def _refresh_gallery_section(self) -> None:
+        """Reload media files and rebuild the gallery section."""
+        if self._gallery_directory is None:
+            return
+
+        self._gallery_items = build_media_gallery(
+            self._gallery_directory,
+            limit=50,
+        )
+
+        gallery_frame = self._section_frames.get(
+            DashboardSection.GALLERY
+        )
+
+        if gallery_frame is None:
+            return
+
+        for child in gallery_frame.winfo_children():
+            child.destroy()
+
+        self._gallery_images.clear()
+
+        self._build_gallery(
+            gallery_frame
+        )
+
+        self._refresh_hero_banner()
+        self._wire_gallery_entries()
+        self._apply_layout_preferences()
 
     def _gallery_thumbnail(
         self,
         parent: tk.Widget,
         item: MediaGalleryItem,
+        *,
+        width: int = 260,
+        height: int = 145,
     ) -> tk.Widget:
-        """Create one thumbnail or a graceful placeholder."""
+        """Create one fitted thumbnail or a graceful placeholder."""
+        if width <= 0 or height <= 0:
+            raise ValueError(
+                "Thumbnail dimensions must be positive."
+            )
+
         try:
             with Image.open(item.path) as source:
                 image = source.convert("RGB")
                 image.thumbnail(
-                    (260, 145),
+                    (width, height),
                     Image.Resampling.LANCZOS,
                 )
 
                 canvas_image = Image.new(
                     "RGB",
-                    (260, 145),
+                    (width, height),
                     self._theme.surface_elevated,
                 )
 
@@ -1555,7 +1939,8 @@ class EcoBiomeDesktopApp:
                     self._theme.accent,
                     0.12,
                 ),
-                height=145,
+                width=width,
+                height=height,
             )
             placeholder.pack_propagate(False)
 
@@ -1564,7 +1949,7 @@ class EcoBiomeDesktopApp:
                 text=DesktopIcon.GALLERY.value,
                 background=placeholder["background"],
                 foreground=self._theme.accent,
-                font=("Segoe UI Symbol", 28),
+                font=("Segoe UI Symbol", 24),
             ).pack(expand=True)
 
             return placeholder
@@ -1573,17 +1958,15 @@ class EcoBiomeDesktopApp:
         self,
         parent: tk.Widget,
     ) -> None:
-        """Build remembered milestones."""
+        """Build compact scientific memories and milestones."""
         card = self._card(
             parent,
-            padding=16,
+            padding=14,
         )
         card.grid(
-            row=6,
+            row=0,
             column=0,
-            sticky="ew",
-            padx=20,
-            pady=(14, 0),
+            sticky="nsew",
         )
 
         self._section_title(
@@ -1596,11 +1979,12 @@ class EcoBiomeDesktopApp:
             background=card["background"],
         )
         row.pack(
-            fill=tk.X,
-            pady=(12, 0),
+            fill=tk.BOTH,
+            expand=True,
+            pady=(10, 0),
         )
 
-        memories = self._view_model.memories
+        memories = self._view_model.memories[:3]
 
         for memory in memories:
             self._memory_card(
@@ -1610,7 +1994,7 @@ class EcoBiomeDesktopApp:
                 side=tk.LEFT,
                 fill=tk.BOTH,
                 expand=True,
-                padx=(0, 8),
+                padx=(0, 6),
             )
 
         add_card = tk.Frame(
@@ -1618,8 +2002,8 @@ class EcoBiomeDesktopApp:
             background=self._theme.surface_elevated,
             highlightthickness=1,
             highlightbackground=self._theme.border,
-            padx=16,
-            pady=16,
+            padx=12,
+            pady=12,
         )
         add_card.pack(
             side=tk.LEFT,
@@ -1632,13 +2016,13 @@ class EcoBiomeDesktopApp:
             text=DesktopIcon.ADD.value,
             background=add_card["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 20),
+            font=("Segoe UI", 18),
         ).pack()
 
         self._muted_label(
             add_card,
             "Ajouter un souvenir",
-        ).pack()
+        ).pack(pady=(4, 0))
 
         self._muted_label(
             add_card,
@@ -1655,7 +2039,7 @@ class EcoBiomeDesktopApp:
             background=self._theme.background,
         )
         footer.grid(
-            row=7,
+            row=0,
             column=0,
             sticky="ew",
             padx=24,
@@ -2013,20 +2397,47 @@ class EcoBiomeDesktopApp:
         self,
         display_name: str,
     ) -> None:
-        """Apply one selected visual theme."""
+        """Rebuild the shell with one selected visual theme."""
         identifier = self._theme_name_by_display[
             display_name
         ]
-
-        self._theme = get_desktop_theme(identifier)
+        self._theme = get_desktop_theme(
+            identifier
+        )
 
         for child in self._root.winfo_children():
             child.destroy()
 
+        self._viewport = None
+        self._hero_banner = None
+        self._footer_container = None
+        self._layout_region = None
         self._build_interface()
+        self._wire_gallery_entries()
 
         if self._on_theme_changed is not None:
             self._on_theme_changed(identifier)
+
+
+    def _refresh_viewport(self) -> None:
+        """Refresh the current main viewport when it exists."""
+        if self._viewport is not None:
+            self._viewport.refresh()
+
+    def _maximize_window(self) -> None:
+        """Maximize the application without changing Tk global scaling."""
+        try:
+            self._root.state(
+                "zoomed"
+            )
+
+        except tk.TclError:
+            self._root.geometry(
+
+                    f"{self._root.winfo_screenwidth()}x"
+                    f"{self._root.winfo_screenheight()}+0+0"
+
+            )
 
     def _accent_for_role(
         self,
@@ -2110,6 +2521,10 @@ def run_desktop_dashboard(
     view_model: DesktopDashboardViewModel,
     *,
     gallery_items: tuple[MediaGalleryItem, ...] = (),
+    gallery_directory: Path | None = None,
+    on_import_gallery_files: (
+        Callable[[tuple[Path, ...]], None] | None
+    ) = None,
     analytics_view_model: (
         DiagnosticAnalyticsViewModel | None
     ) = None,
@@ -2127,6 +2542,10 @@ def run_desktop_dashboard(
     EcoBiomeDesktopApp(
         view_model,
         gallery_items=gallery_items,
+        gallery_directory=gallery_directory,
+        on_import_gallery_files=(
+            on_import_gallery_files
+        ),
         analytics_view_model=analytics_view_model,
         layout_preferences=layout_preferences,
         layout_store=layout_store,

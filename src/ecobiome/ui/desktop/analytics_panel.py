@@ -26,6 +26,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         *,
         view_model: DiagnosticAnalyticsViewModel,
         theme: DesktopTheme,
+        quality_only: bool = False,
     ) -> None:
         super().__init__(
             parent,
@@ -34,6 +35,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
 
         self._view_model = view_model
         self._theme = theme
+        self._quality_only = quality_only
         self._selected_identifier: str | None = None
         self._detail_title: tk.Label | None = None
         self._detail_probability: tk.Label | None = None
@@ -41,17 +43,26 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         self._detail_recommendation: tk.Label | None = None
         self._hypothesis_rows: dict[str, tk.Frame] = {}
 
-        self.grid_columnconfigure(0, weight=2)
-        self.grid_columnconfigure(1, weight=3)
+        if quality_only:
+            self.grid_columnconfigure(
+                0,
+                weight=1,
+            )
+        else:
+            self.grid_columnconfigure(0, weight=2)
+            self.grid_columnconfigure(1, weight=3)
+
         self.grid_rowconfigure(0, weight=1)
 
         self._build_quality_section()
-        self._build_hypothesis_section()
 
-        if view_model.hypotheses:
-            self._select_hypothesis(
-                view_model.hypotheses[0].identifier
-            )
+        if not quality_only:
+            self._build_hypothesis_section()
+
+            if view_model.hypotheses:
+                self._select_hypothesis(
+                    view_model.hypotheses[0].identifier
+                )
 
     def _build_quality_section(self) -> None:
         """Build global-quality and evolution charts."""
@@ -60,7 +71,11 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             row=0,
             column=0,
             sticky="nsew",
-            padx=(0, 7),
+            padx=(
+                0
+                if self._quality_only
+                else (0, 7)
+            ),
         )
 
         self._title(
@@ -74,13 +89,19 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         )
         summary.pack(
             fill=tk.X,
-            pady=(12, 4),
+            pady=(10, 2),
+        )
+
+        donut_size = (
+            145
+            if self._quality_only
+            else 205
         )
 
         donut = tk.Canvas(
             summary,
-            width=205,
-            height=205,
+            width=donut_size,
+            height=donut_size,
             background=card["background"],
             highlightthickness=0,
         )
@@ -119,8 +140,8 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             side=tk.LEFT,
             fill=tk.BOTH,
             expand=True,
-            padx=(14, 0),
-            pady=(12, 0),
+            padx=(10, 0),
+            pady=(6, 0),
         )
 
         legend_items = (
@@ -162,12 +183,16 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             font=("Segoe UI Semibold", 10),
         ).pack(
             anchor="w",
-            pady=(12, 4),
+            pady=(8, 2),
         )
 
         line_chart = tk.Canvas(
             card,
-            height=150,
+            height=(
+                92
+                if self._quality_only
+                else 150
+            ),
             background=card["background"],
             highlightthickness=0,
         )

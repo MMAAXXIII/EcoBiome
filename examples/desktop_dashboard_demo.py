@@ -20,6 +20,7 @@ from ecobiome.ui.desktop import (
     build_media_gallery,
     run_desktop_dashboard,
 )
+from ecobiome.ui.desktop.demo_media import PersistentDemoMediaStore
 from ecobiome.workspace import (
     ProjectManifest,
     ProjectType,
@@ -301,9 +302,22 @@ def main() -> None:
             )
         )
 
+        persistent_media_store = PersistentDemoMediaStore(
+            directory=(
+                Path.home()
+                / ".ecobiome"
+                / "demo-media"
+                / str(PROJECT_ID)
+            ),
+        )
+
+        persistent_media_store.import_directory(
+            workspace.layout.media_directory
+        )
+
         gallery_items = build_media_gallery(
-            workspace.layout.media_directory,
-            limit=8,
+            persistent_media_store.directory,
+            limit=50,
         )
 
         analytics = DiagnosticAnalyticsViewModel(
@@ -406,9 +420,20 @@ def main() -> None:
             )
         )
 
+        def import_gallery_files(
+            source_paths: tuple[Path, ...],
+        ) -> None:
+            persistent_media_store.import_files(
+                source_paths
+            )
+
         run_desktop_dashboard(
             view_model,
             gallery_items=gallery_items,
+            gallery_directory=persistent_media_store.directory,
+            on_import_gallery_files=(
+                import_gallery_files
+            ),
             analytics_view_model=analytics,
             layout_store=layout_store,
         )

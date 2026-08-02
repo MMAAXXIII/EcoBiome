@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -19,6 +20,56 @@ _SUPPORTED_IMAGE_SUFFIXES = frozenset(
         ".webp",
     }
 )
+
+
+_HASH_ONLY_STEM = re.compile(
+    r"^[0-9a-f]{24,}$",
+    re.IGNORECASE,
+)
+_HASH_SUFFIX = re.compile(
+    r"[-_][0-9a-f]{12}$",
+    re.IGNORECASE,
+)
+
+
+def readable_media_title(
+    path: Path,
+) -> str | None:
+    """Return a human title, excluding storage hashes."""
+    stem = _HASH_SUFFIX.sub(
+        "",
+        Path(path).stem,
+    )
+    compact_stem = re.sub(
+        r"[^0-9a-f]",
+        "",
+        stem,
+        flags=re.IGNORECASE,
+    )
+
+    if (
+        _HASH_ONLY_STEM.fullmatch(stem)
+        or (
+            len(compact_stem) >= 24
+            and compact_stem.casefold()
+            == stem.casefold()
+        )
+    ):
+        return None
+
+    title = re.sub(
+        r"[_-]+",
+        " ",
+        stem,
+    )
+    title = " ".join(
+        title.split()
+    ).strip()
+
+    if not title:
+        return None
+
+    return title.title()
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -127,7 +178,16 @@ def build_media_gallery(
             f"Gallery source is not a directory: {root}."
         )
 
-    candidates: list[MediaGalleryItem] = []
+    candidates: list[
+        tuple[
+            datetime,
+            str,
+            Path,
+            int,
+            str,
+            str | None,
+        ]
+    ] = []
 
     for path in root.rglob("*"):
         if not path.is_file():
@@ -145,30 +205,49 @@ def build_media_gallery(
             tz=UTC,
         )
 
-        title = path.stem.replace(
-            "_",
-            " ",
-        ).replace(
-            "-",
-            " ",
-        ).strip().title()
-
         candidates.append(
-            MediaGalleryItem(
-                path=path,
-                title=title,
-                captured_at=captured_at,
-                size_bytes=statistics.st_size,
-                suffix=suffix,
+            (
+                captured_at,
+                path.name.casefold(),
+                path,
+                statistics.st_size,
+                suffix,
+                readable_media_title(path),
             )
         )
 
     candidates.sort(
         key=lambda item: (
-            item.captured_at,
-            item.path.name.casefold(),
+            item[0],
+            item[1],
         ),
         reverse=True,
     )
 
-    return tuple(candidates[:limit])
+    items: list[MediaGalleryItem] = []
+
+    for index, (
+        captured_at,
+        _sort_name,
+        path,
+        size_bytes,
+        suffix,
+        readable_title,
+    ) in enumerate(
+        candidates[:limit],
+        start=1,
+    ):
+        items.append(
+            MediaGalleryItem(
+                path=path,
+                title=(
+                    readable_title
+                    or f"Image du projet {index}"
+                ),
+                captured_at=captured_at,
+                size_bytes=size_bytes,
+                suffix=suffix,
+            )
+        )
+
+    return tuple(items)
