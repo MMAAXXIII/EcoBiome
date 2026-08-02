@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tkinter as tk
 from collections.abc import Callable
+import os
 from pathlib import Path
 from typing import Literal
 
@@ -17,6 +18,12 @@ from PIL import (
 from ecobiome.ui.desktop.design_tokens import (
     TypographyRole,
     typography_font,
+)
+
+_HERO_REFERENCE_PATH = (
+    Path(__file__).resolve().parent
+    / "assets"
+    / "hero_reference.png"
 )
 from ecobiome.ui.desktop.theme import DesktopTheme
 
@@ -479,19 +486,22 @@ def select_hero_image_path(
             )
         )
 
-    if not candidates:
-        return None
-
-    candidates.sort(
-        key=lambda item: (
-            item[0],
-            item[1],
-            item[2],
-            str(item[3]).casefold(),
+    if candidates:
+        candidates.sort(
+            key=lambda item: (
+                item[0],
+                item[1],
+                item[2],
+                str(item[3]).casefold(),
+            )
         )
-    )
 
-    return candidates[0][3]
+        return candidates[0][3]
+
+    if os.environ.get("ECOBIOME_USE_HERO_REFERENCE") == "1" and _HERO_REFERENCE_PATH.is_file():
+        return _HERO_REFERENCE_PATH
+
+    return None
 
 
 class DashboardHeroBanner(tk.Frame):
