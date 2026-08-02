@@ -20,6 +20,14 @@ from ecobiome.ui.desktop.icons import (
     DesktopIcon,
     icon_text,
 )
+from ecobiome.ui.desktop.layout import (
+    DashboardLayoutPreferences,
+    DashboardLayoutStore,
+    DashboardSection,
+)
+from ecobiome.ui.desktop.layout_dialog import (
+    DashboardLayoutDialog,
+)
 from ecobiome.ui.desktop.theme import (
     ThemeIdentifier,
     available_desktop_themes,
@@ -44,6 +52,12 @@ class EcoBiomeDesktopApp:
         analytics_view_model: (
             DiagnosticAnalyticsViewModel | None
         ) = None,
+        layout_preferences: (
+            DashboardLayoutPreferences | None
+        ) = None,
+        layout_store: (
+            DashboardLayoutStore | None
+        ) = None,
         initial_theme: ThemeIdentifier = (
             ThemeIdentifier.ECOBIOME_NIGHT
         ),
@@ -54,6 +68,21 @@ class EcoBiomeDesktopApp:
         self._view_model = view_model
         self._gallery_items = gallery_items
         self._analytics_view_model = analytics_view_model
+        self._layout_store = layout_store
+        self._layout_preferences = (
+            layout_preferences
+            if layout_preferences is not None
+            else (
+                layout_store.load_or_default()
+                if layout_store is not None
+                else DashboardLayoutPreferences()
+            )
+        )
+        self._section_frames: dict[
+            DashboardSection,
+            tk.Frame,
+        ] = {}
+        self._layout_summary_label: tk.Label | None = None
         self._gallery_images: list[ImageTk.PhotoImage] = []
         self._theme = get_desktop_theme(initial_theme)
         self._on_theme_changed = on_theme_changed
@@ -537,15 +566,14 @@ class EcoBiomeDesktopApp:
         body.grid_columnconfigure(0, weight=1)
 
         self._gallery_images.clear()
+        self._section_frames.clear()
 
         self._build_header(body)
         self._build_metric_row(body)
         self._build_analysis_row(body)
-        self._build_activity_row(body)
-        self._build_diagnostic_analytics(body)
-        self._build_gallery(body)
-        self._build_memories(body)
-        self._build_footer(body)
+        self._build_layout_toolbar(body)
+        self._build_customizable_sections(body)
+        self._build_footer_container(body)
 
     def _build_header(
         self,
@@ -1087,6 +1115,199 @@ class EcoBiomeDesktopApp:
         ).pack(fill=tk.X)
 
 
+
+
+    def _build_layout_toolbar(
+        self,
+        parent: tk.Widget,
+    ) -> None:
+        """Build dashboard-layout controls."""
+        toolbar = tk.Frame(
+            parent,
+            background=self._theme.surface,
+            highlightthickness=1,
+            highlightbackground=self._theme.border,
+            padx=16,
+            pady=10,
+        )
+
+        toolbar.grid(
+            row=3,
+            column=0,
+            sticky="ew",
+            padx=20,
+            pady=(14, 0),
+        )
+
+        tk.Label(
+            toolbar,
+            text="Disposition personnalisée",
+            background=toolbar["background"],
+            foreground=self._theme.text_primary,
+            font=("Segoe UI Semibold", 10),
+        ).pack(side=tk.LEFT)
+
+        self._layout_summary_label = tk.Label(
+            toolbar,
+            text=self._layout_summary_text(),
+            background=toolbar["background"],
+            foreground=self._theme.text_secondary,
+            font=("Segoe UI", 9),
+        )
+
+        self._layout_summary_label.pack(
+            side=tk.LEFT,
+            padx=(12, 0),
+        )
+
+        tk.Button(
+            toolbar,
+            text="Personnaliser",
+            command=self._open_layout_dialog,
+            background=self._theme.surface_elevated,
+            foreground=self._theme.accent,
+            activebackground=self._theme.border,
+            activeforeground=self._theme.text_primary,
+            relief=tk.FLAT,
+            padx=13,
+            pady=6,
+            cursor="hand2",
+        ).pack(side=tk.RIGHT)
+
+    def _build_customizable_sections(
+        self,
+        parent: tk.Widget,
+    ) -> None:
+        """Create section containers and apply their order."""
+        builders = {
+            DashboardSection.ACTIVITY: (
+                self._build_activity_row
+            ),
+            DashboardSection.ANALYTICS: (
+                self._build_diagnostic_analytics
+            ),
+            DashboardSection.GALLERY: (
+                self._build_gallery
+            ),
+            DashboardSection.MEMORIES: (
+                self._build_memories
+            ),
+        }
+
+        for section in DashboardSection:
+            container = tk.Frame(
+                parent,
+                background=self._theme.background,
+            )
+
+            container.grid_columnconfigure(
+                0,
+                weight=1,
+            )
+
+            self._section_frames[
+                section
+            ] = container
+
+            builders[section](
+                container
+            )
+
+        self._apply_layout_preferences()
+
+    def _build_footer_container(
+        self,
+        parent: tk.Widget,
+    ) -> None:
+        """Build the footer in an isolated container."""
+        container = tk.Frame(
+            parent,
+            background=self._theme.background,
+        )
+
+        container.grid(
+            row=8,
+            column=0,
+            sticky="ew",
+        )
+
+        container.grid_columnconfigure(
+            0,
+            weight=1,
+        )
+
+        self._build_footer(
+            container
+        )
+
+    def _apply_layout_preferences(
+        self,
+    ) -> None:
+        """Apply visibility and order without rebuilding widgets."""
+        for section_frame in self._section_frames.values():
+            section_frame.grid_forget()
+
+        row = 4
+
+        for section in (
+            self._layout_preferences.visible_sections
+        ):
+            section_frame = self._section_frames[
+                section
+            ]
+
+            section_frame.grid(
+                row=row,
+                column=0,
+                sticky="ew",
+            )
+
+            row += 1
+
+        if self._layout_summary_label is not None:
+            self._layout_summary_label.configure(
+                text=self._layout_summary_text()
+            )
+
+
+    def _layout_summary_text(self) -> str:
+        """Return a compact layout summary."""
+        visible_count = len(
+            self._layout_preferences.visible_sections
+        )
+
+        hidden_count = (
+            len(DashboardSection)
+            - visible_count
+        )
+
+        return (
+            f"{visible_count} section(s) visible(s)"
+            f" · {hidden_count} masquée(s)"
+        )
+
+    def _open_layout_dialog(self) -> None:
+        """Open the dashboard customization dialog."""
+        DashboardLayoutDialog(
+            self._root,
+            preferences=self._layout_preferences,
+            theme=self._theme,
+            on_apply=self._update_layout_preferences,
+        )
+
+    def _update_layout_preferences(
+        self,
+        preferences: DashboardLayoutPreferences,
+    ) -> None:
+        """Apply and persist new preferences."""
+        self._layout_preferences = preferences
+
+        if self._layout_store is not None:
+            self._layout_store.save(
+                preferences
+            )
+
+        self._apply_layout_preferences()
 
     def _build_diagnostic_analytics(
         self,
@@ -1892,6 +2113,12 @@ def run_desktop_dashboard(
     analytics_view_model: (
         DiagnosticAnalyticsViewModel | None
     ) = None,
+    layout_preferences: (
+        DashboardLayoutPreferences | None
+    ) = None,
+    layout_store: (
+        DashboardLayoutStore | None
+    ) = None,
     initial_theme: ThemeIdentifier = (
         ThemeIdentifier.ECOBIOME_NIGHT
     ),
@@ -1901,5 +2128,7 @@ def run_desktop_dashboard(
         view_model,
         gallery_items=gallery_items,
         analytics_view_model=analytics_view_model,
+        layout_preferences=layout_preferences,
+        layout_store=layout_store,
         initial_theme=initial_theme,
     ).run()

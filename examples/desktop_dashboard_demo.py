@@ -13,6 +13,7 @@ from ecobiome.dashboard import build_project_dashboard
 from ecobiome.journal import JournalEventType
 from ecobiome.media import MediaMetadata
 from ecobiome.ui.desktop import (
+    DashboardLayoutStore,
     DesktopDashboardViewModel,
     DiagnosticAnalyticsViewModel,
     HypothesisDetailViewModel,
@@ -397,10 +398,19 @@ def main() -> None:
             ),
         )
 
+        layout_store = DashboardLayoutStore(
+            path=(
+                Path.home()
+                / ".ecobiome"
+                / "dashboard-layout.json"
+            )
+        )
+
         run_desktop_dashboard(
             view_model,
             gallery_items=gallery_items,
             analytics_view_model=analytics,
+            layout_store=layout_store,
         )
 
 
