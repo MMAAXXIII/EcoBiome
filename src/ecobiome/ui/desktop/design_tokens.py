@@ -95,3 +95,19 @@ def typography_font(
         family,
         max(1, round(size * visual_scale)),
     )
+
+
+def surface_geometry(
+    visual_scale: float = 1.0,
+) -> dict[str, tuple[int, int]]:
+    """Return canonical (unscaled) surface geometry (radius, shadow_offset).
+
+    The visual scaling is applied by the consumer (surfaces.surface_profile),
+    so keep these tokens as the single source of truth for base values.
+    """
+    # Keep the base tokens unscaled; surfaces.surface_profile applies visual_scale
+    return {
+        "panel": (14, 3),
+        "analytic": (12, 2),
+        "compact": (9, 1),
+    }

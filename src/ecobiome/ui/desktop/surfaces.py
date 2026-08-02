@@ -9,6 +9,7 @@ from enum import StrEnum
 from typing import Any
 
 from PIL import Image, ImageDraw, ImageTk
+from ecobiome.ui.desktop.design_tokens import surface_geometry
 
 
 class SurfaceLevel(StrEnum):
@@ -40,12 +41,11 @@ def surface_profile(
         )
 
     resolved_level = SurfaceLevel(level)
-    geometry = {
-        SurfaceLevel.PANEL: (14, 3),
-        SurfaceLevel.ANALYTIC: (12, 2),
-        SurfaceLevel.COMPACT: (9, 1),
-    }
-    radius, shadow_offset = geometry[resolved_level]
+    # Use centralized design tokens for surface geometry so tuning is simple
+    # and traceable. surface_geometry returns scaled (radius, shadow_offset)
+    # keyed by the SurfaceLevel.value ("panel", "analytic", "compact").
+    geometry = surface_geometry(visual_scale=visual_scale)
+    radius, shadow_offset = geometry[resolved_level.value]
 
     return SurfaceProfile(
         level=resolved_level,
