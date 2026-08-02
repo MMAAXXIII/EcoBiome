@@ -2945,6 +2945,25 @@ small {{ color: #607980; }}
 
         return card
 
+    def _normalize_padding_token(self, padding: int) -> int:
+        """Map an arbitrary padding to the nearest design token (already scaled).
+
+        This keeps card paddings consistent across components by choosing one
+        of the shared spacing tokens from spacing_scale.
+        """
+        candidates = (
+            self._spacing.micro,
+            self._spacing.compact,
+            self._spacing.gutter,
+            self._spacing.padding,
+            self._spacing.group,
+            self._spacing.major,
+        )
+
+        # Find the candidate value closest to the requested padding
+        nearest = min(candidates, key=lambda v: abs(v - padding))
+        return nearest
+
     def _card(
         self,
         parent: tk.Widget,
@@ -2952,12 +2971,14 @@ small {{ color: #607980; }}
         padding: int,
         level: SurfaceLevel = SurfaceLevel.PANEL,
     ) -> tk.Frame:
-        """Create one standard surface card."""
+        """Create one standard surface card with normalized padding."""
+        normalized_padding = self._normalize_padding_token(padding)
+
         return self._surface_card(
             parent,
             background=self._theme.surface,
             border=self._theme.border,
-            padding=self._px(padding),
+            padding=normalized_padding,
             level=level,
         )
 
