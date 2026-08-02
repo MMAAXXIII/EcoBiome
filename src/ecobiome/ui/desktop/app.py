@@ -1377,7 +1377,7 @@ class EcoBiomeDesktopApp:
                 accent,
                 0.35,
             ),
-            padding=self._px(9),
+            padding=self._spacing.compact,
             level=SurfaceLevel.ANALYTIC,
         )
 
@@ -1418,7 +1418,7 @@ class EcoBiomeDesktopApp:
             pady=(5, 0),
         )
 
-        badge_size = self._px(54)
+        badge_size = max(24, self._spacing.group * 2)
         badge = tk.Canvas(
             summary,
             width=badge_size,
@@ -1454,7 +1454,7 @@ class EcoBiomeDesktopApp:
             font=self._type(TypographyRole.BODY),
         ).pack(
             fill=tk.X,
-            pady=(self._px(5), 0),
+            pady=(self._spacing.micro, 0),
         )
 
         return card
