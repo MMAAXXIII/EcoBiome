@@ -1,5 +1,12 @@
 """Desktop dashboard prototype for EcoBiome."""
 
+from ecobiome.ui.desktop.analytics import (
+    DiagnosticAnalyticsViewModel,
+    HypothesisDetailViewModel,
+)
+from ecobiome.ui.desktop.analytics_panel import (
+    DiagnosticAnalyticsPanel,
+)
 from ecobiome.ui.desktop.app import (
     EcoBiomeDesktopApp,
     run_desktop_dashboard,
@@ -40,7 +47,10 @@ __all__ = [
     "DesktopDashboardViewModel",
     "DesktopIcon",
     "DesktopTheme",
+    "DiagnosticAnalyticsPanel",
+    "DiagnosticAnalyticsViewModel",
     "EcoBiomeDesktopApp",
+    "HypothesisDetailViewModel",
     "MediaGalleryItem",
     "ProbabilityBar",
     "ThemeIdentifier",

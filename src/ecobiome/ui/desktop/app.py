@@ -7,6 +7,12 @@ from collections.abc import Callable
 
 from PIL import Image, ImageTk
 
+from ecobiome.ui.desktop.analytics import (
+    DiagnosticAnalyticsViewModel,
+)
+from ecobiome.ui.desktop.analytics_panel import (
+    DiagnosticAnalyticsPanel,
+)
 from ecobiome.ui.desktop.gallery import (
     MediaGalleryItem,
 )
@@ -35,6 +41,9 @@ class EcoBiomeDesktopApp:
         view_model: DesktopDashboardViewModel,
         *,
         gallery_items: tuple[MediaGalleryItem, ...] = (),
+        analytics_view_model: (
+            DiagnosticAnalyticsViewModel | None
+        ) = None,
         initial_theme: ThemeIdentifier = (
             ThemeIdentifier.ECOBIOME_NIGHT
         ),
@@ -44,6 +53,7 @@ class EcoBiomeDesktopApp:
     ) -> None:
         self._view_model = view_model
         self._gallery_items = gallery_items
+        self._analytics_view_model = analytics_view_model
         self._gallery_images: list[ImageTk.PhotoImage] = []
         self._theme = get_desktop_theme(initial_theme)
         self._on_theme_changed = on_theme_changed
@@ -532,6 +542,7 @@ class EcoBiomeDesktopApp:
         self._build_metric_row(body)
         self._build_analysis_row(body)
         self._build_activity_row(body)
+        self._build_diagnostic_analytics(body)
         self._build_gallery(body)
         self._build_memories(body)
         self._build_footer(body)
@@ -1076,6 +1087,29 @@ class EcoBiomeDesktopApp:
         ).pack(fill=tk.X)
 
 
+
+    def _build_diagnostic_analytics(
+        self,
+        parent: tk.Widget,
+    ) -> None:
+        """Build interactive diagnostic analytics."""
+        if self._analytics_view_model is None:
+            return
+
+        panel = DiagnosticAnalyticsPanel(
+            parent,
+            view_model=self._analytics_view_model,
+            theme=self._theme,
+        )
+
+        panel.grid(
+            row=4,
+            column=0,
+            sticky="ew",
+            padx=20,
+            pady=(14, 0),
+        )
+
     def _build_gallery(
         self,
         parent: tk.Widget,
@@ -1086,7 +1120,7 @@ class EcoBiomeDesktopApp:
             padding=16,
         )
         card.grid(
-            row=4,
+            row=5,
             column=0,
             sticky="ew",
             padx=20,
@@ -1324,7 +1358,7 @@ class EcoBiomeDesktopApp:
             padding=16,
         )
         card.grid(
-            row=5,
+            row=6,
             column=0,
             sticky="ew",
             padx=20,
@@ -1400,7 +1434,7 @@ class EcoBiomeDesktopApp:
             background=self._theme.background,
         )
         footer.grid(
-            row=6,
+            row=7,
             column=0,
             sticky="ew",
             padx=24,
@@ -1855,6 +1889,9 @@ def run_desktop_dashboard(
     view_model: DesktopDashboardViewModel,
     *,
     gallery_items: tuple[MediaGalleryItem, ...] = (),
+    analytics_view_model: (
+        DiagnosticAnalyticsViewModel | None
+    ) = None,
     initial_theme: ThemeIdentifier = (
         ThemeIdentifier.ECOBIOME_NIGHT
     ),
@@ -1863,5 +1900,6 @@ def run_desktop_dashboard(
     EcoBiomeDesktopApp(
         view_model,
         gallery_items=gallery_items,
+        analytics_view_model=analytics_view_model,
         initial_theme=initial_theme,
     ).run()

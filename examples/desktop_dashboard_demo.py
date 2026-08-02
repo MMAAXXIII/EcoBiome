@@ -14,6 +14,8 @@ from ecobiome.journal import JournalEventType
 from ecobiome.media import MediaMetadata
 from ecobiome.ui.desktop import (
     DesktopDashboardViewModel,
+    DiagnosticAnalyticsViewModel,
+    HypothesisDetailViewModel,
     build_media_gallery,
     run_desktop_dashboard,
 )
@@ -303,9 +305,102 @@ def main() -> None:
             limit=8,
         )
 
+        analytics = DiagnosticAnalyticsViewModel(
+            quality_score=82,
+            quality_history=(
+                58,
+                62,
+                66,
+                64,
+                71,
+                74,
+                79,
+                77,
+                82,
+            ),
+            high_quality_count=18,
+            medium_quality_count=6,
+            low_quality_count=2,
+            rejected_count=1,
+            hypotheses=(
+                HypothesisDetailViewModel(
+                    identifier="H1",
+                    title="Capteur de luminance déréglé",
+                    explanation=(
+                        "Les écarts observés sont compatibles "
+                        "avec une dérive progressive du capteur."
+                    ),
+                    recommendation=(
+                        "Recalibrer le capteur puis répéter "
+                        "trois mesures avec une source étalon."
+                    ),
+                    probability=78,
+                    accent="#70D68D",
+                ),
+                HypothesisDetailViewModel(
+                    identifier="H2",
+                    title="Source lumineuse parasite",
+                    explanation=(
+                        "Une lumière extérieure pourrait "
+                        "contaminer les mesures en obscurité."
+                    ),
+                    recommendation=(
+                        "Effectuer un test dans une chambre "
+                        "complètement occultée."
+                    ),
+                    probability=64,
+                    accent="#4FA4FF",
+                ),
+                HypothesisDetailViewModel(
+                    identifier="H3",
+                    title="Réflexion environnementale",
+                    explanation=(
+                        "Les parois claires peuvent réfléchir "
+                        "une partie du flux lumineux."
+                    ),
+                    recommendation=(
+                        "Répéter l'expérience avec des parois "
+                        "mates et sombres."
+                    ),
+                    probability=46,
+                    accent="#A78BFA",
+                ),
+                HypothesisDetailViewModel(
+                    identifier="H4",
+                    title="Erreur de synchronisation",
+                    explanation=(
+                        "Le capteur et la caméra pourraient "
+                        "enregistrer à des instants différents."
+                    ),
+                    recommendation=(
+                        "Synchroniser les horodatages avant "
+                        "une nouvelle acquisition."
+                    ),
+                    probability=31,
+                    accent="#F2A65A",
+                ),
+                HypothesisDetailViewModel(
+                    identifier="H5",
+                    title="Bruit électronique",
+                    explanation=(
+                        "Le niveau de bruit est présent mais "
+                        "semble insuffisant pour expliquer "
+                        "l'ensemble des écarts."
+                    ),
+                    recommendation=(
+                        "Réaliser une mesure de référence "
+                        "avec l'entrée du capteur isolée."
+                    ),
+                    probability=18,
+                    accent="#EC6B72",
+                ),
+            ),
+        )
+
         run_desktop_dashboard(
             view_model,
             gallery_items=gallery_items,
+            analytics_view_model=analytics,
         )
 
 
