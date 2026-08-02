@@ -7,11 +7,14 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import UUID
 
+from PIL import Image, ImageDraw
+
 from ecobiome.dashboard import build_project_dashboard
 from ecobiome.journal import JournalEventType
 from ecobiome.media import MediaMetadata
 from ecobiome.ui.desktop import (
     DesktopDashboardViewModel,
+    build_media_gallery,
     run_desktop_dashboard,
 )
 from ecobiome.workspace import (
@@ -94,6 +97,62 @@ def populate_demo_workspace(
         tags=("diagnostic", "healthy"),
     )
 
+    hypothesis_titles = (
+        "Capteur de luminance déréglé",
+        "Source lumineuse parasite",
+        "Réflexion environnementale",
+        "Erreur de synchronisation",
+        "Bruit électronique",
+    )
+
+    for index, hypothesis_title in enumerate(
+        hypothesis_titles,
+        start=1,
+    ):
+        workspace.journal.record(
+            event_type=JournalEventType.HYPOTHESIS,
+            title=hypothesis_title,
+            description=(
+                "Hypothèse générée automatiquement "
+                "à partir des observations disponibles."
+            ),
+            occurred_at=(
+                NOW
+                - timedelta(
+                    minutes=95 - index
+                )
+            ),
+            project_id=PROJECT_ID,
+            tags=("hypothèse", "diagnostic"),
+        )
+
+    experiment_titles = (
+        "Test d'obscurité contrôlé",
+        "Recalibrage du capteur",
+        "Comparaison avec une source étalon",
+    )
+
+    for index, experiment_title in enumerate(
+        experiment_titles,
+        start=1,
+    ):
+        workspace.journal.record(
+            event_type=JournalEventType.EXPERIMENT,
+            title=experiment_title,
+            description=(
+                "Expérience proposée pour discriminer "
+                "les hypothèses principales."
+            ),
+            occurred_at=(
+                NOW
+                - timedelta(
+                    minutes=70 - index
+                )
+            ),
+            project_id=PROJECT_ID,
+            tags=("expérience", "diagnostic"),
+        )
+
     workspace.journal.record(
         event_type=JournalEventType.LEARNING,
         title="Hypothèse confirmée",
@@ -118,10 +177,85 @@ def populate_demo_workspace(
         tags=("observation", "alevins"),
     )
 
-    for index in range(1, 4):
-        source = root.parent / f"guppy-{index}.jpg"
-        source.write_bytes(
-            f"demo-image-{index}".encode()
+    image_palettes = (
+        (
+            "#0B2D3D",
+            "#27A6A1",
+            "#7CE3B3",
+        ),
+        (
+            "#192E29",
+            "#4E9A55",
+            "#C3DA7A",
+        ),
+        (
+            "#25304B",
+            "#7156B8",
+            "#E4A8F4",
+        ),
+    )
+
+    for index, palette in enumerate(
+        image_palettes,
+        start=1,
+    ):
+        source = (
+            root.parent
+            / f"guppy-{index}.png"
+        )
+
+        image = Image.new(
+            "RGB",
+            (720, 420),
+            palette[0],
+        )
+
+        drawing = ImageDraw.Draw(image)
+
+        drawing.ellipse(
+            (
+                80 + index * 25,
+                90,
+                480 + index * 25,
+                310,
+            ),
+            fill=palette[1],
+        )
+
+        drawing.polygon(
+            (
+                (445 + index * 25, 200),
+                (610, 90 + index * 15),
+                (610, 310 - index * 15),
+            ),
+            fill=palette[2],
+        )
+
+        drawing.ellipse(
+            (
+                180 + index * 25,
+                145,
+                205 + index * 25,
+                170,
+            ),
+            fill="#FFFFFF",
+        )
+
+        drawing.text(
+            (28, 25),
+            f"EcoBiome · Alevins {index}",
+            fill="#FFFFFF",
+        )
+
+        drawing.text(
+            (28, 370),
+            "Aquarium guppys · Démonstration",
+            fill=palette[2],
+        )
+
+        image.save(
+            source,
+            format="PNG",
         )
 
         workspace.media.import_file(
@@ -155,6 +289,7 @@ def main() -> None:
         snapshot = build_project_dashboard(
             workspace,
             latest_limit=8,
+            quality_score=82,
         )
 
         view_model = (
@@ -163,7 +298,15 @@ def main() -> None:
             )
         )
 
-        run_desktop_dashboard(view_model)
+        gallery_items = build_media_gallery(
+            workspace.layout.media_directory,
+            limit=8,
+        )
+
+        run_desktop_dashboard(
+            view_model,
+            gallery_items=gallery_items,
+        )
 
 
 if __name__ == "__main__":

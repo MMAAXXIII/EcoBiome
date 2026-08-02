@@ -93,6 +93,9 @@ def make_snapshot(
         ),
         event_counts=event_counts,
         latest_activity=latest_activity,
+        conclusion_count=(
+            1 if with_activity else 0
+        ),
     )
 
 
@@ -180,11 +183,11 @@ def test_view_model_builds_summary_metrics() -> None:
     }
 
     assert values == {
-        "Événements": "2",
-        "Médias": "3",
-        "Diagnostics": "1",
-        "Apprentissages": "0",
-        "Événements biologiques": "1",
+        "Observations": "2",
+        "Qualité globale": "—",
+        "Hypothèses": "0",
+        "Expériences": "0",
+        "Conclusions": "1",
     }
 
 

@@ -33,11 +33,21 @@ def build_project_dashboard(
     workspace: ProjectWorkspace,
     *,
     latest_limit: int = 10,
+    quality_score: int | None = None,
 ) -> ProjectDashboardSnapshot:
     """Build an immutable dashboard snapshot for one project."""
     if latest_limit < 0:
         raise ValueError(
             "Dashboard latest-activity limit cannot be negative."
+        )
+
+    if (
+        quality_score is not None
+        and not 0 <= quality_score <= 100
+    ):
+        raise ValueError(
+            "Dashboard quality score must be between "
+            "zero and one hundred."
         )
 
     events = workspace.journal.timeline()
@@ -89,6 +99,17 @@ def build_project_dashboard(
         ],
         event_counts=event_counts,
         latest_activity=latest_activity,
+        quality_score=quality_score,
+        hypothesis_count=counts[
+            JournalEventType.HYPOTHESIS
+        ],
+        experiment_count=counts[
+            JournalEventType.EXPERIMENT
+        ],
+        conclusion_count=(
+            counts[JournalEventType.LEARNING]
+            + counts[JournalEventType.BIOLOGICAL_EVENT]
+        ),
     )
 
 

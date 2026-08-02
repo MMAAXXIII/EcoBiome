@@ -86,6 +86,10 @@ class ProjectDashboardSnapshot:
     biological_event_count: int
     event_counts: tuple[DashboardEventCount, ...]
     latest_activity: tuple[DashboardActivityItem, ...]
+    quality_score: int | None = None
+    hypothesis_count: int = 0
+    experiment_count: int = 0
+    conclusion_count: int = 0
 
     def __post_init__(self) -> None:
         """Validate and normalize one dashboard snapshot."""
@@ -109,11 +113,23 @@ class ProjectDashboardSnapshot:
             self.diagnostic_count,
             self.learning_count,
             self.biological_event_count,
+            self.hypothesis_count,
+            self.experiment_count,
+            self.conclusion_count,
         )
 
         if any(counter < 0 for counter in counters):
             raise ValueError(
                 "Dashboard counters cannot be negative."
+            )
+
+        if (
+            self.quality_score is not None
+            and not 0 <= self.quality_score <= 100
+        ):
+            raise ValueError(
+                "Dashboard quality score must be between "
+                "zero and one hundred."
             )
 
         if sum(
