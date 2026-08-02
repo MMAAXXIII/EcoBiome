@@ -9,16 +9,28 @@ from PIL import Image
 from ecobiome.ui.desktop import (
     DashboardViewportMetrics,
     PersistentDemoMediaStore,
+    SpacingScale,
+    SurfaceLevel,
+    TypographyRole,
     cover_dimensions,
+    geometry_dimensions,
     is_gallery_navigation_text,
     normalize_navigation_text,
     resolve_project_title,
+    responsive_content_width,
+    responsive_sidebar_width,
+    scrollbar_fraction_for_thumb,
+    scrollbar_thumb_geometry,
+    spacing_scale,
+    surface_profile,
+    typography_font,
 )
 from ecobiome.ui.desktop.hero import (
     build_aquarium_fallback,
     resolve_mount_geometry_manager,
 )
 from ecobiome.ui.desktop.responsive import fit_content_height
+from ecobiome.ui.desktop.surfaces import render_rounded_surface
 from ecobiome.ui.desktop.theme import (
     ThemeIdentifier,
     get_desktop_theme,
@@ -70,6 +82,16 @@ def test_viewport_ratio_is_clamped_for_small_display() -> None:
     assert metrics.fit_ratio == 0.72
 
 
+def test_viewport_ratio_can_expand_for_large_displays() -> None:
+    metrics = DashboardViewportMetrics(
+        screen_width=2560,
+        screen_height=1440,
+        maximum_ratio=1.2,
+    )
+
+    assert metrics.fit_ratio == 1.2
+
+
 def test_invalid_viewport_dimensions_are_rejected() -> None:
     metrics = DashboardViewportMetrics(
         screen_width=0,
@@ -81,6 +103,151 @@ def test_invalid_viewport_dimensions_are_rejected() -> None:
         match="positive",
     ):
         _ = metrics.fit_ratio
+
+
+def test_window_geometry_drives_non_maximized_visual_scale() -> None:
+    width, height = geometry_dimensions(
+        "1880x1000+-1900+16"
+    )
+    metrics = DashboardViewportMetrics(
+        screen_width=width,
+        screen_height=height,
+    )
+
+    assert (width, height) == (1880, 1000)
+    assert metrics.fit_ratio == pytest.approx(
+        1000 / 1080
+    )
+
+    with pytest.raises(ValueError, match="invalid"):
+        geometry_dimensions("plein-écran")
+
+
+def test_sidebar_width_tracks_viewport_without_crowding() -> None:
+    assert responsive_sidebar_width(1200) == 204
+    assert responsive_sidebar_width(2560) == 435
+    assert responsive_sidebar_width(800) == 200
+    assert responsive_sidebar_width(4000) == 450
+
+
+def test_dashboard_content_is_capped_on_ultra_wide_viewports() -> None:
+    assert responsive_content_width(1366) == 1366
+    assert responsive_content_width(1920) == 1900
+    assert responsive_content_width(2560) == 1900
+
+
+def test_dashboard_content_width_rejects_invalid_values() -> None:
+    with pytest.raises(
+        ValueError,
+        match="positive",
+    ):
+        responsive_content_width(0)
+
+    with pytest.raises(
+        ValueError,
+        match="positive",
+    ):
+        responsive_content_width(
+            1920,
+            maximum=0,
+        )
+
+
+def test_custom_scrollbar_geometry_is_bounded_and_draggable() -> None:
+    assert scrollbar_thumb_geometry(
+        0.25,
+        0.35,
+        track_height=200,
+        minimum_height=36,
+    ) == (50, 86)
+    assert scrollbar_thumb_geometry(
+        0.95,
+        1.0,
+        track_height=200,
+        minimum_height=36,
+    ) == (164, 200)
+    assert scrollbar_fraction_for_thumb(
+        82,
+        track_height=200,
+        thumb_height=36,
+    ) == 0.5
+
+    with pytest.raises(ValueError, match="ordered"):
+        scrollbar_thumb_geometry(
+            0.8,
+            0.2,
+            track_height=200,
+            minimum_height=36,
+        )
+
+
+def test_rounded_surface_has_clean_corners_and_fill() -> None:
+    image = render_rounded_surface(
+        180,
+        90,
+        outer_background="#01090C",
+        surface="#08232A",
+        border="#1C4851",
+        shadow="#000508",
+        radius=16,
+        shadow_offset=4,
+    )
+
+    assert image.size == (180, 90)
+    assert image.getpixel((0, 0)) == (1, 9, 12)
+    assert image.getpixel((90, 40)) == (8, 35, 42)
+    assert len(image.getcolors(maxcolors=5000) or ()) > 4
+
+
+def test_surface_system_exposes_three_scaled_levels() -> None:
+    panel = surface_profile(SurfaceLevel.PANEL)
+    analytic = surface_profile(
+        SurfaceLevel.ANALYTIC,
+        visual_scale=1.2,
+    )
+    compact = surface_profile(SurfaceLevel.COMPACT)
+
+    assert panel.radius == 14
+    assert panel.shadow_offset == 3
+    assert analytic.radius == 14
+    assert analytic.shadow_offset == 2
+    assert compact.radius == 9
+    assert compact.shadow_offset == 1
+
+    with pytest.raises(ValueError, match="positive"):
+        surface_profile(
+            SurfaceLevel.PANEL,
+            visual_scale=0,
+        )
+
+
+def test_design_tokens_share_one_scaled_visual_rhythm() -> None:
+    spacing = spacing_scale(1.2)
+
+    assert spacing == SpacingScale(
+        micro=5,
+        compact=10,
+        gutter=14,
+        padding=19,
+        group=29,
+        major=38,
+    )
+    assert typography_font(
+        TypographyRole.PROJECT_TITLE
+    ) == ("Segoe UI Semibold", 25)
+    assert typography_font(
+        TypographyRole.BODY,
+        visual_scale=1.2,
+    ) == ("Segoe UI", 11)
+
+    with pytest.raises(ValueError, match="positive"):
+        spacing_scale(0)
+
+    with pytest.raises(ValueError, match="positive"):
+        typography_font(
+            TypographyRole.BODY,
+            visual_scale=0,
+        )
 
 
 def test_cover_dimensions_fill_target_area() -> None:

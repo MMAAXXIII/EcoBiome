@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import os
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import UUID
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageOps
 
 from ecobiome.dashboard import build_project_dashboard
 from ecobiome.journal import JournalEventType
@@ -17,10 +18,13 @@ from ecobiome.ui.desktop import (
     DesktopDashboardViewModel,
     DiagnosticAnalyticsViewModel,
     HypothesisDetailViewModel,
+    ThemeIdentifier,
     build_media_gallery,
+    get_desktop_theme,
     run_desktop_dashboard,
 )
 from ecobiome.ui.desktop.demo_media import PersistentDemoMediaStore
+from ecobiome.ui.desktop.hero import build_aquarium_fallback
 from ecobiome.workspace import (
     ProjectManifest,
     ProjectType,
@@ -45,7 +49,7 @@ def populate_demo_workspace(
         root,
         manifest=ProjectManifest(
             project_id=PROJECT_ID,
-            name="Aquarium guppys",
+            name="Aquarium Guppys",
             project_type=ProjectType.AQUARIUM,
             description=(
                 "Suivi scientifique de la reproduction, "
@@ -181,86 +185,32 @@ def populate_demo_workspace(
         tags=("observation", "alevins"),
     )
 
-    image_palettes = (
-        (
-            "#0B2D3D",
-            "#27A6A1",
-            "#7CE3B3",
-        ),
-        (
-            "#192E29",
-            "#4E9A55",
-            "#C3DA7A",
-        ),
-        (
-            "#25304B",
-            "#7156B8",
-            "#E4A8F4",
+    image_centerings = (
+        (0.34, 0.48),
+        (0.58, 0.52),
+        (0.78, 0.46),
+    )
+
+    aquarium_image = build_aquarium_fallback(
+        width=1600,
+        height=600,
+        theme=get_desktop_theme(
+            ThemeIdentifier.ECOBIOME_NIGHT
         ),
     )
 
-    for index, palette in enumerate(
-        image_palettes,
+    for index, centering in enumerate(
+        image_centerings,
         start=1,
     ):
-        source = (
-            root.parent
-            / f"guppy-{index}.png"
-        )
-
-        image = Image.new(
-            "RGB",
+        source = root.parent / f"guppy-{index}.png"
+        image = ImageOps.fit(
+            aquarium_image,
             (720, 420),
-            palette[0],
+            method=Image.Resampling.LANCZOS,
+            centering=centering,
         )
-
-        drawing = ImageDraw.Draw(image)
-
-        drawing.ellipse(
-            (
-                80 + index * 25,
-                90,
-                480 + index * 25,
-                310,
-            ),
-            fill=palette[1],
-        )
-
-        drawing.polygon(
-            (
-                (445 + index * 25, 200),
-                (610, 90 + index * 15),
-                (610, 310 - index * 15),
-            ),
-            fill=palette[2],
-        )
-
-        drawing.ellipse(
-            (
-                180 + index * 25,
-                145,
-                205 + index * 25,
-                170,
-            ),
-            fill="#FFFFFF",
-        )
-
-        drawing.text(
-            (28, 25),
-            f"EcoBiome · Alevins {index}",
-            fill="#FFFFFF",
-        )
-
-        drawing.text(
-            (28, 370),
-            "Aquarium guppys · Démonstration",
-            fill=palette[2],
-        )
-
-        image.save(
-            source,
-            format="PNG",
-        )
+        image.save(source, format="PNG")
 
         workspace.media.import_file(
             source,
@@ -436,6 +386,14 @@ def main() -> None:
             ),
             analytics_view_model=analytics,
             layout_store=layout_store,
+            initial_geometry=os.environ.get(
+                "ECOBIOME_DEMO_GEOMETRY",
+                "1500x900",
+            ),
+            start_maximized=(
+                "ECOBIOME_DEMO_GEOMETRY"
+                not in os.environ
+            ),
         )
 
 

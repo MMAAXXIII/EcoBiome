@@ -23,6 +23,12 @@ from ecobiome.ui.desktop.demo_media import (
     PersistentDemoMediaStore,
     is_supported_demo_image,
 )
+from ecobiome.ui.desktop.design_tokens import (
+    SpacingScale,
+    TypographyRole,
+    spacing_scale,
+    typography_font,
+)
 from ecobiome.ui.desktop.gallery import (
     MediaGalleryItem,
     build_media_gallery,
@@ -57,13 +63,27 @@ from ecobiome.ui.desktop.layout_dialog import (
     DashboardLayoutDialog,
 )
 from ecobiome.ui.desktop.navigation import (
+    NavigationIdentifier,
+    NavigationItem,
+    NavigationStatus,
     bind_gallery_navigation,
     is_gallery_navigation_text,
     normalize_navigation_text,
 )
 from ecobiome.ui.desktop.responsive import (
+    CanvasVerticalScrollbar,
     DashboardViewportMetrics,
     ResponsiveDashboardViewport,
+    geometry_dimensions,
+    responsive_content_width,
+    responsive_sidebar_width,
+    scrollbar_fraction_for_thumb,
+    scrollbar_thumb_geometry,
+)
+from ecobiome.ui.desktop.surfaces import (
+    SurfaceLevel,
+    SurfaceProfile,
+    surface_profile,
 )
 from ecobiome.ui.desktop.theme import (
     DesktopTheme,
@@ -82,6 +102,7 @@ from ecobiome.ui.desktop.view_model import (
 __all__ = [
     "DEFAULT_DASHBOARD_ORDER",
     "SUPPORTED_DEMO_IMAGE_SUFFIXES",
+    "CanvasVerticalScrollbar",
     "DashboardActivityViewModel",
     "DashboardHeroBanner",
     "DashboardLayoutDialog",
@@ -102,10 +123,17 @@ __all__ = [
     "GalleryViewerDialog",
     "HypothesisDetailViewModel",
     "MediaGalleryItem",
+    "NavigationIdentifier",
+    "NavigationItem",
+    "NavigationStatus",
     "PersistentDemoMediaStore",
     "ProbabilityBar",
     "ResponsiveDashboardViewport",
+    "SpacingScale",
+    "SurfaceLevel",
+    "SurfaceProfile",
     "ThemeIdentifier",
+    "TypographyRole",
     "UserProgressViewModel",
     "available_desktop_themes",
     "bind_gallery_navigation",
@@ -118,6 +146,7 @@ __all__ = [
     "draw_probability_bar",
     "draw_progress_bar",
     "draw_quality_donut",
+    "geometry_dimensions",
     "get_desktop_theme",
     "icon_text",
     "identify_dashboard_layout_preset",
@@ -126,6 +155,13 @@ __all__ = [
     "normalize_navigation_text",
     "readable_media_title",
     "resolve_project_title",
+    "responsive_content_width",
+    "responsive_sidebar_width",
     "run_desktop_dashboard",
+    "scrollbar_fraction_for_thumb",
+    "scrollbar_thumb_geometry",
     "select_hero_image_path",
+    "spacing_scale",
+    "surface_profile",
+    "typography_font",
 ]

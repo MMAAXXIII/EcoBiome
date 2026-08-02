@@ -5,6 +5,7 @@ from __future__ import annotations
 import tkinter as tk
 from collections.abc import Callable
 from datetime import UTC, datetime
+from functools import partial
 from html import escape
 from pathlib import Path
 from tkinter import filedialog, messagebox
@@ -16,6 +17,12 @@ from ecobiome.ui.desktop.analytics import (
 )
 from ecobiome.ui.desktop.analytics_panel import (
     DiagnosticAnalyticsPanel,
+)
+from ecobiome.ui.desktop.design_tokens import (
+    SpacingScale,
+    TypographyRole,
+    spacing_scale,
+    typography_font,
 )
 from ecobiome.ui.desktop.gallery import (
     MediaGalleryItem,
@@ -42,10 +49,21 @@ from ecobiome.ui.desktop.layout_dialog import (
     DashboardLayoutDialog,
 )
 from ecobiome.ui.desktop.navigation import (
+    NavigationIdentifier,
+    NavigationItem,
+    NavigationStatus,
     bind_gallery_navigation,
 )
 from ecobiome.ui.desktop.responsive import (
+    DashboardViewportMetrics,
     ResponsiveDashboardViewport,
+    geometry_dimensions,
+    responsive_sidebar_width,
+)
+from ecobiome.ui.desktop.surfaces import (
+    RoundedSurfaceCard,
+    SurfaceLevel,
+    draw_diagnostic_icon,
 )
 from ecobiome.ui.desktop.theme import (
     ThemeIdentifier,
@@ -85,7 +103,14 @@ class EcoBiomeDesktopApp:
         on_theme_changed: (
             Callable[[ThemeIdentifier], None] | None
         ) = None,
+        initial_geometry: str = "1500x900",
+        start_maximized: bool = True,
     ) -> None:
+        if not initial_geometry.strip():
+            raise ValueError(
+                "Initial desktop geometry cannot be empty."
+            )
+
         self._view_model = view_model
         self._gallery_items = gallery_items
         self._gallery_directory = (
@@ -119,29 +144,200 @@ class EcoBiomeDesktopApp:
         self._viewport: ResponsiveDashboardViewport | None = None
         self._hero_banner: DashboardHeroBanner | None = None
         self._layout_region: tk.Frame | None = None
+        self._sidebar: tk.Frame | None = None
+        self._sidebar_navigation_canvas: tk.Canvas | None = None
+        self._sidebar_navigation_content: tk.Frame | None = None
+        self._sidebar_navigation_scrollbar: tk.Canvas | None = None
+        self._pending_theme_identifier: ThemeIdentifier | None = None
+        self._theme_change_after_id: str | None = None
+        self._window_is_maximized = False
+        self._window_restore_geometry = initial_geometry
+        self._window_drag_offset: tuple[int, int] | None = None
+        self._start_maximized = start_maximized
 
         self._root = tk.Tk()
+        self._root.withdraw()
+        display_width = self._root.winfo_screenwidth()
+        display_height = self._root.winfo_screenheight()
+
+        if not start_maximized:
+            display_width, display_height = geometry_dimensions(
+                initial_geometry
+            )
+
+        self._visual_scale = DashboardViewportMetrics(
+            screen_width=display_width,
+            screen_height=display_height,
+            maximum_ratio=1.2,
+        ).fit_ratio
+        self._spacing: SpacingScale = spacing_scale(
+            self._visual_scale
+        )
         self._root.title(
             f"EcoBiome — {view_model.project_name}"
         )
-        self._root.geometry("1500x900")
+        self._root.geometry(initial_geometry)
         self._root.minsize(1180, 720)
 
         self._theme_name_by_display = {
             theme.display_name: theme.identifier
             for theme in available_desktop_themes()
         }
+        self._root_binding_ids: dict[str, str] = {}
+        self._navigation_items = (
+            self._create_navigation_items()
+        )
 
+        self._install_root_bindings()
         self._build_interface()
         self._wire_gallery_entries()
-        self._root.after_idle(
-            self._maximize_window
+        self._root.bind(
+            "<Configure>",
+            self._on_root_configure,
+            add="+",
+        )
+        self._root.bind(
+            "<Map>",
+            self._on_root_map,
+            add="+",
         )
 
 
     def run(self) -> None:
         """Start the desktop event loop."""
+        self._show_window()
         self._root.mainloop()
+
+    def _install_root_bindings(self) -> None:
+        """Install application-owned global bindings exactly once."""
+        if self._root_binding_ids:
+            return
+
+        handlers: tuple[
+            tuple[str, Callable[[tk.Event], str | None]],
+            ...,
+        ] = (
+            ("<MouseWheel>", self._on_root_mousewheel),
+            ("<Button-4>", self._on_root_scroll_up),
+            ("<Button-5>", self._on_root_scroll_down),
+            ("<Home>", self._on_root_home),
+            ("<End>", self._on_root_end),
+        )
+
+        for sequence, handler in handlers:
+            binding_id = self._root.bind(
+                sequence,
+                handler,
+                add="+",
+            )
+
+            if binding_id is None:
+                raise RuntimeError(
+                    f"Unable to install root binding {sequence}."
+                )
+
+            self._root_binding_ids[sequence] = binding_id
+
+    def _active_viewport(
+        self,
+    ) -> ResponsiveDashboardViewport | None:
+        """Return the live viewport targeted by application bindings."""
+        viewport = self._viewport
+
+        if viewport is None or not viewport.is_alive:
+            return None
+
+        return viewport
+
+    def _on_root_mousewheel(
+        self,
+        event: tk.Event,
+    ) -> str | None:
+        """Delegate one wheel event to the current viewport."""
+        viewport = self._active_viewport()
+        return (
+            viewport.handle_mousewheel(event)
+            if viewport is not None
+            else None
+        )
+
+    def _on_root_scroll_up(
+        self,
+        event: tk.Event,
+    ) -> str | None:
+        """Delegate one X11 upward-scroll event."""
+        viewport = self._active_viewport()
+        return (
+            viewport.handle_scroll_up(event)
+            if viewport is not None
+            else None
+        )
+
+    def _on_root_scroll_down(
+        self,
+        event: tk.Event,
+    ) -> str | None:
+        """Delegate one X11 downward-scroll event."""
+        viewport = self._active_viewport()
+        return (
+            viewport.handle_scroll_down(event)
+            if viewport is not None
+            else None
+        )
+
+    def _on_root_home(
+        self,
+        event: tk.Event,
+    ) -> str | None:
+        """Delegate one Home key event."""
+        if self._event_targets_editable_widget(event):
+            return None
+
+        viewport = self._active_viewport()
+        return (
+            viewport.handle_home(event)
+            if viewport is not None
+            else None
+        )
+
+    def _on_root_end(
+        self,
+        event: tk.Event,
+    ) -> str | None:
+        """Delegate one End key event."""
+        if self._event_targets_editable_widget(event):
+            return None
+
+        viewport = self._active_viewport()
+        return (
+            viewport.handle_end(event)
+            if viewport is not None
+            else None
+        )
+
+    @staticmethod
+    def _event_targets_editable_widget(
+        event: tk.Event,
+    ) -> bool:
+        """Return whether navigation keys belong to a text-editing widget."""
+        widget = event.widget
+
+        if not isinstance(widget, tk.Misc):
+            return False
+
+        try:
+            widget_class = str(widget.winfo_class())
+        except tk.TclError:
+            return False
+
+        return widget_class in {
+            "Entry",
+            "Spinbox",
+            "TCombobox",
+            "TEntry",
+            "TSpinbox",
+            "Text",
+        }
 
     def _build_interface(self) -> None:
         """Build a fixed sidebar and an independent main viewport."""
@@ -168,7 +364,7 @@ class EcoBiomeDesktopApp:
         )
         shell.grid_columnconfigure(
             0,
-            minsize=270,
+            minsize=130,
         )
         shell.grid_columnconfigure(
             1,
@@ -182,6 +378,133 @@ class EcoBiomeDesktopApp:
         self._build_sidebar(shell)
         self._build_main_area(shell)
 
+    def _create_navigation_items(
+        self,
+    ) -> tuple[NavigationItem, ...]:
+        """Create the single explicit primary-navigation table."""
+        coming_soon = self._show_coming_soon
+
+        return (
+            NavigationItem(
+                identifier=NavigationIdentifier.DASHBOARD,
+                icon=DesktopIcon.DASHBOARD,
+                label="Tableau de bord",
+                status=NavigationStatus.AVAILABLE,
+                command=self._show_dashboard,
+                selected=True,
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.JOURNAL,
+                icon=DesktopIcon.JOURNAL,
+                label="Journal scientifique",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(
+                    coming_soon,
+                    "Journal scientifique",
+                ),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.GALLERY,
+                icon=DesktopIcon.GALLERY,
+                label="Galerie",
+                status=NavigationStatus.AVAILABLE,
+                command=self._open_gallery_dialog,
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.PROJECTS,
+                icon=DesktopIcon.PROJECTS,
+                label="Projets",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Projets"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.DIAGNOSTIC,
+                icon=DesktopIcon.DIAGNOSTIC,
+                label="IA & Diagnostic",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(
+                    coming_soon,
+                    "IA & Diagnostic",
+                ),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.ANALYSES,
+                icon=DesktopIcon.ANALYSES,
+                label="Analyses",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Analyses"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.EXPERIMENTS,
+                icon=DesktopIcon.EXPERIMENTS,
+                label="Expériences",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Expériences"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.LEARNING,
+                icon=DesktopIcon.LEARNING,
+                label="Apprentissage",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Apprentissage"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.STATISTICS,
+                icon=DesktopIcon.STATISTICS,
+                label="Statistiques",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Statistiques"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.COMMUNITY,
+                icon=DesktopIcon.COMMUNITY,
+                label="Communauté",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Communauté"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.DONATIONS,
+                icon=DesktopIcon.DONATIONS,
+                label="Dons",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Dons"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.SHOP,
+                icon=DesktopIcon.SHOP,
+                label="Boutique",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Boutique"),
+            ),
+            NavigationItem(
+                identifier=NavigationIdentifier.SETTINGS,
+                icon=DesktopIcon.SETTINGS,
+                label="Paramètres",
+                status=NavigationStatus.COMING_SOON,
+                command=partial(coming_soon, "Paramètres"),
+            ),
+        )
+
+    def _show_dashboard(self) -> None:
+        """Return the current dashboard viewport to its beginning."""
+        viewport = self._active_viewport()
+
+        if viewport is not None:
+            viewport.scroll_to_top()
+
+    def _show_coming_soon(
+        self,
+        label: str,
+    ) -> None:
+        """Explain an intentionally visible unavailable destination."""
+        messagebox.showinfo(
+            "Fonction à venir",
+            (
+                f"{label} sera disponible dans une prochaine version "
+                "d’EcoBiome."
+            ),
+            parent=self._root,
+        )
 
     def _build_sidebar(
         self,
@@ -194,7 +517,9 @@ class EcoBiomeDesktopApp:
                 self._theme.background,
                 0.18,
             ),
-            width=245,
+            width=responsive_sidebar_width(
+                1500
+            ),
             highlightthickness=1,
             highlightbackground=self._theme.border,
         )
@@ -204,6 +529,8 @@ class EcoBiomeDesktopApp:
             sticky="nsew",
         )
         sidebar.grid_propagate(False)
+        sidebar.pack_propagate(False)
+        self._sidebar = sidebar
 
         logo = tk.Frame(
             sidebar,
@@ -211,8 +538,8 @@ class EcoBiomeDesktopApp:
         )
         logo.pack(
             fill=tk.X,
-            padx=20,
-            pady=(22, 18),
+            padx=10,
+            pady=(12, 10),
         )
 
         tk.Label(
@@ -220,7 +547,7 @@ class EcoBiomeDesktopApp:
             text=DesktopIcon.LOGO.value,
             background=logo["background"],
             foreground=self._theme.success,
-            font=("Segoe UI Symbol", 32),
+            font=self._font("Segoe UI Symbol", 28),
         ).pack(side=tk.LEFT)
 
         logo_text = tk.Frame(
@@ -237,7 +564,7 @@ class EcoBiomeDesktopApp:
             text="EcoBiome",
             background=logo_text["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 20),
+            font=self._font("Segoe UI Semibold", 19),
         ).pack(anchor="w")
 
         tk.Label(
@@ -245,101 +572,279 @@ class EcoBiomeDesktopApp:
             text="Diagnostic intelligent",
             background=logo_text["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
         ).pack(anchor="w")
 
-        navigation = (
-            (
-                DesktopIcon.DASHBOARD,
-                "Tableau de bord",
-                True,
-            ),
-            (
-                DesktopIcon.JOURNAL,
-                "Journal scientifique",
-                False,
-            ),
-            (
-                DesktopIcon.GALLERY,
-                "Galerie",
-                False,
-            ),
-            (
-                DesktopIcon.PROJECTS,
-                "Projets",
-                False,
-            ),
-            (
-                DesktopIcon.DIAGNOSTIC,
-                "IA & Diagnostic",
-                False,
-            ),
-            (
-                DesktopIcon.ANALYSES,
-                "Analyses",
-                False,
-            ),
-            (
-                DesktopIcon.EXPERIMENTS,
-                "Expériences",
-                False,
-            ),
-            (
-                DesktopIcon.LEARNING,
-                "Apprentissage",
-                False,
-            ),
-            (
-                DesktopIcon.STATISTICS,
-                "Statistiques",
-                False,
-            ),
-            (
-                DesktopIcon.COMMUNITY,
-                "Communauté",
-                False,
-            ),
-            (
-                DesktopIcon.DONATIONS,
-                "Dons",
-                False,
-            ),
-            (
-                DesktopIcon.SHOP,
-                "Boutique",
-                False,
-            ),
-            (
-                DesktopIcon.SETTINGS,
-                "Paramètres",
-                False,
-            ),
-        )
-
-        navigation_frame = tk.Frame(
+        navigation_shell = tk.Frame(
             sidebar,
             background=sidebar["background"],
         )
-        navigation_frame.pack(
-            fill=tk.X,
-            padx=12,
-        )
-
-        for icon, label, selected in navigation:
-            self._navigation_button(
-                navigation_frame,
-                icon=icon,
-                label=label,
-                selected=selected,
-            )
-
-        spacer = tk.Frame(
-            sidebar,
-            background=sidebar["background"],
-        )
-        spacer.pack(
+        navigation_shell.pack(
             fill=tk.BOTH,
             expand=True,
+            padx=(10, 4),
+        )
+        navigation_shell.grid_columnconfigure(0, weight=1)
+        navigation_shell.grid_rowconfigure(0, weight=1)
+
+        navigation_canvas = tk.Canvas(
+            navigation_shell,
+            background=navigation_shell["background"],
+            borderwidth=0,
+            highlightthickness=0,
+            yscrollincrement=self._px(24),
+        )
+        navigation_canvas.grid(
+            row=0,
+            column=0,
+            sticky="nsew",
+        )
+        self._sidebar_navigation_canvas = navigation_canvas
+
+        scrollbar_width = self._px(7)
+        navigation_scrollbar = tk.Canvas(
+            navigation_shell,
+            width=scrollbar_width,
+            background=sidebar["background"],
+            highlightthickness=0,
+            borderwidth=0,
+            cursor="hand2",
+        )
+        navigation_scrollbar.grid(
+            row=0,
+            column=1,
+            sticky="ns",
+        )
+        self._sidebar_navigation_scrollbar = navigation_scrollbar
+        scrollbar_thumb = navigation_scrollbar.create_rectangle(
+            1,
+            0,
+            max(2, scrollbar_width - 1),
+            1,
+            fill=self._blend(
+                self._theme.border,
+                self._theme.text_secondary,
+                0.42,
+            ),
+            activefill=self._theme.accent,
+            outline="",
+        )
+        scrollbar_drag_offset: int | None = None
+
+        def update_navigation_scrollbar(
+            first: float | str,
+            last: float | str,
+        ) -> None:
+            first_fraction = float(first)
+            last_fraction = float(last)
+
+            if first_fraction <= 0.0 and last_fraction >= 1.0:
+                navigation_scrollbar.grid_remove()
+                return
+
+            navigation_scrollbar.grid()
+            track_height = max(
+                1,
+                navigation_scrollbar.winfo_height(),
+            )
+            thumb_top = round(track_height * first_fraction)
+            thumb_bottom = round(track_height * last_fraction)
+            minimum_thumb_height = min(
+                track_height,
+                self._px(28),
+            )
+
+            if thumb_bottom - thumb_top < minimum_thumb_height:
+                thumb_bottom = min(
+                    track_height,
+                    thumb_top + minimum_thumb_height,
+                )
+                thumb_top = max(
+                    0,
+                    thumb_bottom - minimum_thumb_height,
+                )
+
+            navigation_scrollbar.coords(
+                scrollbar_thumb,
+                1,
+                thumb_top,
+                max(2, scrollbar_width - 1),
+                thumb_bottom,
+            )
+
+        def refresh_navigation_scrollbar(
+            _event: tk.Event,
+        ) -> None:
+            first, last = navigation_canvas.yview()
+            update_navigation_scrollbar(first, last)
+
+        def move_navigation_from_scrollbar(
+            event: tk.Event,
+        ) -> str:
+            track_height = max(
+                1,
+                navigation_scrollbar.winfo_height(),
+            )
+            coordinates = navigation_scrollbar.coords(
+                scrollbar_thumb
+            )
+            thumb_height = max(
+                1,
+                round(coordinates[3] - coordinates[1]),
+            )
+            thumb_top = max(
+                0,
+                min(
+                    track_height - thumb_height,
+                    event.y - thumb_height // 2,
+                ),
+            )
+            navigation_canvas.yview_moveto(
+                thumb_top / track_height
+            )
+            return "break"
+
+        def begin_scrollbar_drag(
+            event: tk.Event,
+        ) -> str:
+            nonlocal scrollbar_drag_offset
+            coordinates = navigation_scrollbar.coords(
+                scrollbar_thumb
+            )
+
+            if coordinates[1] <= event.y <= coordinates[3]:
+                scrollbar_drag_offset = round(
+                    event.y - coordinates[1]
+                )
+                return "break"
+
+            move_navigation_from_scrollbar(event)
+            updated_coordinates = navigation_scrollbar.coords(
+                scrollbar_thumb
+            )
+            scrollbar_drag_offset = round(
+                event.y - updated_coordinates[1]
+            )
+            return "break"
+
+        def drag_navigation_scrollbar(
+            event: tk.Event,
+        ) -> str:
+            if scrollbar_drag_offset is None:
+                return "break"
+
+            track_height = max(
+                1,
+                navigation_scrollbar.winfo_height(),
+            )
+            coordinates = navigation_scrollbar.coords(
+                scrollbar_thumb
+            )
+            thumb_height = max(
+                1,
+                round(coordinates[3] - coordinates[1]),
+            )
+            thumb_top = max(
+                0,
+                min(
+                    track_height - thumb_height,
+                    event.y - scrollbar_drag_offset,
+                ),
+            )
+            navigation_canvas.yview_moveto(
+                thumb_top / track_height
+            )
+            return "break"
+
+        def end_scrollbar_drag(
+            _event: tk.Event,
+        ) -> str:
+            nonlocal scrollbar_drag_offset
+            scrollbar_drag_offset = None
+            return "break"
+
+        navigation_canvas.configure(
+            yscrollcommand=update_navigation_scrollbar,
+        )
+        navigation_scrollbar.bind(
+            "<Configure>",
+            refresh_navigation_scrollbar,
+        )
+        navigation_scrollbar.bind(
+            "<ButtonPress-1>",
+            begin_scrollbar_drag,
+        )
+        navigation_scrollbar.bind(
+            "<B1-Motion>",
+            drag_navigation_scrollbar,
+        )
+        navigation_scrollbar.bind(
+            "<ButtonRelease-1>",
+            end_scrollbar_drag,
+        )
+
+        for widget in (navigation_canvas, navigation_scrollbar):
+            widget.bind(
+                "<MouseWheel>",
+                self._scroll_sidebar_navigation,
+                add="+",
+            )
+            widget.bind(
+                "<Button-4>",
+                self._scroll_sidebar_navigation,
+                add="+",
+            )
+            widget.bind(
+                "<Button-5>",
+                self._scroll_sidebar_navigation,
+                add="+",
+            )
+
+        navigation_frame = tk.Frame(
+            navigation_canvas,
+            background=navigation_canvas["background"],
+        )
+        self._sidebar_navigation_content = navigation_frame
+        navigation_window = navigation_canvas.create_window(
+            (0, 0),
+            window=navigation_frame,
+            anchor="nw",
+        )
+        navigation_frame.bind(
+            "<Configure>",
+            lambda _event: navigation_canvas.configure(
+                scrollregion=navigation_canvas.bbox("all"),
+            ),
+        )
+        navigation_canvas.bind(
+            "<Configure>",
+            lambda event: navigation_canvas.itemconfigure(
+                navigation_window,
+                width=max(1, event.width),
+            ),
+        )
+
+        self._build_navigation_group(
+            navigation_frame,
+            label="Espace scientifique",
+            items=self._navigation_items[:8],
+        )
+
+        separator = tk.Frame(
+            navigation_frame,
+            background=self._theme.border,
+            height=self._px(1),
+        )
+        separator.pack(
+            fill=tk.X,
+            padx=self._px(8),
+            pady=(self._px(5), self._px(4)),
+        )
+
+        self._build_navigation_group(
+            navigation_frame,
+            label="Communauté et compte",
+            items=self._navigation_items[8:],
         )
 
         self._build_progress_card(sidebar)
@@ -365,50 +870,202 @@ class EcoBiomeDesktopApp:
                 text=icon.value,
                 background=theme_row["background"],
                 foreground=self._theme.text_secondary,
-                font=("Segoe UI Symbol", 16),
+                font=self._font("Segoe UI Symbol", 16),
                 padx=9,
             ).pack(side=tk.LEFT)
+
+    def _build_navigation_group(
+        self,
+        parent: tk.Widget,
+        *,
+        label: str,
+        items: tuple[NavigationItem, ...],
+    ) -> None:
+        """Build one clearly labelled navigation group."""
+        tk.Label(
+            parent,
+            text=label.upper(),
+            anchor="w",
+            background=parent["background"],
+            foreground=self._blend(
+                self._theme.text_secondary,
+                self._theme.background,
+                0.22,
+            ),
+            font=self._font("Segoe UI Semibold", 7),
+            padx=self._px(9),
+            pady=self._px(2),
+        ).pack(fill=tk.X)
+
+        for item in items:
+            self._navigation_button(
+                parent,
+                item=item,
+            )
 
     def _navigation_button(
         self,
         parent: tk.Widget,
         *,
-        icon: DesktopIcon,
-        label: str,
-        selected: bool,
-    ) -> None:
+        item: NavigationItem,
+    ) -> tk.Button:
         """Build one sidebar navigation item."""
-        background = (
+        parent_background = str(
+            parent.cget("background")
+        )
+        selected_background = (
             self._blend(
                 self._theme.success,
                 self._theme.background,
-                0.25,
+                0.28,
             )
-            if selected
-            else parent["background"]
         )
-
-        foreground = (
-            self._theme.text_primary
-            if selected
-            else self._theme.text_secondary
+        hover_background = self._blend(
+            self._theme.surface_elevated,
+            self._theme.background,
+            0.54,
         )
-
-        button = tk.Label(
+        selected = item.selected
+        available = (
+            item.status is NavigationStatus.AVAILABLE
+        )
+        button = tk.Button(
             parent,
-            text=icon_text(icon, label),
+            text=icon_text(item.icon, item.label),
+            command=item.command,
             anchor="w",
-            background=background,
-            foreground=foreground,
-            font=("Segoe UI Semibold" if selected else "Segoe UI", 10),
-            padx=14,
-            pady=10,
+            takefocus=True,
+            background=(
+                selected_background
+                if selected
+                else parent_background
+            ),
+            foreground=(
+                self._theme.text_primary
+                if selected or available
+                else self._theme.text_secondary
+            ),
+            activebackground=hover_background,
+            activeforeground=self._theme.text_primary,
+            font=self._font(
+                "Segoe UI Semibold"
+                if selected or available
+                else "Segoe UI",
+                9,
+            ),
+            relief=(
+                tk.SUNKEN
+                if selected
+                else tk.FLAT
+            ),
+            borderwidth=(2 if selected else 1),
+            highlightthickness=2,
+            highlightbackground=parent_background,
+            highlightcolor=self._theme.accent,
+            padx=self._px(10),
+            pady=self._px(3),
             cursor="hand2",
         )
         button.pack(
             fill=tk.X,
-            pady=2,
+            pady=self._px(1),
         )
+
+        invoke = partial(
+            self._invoke_navigation_button,
+            button,
+        )
+        button.bind("<Return>", invoke)
+        button.bind("<KP_Enter>", invoke)
+        button.bind("<space>", invoke)
+        button.bind(
+            "<FocusIn>",
+            self._reveal_sidebar_navigation_item,
+            add="+",
+        )
+        button.bind(
+            "<MouseWheel>",
+            self._scroll_sidebar_navigation,
+            add="+",
+        )
+        button.bind(
+            "<Button-4>",
+            self._scroll_sidebar_navigation,
+            add="+",
+        )
+        button.bind(
+            "<Button-5>",
+            self._scroll_sidebar_navigation,
+            add="+",
+        )
+
+        return button
+
+    def _scroll_sidebar_navigation(
+        self,
+        event: tk.Event,
+    ) -> str | None:
+        """Scroll the navigation group under the pointer."""
+        canvas = self._sidebar_navigation_canvas
+
+        if canvas is None:
+            return None
+
+        if getattr(event, "num", None) == 4:
+            direction = -1
+        elif getattr(event, "num", None) == 5:
+            direction = 1
+        elif event.delta:
+            direction = -1 if event.delta > 0 else 1
+        else:
+            return None
+
+        canvas.yview_scroll(direction, "units")
+        return "break"
+
+    def _reveal_sidebar_navigation_item(
+        self,
+        event: tk.Event,
+    ) -> None:
+        """Keep a keyboard-focused navigation item inside the viewport."""
+        canvas = self._sidebar_navigation_canvas
+        content = self._sidebar_navigation_content
+        widget = event.widget
+
+        if (
+            canvas is None
+            or content is None
+            or not isinstance(widget, tk.Widget)
+        ):
+            return
+
+        content.update_idletasks()
+        content_height = max(1, content.winfo_reqheight())
+        viewport_height = max(1, canvas.winfo_height())
+        item_top = widget.winfo_y()
+        item_bottom = item_top + widget.winfo_height()
+        viewport_top = round(canvas.canvasy(0))
+        viewport_bottom = viewport_top + viewport_height
+
+        if item_top < viewport_top:
+            canvas.yview_moveto(item_top / content_height)
+        elif item_bottom > viewport_bottom:
+            canvas.yview_moveto(
+                max(
+                    0.0,
+                    (item_bottom - viewport_height)
+                    / content_height,
+                )
+            )
+
+    @staticmethod
+    def _invoke_navigation_button(
+        button: tk.Button,
+        _event: tk.Event,
+    ) -> str:
+        """Invoke one navigation command and stop the class binding."""
+        button.invoke()
+        return "break"
 
     def _build_progress_card(
         self,
@@ -419,11 +1076,12 @@ class EcoBiomeDesktopApp:
 
         card = self._card(
             parent,
-            padding=14,
+            padding=11,
+            level=SurfaceLevel.ANALYTIC,
         )
         card.pack(
             fill=tk.X,
-            padx=14,
+            padx=10,
             pady=(0, 10),
         )
 
@@ -438,7 +1096,7 @@ class EcoBiomeDesktopApp:
             text=DesktopIcon.LOGO.value,
             background=header["background"],
             foreground=self._theme.success,
-            font=("Segoe UI Symbol", 25),
+            font=self._font("Segoe UI Symbol", 25),
         ).pack(side=tk.LEFT)
 
         text = tk.Frame(
@@ -455,7 +1113,7 @@ class EcoBiomeDesktopApp:
             text=f"Niveau {progress.level}",
             background=text["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 12),
+            font=self._font("Segoe UI Semibold", 12),
         ).pack(anchor="w")
 
         tk.Label(
@@ -463,7 +1121,7 @@ class EcoBiomeDesktopApp:
             text=progress.title,
             background=text["background"],
             foreground=self._theme.success,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
         ).pack(anchor="w")
 
         bar = tk.Canvas(
@@ -500,7 +1158,7 @@ class EcoBiomeDesktopApp:
             ).replace(",", " "),
             background=footer["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
         ).pack(side=tk.LEFT)
 
         tk.Label(
@@ -508,7 +1166,7 @@ class EcoBiomeDesktopApp:
             text=f"{progress.progress_percent}%",
             background=footer["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
         ).pack(side=tk.RIGHT)
 
     def _build_engine_card(
@@ -518,11 +1176,12 @@ class EcoBiomeDesktopApp:
         """Build the operational-engine status card."""
         card = self._card(
             parent,
-            padding=14,
+            padding=11,
+            level=SurfaceLevel.ANALYTIC,
         )
         card.pack(
             fill=tk.X,
-            padx=14,
+            padx=10,
             pady=(0, 4),
         )
 
@@ -534,7 +1193,7 @@ class EcoBiomeDesktopApp:
             ),
             background=card["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 10),
+            font=self._font("Segoe UI Semibold", 10),
             anchor="w",
         ).pack(fill=tk.X)
 
@@ -543,7 +1202,7 @@ class EcoBiomeDesktopApp:
             text="Tous les systèmes actifs",
             background=card["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
             anchor="w",
         ).pack(
             fill=tk.X,
@@ -576,14 +1235,20 @@ class EcoBiomeDesktopApp:
         viewport = ResponsiveDashboardViewport(
             container,
             background=self._theme.background,
+            maximum_content_width=1900,
+            scrollbar_thumb=self._blend(
+                self._theme.border,
+                self._theme.text_secondary,
+                0.42,
+            ),
+            scrollbar_active_thumb=self._theme.accent,
+            scrollbar_width=self._px(8),
+            minimum_thumb_height=self._px(36),
         )
         viewport.grid(
             row=0,
             column=0,
             sticky="nsew",
-        )
-        viewport.bind_scrolling(
-            self._root
         )
         self._viewport = viewport
 
@@ -620,13 +1285,24 @@ class EcoBiomeDesktopApp:
             ),
             current_theme=self._theme.display_name,
             on_theme_changed=self._change_theme,
+            on_minimize_window=self._minimize_window,
+            on_toggle_maximize_window=(
+                self._toggle_maximize_window
+            ),
+            on_close_window=self._close_window,
+            visual_scale=self._visual_scale,
+        )
+        self._hero_banner.bind_window_drag(
+            on_start=self._begin_window_drag,
+            on_motion=self._drag_window,
+            on_end=self._end_window_drag,
         )
         self._hero_banner.grid(
             row=0,
             column=0,
             sticky="ew",
-            padx=20,
-            pady=(14, 0),
+            padx=self._spacing.padding,
+            pady=(self._spacing.gutter, 0),
         )
 
         self._build_metric_row(body)
@@ -651,8 +1327,8 @@ class EcoBiomeDesktopApp:
             row=1,
             column=0,
             sticky="ew",
-            padx=20,
-            pady=(12, 0),
+            padx=self._spacing.padding,
+            pady=(self._spacing.gutter, 0),
         )
 
         for index, metric in enumerate(
@@ -689,35 +1365,33 @@ class EcoBiomeDesktopApp:
         accent = self._accent_for_role(
             metric.accent_role
         )
-        card = tk.Frame(
+        card = self._surface_card(
             parent,
             background=self._blend(
                 self._theme.surface,
                 accent,
                 0.12,
             ),
-            highlightthickness=1,
-            highlightbackground=self._blend(
+            border=self._blend(
                 self._theme.border,
                 accent,
                 0.35,
             ),
-            padx=16,
-            pady=14,
+            padding=self._px(9),
+            level=SurfaceLevel.ANALYTIC,
         )
 
-        content = tk.Frame(
+        summary = tk.Frame(
             card,
             background=card["background"],
         )
-        content.pack(
-            fill=tk.BOTH,
-            expand=True,
+        summary.pack(
+            fill=tk.X,
         )
 
         text = tk.Frame(
-            content,
-            background=content["background"],
+            summary,
+            background=summary["background"],
         )
         text.pack(
             side=tk.LEFT,
@@ -730,7 +1404,7 @@ class EcoBiomeDesktopApp:
             text=metric.label,
             background=text["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 10),
+            font=self._type(TypographyRole.PRIMARY_LABEL),
         ).pack(anchor="w")
 
         tk.Label(
@@ -738,54 +1412,49 @@ class EcoBiomeDesktopApp:
             text=metric.value,
             background=text["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 26),
+            font=self._type(TypographyRole.KPI_VALUE),
         ).pack(
             anchor="w",
             pady=(5, 0),
         )
 
-        tk.Label(
-            text,
-            text=metric.detail,
-            background=text["background"],
-            foreground=accent,
-            font=("Segoe UI", 9),
-        ).pack(
-            anchor="w",
-            pady=(5, 0),
-        )
-
+        badge_size = self._px(54)
         badge = tk.Canvas(
-            content,
-            width=54,
-            height=54,
-            background=content["background"],
+            summary,
+            width=badge_size,
+            height=badge_size,
+            background=summary["background"],
             highlightthickness=0,
         )
         badge.pack(
-            side=tk.RIGHT,
+            side=tk.LEFT,
             anchor="n",
-            padx=(12, 0),
+            before=text,
+            padx=(0, self._px(12)),
         )
-        badge.create_oval(
-            3,
-            3,
-            51,
-            51,
+        draw_diagnostic_icon(
+            badge,
+            role=metric.accent_role,
+            accent=accent,
             fill=self._blend(
                 card["background"],
                 accent,
                 0.28,
             ),
-            outline=accent,
-            width=2,
+            size=badge_size,
         )
-        badge.create_text(
-            27,
-            27,
-            text=metric.symbol,
-            fill=accent,
-            font=("Segoe UI Symbol", 18),
+
+        tk.Label(
+            card,
+            text=metric.detail,
+            anchor="w",
+            justify=tk.LEFT,
+            background=card["background"],
+            foreground=accent,
+            font=self._type(TypographyRole.BODY),
+        ).pack(
+            fill=tk.X,
+            pady=(self._px(5), 0),
         )
 
         return card
@@ -804,15 +1473,15 @@ class EcoBiomeDesktopApp:
             row=2,
             column=0,
             sticky="ew",
-            padx=20,
-            pady=(12, 0),
+            padx=self._spacing.padding,
+            pady=(self._spacing.gutter, 0),
         )
         row.grid_columnconfigure(0, weight=3)
         row.grid_columnconfigure(1, weight=2)
 
         chain_card = self._card(
             row,
-            padding=16,
+            padding=11,
         )
         chain_card.grid(
             row=0,
@@ -832,44 +1501,67 @@ class EcoBiomeDesktopApp:
         chain.pack(
             fill=tk.BOTH,
             expand=True,
-            pady=(14, 2),
+            pady=(8, 0),
         )
+
+        metric_values = tuple(
+            metric.value
+            for metric in self._view_model.metrics
+        )
+
+        def metric_value(
+            index: int,
+            fallback: str,
+        ) -> str:
+            if index < len(metric_values):
+                return metric_values[index]
+
+            return fallback
 
         stages = (
             (
-                DesktopIcon.OBSERVATION,
+                "success",
                 "Observation",
-                "Données collectées",
+                f"{metric_value(0, '—')} observations",
                 self._theme.success,
             ),
             (
-                DesktopIcon.QUALITY,
+                "quality",
                 "Qualité",
-                "Validation",
+                f"Fiabilité {metric_value(1, '—')}",
                 self._theme.accent,
             ),
             (
-                DesktopIcon.HYPOTHESIS,
+                "hypothesis",
                 "Abduction",
-                "Hypothèses",
+                f"{metric_value(2, '—')} hypothèses",
                 self._theme.hypothesis,
             ),
             (
-                DesktopIcon.EXPERIMENTS,
+                "warning",
                 "Expériences",
-                "Évaluation",
+                f"{metric_value(3, '—')} protocoles",
                 self._theme.warning,
             ),
             (
-                DesktopIcon.CONCLUSION,
+                "conclusion",
                 "Conclusion",
-                "Apprentissage",
+                f"{metric_value(4, '—')} résultats",
                 self._theme.success,
             ),
         )
 
+        chain.grid_rowconfigure(0, weight=1)
+
+        for stage_index in range(len(stages)):
+            chain.grid_columnconfigure(
+                stage_index * 2,
+                weight=1,
+                uniform="causal-stage",
+            )
+
         for index, (
-            icon,
+            role,
             title,
             subtitle,
             accent,
@@ -878,39 +1570,32 @@ class EcoBiomeDesktopApp:
                 chain,
                 background=chain["background"],
             )
-            stage.pack(
-                side=tk.LEFT,
-                fill=tk.BOTH,
-                expand=True,
+            stage.grid(
+                row=0,
+                column=index * 2,
+                sticky="nsew",
+                padx=self._px(2),
             )
 
+            badge_size = self._px(64)
             badge = tk.Canvas(
                 stage,
-                width=58,
-                height=58,
+                width=badge_size,
+                height=badge_size,
                 background=stage["background"],
                 highlightthickness=0,
             )
             badge.pack()
-            badge.create_oval(
-                4,
-                4,
-                54,
-                54,
+            draw_diagnostic_icon(
+                badge,
+                role=role,
+                accent=accent,
                 fill=self._blend(
                     chain_card["background"],
                     accent,
                     0.20,
                 ),
-                outline=accent,
-                width=2,
-            )
-            badge.create_text(
-                29,
-                29,
-                text=icon.value,
-                fill=accent,
-                font=("Segoe UI Symbol", 19),
+                size=badge_size,
             )
 
             tk.Label(
@@ -918,14 +1603,16 @@ class EcoBiomeDesktopApp:
                 text=title,
                 background=stage["background"],
                 foreground=accent,
-                font=("Segoe UI Semibold", 10),
+                font=self._font("Segoe UI Semibold", 10),
             ).pack(pady=(5, 1))
             tk.Label(
                 stage,
                 text=subtitle,
                 background=stage["background"],
                 foreground=self._theme.text_secondary,
-                font=("Segoe UI", 8),
+                font=self._font("Segoe UI", 8),
+                justify=tk.CENTER,
+                wraplength=self._px(126),
             ).pack()
 
             if index < len(stages) - 1:
@@ -934,15 +1621,17 @@ class EcoBiomeDesktopApp:
                     text=DesktopIcon.ARROW.value,
                     background=chain["background"],
                     foreground=accent,
-                    font=("Segoe UI Symbol", 16),
-                ).pack(
-                    side=tk.LEFT,
-                    padx=1,
+                    font=self._font("Segoe UI Symbol", 16),
+                ).grid(
+                    row=0,
+                    column=index * 2 + 1,
+                    sticky="ns",
+                    padx=self._px(1),
                 )
 
         hypotheses = self._card(
             row,
-            padding=16,
+            padding=11,
         )
         hypotheses.grid(
             row=0,
@@ -977,7 +1666,7 @@ class EcoBiomeDesktopApp:
             )
             hypothesis_row.pack(
                 fill=tk.X,
-                pady=(9, 0),
+                pady=(2, 0),
             )
 
             header = tk.Frame(
@@ -991,16 +1680,16 @@ class EcoBiomeDesktopApp:
                 text=probability.identifier,
                 background=self._theme.surface_elevated,
                 foreground=probability.accent,
-                font=("Segoe UI Semibold", 9),
-                padx=7,
-                pady=2,
+                font=self._font("Segoe UI Semibold", 8),
+                padx=6,
+                pady=1,
             ).pack(side=tk.LEFT)
             tk.Label(
                 header,
                 text=probability.label,
                 background=header["background"],
                 foreground=self._theme.text_primary,
-                font=("Segoe UI", 9),
+                font=self._font("Segoe UI", 8),
             ).pack(
                 side=tk.LEFT,
                 padx=(8, 0),
@@ -1010,18 +1699,18 @@ class EcoBiomeDesktopApp:
                 text=f"{probability.probability}%",
                 background=header["background"],
                 foreground=self._theme.text_primary,
-                font=("Segoe UI Semibold", 9),
+                font=self._font("Segoe UI Semibold", 8),
             ).pack(side=tk.RIGHT)
 
             bar = tk.Canvas(
                 hypothesis_row,
-                height=6,
+                height=self._px(4),
                 background=hypothesis_row["background"],
                 highlightthickness=0,
             )
             bar.pack(
                 fill=tk.X,
-                pady=(5, 0),
+                pady=(2, 0),
             )
 
             def redraw_bar(
@@ -1036,19 +1725,23 @@ class EcoBiomeDesktopApp:
                     event.width,
                 )
                 canvas.delete("all")
+                bar_height = max(
+                    1,
+                    event.height - 1,
+                )
                 canvas.create_rectangle(
                     0,
-                    1,
+                    0,
                     bar_width,
-                    5,
+                    bar_height,
                     fill=self._theme.surface_elevated,
                     outline="",
                 )
                 canvas.create_rectangle(
                     0,
-                    1,
+                    0,
                     bar_width * value / 100,
-                    5,
+                    bar_height,
                     fill=color,
                     outline="",
                 )
@@ -1079,7 +1772,7 @@ class EcoBiomeDesktopApp:
 
         activity = self._card(
             row,
-            padding=15,
+            padding=12,
         )
         activity.grid(
             row=0,
@@ -1107,7 +1800,7 @@ class EcoBiomeDesktopApp:
 
         recommendation = self._card(
             row,
-            padding=15,
+            padding=12,
         )
         recommendation.grid(
             row=0,
@@ -1130,13 +1823,13 @@ class EcoBiomeDesktopApp:
                 0.32,
             ),
             foreground=self._theme.hypothesis,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
             padx=9,
             pady=5,
         )
         badge.pack(
             anchor="w",
-            pady=(12, 9),
+            pady=(8, 6),
         )
 
         self._body_label(
@@ -1154,7 +1847,7 @@ class EcoBiomeDesktopApp:
             wraplength=310,
         ).pack(
             anchor="w",
-            pady=(7, 10),
+            pady=(5, 7),
         )
 
         self._body_label(
@@ -1174,7 +1867,7 @@ class EcoBiomeDesktopApp:
             wraplength=310,
         ).pack(
             anchor="w",
-            pady=(6, 10),
+            pady=(4, 7),
         )
 
         self._action_button(
@@ -1200,8 +1893,8 @@ class EcoBiomeDesktopApp:
             row=3,
             column=0,
             sticky="ew",
-            padx=20,
-            pady=(12, 0),
+            padx=self._spacing.padding,
+            pady=(self._spacing.gutter, 0),
         )
         region.grid_columnconfigure(
             0,
@@ -1448,6 +2141,7 @@ class EcoBiomeDesktopApp:
             view_model=self._analytics_view_model,
             theme=self._theme,
             quality_only=True,
+            visual_scale=self._visual_scale,
         )
 
         panel.grid(
@@ -1463,7 +2157,7 @@ class EcoBiomeDesktopApp:
         """Build a compact quick gallery for the dashboard."""
         card = self._card(
             parent,
-            padding=14,
+            padding=12,
         )
         card.grid(
             row=0,
@@ -1482,7 +2176,7 @@ class EcoBiomeDesktopApp:
             text="Galerie rapide",
             background=header["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 13),
+            font=self._type(TypographyRole.SECTION_TITLE),
         ).pack(side=tk.LEFT)
 
         tk.Label(
@@ -1490,17 +2184,16 @@ class EcoBiomeDesktopApp:
             text=f"{len(self._gallery_items)} image(s)",
             background=header["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
         ).pack(side=tk.RIGHT)
 
         if not self._gallery_items:
-            empty = tk.Frame(
+            empty = self._surface_card(
                 card,
                 background=self._theme.surface_elevated,
-                highlightthickness=1,
-                highlightbackground=self._theme.border,
-                padx=16,
-                pady=18,
+                border=self._theme.border,
+                padding=self._px(16),
+                level=SurfaceLevel.COMPACT,
             )
             empty.pack(
                 fill=tk.BOTH,
@@ -1513,7 +2206,7 @@ class EcoBiomeDesktopApp:
                 text=DesktopIcon.GALLERY.value,
                 background=empty["background"],
                 foreground=self._theme.accent,
-                font=("Segoe UI Symbol", 22),
+                font=self._font("Segoe UI Symbol", 22),
             ).pack()
 
             self._muted_label(
@@ -1541,13 +2234,12 @@ class EcoBiomeDesktopApp:
                     uniform="quick-gallery",
                 )
 
-                tile = tk.Frame(
+                tile = self._surface_card(
                     gallery_row,
                     background=self._theme.surface_elevated,
-                    highlightthickness=1,
-                    highlightbackground=self._theme.border,
-                    padx=4,
-                    pady=4,
+                    border=self._theme.border,
+                    padding=self._px(4),
+                    level=SurfaceLevel.COMPACT,
                 )
                 tile.grid(
                     row=0,
@@ -1624,10 +2316,16 @@ class EcoBiomeDesktopApp:
 
 
     def _wire_gallery_entries(self) -> None:
-        """Make every gallery navigation entry functional."""
+        """Wire legacy gallery actions outside the explicit primary menu."""
+        excluded_roots = (
+            (self._sidebar,)
+            if self._sidebar is not None
+            else ()
+        )
         bind_gallery_navigation(
             self._root,
             self._open_gallery_dialog,
+            excluded_roots=excluded_roots,
         )
 
     def _select_hero_image_path(
@@ -1949,7 +2647,7 @@ small {{ color: #607980; }}
                 text=DesktopIcon.GALLERY.value,
                 background=placeholder["background"],
                 foreground=self._theme.accent,
-                font=("Segoe UI Symbol", 24),
+                font=self._font("Segoe UI Symbol", 24),
             ).pack(expand=True)
 
             return placeholder
@@ -1961,7 +2659,7 @@ small {{ color: #607980; }}
         """Build compact scientific memories and milestones."""
         card = self._card(
             parent,
-            padding=14,
+            padding=12,
         )
         card.grid(
             row=0,
@@ -1997,13 +2695,12 @@ small {{ color: #607980; }}
                 padx=(0, 6),
             )
 
-        add_card = tk.Frame(
+        add_card = self._surface_card(
             row,
             background=self._theme.surface_elevated,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
-            padx=12,
-            pady=12,
+            border=self._theme.border,
+            padding=self._px(12),
+            level=SurfaceLevel.COMPACT,
         )
         add_card.pack(
             side=tk.LEFT,
@@ -2016,7 +2713,7 @@ small {{ color: #607980; }}
             text=DesktopIcon.ADD.value,
             background=add_card["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 18),
+            font=self._font("Segoe UI", 18),
         ).pack()
 
         self._muted_label(
@@ -2042,8 +2739,11 @@ small {{ color: #607980; }}
             row=0,
             column=0,
             sticky="ew",
-            padx=24,
-            pady=(12, 18),
+            padx=self._spacing.group,
+            pady=(
+                self._spacing.gutter,
+                self._spacing.padding,
+            ),
         )
 
         tk.Label(
@@ -2055,7 +2755,7 @@ small {{ color: #607980; }}
             ),
             background=footer["background"],
             foreground=self._theme.success,
-            font=("Segoe UI", 9),
+            font=self._type(TypographyRole.BODY),
         ).pack(side=tk.LEFT)
 
         tk.Label(
@@ -2063,7 +2763,7 @@ small {{ color: #607980; }}
             text="●  EcoBiome Desktop Prototype v0.27",
             background=footer["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 8),
+            font=self._type(TypographyRole.METADATA),
         ).pack(side=tk.RIGHT)
 
     def _activity_item(
@@ -2078,7 +2778,7 @@ small {{ color: #607980; }}
         )
         row.pack(
             fill=tk.X,
-            pady=7,
+            pady=2,
         )
 
         accent = (
@@ -2096,9 +2796,9 @@ small {{ color: #607980; }}
                 0.25,
             ),
             foreground=accent,
-            font=("Segoe UI Symbol", 13),
-            padx=8,
-            pady=6,
+            font=self._font("Segoe UI Symbol", 11),
+            padx=5,
+            pady=2,
         ).pack(side=tk.LEFT)
 
         text = tk.Frame(
@@ -2109,7 +2809,7 @@ small {{ color: #607980; }}
             side=tk.LEFT,
             fill=tk.X,
             expand=True,
-            padx=(10, 0),
+            padx=(8, 0),
         )
 
         self._body_label(
@@ -2140,9 +2840,9 @@ small {{ color: #607980; }}
                 0.20,
             ),
             foreground=accent,
-            font=("Segoe UI Semibold", 8),
-            padx=8,
-            pady=4,
+            font=self._font("Segoe UI Semibold", 8),
+            padx=7,
+            pady=3,
         ).pack(side=tk.RIGHT)
 
     def _distribution_row(
@@ -2171,7 +2871,7 @@ small {{ color: #607980; }}
             text=str(count),
             background=row["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 10),
+            font=self._font("Segoe UI Semibold", 10),
         ).pack(side=tk.RIGHT)
 
         bar = tk.Canvas(
@@ -2205,13 +2905,12 @@ small {{ color: #607980; }}
         memory: DashboardMemoryViewModel,
     ) -> tk.Frame:
         """Build one memory card."""
-        card = tk.Frame(
+        card = self._surface_card(
             parent,
             background=self._theme.surface_elevated,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
-            padx=14,
-            pady=12,
+            border=self._theme.border,
+            padding=self._px(13),
+            level=SurfaceLevel.COMPACT,
         )
 
         tk.Label(
@@ -2219,7 +2918,7 @@ small {{ color: #607980; }}
             text=memory.symbol,
             background=card["background"],
             foreground=self._theme.success,
-            font=("Segoe UI Symbol", 18),
+            font=self._font("Segoe UI Symbol", 18),
         ).pack(anchor="w")
 
         self._body_label(
@@ -2251,15 +2950,72 @@ small {{ color: #607980; }}
         parent: tk.Widget,
         *,
         padding: int,
+        level: SurfaceLevel = SurfaceLevel.PANEL,
     ) -> tk.Frame:
         """Create one standard surface card."""
-        return tk.Frame(
+        return self._surface_card(
             parent,
             background=self._theme.surface,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
-            padx=padding,
-            pady=padding,
+            border=self._theme.border,
+            padding=self._px(padding),
+            level=level,
+        )
+
+    def _surface_card(
+        self,
+        parent: tk.Widget,
+        *,
+        background: str,
+        border: str,
+        padding: int,
+        level: SurfaceLevel = SurfaceLevel.PANEL,
+    ) -> RoundedSurfaceCard:
+        """Create one elevated rounded surface."""
+        return RoundedSurfaceCard(
+            parent,
+            background=background,
+            outer_background=str(
+                parent["background"]
+            ),
+            border=border,
+            shadow=self._darken(
+                self._theme.background,
+                0.32,
+            ),
+            padding=padding,
+            level=level,
+            visual_scale=self._visual_scale,
+        )
+
+    def _px(
+        self,
+        value: int,
+    ) -> int:
+        """Scale one layout dimension for the current display."""
+        return max(
+            1,
+            round(value * self._visual_scale),
+        )
+
+    def _font(
+        self,
+        family: str,
+        size: int,
+    ) -> tuple[str, int]:
+        """Scale one explicit Tk font without changing global scaling."""
+        return (
+            family,
+            self._px(size),
+        )
+
+    def _type(
+        self,
+        role: TypographyRole,
+    ) -> tuple[str, int]:
+        """Resolve one semantic font for the active display scale."""
+        return typography_font(
+            role,
+            visual_scale=self._visual_scale,
         )
 
     def _section_title(
@@ -2273,7 +3029,7 @@ small {{ color: #607980; }}
             text=text,
             background=parent["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 13),
+            font=self._type(TypographyRole.SECTION_TITLE),
         ).pack(anchor="w")
 
     def _body_label(
@@ -2289,11 +3045,10 @@ small {{ color: #607980; }}
             text=text,
             background=parent["background"],
             foreground=self._theme.text_primary,
-            font=(
-                "Segoe UI Semibold"
+            font=self._type(
+                TypographyRole.PRIMARY_LABEL
                 if strong
-                else "Segoe UI",
-                10,
+                else TypographyRole.BODY
             ),
             justify=tk.LEFT,
         )
@@ -2311,7 +3066,7 @@ small {{ color: #607980; }}
             text=text,
             background=parent["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._type(TypographyRole.METADATA),
             justify=tk.LEFT,
             wraplength=wraplength,
         )
@@ -2329,7 +3084,7 @@ small {{ color: #607980; }}
             text=text,
             background=parent["background"],
             foreground=accent,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
             padx=14,
             pady=8,
             highlightthickness=1,
@@ -2397,21 +3152,50 @@ small {{ color: #607980; }}
         self,
         display_name: str,
     ) -> None:
-        """Rebuild the shell with one selected visual theme."""
+        """Coalesce theme selections outside the current Tk callback."""
         identifier = self._theme_name_by_display[
             display_name
         ]
+
+        self._pending_theme_identifier = identifier
+
+        if self._theme_change_after_id is None:
+            self._theme_change_after_id = (
+                self._root.after_idle(
+                    self._apply_pending_theme
+                )
+            )
+
+    def _apply_pending_theme(self) -> None:
+        """Apply only the last theme selected before Tk becomes idle."""
+        self._theme_change_after_id = None
+        identifier = self._pending_theme_identifier
+        self._pending_theme_identifier = None
+
+        if identifier is not None:
+            self._apply_theme(identifier)
+
+    def _apply_theme(
+        self,
+        identifier: ThemeIdentifier,
+    ) -> None:
+        """Rebuild the shell with one selected visual theme."""
         self._theme = get_desktop_theme(
             identifier
         )
-
-        for child in self._root.winfo_children():
-            child.destroy()
 
         self._viewport = None
         self._hero_banner = None
         self._footer_container = None
         self._layout_region = None
+        self._sidebar = None
+        self._sidebar_navigation_canvas = None
+        self._sidebar_navigation_content = None
+        self._sidebar_navigation_scrollbar = None
+
+        for child in self._root.winfo_children():
+            child.destroy()
+
         self._build_interface()
         self._wire_gallery_entries()
 
@@ -2424,20 +3208,177 @@ small {{ color: #607980; }}
         if self._viewport is not None:
             self._viewport.refresh()
 
-    def _maximize_window(self) -> None:
-        """Maximize the application without changing Tk global scaling."""
+    def _on_root_configure(
+        self,
+        event: tk.Event,
+    ) -> None:
+        """Keep the sidebar proportional to the live window width."""
+        if (
+            event.widget is not self._root
+            or self._sidebar is None
+        ):
+            return
+
+        self._sidebar.configure(
+            width=responsive_sidebar_width(
+                max(1, event.width)
+            )
+        )
+
+    def _show_window(self) -> None:
+        """Reveal the application with integrated window chrome."""
+        self._root.deiconify()
+
+        if self._start_maximized:
+            self._maximize_window()
+        else:
+            self._root.update_idletasks()
+            self._apply_borderless_window()
+
+    def _apply_borderless_window(self) -> None:
+        """Hide the native title bar after one window-state transition."""
         try:
-            self._root.state(
-                "zoomed"
+            self._root.overrideredirect(True)
+        except tk.TclError:
+            return
+
+    def _maximize_window(self) -> None:
+        """Maximize the application before replacing the native chrome."""
+        if not self._window_is_maximized:
+            self._window_restore_geometry = (
+                self._root.geometry()
+            )
+
+        try:
+            self._root.overrideredirect(False)
+            self._root.state("zoomed")
+            self._root.update_idletasks()
+            self._window_is_maximized = True
+            self._root.after_idle(
+                self._apply_borderless_window
             )
 
         except tk.TclError:
             self._root.geometry(
-
-                    f"{self._root.winfo_screenwidth()}x"
-                    f"{self._root.winfo_screenheight()}+0+0"
-
+                f"{self._root.winfo_screenwidth()}x"
+                f"{self._root.winfo_screenheight()}+0+0"
             )
+            self._root.overrideredirect(True)
+            self._window_is_maximized = True
+
+    def _restore_window(self) -> None:
+        """Restore the borderless application to its previous geometry."""
+        try:
+            self._root.overrideredirect(False)
+            self._root.state("normal")
+            self._root.geometry(
+                self._window_restore_geometry
+            )
+            self._root.update_idletasks()
+            self._root.overrideredirect(True)
+            self._window_is_maximized = False
+        except tk.TclError:
+            return
+
+    def _toggle_maximize_window(self) -> None:
+        """Toggle between restored and maximized borderless states."""
+        if self._window_is_maximized:
+            self._restore_window()
+        else:
+            self._maximize_window()
+
+    def _minimize_window(self) -> None:
+        """Temporarily restore native ownership before iconifying."""
+        try:
+            self._root.overrideredirect(False)
+            self._root.iconify()
+        except tk.TclError:
+            return
+
+    def _close_window(self) -> None:
+        """Close the application from the integrated window controls."""
+        try:
+            self._root.destroy()
+        except tk.TclError:
+            return
+
+    def _on_root_map(
+        self,
+        event: tk.Event,
+    ) -> None:
+        """Restore the integrated chrome after taskbar activation."""
+        if event.widget is not self._root:
+            return
+
+        self._root.after_idle(
+            self._apply_borderless_window
+        )
+
+    def _begin_window_drag(
+        self,
+        event: tk.Event,
+    ) -> None:
+        """Record the pointer offset for a borderless-window drag."""
+        if self._window_is_maximized:
+            previous_left = self._root.winfo_x()
+            previous_width = max(
+                1,
+                self._root.winfo_width(),
+            )
+            horizontal_ratio = max(
+                0.08,
+                min(
+                    0.92,
+                    (event.x_root - previous_left)
+                    / previous_width,
+                ),
+            )
+            self._restore_window()
+            restored_width = max(
+                1,
+                self._root.winfo_width(),
+            )
+            horizontal_offset = round(
+                restored_width * horizontal_ratio
+            )
+            vertical_offset = self._px(18)
+            self._root.geometry(
+                f"+{event.x_root - horizontal_offset}"
+                f"+{event.y_root - vertical_offset}"
+            )
+            self._window_drag_offset = (
+                horizontal_offset,
+                vertical_offset,
+            )
+            return
+
+        self._window_drag_offset = (
+            event.x_root - self._root.winfo_x(),
+            event.y_root - self._root.winfo_y(),
+        )
+
+    def _drag_window(
+        self,
+        event: tk.Event,
+    ) -> None:
+        """Move the restored borderless window with the pointer."""
+        if self._window_drag_offset is None:
+            return
+
+        horizontal_offset, vertical_offset = (
+            self._window_drag_offset
+        )
+        self._root.geometry(
+            f"+{event.x_root - horizontal_offset}"
+            f"+{event.y_root - vertical_offset}"
+        )
+
+    def _end_window_drag(
+        self,
+        _event: tk.Event,
+    ) -> None:
+        """End one integrated-window drag gesture."""
+        self._window_drag_offset = None
 
     def _accent_for_role(
         self,
@@ -2537,6 +3478,8 @@ def run_desktop_dashboard(
     initial_theme: ThemeIdentifier = (
         ThemeIdentifier.ECOBIOME_NIGHT
     ),
+    initial_geometry: str = "1500x900",
+    start_maximized: bool = True,
 ) -> None:
     """Create and run the EcoBiome desktop dashboard."""
     EcoBiomeDesktopApp(
@@ -2550,4 +3493,6 @@ def run_desktop_dashboard(
         layout_preferences=layout_preferences,
         layout_store=layout_store,
         initial_theme=initial_theme,
+        initial_geometry=initial_geometry,
+        start_maximized=start_maximized,
     ).run()

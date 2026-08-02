@@ -14,6 +14,14 @@ from ecobiome.ui.desktop.charts import (
     draw_probability_bar,
     draw_quality_donut,
 )
+from ecobiome.ui.desktop.design_tokens import (
+    TypographyRole,
+    typography_font,
+)
+from ecobiome.ui.desktop.surfaces import (
+    RoundedSurfaceCard,
+    SurfaceLevel,
+)
 from ecobiome.ui.desktop.theme import DesktopTheme
 
 
@@ -27,7 +35,13 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         view_model: DiagnosticAnalyticsViewModel,
         theme: DesktopTheme,
         quality_only: bool = False,
+        visual_scale: float = 1.0,
     ) -> None:
+        if visual_scale <= 0:
+            raise ValueError(
+                "Analytics visual scale must be positive."
+            )
+
         super().__init__(
             parent,
             background=theme.background,
@@ -36,6 +50,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         self._view_model = view_model
         self._theme = theme
         self._quality_only = quality_only
+        self._visual_scale = visual_scale
         self._selected_identifier: str | None = None
         self._detail_title: tk.Label | None = None
         self._detail_probability: tk.Label | None = None
@@ -89,13 +104,17 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         )
         summary.pack(
             fill=tk.X,
-            pady=(10, 2),
+            pady=(
+                (6, 0)
+                if self._quality_only
+                else (10, 2)
+            ),
         )
 
         donut_size = (
-            145
+            self._px(120)
             if self._quality_only
-            else 205
+            else self._px(205)
         )
 
         donut = tk.Canvas(
@@ -140,7 +159,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             side=tk.LEFT,
             fill=tk.BOTH,
             expand=True,
-            padx=(10, 0),
+            padx=(self._px(10), 0),
             pady=(6, 0),
         )
 
@@ -180,18 +199,22 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="Évolution récente",
             background=card["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 10),
+            font=self._font("Segoe UI Semibold", 10),
         ).pack(
             anchor="w",
-            pady=(8, 2),
+            pady=(
+                (5, 1)
+                if self._quality_only
+                else (8, 2)
+            ),
         )
 
         line_chart = tk.Canvas(
             card,
             height=(
-                92
+                self._px(72)
                 if self._quality_only
-                else 150
+                else self._px(150)
             ),
             background=card["background"],
             highlightthickness=0,
@@ -267,7 +290,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
                 text="Aucune hypothèse disponible.",
                 background=ranking["background"],
                 foreground=self._theme.text_secondary,
-                font=("Segoe UI", 9),
+                font=self._font("Segoe UI", 9),
             ).pack(anchor="w")
 
         for probability in (
@@ -297,7 +320,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="Sélectionnez une hypothèse",
             background=detail["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 12),
+            font=self._font("Segoe UI Semibold", 12),
             justify=tk.LEFT,
             wraplength=300,
         )
@@ -308,7 +331,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="",
             background=detail["background"],
             foreground=self._theme.hypothesis,
-            font=("Segoe UI Semibold", 22),
+            font=self._font("Segoe UI Semibold", 22),
         )
         self._detail_probability.pack(
             anchor="w",
@@ -320,7 +343,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="Interprétation",
             background=detail["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
         ).pack(
             anchor="w",
             pady=(8, 3),
@@ -331,7 +354,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="",
             background=detail["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
             justify=tk.LEFT,
             wraplength=300,
         )
@@ -342,7 +365,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="Prochaine action",
             background=detail["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
         ).pack(
             anchor="w",
             pady=(16, 3),
@@ -353,7 +376,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="",
             background=detail["background"],
             foreground=self._theme.success,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
             justify=tk.LEFT,
             wraplength=300,
         )
@@ -395,7 +418,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text=probability.identifier,
             background=header["background"],
             foreground=probability.accent,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
             cursor="hand2",
         )
         identifier.pack(side=tk.LEFT)
@@ -405,7 +428,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text=probability.label,
             background=header["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
             cursor="hand2",
         )
         title.pack(
@@ -418,7 +441,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text=f"{probability.probability}%",
             background=header["background"],
             foreground=probability.accent,
-            font=("Segoe UI Semibold", 10),
+            font=self._font("Segoe UI Semibold", 10),
             cursor="hand2",
         )
         percentage.pack(side=tk.RIGHT)
@@ -596,7 +619,11 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         )
         row.pack(
             fill=tk.X,
-            pady=4,
+            pady=(
+                2
+                if self._quality_only
+                else 4
+            ),
         )
 
         tk.Label(
@@ -604,7 +631,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text="●",
             background=row["background"],
             foreground=accent,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
         ).pack(side=tk.LEFT)
 
         tk.Label(
@@ -612,7 +639,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text=label,
             background=row["background"],
             foreground=self._theme.text_secondary,
-            font=("Segoe UI", 9),
+            font=self._font("Segoe UI", 9),
         ).pack(
             side=tk.LEFT,
             padx=(6, 0),
@@ -623,7 +650,7 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text=str(value),
             background=row["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 9),
+            font=self._font("Segoe UI Semibold", 9),
         ).pack(side=tk.RIGHT)
 
     def _card(
@@ -631,13 +658,21 @@ class DiagnosticAnalyticsPanel(tk.Frame):
         parent: tk.Widget,
     ) -> tk.Frame:
         """Create one analytics card."""
-        return tk.Frame(
+        return RoundedSurfaceCard(
             parent,
             background=self._theme.surface,
-            highlightthickness=1,
-            highlightbackground=self._theme.border,
-            padx=18,
-            pady=16,
+            outer_background=str(
+                parent["background"]
+            ),
+            border=self._theme.border,
+            shadow=self._theme.background,
+            padding=self._px(
+                12
+                if self._quality_only
+                else 18
+            ),
+            level=SurfaceLevel.PANEL,
+            visual_scale=self._visual_scale,
         )
 
     def _title(
@@ -651,7 +686,38 @@ class DiagnosticAnalyticsPanel(tk.Frame):
             text=text,
             background=parent["background"],
             foreground=self._theme.text_primary,
-            font=("Segoe UI Semibold", 13),
+            font=self._type(TypographyRole.SECTION_TITLE),
+        )
+
+    def _px(
+        self,
+        value: int,
+    ) -> int:
+        """Scale one analytics dimension for the current display."""
+        return max(
+            1,
+            round(value * self._visual_scale),
+        )
+
+    def _font(
+        self,
+        family: str,
+        size: int,
+    ) -> tuple[str, int]:
+        """Return one explicitly scaled analytics font."""
+        return (
+            family,
+            self._px(size),
+        )
+
+    def _type(
+        self,
+        role: TypographyRole,
+    ) -> tuple[str, int]:
+        """Resolve one semantic analytics font for the display scale."""
+        return typography_font(
+            role,
+            visual_scale=self._visual_scale,
         )
 
     @staticmethod

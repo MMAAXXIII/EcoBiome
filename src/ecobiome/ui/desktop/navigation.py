@@ -6,6 +6,47 @@ import re
 import tkinter as tk
 import unicodedata
 from collections.abc import Callable
+from dataclasses import dataclass
+from enum import StrEnum
+
+from ecobiome.ui.desktop.icons import DesktopIcon
+
+
+class NavigationIdentifier(StrEnum):
+    """Stable identifiers for the primary desktop navigation."""
+
+    DASHBOARD = "dashboard"
+    JOURNAL = "journal"
+    GALLERY = "gallery"
+    PROJECTS = "projects"
+    DIAGNOSTIC = "diagnostic"
+    ANALYSES = "analyses"
+    EXPERIMENTS = "experiments"
+    LEARNING = "learning"
+    STATISTICS = "statistics"
+    COMMUNITY = "community"
+    DONATIONS = "donations"
+    SHOP = "shop"
+    SETTINGS = "settings"
+
+
+class NavigationStatus(StrEnum):
+    """Describe whether one desktop destination is currently available."""
+
+    AVAILABLE = "available"
+    COMING_SOON = "coming-soon"
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class NavigationItem:
+    """Define one explicit and keyboard-accessible navigation action."""
+
+    identifier: NavigationIdentifier
+    icon: DesktopIcon
+    label: str
+    status: NavigationStatus
+    command: Callable[[], None]
+    selected: bool = False
 
 _GALLERY_LABELS = frozenset(
     {
@@ -71,10 +112,16 @@ def is_gallery_navigation_text(
 def bind_gallery_navigation(
     root: tk.Misc,
     callback: Callable[[], None],
+    *,
+    excluded_roots: tuple[tk.Misc, ...] = (),
 ) -> int:
-    """Connect every explicit gallery navigation entry."""
+    """Connect gallery actions outside explicitly managed navigation roots."""
     bound_widgets = 0
     bound_widget_paths: set[str] = set()
+    excluded_widget_paths = {
+        str(widget)
+        for widget in excluded_roots
+    }
 
     def handle_click(
         _event: tk.Event,
@@ -134,6 +181,9 @@ def bind_gallery_navigation(
     def walk(
         widget: tk.Misc,
     ) -> None:
+        if str(widget) in excluded_widget_paths:
+            return
+
         for child in widget.winfo_children():
             label_text = ""
 

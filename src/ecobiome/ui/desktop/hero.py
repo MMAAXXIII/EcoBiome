@@ -14,7 +14,44 @@ from PIL import (
     ImageTk,
 )
 
+from ecobiome.ui.desktop.design_tokens import (
+    TypographyRole,
+    typography_font,
+)
 from ecobiome.ui.desktop.theme import DesktopTheme
+
+_PANORAMA_MINIMUM_RATIO = 2.15
+
+
+def _load_rgb_image(
+    image_path: Path | None,
+) -> Image.Image | None:
+    """Load one RGB image without retaining a file handle."""
+    if image_path is None:
+        return None
+
+    try:
+        with Image.open(image_path) as source:
+            return source.convert("RGB")
+
+    except OSError:
+        return None
+
+
+def _is_panorama(
+    image: Image.Image | None,
+) -> bool:
+    """Return whether an image can fill the shallow hero safely."""
+    if image is None:
+        return False
+
+    width, height = image.size
+
+    return (
+        height > 0
+        and width / height
+        >= _PANORAMA_MINIMUM_RATIO
+    )
 
 
 def cover_dimensions(
@@ -477,11 +514,22 @@ class DashboardHeroBanner(tk.Frame):
         theme_names: tuple[str, ...] = (),
         current_theme: str | None = None,
         on_theme_changed: Callable[[str], None] | None = None,
+        on_minimize_window: Callable[[], None] | None = None,
+        on_toggle_maximize_window: Callable[[], None] | None = None,
+        on_close_window: Callable[[], None] | None = None,
+        visual_scale: float = 1.0,
     ) -> None:
+        if visual_scale <= 0:
+            raise ValueError(
+                "Hero visual scale must be positive."
+            )
+
+        self._visual_scale = visual_scale
+        hero_height = self._px(132)
         super().__init__(
             parent,
             background=theme.background,
-            height=172,
+            height=hero_height,
         )
         self._container = parent
         self._theme = theme
@@ -490,7 +538,22 @@ class DashboardHeroBanner(tk.Frame):
         self._image_path = image_path
         self._source_image: Image.Image | None = None
         self._photo: ImageTk.PhotoImage | None = None
+        self._disposed = False
+        self._initial_redraw_completed = False
+        self._initial_redraw_after_id: str | None = None
         self._redraw_after_id: str | None = None
+        self._theme_trace_id: str | None = None
+
+        window_callbacks = (
+            on_minimize_window,
+            on_toggle_maximize_window,
+            on_close_window,
+        )
+
+        if any(window_callbacks) and not all(window_callbacks):
+            raise ValueError(
+                "Integrated window controls require all callbacks."
+            )
 
         self.grid_propagate(
             False
@@ -508,9 +571,8 @@ class DashboardHeroBanner(tk.Frame):
             self,
             background=theme.surface,
             borderwidth=0,
-            highlightthickness=1,
-            highlightbackground=theme.border,
-            height=172,
+            highlightthickness=0,
+            height=hero_height,
         )
         self._canvas.grid(
             row=0,
@@ -518,8 +580,85 @@ class DashboardHeroBanner(tk.Frame):
             sticky="nsew",
         )
 
-        self._gallery_button = tk.Button(
+        self._toolbar = tk.Frame(
             self._canvas,
+            background=theme.surface,
+            borderwidth=0,
+            highlightthickness=1,
+            highlightbackground=theme.border,
+            padx=self._px(5),
+            pady=self._px(5),
+        )
+        self._primary_actions = tk.Frame(
+            self._toolbar,
+            background=theme.surface,
+        )
+        self._primary_actions.pack(fill=tk.X)
+
+        self._window_controls: tk.Frame | None = None
+        if all(window_callbacks):
+            assert on_minimize_window is not None
+            assert on_toggle_maximize_window is not None
+            assert on_close_window is not None
+            self._window_controls = tk.Frame(
+                self._primary_actions,
+                background=theme.surface,
+            )
+            self._window_controls.pack(
+                side=tk.RIGHT,
+                padx=(self._px(5), 0),
+            )
+
+            window_button_specifications = (
+                (
+                    "−",
+                    on_minimize_window,
+                    theme.text_secondary,
+                    theme.surface_elevated,
+                ),
+                (
+                    "□",
+                    on_toggle_maximize_window,
+                    theme.text_primary,
+                    theme.surface_elevated,
+                ),
+                (
+                    "×",
+                    on_close_window,
+                    theme.text_primary,
+                    theme.danger,
+                ),
+            )
+
+            for (
+                symbol,
+                callback,
+                foreground,
+                active_background,
+            ) in window_button_specifications:
+                tk.Button(
+                    self._window_controls,
+                    text=symbol,
+                    command=callback,
+                    takefocus=True,
+                    background=theme.surface,
+                    foreground=foreground,
+                    activebackground=active_background,
+                    activeforeground=theme.text_primary,
+                    relief=tk.FLAT,
+                    borderwidth=0,
+                    highlightthickness=1,
+                    highlightbackground=theme.surface,
+                    highlightcolor=theme.accent,
+                    width=2,
+                    padx=self._px(2),
+                    pady=self._px(2),
+                    cursor="hand2",
+                    font=self._font("Segoe UI Semibold", 10),
+                ).pack(side=tk.LEFT)
+
+        self._gallery_button = tk.Button(
+            self._primary_actions,
             text="Ouvrir la galerie  →",
             command=on_open_gallery,
             background=theme.success,
@@ -527,10 +666,10 @@ class DashboardHeroBanner(tk.Frame):
             activebackground=theme.accent,
             activeforeground="#FFFFFF",
             relief=tk.FLAT,
-            padx=16,
-            pady=8,
+            padx=self._px(11),
+            pady=self._px(5),
             cursor="hand2",
-            font=(
+            font=self._font(
                 "Segoe UI Semibold",
                 9,
             ),
@@ -539,7 +678,7 @@ class DashboardHeroBanner(tk.Frame):
         self._export_button: tk.Button | None = None
         if on_export_report is not None:
             self._export_button = tk.Button(
-                self._canvas,
+                self._toolbar,
                 text="⇩  Exporter le rapport",
                 command=on_export_report,
                 background=theme.surface_elevated,
@@ -547,10 +686,12 @@ class DashboardHeroBanner(tk.Frame):
                 activebackground=theme.border,
                 activeforeground=theme.text_primary,
                 relief=tk.FLAT,
-                padx=13,
-                pady=8,
+                padx=self._px(12),
+                pady=self._px(5),
+                highlightthickness=1,
+                highlightbackground=theme.success,
                 cursor="hand2",
-                font=(
+                font=self._font(
                     "Segoe UI Semibold",
                     9,
                 ),
@@ -559,7 +700,7 @@ class DashboardHeroBanner(tk.Frame):
         self._layout_button: tk.Button | None = None
         if on_customize_layout is not None:
             self._layout_button = tk.Button(
-                self._canvas,
+                self._primary_actions,
                 text="⚙  Disposition",
                 command=on_customize_layout,
                 background=theme.surface_elevated,
@@ -567,10 +708,10 @@ class DashboardHeroBanner(tk.Frame):
                 activebackground=theme.border,
                 activeforeground=theme.text_primary,
                 relief=tk.FLAT,
-                padx=12,
-                pady=8,
+                padx=self._px(9),
+                pady=self._px(5),
                 cursor="hand2",
-                font=(
+                font=self._font(
                     "Segoe UI Semibold",
                     9,
                 ),
@@ -585,6 +726,7 @@ class DashboardHeroBanner(tk.Frame):
             and on_theme_changed is not None
         ):
             self._theme_variable = tk.StringVar(
+                master=self,
                 value=current_theme
             )
             theme_variable = self._theme_variable
@@ -600,7 +742,7 @@ class DashboardHeroBanner(tk.Frame):
                 )
 
             self._theme_menu = tk.OptionMenu(
-                self._canvas,
+                self._primary_actions,
                 theme_variable,
                 *theme_names,
             )
@@ -608,11 +750,17 @@ class DashboardHeroBanner(tk.Frame):
             def handle_theme_variable_change(
                 *_args: str,
             ) -> None:
-                theme_change_callback(
-                    theme_variable.get()
-                )
+                if self._disposed:
+                    return
 
-            theme_variable.trace_add(
+                try:
+                    selected_theme = theme_variable.get()
+                except tk.TclError:
+                    return
+
+                theme_change_callback(selected_theme)
+
+            self._theme_trace_id = theme_variable.trace_add(
                 "write",
                 handle_theme_variable_change,
             )
@@ -623,9 +771,9 @@ class DashboardHeroBanner(tk.Frame):
                 activeforeground=theme.text_primary,
                 relief=tk.FLAT,
                 borderwidth=0,
-                highlightthickness=1,
-                highlightbackground=theme.border,
-                font=(
+                highlightthickness=0,
+                width=13,
+                font=self._font(
                     "Segoe UI",
                     9,
                 ),
@@ -634,6 +782,39 @@ class DashboardHeroBanner(tk.Frame):
                 background=theme.surface,
                 foreground=theme.text_primary,
                 activebackground=theme.accent,
+            )
+
+        self._theme_symbol = tk.Label(
+            self._primary_actions,
+            text="☼",
+            background=theme.surface,
+            foreground=theme.warning,
+            font=self._font(
+                "Segoe UI Symbol",
+                14,
+            ),
+            padx=self._px(5),
+        )
+        self._theme_symbol.pack(side=tk.LEFT)
+
+        if self._theme_menu is not None:
+            self._theme_menu.pack(
+                side=tk.LEFT,
+                padx=(0, self._px(5)),
+            )
+
+        if self._layout_button is not None:
+            self._layout_button.pack(
+                side=tk.LEFT,
+                padx=(0, self._px(5)),
+            )
+
+        self._gallery_button.pack(side=tk.LEFT)
+
+        if self._export_button is not None:
+            self._export_button.pack(
+                anchor="e",
+                pady=(self._px(6), 0),
             )
 
         self._canvas.bind(
@@ -647,6 +828,106 @@ class DashboardHeroBanner(tk.Frame):
     def has_source_image(self) -> bool:
         """Return whether a real project image is loaded."""
         return self._source_image is not None
+
+    def destroy(self) -> None:
+        """Release Tcl callbacks and destroy the banner exactly once."""
+        if self._disposed:
+            return
+
+        self._disposed = True
+        theme_variable = self._theme_variable
+        theme_trace_id = self._theme_trace_id
+
+        if (
+            theme_variable is not None
+            and theme_trace_id is not None
+        ):
+            try:
+                theme_variable.trace_remove(
+                    "write",
+                    theme_trace_id,
+                )
+            except tk.TclError:
+                pass
+
+        self._theme_trace_id = None
+
+        for attribute_name in (
+            "_initial_redraw_after_id",
+            "_redraw_after_id",
+        ):
+            callback_id = getattr(
+                self,
+                attribute_name,
+            )
+
+            if callback_id is None:
+                continue
+
+            try:
+                self.after_cancel(callback_id)
+            except tk.TclError:
+                pass
+
+            setattr(self, attribute_name, None)
+
+        self._photo = None
+        super().destroy()
+
+    def bind_window_drag(
+        self,
+        *,
+        on_start: Callable[[tk.Event], None],
+        on_motion: Callable[[tk.Event], None],
+        on_end: Callable[[tk.Event], None],
+    ) -> None:
+        """Make the illustrated background act as a window drag surface."""
+        self._canvas.bind(
+            "<ButtonPress-1>",
+            on_start,
+            add="+",
+        )
+        self._canvas.bind(
+            "<B1-Motion>",
+            on_motion,
+            add="+",
+        )
+        self._canvas.bind(
+            "<ButtonRelease-1>",
+            on_end,
+            add="+",
+        )
+
+    def _px(
+        self,
+        value: int,
+    ) -> int:
+        """Scale one hero dimension for the current display."""
+        return max(
+            1,
+            round(value * self._visual_scale),
+        )
+
+    def _font(
+        self,
+        family: str,
+        size: int,
+    ) -> tuple[str, int]:
+        """Return one explicitly scaled hero font."""
+        return (
+            family,
+            self._px(size),
+        )
+
+    def _type(
+        self,
+        role: TypographyRole,
+    ) -> tuple[str, int]:
+        """Resolve one semantic hero font for the display scale."""
+        return typography_font(
+            role,
+            visual_scale=self._visual_scale,
+        )
 
     def mount_at_top(self) -> None:
         """Insert the banner before existing dashboard content."""
@@ -706,15 +987,25 @@ class DashboardHeroBanner(tk.Frame):
                 pady=(14, 4),
             )
 
-        self.after_idle(
-            self._redraw
-        )
+        if (
+            not self._disposed
+            and not self._initial_redraw_completed
+            and self._initial_redraw_after_id is None
+        ):
+            self._initial_redraw_after_id = (
+                self.after_idle(
+                    self._run_initial_redraw
+                )
+            )
 
     def set_image_path(
         self,
         image_path: Path | None,
     ) -> None:
         """Replace the project image used by the banner."""
+        if self._disposed:
+            return
+
         normalized_path = (
             Path(image_path)
             if image_path is not None
@@ -730,40 +1021,60 @@ class DashboardHeroBanner(tk.Frame):
 
     def _load_source_image(self) -> None:
         """Load the image without retaining a file handle."""
-        self._source_image = None
-
-        if self._image_path is None:
-            return
-
-        try:
-            with Image.open(
-                self._image_path
-            ) as source:
-                self._source_image = source.convert(
-                    "RGB"
-                )
-
-        except OSError:
-            self._source_image = None
+        self._source_image = _load_rgb_image(
+            self._image_path
+        )
 
     def _schedule_redraw(
         self,
         _event: tk.Event | None = None,
     ) -> None:
         """Debounce redraws triggered by resizing."""
+        if self._disposed:
+            return
+
         if self._redraw_after_id is not None:
-            self.after_cancel(
-                self._redraw_after_id
-            )
+            try:
+                self.after_cancel(
+                    self._redraw_after_id
+                )
+            except tk.TclError:
+                pass
+
+            self._redraw_after_id = None
 
         self._redraw_after_id = self.after(
             40,
-            self._redraw,
+            self._run_scheduled_redraw,
         )
+
+    def _run_initial_redraw(self) -> None:
+        """Run the owned first redraw when the banner is still alive."""
+        self._initial_redraw_after_id = None
+        self._initial_redraw_completed = True
+
+        if not self._disposed:
+            self._redraw()
+
+    def _run_scheduled_redraw(self) -> None:
+        """Run one debounced redraw when the banner is still alive."""
+        self._redraw_after_id = None
+
+        if not self._disposed:
+            self._redraw()
 
     def _redraw(self) -> None:
         """Render the responsive image, overlay and controls."""
-        self._redraw_after_id = None
+        if self._disposed:
+            return
+
+        try:
+            canvas_exists = self._canvas.winfo_exists()
+        except tk.TclError:
+            return
+
+        if not canvas_exists:
+            return
 
         width = max(
             1,
@@ -794,75 +1105,43 @@ class DashboardHeroBanner(tk.Frame):
         )
 
         self._canvas.create_text(
-            30,
-            25,
+            self._px(28),
+            self._px(14),
             text=self._title,
             fill=self._theme.text_primary,
             anchor="nw",
-            font=(
-                "Segoe UI Semibold",
-                25,
-            ),
+            font=self._type(TypographyRole.PROJECT_TITLE),
         )
         self._canvas.create_text(
-            31,
-            72,
+            self._px(29),
+            self._px(52),
             text=self._subtitle,
             fill=self._theme.text_secondary,
             anchor="nw",
             width=max(
-                320,
-                min(680, width - 520),
+                self._px(320),
+                min(
+                    self._px(680),
+                    width - self._px(520),
+                ),
             ),
-            font=(
-                "Segoe UI",
-                10,
-            ),
+            font=self._type(TypographyRole.BODY),
         )
         self._canvas.create_text(
-            31,
-            126,
+            self._px(29),
+            self._px(94),
             text="●  Projet actif",
             fill=self._theme.success,
             anchor="nw",
-            font=(
-                "Segoe UI Semibold",
-                10,
-            ),
+            font=self._type(TypographyRole.PRIMARY_LABEL),
         )
-
-        right = width - 24
-
-        if self._theme_menu is not None:
-            self._canvas.create_window(
-                right,
-                18,
-                window=self._theme_menu,
-                anchor="ne",
-            )
-
-        if self._export_button is not None:
-            self._canvas.create_window(
-                right,
-                66,
-                window=self._export_button,
-                anchor="ne",
-            )
 
         self._canvas.create_window(
-            right,
-            height - 18,
-            window=self._gallery_button,
-            anchor="se",
+            width - self._px(14),
+            self._px(10),
+            window=self._toolbar,
+            anchor="ne",
         )
-
-        if self._layout_button is not None:
-            self._canvas.create_window(
-                right - 160,
-                height - 18,
-                window=self._layout_button,
-                anchor="se",
-            )
 
     def _render_background(
         self,
@@ -871,18 +1150,9 @@ class DashboardHeroBanner(tk.Frame):
         height: int,
     ) -> Image.Image:
         """Build a wide source image or illustrated aquarium fallback."""
-        source_is_panorama = False
-
-        if self._source_image is not None:
-            source_width, source_height = (
-                self._source_image.size
-            )
-
-            if source_height > 0:
-                source_is_panorama = (
-                    source_width / source_height
-                    >= 2.15
-                )
+        source_is_panorama = _is_panorama(
+            self._source_image
+        )
 
         if (
             self._source_image is None
@@ -952,7 +1222,47 @@ class DashboardHeroBanner(tk.Frame):
                 ),
             )
 
-        return Image.alpha_composite(
+        composited = Image.alpha_composite(
             rgba_image,
             overlay,
         ).convert("RGB")
+
+        radius = max(
+            1,
+            min(
+                14,
+                width // 2,
+                height // 2,
+            ),
+        )
+        mask = Image.new(
+            "L",
+            (width, height),
+            0,
+        )
+        mask_drawing = ImageDraw.Draw(mask)
+        mask_drawing.rounded_rectangle(
+            (0, 0, width - 1, height - 1),
+            radius=radius,
+            fill=255,
+        )
+
+        rounded = Image.new(
+            "RGB",
+            (width, height),
+            self._theme.background,
+        )
+        rounded.paste(
+            composited,
+            (0, 0),
+            mask,
+        )
+        border = ImageDraw.Draw(rounded)
+        border.rounded_rectangle(
+            (0, 0, width - 1, height - 1),
+            radius=radius,
+            outline=self._theme.border,
+            width=1,
+        )
+
+        return rounded

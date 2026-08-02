@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import ast
+import os
 import pathlib
 import runpy
+import subprocess
+import sys
 import tkinter as tk
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -19,10 +22,12 @@ from ecobiome.ui.desktop import (
     DiagnosticAnalyticsViewModel,
     EcoBiomeDesktopApp,
     HypothesisDetailViewModel,
+    SurfaceLevel,
     build_media_gallery,
     readable_media_title,
     select_hero_image_path,
 )
+from ecobiome.ui.desktop.surfaces import RoundedSurfaceCard
 
 _desktop_dashboard_demo = runpy.run_path(
     str(
@@ -33,6 +38,50 @@ _desktop_dashboard_demo = runpy.run_path(
 )
 
 populate_demo_workspace = _desktop_dashboard_demo["populate_demo_workspace"]
+
+_TK_SCENARIO_ENVIRONMENT_VARIABLE = (
+    "ECOBIOME_TK_TEST_SCENARIO"
+)
+
+
+def _run_in_isolated_tk_process(
+    scenario_name: str,
+) -> bool:
+    """Run one native Tk scenario in its own Python process."""
+    if (
+        os.environ.get(
+            _TK_SCENARIO_ENVIRONMENT_VARIABLE
+        )
+        == scenario_name
+    ):
+        return False
+
+    environment = os.environ.copy()
+    environment[
+        _TK_SCENARIO_ENVIRONMENT_VARIABLE
+    ] = scenario_name
+    node_identifier = (
+        f"{Path(__file__).resolve()}::{scenario_name}"
+    )
+    result = subprocess.run(
+        (
+            sys.executable,
+            "-m",
+            "pytest",
+            node_identifier,
+            "-q",
+        ),
+        check=False,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
+
+    assert result.returncode == 0, (
+        "Isolated Tk scenario failed:\n"
+        f"{result.stdout}\n{result.stderr}"
+    )
+    return True
 
 
 def _widget_texts(
@@ -54,6 +103,19 @@ def _widget_texts(
         )
 
     return tuple(texts)
+
+
+def _walk_widgets(
+    widget: tk.Misc,
+) -> tuple[tk.Misc, ...]:
+    """Return every descendant widget in stable creation order."""
+    descendants: list[tk.Misc] = []
+
+    for child in widget.winfo_children():
+        descendants.append(child)
+        descendants.extend(_walk_widgets(child))
+
+    return tuple(descendants)
 
 
 def test_readable_media_title_removes_storage_digest() -> None:
@@ -163,6 +225,11 @@ def test_compact_analytics_disables_second_hypothesis_panel() -> None:
 
 
 def test_complete_dashboard_uses_compact_visual_rows() -> None:
+    if _run_in_isolated_tk_process(
+        "test_complete_dashboard_uses_compact_visual_rows"
+    ):
+        return
+
     with TemporaryDirectory(
         prefix="ecobiome-composition-"
     ) as temporary:
@@ -232,9 +299,25 @@ def test_complete_dashboard_uses_compact_visual_rows() -> None:
             assert viewport is not None
             assert hero is not None
             assert hero.master is viewport.content
+            assert int(hero.cget("height")) == hero._px(132)
             assert int(
                 hero.grid_info()["row"]
             ) == 0
+
+            assert hero._window_controls is not None
+            window_buttons = tuple(
+                child
+                for child in hero._window_controls.winfo_children()
+                if isinstance(child, tk.Button)
+            )
+            assert tuple(
+                str(button.cget("text"))
+                for button in window_buttons
+            ) == ("−", "□", "×")
+            assert all(
+                str(button.cget("takefocus")) == "1"
+                for button in window_buttons
+            )
 
             activity_info = app._section_frames[
                 DashboardSection.ACTIVITY
@@ -267,10 +350,31 @@ def test_complete_dashboard_uses_compact_visual_rows() -> None:
             ) == (1, 1)
 
             texts = _widget_texts(root)
+            surface_levels = {
+                widget.surface_level
+                for widget in _walk_widgets(root)
+                if isinstance(widget, RoundedSurfaceCard)
+            }
+
+            assert surface_levels == {
+                SurfaceLevel.PANEL,
+                SurfaceLevel.ANALYTIC,
+                SurfaceLevel.COMPACT,
+            }
 
             assert texts.count(
                 "Hypothèses principales"
             ) == 1
+            assert "ESPACE SCIENTIFIQUE" in texts
+            assert "COMMUNAUTÉ ET COMPTE" in texts
+            assert (
+                f"{view_model.metrics[0].value} observations"
+                in texts
+            )
+            assert (
+                f"Fiabilité {view_model.metrics[1].value}"
+                in texts
+            )
             assert "Galerie rapide" in texts
             assert "⇩  Exporter le rapport" in texts
 

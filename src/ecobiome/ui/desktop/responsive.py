@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import tkinter as tk
 from dataclasses import dataclass
 from typing import Literal
@@ -51,7 +52,6 @@ class DashboardViewportMetrics:
             / self.reference_width,
             self.screen_height
             / self.reference_height,
-            1.0,
         )
 
         return max(
@@ -83,6 +83,342 @@ def fit_content_height(
     )
 
 
+def responsive_sidebar_width(
+    viewport_width: int,
+    *,
+    minimum: int = 200,
+    maximum: int = 450,
+    ratio: float = 0.17,
+) -> int:
+    """Keep the navigation rail proportional without crowding content."""
+    if viewport_width <= 0:
+        raise ValueError(
+            "Viewport width must be positive."
+        )
+
+    if not 0 < minimum <= maximum:
+        raise ValueError(
+            "Sidebar width bounds are invalid."
+        )
+
+    if not 0 < ratio < 1:
+        raise ValueError(
+            "Sidebar width ratio must be between zero and one."
+        )
+
+    return max(
+        minimum,
+        min(
+            maximum,
+            round(viewport_width * ratio),
+        ),
+    )
+
+
+def responsive_content_width(
+    viewport_width: int,
+    *,
+    maximum: int = 1900,
+) -> int:
+    """Cap ultra-wide dashboard content while preserving narrow layouts."""
+    if viewport_width <= 0:
+        raise ValueError(
+            "Viewport width must be positive."
+        )
+
+    if maximum <= 0:
+        raise ValueError(
+            "Maximum content width must be positive."
+        )
+
+    return min(
+        viewport_width,
+        maximum,
+    )
+
+
+def geometry_dimensions(
+    geometry: str,
+) -> tuple[int, int]:
+    """Extract positive width and height from one Tk geometry string."""
+    match = re.fullmatch(
+        r"\s*(\d+)x(\d+)(?:[+-]+\d+){0,2}\s*",
+        geometry,
+    )
+
+    if match is None:
+        raise ValueError(
+            "Initial desktop geometry is invalid."
+        )
+
+    width = int(match.group(1))
+    height = int(match.group(2))
+
+    if width <= 0 or height <= 0:
+        raise ValueError(
+            "Initial desktop geometry dimensions must be positive."
+        )
+
+    return width, height
+
+
+def scrollbar_thumb_geometry(
+    first: float,
+    last: float,
+    *,
+    track_height: int,
+    minimum_height: int,
+) -> tuple[int, int]:
+    """Resolve one bounded vertical scrollbar thumb geometry."""
+    if track_height <= 0 or minimum_height <= 0:
+        raise ValueError(
+            "Scrollbar dimensions must be positive."
+        )
+
+    if not 0.0 <= first <= last <= 1.0:
+        raise ValueError(
+            "Scrollbar fractions must be ordered between zero and one."
+        )
+
+    thumb_top = round(track_height * first)
+    thumb_bottom = round(track_height * last)
+    resolved_minimum = min(
+        track_height,
+        minimum_height,
+    )
+
+    if thumb_bottom - thumb_top < resolved_minimum:
+        thumb_bottom = min(
+            track_height,
+            thumb_top + resolved_minimum,
+        )
+        thumb_top = max(
+            0,
+            thumb_bottom - resolved_minimum,
+        )
+
+    return thumb_top, thumb_bottom
+
+
+def scrollbar_fraction_for_thumb(
+    thumb_top: int,
+    *,
+    track_height: int,
+    thumb_height: int,
+) -> float:
+    """Translate a dragged thumb position to a canvas scroll fraction."""
+    if track_height <= 0 or thumb_height <= 0:
+        raise ValueError(
+            "Scrollbar dimensions must be positive."
+        )
+
+    travel = max(
+        1,
+        track_height - min(
+            track_height,
+            thumb_height,
+        ),
+    )
+
+    return max(
+        0.0,
+        min(
+            1.0,
+            thumb_top / travel,
+        ),
+    )
+
+
+class CanvasVerticalScrollbar:
+    """Draw a theme-aware vertical scrollbar for one Tk canvas."""
+
+    def __init__(
+        self,
+        parent: tk.Widget,
+        *,
+        target: tk.Canvas,
+        background: str,
+        thumb: str,
+        active_thumb: str,
+        width: int = 8,
+        minimum_thumb_height: int = 28,
+    ) -> None:
+        if width <= 0 or minimum_thumb_height <= 0:
+            raise ValueError(
+                "Scrollbar dimensions must be positive."
+            )
+
+        self._target = target
+        self._width = width
+        self._minimum_thumb_height = minimum_thumb_height
+        self._drag_offset: int | None = None
+        self.widget = tk.Canvas(
+            parent,
+            width=width,
+            background=background,
+            highlightthickness=0,
+            borderwidth=0,
+            cursor="hand2",
+        )
+        self._thumb = self.widget.create_rectangle(
+            1,
+            0,
+            max(2, width - 1),
+            1,
+            fill=thumb,
+            activefill=active_thumb,
+            outline="",
+        )
+
+        target.configure(
+            yscrollcommand=self.set,
+        )
+        self.widget.bind(
+            "<Configure>",
+            self._refresh,
+        )
+        self.widget.bind(
+            "<ButtonPress-1>",
+            self._begin_drag,
+        )
+        self.widget.bind(
+            "<B1-Motion>",
+            self._drag,
+        )
+        self.widget.bind(
+            "<ButtonRelease-1>",
+            self._end_drag,
+        )
+
+    def grid(
+        self,
+        *,
+        row: int,
+        column: int,
+        sticky: str = "ns",
+    ) -> None:
+        """Mount the scrollbar canvas with grid."""
+        self.widget.grid(
+            row=row,
+            column=column,
+            sticky=sticky,
+        )
+
+    def set(
+        self,
+        first: float | str,
+        last: float | str,
+    ) -> None:
+        """Synchronize visibility and thumb position from a canvas view."""
+        first_fraction = float(first)
+        last_fraction = float(last)
+
+        if first_fraction <= 0.0 and last_fraction >= 1.0:
+            self.widget.grid_remove()
+            return
+
+        self.widget.grid()
+        track_height = max(
+            1,
+            self.widget.winfo_height(),
+        )
+        thumb_top, thumb_bottom = scrollbar_thumb_geometry(
+            first_fraction,
+            last_fraction,
+            track_height=track_height,
+            minimum_height=self._minimum_thumb_height,
+        )
+        self.widget.coords(
+            self._thumb,
+            1,
+            thumb_top,
+            max(2, self._width - 1),
+            thumb_bottom,
+        )
+
+    def _refresh(
+        self,
+        _event: tk.Event,
+    ) -> None:
+        first, last = self._target.yview()
+        self.set(first, last)
+
+    def _move_to_pointer(
+        self,
+        event: tk.Event,
+        *,
+        offset: int,
+    ) -> None:
+        track_height = max(
+            1,
+            self.widget.winfo_height(),
+        )
+        coordinates = self.widget.coords(
+            self._thumb
+        )
+        thumb_height = max(
+            1,
+            round(coordinates[3] - coordinates[1]),
+        )
+        thumb_top = max(
+            0,
+            min(
+                track_height - thumb_height,
+                event.y - offset,
+            ),
+        )
+        fraction = scrollbar_fraction_for_thumb(
+            thumb_top,
+            track_height=track_height,
+            thumb_height=thumb_height,
+        )
+        self._target.yview_moveto(fraction)
+
+    def _begin_drag(
+        self,
+        event: tk.Event,
+    ) -> str:
+        coordinates = self.widget.coords(
+            self._thumb
+        )
+
+        if coordinates[1] <= event.y <= coordinates[3]:
+            self._drag_offset = round(
+                event.y - coordinates[1]
+            )
+        else:
+            thumb_height = max(
+                1,
+                round(coordinates[3] - coordinates[1]),
+            )
+            self._drag_offset = thumb_height // 2
+            self._move_to_pointer(
+                event,
+                offset=self._drag_offset,
+            )
+
+        return "break"
+
+    def _drag(
+        self,
+        event: tk.Event,
+    ) -> str:
+        if self._drag_offset is not None:
+            self._move_to_pointer(
+                event,
+                offset=self._drag_offset,
+            )
+
+        return "break"
+
+    def _end_drag(
+        self,
+        _event: tk.Event,
+    ) -> str:
+        self._drag_offset = None
+        return "break"
+
+
 class ResponsiveDashboardViewport:
     """Host dashboard content in a vertically scrollable child area."""
 
@@ -91,8 +427,19 @@ class ResponsiveDashboardViewport:
         parent: tk.Widget,
         *,
         background: str,
+        maximum_content_width: int = 1900,
+        scrollbar_thumb: str = "#53666D",
+        scrollbar_active_thumb: str = "#75D85A",
+        scrollbar_width: int = 8,
+        minimum_thumb_height: int = 28,
     ) -> None:
+        if maximum_content_width <= 0:
+            raise ValueError(
+                "Maximum content width must be positive."
+            )
+
         self._background = background
+        self._maximum_content_width = maximum_content_width
 
         self.container = tk.Frame(
             parent,
@@ -120,20 +467,21 @@ class ResponsiveDashboardViewport:
             sticky="nsew",
         )
 
-        self.scrollbar = tk.Scrollbar(
+        self._scrollbar = CanvasVerticalScrollbar(
             self.container,
-            orient=tk.VERTICAL,
-            command=self.canvas.yview,
+            target=self.canvas,
+            background=background,
+            thumb=scrollbar_thumb,
+            active_thumb=scrollbar_active_thumb,
+            width=scrollbar_width,
+            minimum_thumb_height=minimum_thumb_height,
         )
-        self.scrollbar.grid(
+        self._scrollbar.grid(
             row=0,
             column=1,
             sticky="ns",
         )
-
-        self.canvas.configure(
-            yscrollcommand=self.scrollbar.set,
-        )
+        self.scrollbar = self._scrollbar.widget
 
         self.content = tk.Frame(
             self.canvas,
@@ -196,32 +544,16 @@ class ResponsiveDashboardViewport:
             expand=expand,
         )
 
-
-    def bind_scrolling(
-        self,
-        root: tk.Tk,
-    ) -> None:
-        """Bind wheel and keyboard navigation to one application root."""
-        root.bind(
-            "<MouseWheel>",
-            self._on_mousewheel,
-        )
-        root.bind(
-            "<Button-4>",
-            self._on_scroll_up,
-        )
-        root.bind(
-            "<Button-5>",
-            self._on_scroll_down,
-        )
-        root.bind(
-            "<Home>",
-            self._on_home,
-        )
-        root.bind(
-            "<End>",
-            self._on_end,
-        )
+    @property
+    def is_alive(self) -> bool:
+        """Return whether the viewport can safely receive delegated events."""
+        try:
+            return bool(
+                self.container.winfo_exists()
+                and self.canvas.winfo_exists()
+            )
+        except tk.TclError:
+            return False
 
     def scroll_to_top(self) -> None:
         """Move to the first dashboard row."""
@@ -248,14 +580,27 @@ class ResponsiveDashboardViewport:
             1,
             self.canvas.winfo_height(),
         )
+        content_width = responsive_content_width(
+            canvas_width,
+            maximum=self._maximum_content_width,
+        )
+        content_x = max(
+            0,
+            (canvas_width - content_width) // 2,
+        )
         content_height = fit_content_height(
             canvas_height,
             self.content.winfo_reqheight(),
         )
 
+        self.canvas.coords(
+            self._content_window,
+            content_x,
+            0,
+        )
         self.canvas.itemconfigure(
             self._content_window,
-            width=canvas_width,
+            width=content_width,
             height=content_height,
         )
         self.canvas.configure(
@@ -296,11 +641,11 @@ class ResponsiveDashboardViewport:
         """Make content fill the available viewport dimensions."""
         self.refresh()
 
-    def _on_mousewheel(
+    def handle_mousewheel(
         self,
         event: tk.Event,
     ) -> str | None:
-        """Scroll with the Windows or macOS mouse wheel."""
+        """Handle a delegated Windows or macOS mouse-wheel event."""
         if (
             event.delta == 0
             or not self._pointer_is_inside_canvas(
@@ -326,11 +671,11 @@ class ResponsiveDashboardViewport:
 
         return "break"
 
-    def _on_scroll_up(
+    def handle_scroll_up(
         self,
         event: tk.Event,
     ) -> str | None:
-        """Scroll upward on X11."""
+        """Handle a delegated X11 upward-scroll event."""
         if not self._pointer_is_inside_canvas(
             event
         ):
@@ -343,11 +688,11 @@ class ResponsiveDashboardViewport:
 
         return "break"
 
-    def _on_scroll_down(
+    def handle_scroll_down(
         self,
         event: tk.Event,
     ) -> str | None:
-        """Scroll downward on X11."""
+        """Handle a delegated X11 downward-scroll event."""
         if not self._pointer_is_inside_canvas(
             event
         ):
@@ -360,20 +705,20 @@ class ResponsiveDashboardViewport:
 
         return "break"
 
-    def _on_home(
+    def handle_home(
         self,
         _event: tk.Event,
     ) -> str:
-        """Move to the beginning of the dashboard."""
+        """Handle a delegated request to show the dashboard beginning."""
         self.scroll_to_top()
 
         return "break"
 
-    def _on_end(
+    def handle_end(
         self,
         _event: tk.Event,
     ) -> str:
-        """Move to the end of the dashboard."""
+        """Handle a delegated request to show the dashboard end."""
         self.scroll_to_bottom()
 
         return "break"

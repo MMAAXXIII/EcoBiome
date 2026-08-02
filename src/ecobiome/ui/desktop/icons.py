@@ -6,7 +6,7 @@ from enum import StrEnum
 class DesktopIcon(StrEnum):
     """Unicode icons used consistently across EcoBiome."""
 
-    LOGO = "❧"
+    LOGO = "☘"
     DASHBOARD = "⌂"
     JOURNAL = "▤"
     GALLERY = "▣"
