@@ -1,0 +1,9 @@
+id: physics.thermal_inertia.decreases_temperature_fluctuation
+source: physics.thermal_inertia
+target: physics.temperature_fluctuation
+effect: decreases
+strength: strong
+confidence: high
+explanation: >
+  Greater thermal inertia slows temperature changes and therefore
+  decreases short-term temperature fluctuations.
