@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useWaterBodies, useAllMeasurements, useDiagnostics, getLatestByMetric, getMetricSeries } from '@/lib/hooks';
 import { METRIC_LIST, type Metric, type WaterBody } from '@/lib/types';
 import { MetricCard } from '@/components/MetricCard';
@@ -12,6 +12,18 @@ interface DashboardViewProps {
 }
 
 export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: DashboardViewProps) {
+
+  // 👉 MODULE BACKEND
+  const [projectInfo, setProjectInfo] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/dashboard")
+      .then((res) => res.json())
+      .then((json) => setProjectInfo(json))
+      .catch((err) => console.error("Erreur backend :", err));
+  }, []);
+
+  // 👉 Supabase hooks
   const { data: waterBodies, loading: wbLoading } = useWaterBodies();
   const { data: allMeasurements, loading: measLoading } = useAllMeasurements();
   const { data: diagnostics } = useDiagnostics();
@@ -38,6 +50,7 @@ export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: Dashb
 
   const recentDiagnostics = diagnostics.slice(0, 4);
 
+
   if (wbLoading || measLoading) {
     return (
       <div className="p-6 space-y-6">
@@ -51,6 +64,24 @@ export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: Dashb
 
   return (
     <div className="p-6 space-y-6 animate-fade-in">
+
+      {projectInfo && (
+  <div className="surface p-5 mb-6">
+    <h2 className="section-title mb-2">Résumé du projet EcoBiome</h2>
+    <p className="text-slate-300">{projectInfo.description}</p>
+
+    <ul className="mt-3 text-sm text-slate-400 space-y-1">
+      <li>Type : {projectInfo.project_type}</li>
+      <li>Tags : {projectInfo.tags.join(", ")}</li>
+      <li>Événements : {projectInfo.journal_event_count}</li>
+      <li>Médias : {projectInfo.media_file_count}</li>
+      <li>Diagnostics : {projectInfo.diagnostic_count}</li>
+      <li>Hypothèses : {projectInfo.hypothesis_count}</li>
+      <li>Expériences : {projectInfo.experiment_count}</li>
+      <li>Conclusions : {projectInfo.conclusion_count}</li>
+    </ul>
+  </div>
+)}
       {/* Top KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="kpi-card border-l-4 border-l-teal-500">
