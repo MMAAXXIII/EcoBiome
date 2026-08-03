@@ -1,0 +1,274 @@
+{
+  "meta": {
+    "author": "Maxime & Copilot",
+    "project": "Ecobiome",
+    "note": "Ce fichier est une création conjointe entre Maxime et Copilot, destinée à l’intégration future dans le logiciel Ecobiome."
+  },
+
+  "environment": {
+    "name": "Estuaire de la Gironde - Royan",
+    "location": "Royan, 17200, France",
+    "description": "Biotope saumâtre estuarien pour élevage larvaire de Caridina multidentata (Amano). Eau prélevée à l’entrée de l’estuaire, riche en plancton et microalgues.",
+    "notes": "Salinité et charge organique variables selon marée, saison, débit fluvial et météo."
+  },
+
+  "water_parameters": [
+    {
+      "name": "temperature",
+      "unit": "°C",
+      "target_range": [22, 26],
+      "warning_threshold": [20, 28],
+      "critical_threshold": [18, 30],
+      "measurement_frequency": "2x par jour"
+    },
+    {
+      "name": "pH",
+      "unit": "",
+      "target_range": [7.5, 8.2],
+      "warning_threshold": [7.0, 8.5],
+      "critical_threshold": [6.5, 9.0],
+      "measurement_frequency": "1x par jour"
+    },
+    {
+      "name": "KH",
+      "unit": "°dKH",
+      "target_range": [5, 8],
+      "warning_threshold": [3, 10],
+      "critical_threshold": [1, 12],
+      "measurement_frequency": "2x par semaine"
+    },
+    {
+      "name": "GH",
+      "unit": "°dGH",
+      "target_range": [6, 12],
+      "warning_threshold": [4, 16],
+      "critical_threshold": [2, 20],
+      "measurement_frequency": "2x par semaine"
+    },
+    {
+      "name": "conductivity",
+      "unit": "µS/cm",
+      "target_range": [15000, 35000],
+      "warning_threshold": [10000, 40000],
+      "critical_threshold": [5000, 45000],
+      "measurement_frequency": "1x par jour"
+    },
+    {
+      "name": "salinity_ppt",
+      "unit": "ppt",
+      "target_range": [15, 25],
+      "warning_threshold": [10, 30],
+      "critical_threshold": [5, 35],
+      "measurement_frequency": "à chaque prélèvement"
+    },
+    {
+      "name": "salinity_SG",
+      "unit": "SG",
+      "target_range": [1.010, 1.018],
+      "warning_threshold": [1.008, 1.022],
+      "critical_threshold": [1.005, 1.025],
+      "measurement_frequency": "à chaque prélèvement"
+    },
+    {
+      "name": "NO2",
+      "unit": "mg/L",
+      "target_range": [0.0, 0.02],
+      "warning_threshold": [0.02, 0.1],
+      "critical_threshold": [0.1, 1.0],
+      "measurement_frequency": "1x par jour"
+    },
+    {
+      "name": "NO3",
+      "unit": "mg/L",
+      "target_range": [5, 40],
+      "warning_threshold": [40, 80],
+      "critical_threshold": [80, 200],
+      "measurement_frequency": "2x par semaine"
+    },
+    {
+      "name": "NH3_NH4",
+      "unit": "mg/L",
+      "target_range": [0.0, 0.02],
+      "warning_threshold": [0.02, 0.1],
+      "critical_threshold": [0.1, 1.0],
+      "measurement_frequency": "1x par jour"
+    },
+    {
+      "name": "copper",
+      "unit": "mg/L",
+      "target_range": [0.0, 0.01],
+      "warning_threshold": [0.01, 0.03],
+      "critical_threshold": [0.03, 0.1],
+      "measurement_frequency": "1x par semaine"
+    },
+    {
+      "name": "iron",
+      "unit": "mg/L",
+      "target_range": [0.0, 0.1],
+      "warning_threshold": [0.1, 0.3],
+      "critical_threshold": [0.3, 1.0],
+      "measurement_frequency": "1x par semaine"
+    },
+    {
+      "name": "dissolved_oxygen",
+      "unit": "mg/L",
+      "target_range": [6, 9],
+      "warning_threshold": [4, 6],
+      "critical_threshold": [2, 4],
+      "measurement_frequency": "2x par jour"
+    }
+  ],
+
+  "light_parameters": [
+    {
+      "name": "PAR_surface",
+      "unit": "µmol/m²/s",
+      "target_range": [80, 200],
+      "warning_threshold": [40, 250],
+      "critical_threshold": [20, 300],
+      "measurement_frequency": "1x par jour"
+    },
+    {
+      "name": "PAR_midwater",
+      "unit": "µmol/m²/s",
+      "target_range": [30, 100],
+      "warning_threshold": [20, 150],
+      "critical_threshold": [10, 200],
+      "measurement_frequency": "1x par jour"
+    },
+    {
+      "name": "photoperiod",
+      "unit": "h/jour",
+      "target_range": [10, 14],
+      "warning_threshold": [8, 16],
+      "critical_threshold": [6, 18],
+      "measurement_frequency": "hebdomadaire"
+    },
+    {
+      "name": "light_type",
+      "unit": "",
+      "target_range": ["LED full spectrum 6500–10000K"],
+      "measurement_frequency": "fixe"
+    }
+  ],
+
+  "biology": {
+    "species": "Caridina multidentata",
+    "life_stage": "larves puis juvéniles",
+    "larval_density": {
+      "name": "larval_density",
+      "unit": "larves/L",
+      "target_range": [10, 50],
+      "warning_threshold": [50, 80],
+      "critical_threshold": [80, 120],
+      "measurement_frequency": "initial + hebdomadaire"
+    },
+    "food_types": [
+      "phytoplancton naturel",
+      "microalgues",
+      "spiruline micronisée",
+      "rotifères",
+      "infusoires"
+    ],
+    "feeding_frequency": {
+      "name": "feeding_events",
+      "unit": "fois/jour",
+      "target_range": [2, 5],
+      "warning_threshold": [1, 6],
+      "critical_threshold": [0, 8],
+      "measurement_frequency": "journalier"
+    }
+  },
+
+  "protocol_steps": [
+    {
+      "step_id": "1",
+      "title": "Prélevage de l’eau",
+      "description": "Collecte de l’eau estuarienne à Royan.",
+      "inputs": ["Bidons", "Coordonnées GPS", "Horaires de marée"],
+      "outputs": ["Eau brute"],
+      "monitored_parameters": ["temperature", "salinity_ppt", "salinity_SG"]
+    },
+
+    {
+      "step_id": "2",
+      "title": "Pré-filtration",
+      "description": "Filtration grossière pour conserver le plancton.",
+      "inputs": ["Perlon", "Filtre café"],
+      "outputs": ["Eau pré-filtrée"],
+      "monitored_parameters": ["dissolved_oxygen"]
+    },
+
+    {
+      "step_id": "3",
+      "title": "Mesure de salinité",
+      "description": "Mesure au réfractomètre et ajustement éventuel.",
+      "inputs": ["Réfractomètre", "Eau filtrée"],
+      "outputs": ["Salinité mesurée"],
+      "monitored_parameters": ["salinity_ppt", "salinity_SG"]
+    },
+
+    {
+      "step_id": "4",
+      "title": "Contrôle qualité",
+      "description": "Tests NO2, NO3, NH3, cuivre, fer.",
+      "inputs": ["Tests gouttes"],
+      "outputs": ["Profil initial"],
+      "monitored_parameters": ["NO2", "NO3", "NH3_NH4", "copper", "iron"]
+    },
+
+    {
+      "step_id": "5",
+      "title": "Lumière",
+      "description": "Configuration de la photopériode et du PAR.",
+      "inputs": ["LED", "Minuteur"],
+      "outputs": ["Photopériode stable"],
+      "monitored_parameters": ["PAR_surface", "PAR_midwater", "photoperiod"]
+    },
+
+    {
+      "step_id": "6",
+      "title": "Introduction des larves",
+      "description": "Acclimatation douce en eau saumâtre.",
+      "inputs": ["Larves Amano"],
+      "outputs": ["Larves acclimatées"],
+      "monitored_parameters": ["larval_density"]
+    },
+
+    {
+      "step_id": "7",
+      "title": "Nourrissage",
+      "description": "Maintien du plancton et ajout de microalgues.",
+      "inputs": ["Phytoplancton", "Spiruline"],
+      "outputs": ["Courbe de nourrissage"],
+      "monitored_parameters": ["feeding_events", "NO2", "NH3_NH4"]
+    },
+
+    {
+      "step_id": "8",
+      "title": "Suivi quotidien",
+      "description": "Mesures des paramètres critiques.",
+      "inputs": ["Thermomètre", "Tests"],
+      "outputs": ["Journal quotidien"],
+      "monitored_parameters": ["temperature", "NO2", "NH3_NH4", "dissolved_oxygen"]
+    },
+
+    {
+      "step_id": "9",
+      "title": "Métamorphose",
+      "description": "Observation de la transition larve → juvénile.",
+      "inputs": ["Loupe"],
+      "outputs": ["Taux de métamorphose"],
+      "monitored_parameters": ["salinity_ppt", "NO2", "NO3"]
+    },
+
+    {
+      "step_id": "10",
+      "title": "Retour en eau douce",
+      "description": "Diminution progressive de la salinité.",
+      "inputs": ["Eau douce"],
+      "outputs": ["Juvéniles en eau douce"],
+      "monitored_parameters": ["salinity_ppt", "pH", "GH", "KH"]
+    }
+  ]
+}
