@@ -249,7 +249,7 @@ def build_aquarium_fallback(
             fill=(*gradient_color, 255),
         )
 
-    # Add a subtle light band for depth.
+    # Add a subtle light band and water shimmer for depth.
     highlight = Image.new(
         "RGBA",
         (width, height),
@@ -261,13 +261,30 @@ def build_aquarium_fallback(
     )
     highlight_draw.ellipse(
         (
-            round(width * 0.52),
-            round(height * 0.02),
+            round(width * 0.48),
+            round(height * 0.01),
             round(width * 0.98),
-            round(height * 0.36),
+            round(height * 0.30),
         ),
-        fill=(255, 255, 255, 20),
+        fill=(255, 255, 255, 22),
     )
+
+    for wave_index in range(6):
+        baseline = round(height * (0.08 + wave_index * 0.045))
+        wave_length = round(width * 0.16)
+        alpha = max(6, 22 - wave_index * 3)
+        for x_offset in range(-wave_length, width + wave_length, wave_length * 2):
+            highlight_draw.line(
+                (
+                    x_offset,
+                    baseline,
+                    x_offset + wave_length,
+                    baseline,
+                ),
+                fill=(255, 255, 255, alpha),
+                width=1,
+            )
+
     image = Image.alpha_composite(
         image.convert("RGBA"),
         highlight,

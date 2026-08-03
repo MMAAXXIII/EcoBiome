@@ -232,6 +232,10 @@ def populate_demo_workspace(
 
 def main() -> None:
     """Build and display the EcoBiome dashboard demonstration."""
+    os.environ.setdefault(
+        "ECOBIOME_USE_HERO_REFERENCE",
+        "1",
+    )
     with TemporaryDirectory(
         prefix="ecobiome-dashboard-"
     ) as temporary_directory:
