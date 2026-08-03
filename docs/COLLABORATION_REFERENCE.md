@@ -32,3 +32,13 @@ Ce prototype Bolt a servi de référence pour l'interface web et le design du ta
 - Créer une issue GitHub pour centraliser le travail sur le prototype web (`agents/web-dashboard`).
 - Ajouter une issue séparée pour la synchronisation des données entre le desktop Python/Tkinter et l'interface web.
 - Garder ce document à jour chaque fois qu'un nouveau prototype externe ou une nouvelle maquette est ajoutée.
+
+## Priorités pour les contributeurs
+
+| Priorité | Domaine | Objectif |
+|---|---|---|
+| Haute | UI et prototype web | Affiner le dashboard, les cartes KPI, la navigation et le rendu visuel dans `frontend/`. |
+| Haute | Référence Bolt | Utiliser le prototype Bolt comme référence visuelle commune. |
+| Moyenne | Schéma de données Bolt | Définir la base de données et le modèle de données pour les milieux, diagnostics et média. |
+| Moyenne | Intégration desktop/web | Clarifier le mode d’intégration entre le simulateur Python et l’interface web. |
+| Basse | Validation visuelle | Mettre en place des captures d’écran, une checklist de revue et un plan de tests. |
