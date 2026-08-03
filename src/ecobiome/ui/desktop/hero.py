@@ -249,8 +249,36 @@ def build_aquarium_fallback(
             fill=(*gradient_color, 255),
         )
 
+    # Add a subtle light band for depth.
+    highlight = Image.new(
+        "RGBA",
+        (width, height),
+        (255, 255, 255, 0),
+    )
+    highlight_draw = ImageDraw.Draw(
+        highlight,
+        "RGBA",
+    )
+    highlight_draw.ellipse(
+        (
+            round(width * 0.52),
+            round(height * 0.02),
+            round(width * 0.98),
+            round(height * 0.36),
+        ),
+        fill=(255, 255, 255, 20),
+    )
+    image = Image.alpha_composite(
+        image.convert("RGBA"),
+        highlight,
+    ).convert("RGB")
+
     floor_y = round(
         height * 0.82
+    )
+    drawing = ImageDraw.Draw(
+        image,
+        "RGBA",
     )
     drawing.rectangle(
         (0, floor_y, width, height),
@@ -486,6 +514,9 @@ def select_hero_image_path(
             )
         )
 
+    if os.environ.get("ECOBIOME_USE_HERO_REFERENCE") == "1" and _HERO_REFERENCE_PATH.is_file():
+        return _HERO_REFERENCE_PATH
+
     if candidates:
         candidates.sort(
             key=lambda item: (
@@ -497,9 +528,6 @@ def select_hero_image_path(
         )
 
         return candidates[0][3]
-
-    if os.environ.get("ECOBIOME_USE_HERO_REFERENCE") == "1" and _HERO_REFERENCE_PATH.is_file():
-        return _HERO_REFERENCE_PATH
 
     return None
 
@@ -1194,7 +1222,7 @@ class DashboardHeroBanner(tk.Frame):
             overlay,
             "RGBA",
         )
-
+ 
         gradient_width = min(
             width,
             max(
@@ -1203,7 +1231,7 @@ class DashboardHeroBanner(tk.Frame):
             ),
         )
         steps = 64
-
+ 
         for step in range(steps):
             start_x = round(
                 gradient_width * step / steps
@@ -1231,10 +1259,49 @@ class DashboardHeroBanner(tk.Frame):
                     alpha,
                 ),
             )
-
+ 
+        overlay_drawing.ellipse(
+            (
+                round(width * 0.44),
+                round(height * 0.04),
+                round(width * 0.96),
+                round(height * 0.38),
+            ),
+            fill=(255, 255, 255, 18),
+        )
+ 
         composited = Image.alpha_composite(
             rgba_image,
             overlay,
+        )
+ 
+        vignette_mask = Image.new(
+            "L",
+            (width, height),
+            0,
+        )
+        vignette_drawing = ImageDraw.Draw(
+            vignette_mask,
+            "L",
+        )
+        vignette_drawing.ellipse(
+            (
+                -round(width * 0.18),
+                -round(height * 0.18),
+                round(width * 1.18),
+                round(height * 1.18),
+            ),
+            fill=255,
+        )
+        edge_shadow = Image.new(
+            "RGBA",
+            (width, height),
+            (0, 0, 0, 112),
+        )
+        composited = Image.composite(
+            composited,
+            edge_shadow,
+            vignette_mask,
         ).convert("RGB")
 
         radius = max(
