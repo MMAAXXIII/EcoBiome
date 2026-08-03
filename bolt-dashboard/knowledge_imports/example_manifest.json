@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.1",
+  "source": {
+    "id": "047ea9b0-6d3e-4b23-8c75-b87b41e1ba9d",
+    "title": "Première transcription EcoBiome",
+    "source_type": "transcript",
+    "locator": "local:example-transcript",
+    "author": null,
+    "language": "fr",
+    "description": "",
+    "imported_at": "2026-08-01T18:39:46.160026+00:00"
+  },
+  "transcript": {
+    "path": "examples\\transcripts\\example_transcript.txt",
+    "character_count": 236,
+    "passage_count": 1
+  },
+  "passages": [
+    {
+      "index": 1,
+      "text": "Collez ici une transcription YouTube ou un retour d'expérience.\n\nCette transcription reste une source brute.\nLes affirmations extraites devront être vérifiées avant d'entrer\ndans la base de connaissances scientifique validée d'EcoBiome.",
+      "review_status": "imported"
+    }
+  ]
+}
