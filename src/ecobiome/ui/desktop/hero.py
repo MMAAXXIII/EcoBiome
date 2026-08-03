@@ -580,7 +580,7 @@ class DashboardHeroBanner(tk.Frame):
             )
 
         self._visual_scale = visual_scale
-        hero_height = self._px(132)
+        hero_height = self._px(180)
         super().__init__(
             parent,
             background=theme.background,
@@ -1224,16 +1224,16 @@ class DashboardHeroBanner(tk.Frame):
                 self._source_image,
                 (width, height),
                 method=Image.Resampling.LANCZOS,
-                centering=(0.52, 0.5),
+                centering=(0.5, 0.4),
             )
-
+ 
         rgba_image = image.convert(
             "RGBA"
         )
         overlay = Image.new(
             "RGBA",
             (width, height),
-            (1, 10, 13, 96),
+            (3, 18, 27, 0),
         )
         overlay_drawing = ImageDraw.Draw(
             overlay,
@@ -1259,7 +1259,7 @@ class DashboardHeroBanner(tk.Frame):
                 / steps
             )
             alpha = round(
-                226
+                160
                 * (1 - step / steps)
             )
             overlay_drawing.rectangle(
@@ -1270,21 +1270,30 @@ class DashboardHeroBanner(tk.Frame):
                     height,
                 ),
                 fill=(
-                    1,
-                    12,
-                    15,
+                    3,
+                    18,
+                    27,
                     alpha,
                 ),
             )
  
         overlay_drawing.ellipse(
             (
-                round(width * 0.44),
+                round(width * 0.34),
                 round(height * 0.04),
-                round(width * 0.96),
-                round(height * 0.38),
+                round(width * 0.76),
+                round(height * 0.40),
             ),
             fill=(255, 255, 255, 18),
+        )
+        overlay_drawing.ellipse(
+            (
+                round(width * 0.62),
+                round(height * 0.12),
+                round(width * 0.88),
+                round(height * 0.26),
+            ),
+            fill=(255, 255, 255, 12),
         )
  
         composited = Image.alpha_composite(

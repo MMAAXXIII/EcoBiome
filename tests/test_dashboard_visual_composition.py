@@ -299,7 +299,7 @@ def test_complete_dashboard_uses_compact_visual_rows() -> None:
             assert viewport is not None
             assert hero is not None
             assert hero.master is viewport.content
-            assert int(hero.cget("height")) == hero._px(132)
+            assert int(hero.cget("height")) == hero._px(180)
             assert int(
                 hero.grid_info()["row"]
             ) == 0
