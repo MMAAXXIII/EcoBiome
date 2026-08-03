@@ -1,0 +1,36 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'agents/**'
+  pull_request:
+    branches:
+      - main
+      - 'feature/**'
+      - 'agents/**'
+
+jobs:
+  frontend:
+    name: Frontend build and typecheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Run typecheck and build
+        working-directory: frontend
+        run: npm run build
