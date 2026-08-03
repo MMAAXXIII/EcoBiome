@@ -17,11 +17,16 @@ Milestone: [Sprint 1 — UI Prototype](https://github.com/MMAAXXIII/EcoBiome/mil
 
 ### Review / PRs
 
+- [x] [#9 Integrate clean Bolt UI web dashboard prototype into main](https://github.com/MMAAXXIII/EcoBiome/pull/9)
 - [ ] [#4 Add EcoBiome web dashboard prototype (Vite + React + TypeScript)](https://github.com/MMAAXXIII/EcoBiome/pull/4)
 - [ ] [#1 Improve desktop hero: larger reference asset, enhanced aquarium fallback, and demo](https://github.com/MMAAXXIII/EcoBiome/pull/1)
 
 ## Notes
 
-- The current branch for the web prototype is `agents/web-dashboard`.
-- The visual pass branch is `agents/visual-pass2`.
-- Use this file as a lightweight project board when GitHub Projects is not available or to complement it.
+- Le frontend web est désormais intégré dans `main`.
+- Le dossier `frontend/` contient le prototype Bolt Web Dashboard.
+- Les branches historiques restent disponibles :
+  - `agents/web-dashboard`
+  - `agents/visual-pass2`
+- Point de restauration sauvegardé : tag `before-web-dashboard-merge-2026-08-03`.
+- Utilisez ce fichier comme tableau de suivi léger en attendant un GitHub Project board.
