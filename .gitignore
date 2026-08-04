@@ -21,3 +21,10 @@ Thumbs.db
 
 # Python bytecode and caches
 *.py[cod]
+
+# Local runtime data
+/cloud/cloud.db
+/data/audio_input.wav
+/data/transcription.txt
+/data/translation.txt
+/ecobiome.db
