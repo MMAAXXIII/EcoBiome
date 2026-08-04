@@ -1,0 +1,10 @@
+﻿{
+  "species": [
+    {
+      "id": "Caridina_multidentata",
+      "common_names": ["Amano shrimp", "Yamato shrimp"],
+      "scientific_name": "Caridina multidentata",
+      "notes": "Detected from tags and transcript keywords."
+    }
+  ]
+}

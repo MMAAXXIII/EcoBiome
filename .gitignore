@@ -15,3 +15,7 @@ workspace/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Backup files
+*.bak
+
