@@ -4,8 +4,19 @@ import { METRIC_LIST, type Metric, type WaterBody } from '@/lib/types';
 import { MetricCard } from '@/components/MetricCard';
 import { WaterTankViz } from '@/components/WaterTankViz';
 import { StatusBadge, StatusDot } from '@/components/StatusBadge';
-import { Droplets, AlertTriangle, CheckCircle2, Activity, TrendingUp, ChevronRight, Microscope, BookOpen } from 'lucide-react';
+import { Droplets, AlertTriangle, CheckCircle2, Activity, TrendingUp, ChevronRight, Microscope } from 'lucide-react';
 
+interface ProjectDashboardSummary {
+  description: string;
+  project_type: string;
+  tags: string[];
+  journal_event_count: number;
+  media_file_count: number;
+  diagnostic_count: number;
+  hypothesis_count: number;
+  experiment_count: number;
+  conclusion_count: number;
+}
 interface DashboardViewProps {
   onNavigateToWaterBody: (wb: WaterBody) => void;
   onNavigateToView: (view: 'waterbodies' | 'diagnostics' | 'journal') => void;
@@ -14,7 +25,7 @@ interface DashboardViewProps {
 export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: DashboardViewProps) {
 
   // 👉 MODULE BACKEND
-  const [projectInfo, setProjectInfo] = useState<any>(null);
+  const [projectInfo, setProjectInfo] = useState<ProjectDashboardSummary | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/dashboard")
