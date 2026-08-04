@@ -1,5 +1,5 @@
-﻿import pytest
-from analyzers.transcription_analyzer import TranscriptionAnalyzer
+﻿from analyzers.transcription_analyzer import TranscriptionAnalyzer
+
 
 def test_extract_species_caridina():
     ta = TranscriptionAnalyzer()

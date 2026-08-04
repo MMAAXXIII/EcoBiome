@@ -1,7 +1,8 @@
-﻿# -*- coding: utf-8 -*-
-from collector_core.logger import log
 import re
 import unicodedata
+
+from collector_core.logger import log
+
 
 class TranscriptionAnalyzer:
     def __init__(self):
@@ -77,9 +78,8 @@ class TranscriptionAnalyzer:
             if "25" in t:
                 params["temperature"] = 25
 
-        if "humidité" in t or "humidity" in t:
-            if "80%" in t:
-                params["humidity"] = 80
+        if ("humidité" in t or "humidity" in t) and "80%" in t:
+            params["humidity"] = 80
 
         return params
 
