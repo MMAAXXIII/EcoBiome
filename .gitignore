@@ -19,3 +19,5 @@ Thumbs.db
 # Backup files
 *.bak
 
+# Python bytecode and caches
+*.py[cod]
