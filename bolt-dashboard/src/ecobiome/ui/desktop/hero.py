@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import os
 import tkinter as tk
 from collections.abc import Callable
-import os
 from pathlib import Path
 from typing import Literal
 
