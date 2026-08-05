@@ -1,0 +1,163 @@
+ECOBIOME — SUGGESTIONS POUR IA COLLABORATIVE
+Version : 2026-08-05
+
+===============================================================
+1. PRIORITÉ ABSOLUE : PACKAGE CANONIQUE
+===============================================================
+
+Avant tout push, il faut résoudre le conflit entre :
+- le petit package racine ecobiome/ (masquant)
+- le package canonique bolt-dashboard/src/ecobiome
+
+Action :
+- Sprint 13 : écrire l’ADR “Package canonique EcoBiome”
+- Sprint 14 : migration structurelle par petits lots
+- supprimer le package masquant
+- stabiliser les imports
+
+===============================================================
+2. SCRIPT PRÉ-PUSH AUTOMATIQUE
+===============================================================
+
+Créer un script qui vérifie :
+- imports Python
+- résolution du package canonique
+- uv sync --locked
+- tests racine + dashboard
+- ESLint + typecheck + build
+- git diff --check
+- absence de données locales
+- absence de secrets
+- absence de dépendances lourdes dans le package racine
+
+===============================================================
+3. ARCHITECTURE ECOBIOME@HOME (CALCUL VOLONTAIRE)
+===============================================================
+
+Concept :
+- chaque utilisateur devient un worker volontaire
+- CPU/GPU/NVMe/HDD mis à disposition
+- tâches distribuées
+- résultats renvoyés au cloud
+- logiciel léger pour tous
+
+Étapes :
+- prototype worker local
+- prototype scheduler FastAPI
+- file de tâches (pending / processing / done / failed / DLQ)
+- validation des résultats (hash, double calcul)
+
+===============================================================
+4. SÉPARATION NVME / HDD
+===============================================================
+
+NVMe (hot storage) :
+- artefacts temporaires
+- caches ML
+- segments audio
+- fichiers intermédiaires
+
+HDD (cold storage) :
+- archives
+- datasets
+- vidéos originales
+- logs historiques
+
+Créer un module ecobiome.storage pour gérer automatiquement les chemins.
+
+===============================================================
+5. EXPORT CLOUD
+===============================================================
+
+Stockage cloud recommandé :
+- Backblaze B2
+- Wasabi
+- Scaleway Object Storage
+- MinIO auto-hébergé
+
+Module à créer :
+- ecobiome.cloud.upload(file)
+- ecobiome.cloud.download(id)
+- ecobiome.cloud.list()
+
+===============================================================
+6. MANIFEST GLOBAL DES ARTEFACTS
+===============================================================
+
+Créer un fichier artefacts.json contenant :
+- transcriptions
+- analyses
+- embeddings
+- diagnostics
+- vidéos
+- logs
+- métadonnées
+
+===============================================================
+7. MODE SAFE POUR LES WORKERS
+===============================================================
+
+Limiter automatiquement :
+- CPU
+- GPU
+- RAM
+- NVMe
+- HDD
+
+Fonctions :
+- pause si l’utilisateur utilise la machine
+- mode nuit
+- quotas configurables
+
+Module : ecobiome.worker.safety
+
+===============================================================
+8. DOSSIER /DOCS/ À LA RACINE
+===============================================================
+
+Contenu :
+- vision
+- architecture
+- design EcoBiome@home
+- roadmap
+- ADR package canonique
+- protocole workers
+- protocole cloud
+- pré-push check
+
+===============================================================
+9. PRÉPARATION DU PREMIER PUSH PROPRE
+===============================================================
+
+Checklist :
+- ADR Sprint 13 validé
+- migration Sprint 14 effectuée
+- pré-push check exécuté
+- manifestes vérifiés
+- imports stables
+- tests verts
+- aucune donnée locale
+- aucun secret
+- dépendances propres
+- encodages vérifiés
+- logs propres
+
+===============================================================
+10. SUGGESTION LA PLUS UTILE MAINTENANT
+===============================================================
+
+Créer l’ADR Sprint 13 :
+“Package canonique EcoBiome”
+
+C’est la décision qui débloque :
+- migration
+- push
+- workers
+- cloud
+- CI
+- documentation
+- collaboration multi-IA
+
+===============================================================
+FIN DU DOCUMENT
+===============================================================
