@@ -2,11 +2,19 @@
 
 import sys
 
-from ecobiome.app import run
 from ecobiome.cli import main
 
-if __name__ == "__main__":
+
+def run_entry_point() -> int:
+    """Dispatch CLI arguments before importing the graphical application."""
     if len(sys.argv) > 1:
-        raise SystemExit(main(sys.argv[1:]))
+        return main(sys.argv[1:])
+
+    from ecobiome.app import run
 
     run()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(run_entry_point())

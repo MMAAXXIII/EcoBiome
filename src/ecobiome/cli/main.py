@@ -1,20 +1,9 @@
 """Central command-line interface for EcoBiome."""
 
 import argparse
+import sys
 from collections.abc import Sequence
 from pathlib import Path
-
-from ecobiome.cli.replay_events import (
-    add_replay_events_parser,
-    replay_events_command,
-)
-from ecobiome.cli.water_level import (
-    add_water_level_parser,
-    water_level_command,
-)
-from ecobiome.knowledge.directory_loader import load_knowledge_directory
-from ecobiome.knowledge_acquisition.cli import main as acquisition_main
-from ecobiome.reasoning import CausalChainEngine
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -42,6 +31,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=8,
     )
 
+    from ecobiome.cli.replay_events import add_replay_events_parser
+    from ecobiome.cli.water_level import add_water_level_parser
+
     add_water_level_parser(subparsers)
     add_replay_events_parser(subparsers)
 
@@ -50,6 +42,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def explain_command(args: argparse.Namespace) -> int:
     """Load scientific knowledge and print a causal explanation."""
+    from ecobiome.knowledge.directory_loader import load_knowledge_directory
+    from ecobiome.reasoning import CausalChainEngine
+
     registry = load_knowledge_directory(args.knowledge_base)
     engine = CausalChainEngine(registry)
 
@@ -59,7 +54,7 @@ def explain_command(args: argparse.Namespace) -> int:
     )
 
     print("=" * 64)
-    print("EcoBiome — Causal Explanation")
+    print("EcoBiome - Causal Explanation")
     print("=" * 64)
     print(f"Variables loaded : {len(registry.variables)}")
     print(f"Relations loaded : {len(registry.relations)}")
@@ -71,9 +66,13 @@ def explain_command(args: argparse.Namespace) -> int:
 
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the central EcoBiome command-line interface."""
-    arguments = list(argv) if argv is not None else None
+    arguments = list(argv) if argv is not None else sys.argv[1:]
 
     if arguments and arguments[0] == "import-transcript":
+        from ecobiome.knowledge_acquisition.cli import (
+            main as acquisition_main,
+        )
+
         return acquisition_main(arguments)
 
     parser = build_parser()
@@ -83,9 +82,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         return explain_command(args)
 
     if args.command == "water-level":
+        from ecobiome.cli.water_level import water_level_command
+
         return water_level_command(args)
 
     if args.command == "replay-events":
+        from ecobiome.cli.replay_events import replay_events_command
+
         return replay_events_command(args)
 
     parser.print_help()

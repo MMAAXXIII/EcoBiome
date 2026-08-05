@@ -29,3 +29,9 @@ Thumbs.db
 /data/translation.txt
 /ecobiome.db
 /data/ia_input.json
+
+# Local development caches
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
