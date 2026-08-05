@@ -209,4 +209,3 @@ class JsonlLearningEventStore:
             ),
             notes=str(payload["notes"]),
         )
-

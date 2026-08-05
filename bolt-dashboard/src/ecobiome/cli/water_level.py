@@ -166,4 +166,3 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(arguments)
 
     return water_level_command(args)
-

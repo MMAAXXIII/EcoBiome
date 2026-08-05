@@ -108,4 +108,3 @@ class Measurement:
             value=float(converted.magnitude),
             unit=str(converted.units),
         )
-

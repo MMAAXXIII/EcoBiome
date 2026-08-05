@@ -7,4 +7,3 @@ from ecobiome.world.water_body import (
 )
 
 __all__ = ["WaterBody", "WaterBodyShape", "WaterBodyType"]
-
