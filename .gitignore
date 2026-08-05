@@ -10,7 +10,7 @@ dist/
 supabase/
 
 # Workspace EcoBiome
-workspace/
+/workspace/
 
 # OS junk
 .DS_Store
