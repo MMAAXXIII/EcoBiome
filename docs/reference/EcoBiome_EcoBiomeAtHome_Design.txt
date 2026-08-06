@@ -1,0 +1,205 @@
+ECOBIOME@HOME — DESIGN D’ARCHITECTURE DISTRIBUÉE VOLONTAIRE
+Version : 2026-08-05
+
+===============================================================
+1. OBJECTIF
+===============================================================
+
+EcoBiome@home est le modèle d’architecture distribuée volontaire d’EcoBiome.
+
+But :
+- permettre à chaque utilisateur de contribuer CPU/GPU/stockage ;
+- mutualiser la puissance de calcul et les données ;
+- garder le logiciel léger (pas de 3 To local) ;
+- centraliser les résultats dans un cloud partagé ;
+- fonctionner en mode batch (nuit, périodes d’inactivité) ;
+- rester reproductible, sécurisé et modulaire.
+
+===============================================================
+2. PLANS D’ARCHITECTURE
+===============================================================
+
+2.1 Control Plane
+- API FastAPI (create_app, lifespan) ;
+- Dashboard React (Vite, TypeScript) ;
+- Workspace / manifest ;
+- orchestration des pipelines (jobs, états, logs).
+
+2.2 Data Plane
+- collecteurs (YouTube, HTML, mesures locales) ;
+- transcription (Whisper ou équivalent) ;
+- analyse NLP (normalisation, extraction, embeddings) ;
+- artefacts : JSON, audio, caches, logs.
+
+2.3 Compute Plane
+- workers CPU/GPU (local ou cloud) ;
+- file de tâches (pending / processing / done / failed / DLQ) ;
+- NVMe pour calcul intensif (artefacts temporaires) ;
+- HDD pour stockage froid (archives, datasets, vidéos) ;
+- export vers cloud (S3 / Backblaze / MinIO).
+
+2.4 Cloud Plane
+- stockage des résultats finaux ;
+- API centrale pour accès aux données ;
+- index global des artefacts ;
+- gestion des droits et des quotas.
+
+2.5 Worker Plane (EcoBiome@home)
+- chaque utilisateur peut lancer un worker EcoBiome ;
+- le worker récupère des tâches depuis le Control Plane ;
+- exécute localement (CPU/GPU/NVMe/HDD) ;
+- renvoie les résultats au cloud ;
+- ne stocke que ce qui est nécessaire localement.
+
+===============================================================
+3. PROTOCOLE DE DISTRIBUTION DES TÂCHES
+===============================================================
+
+3.1 Segmentation
+- vidéos → segments audio ;
+- analyses → blocs indépendants ;
+- simulations → sous-problèmes ;
+- NLP → lots de phrases ;
+- embeddings → batchs.
+
+3.2 Attribution
+- le Control Plane attribue des tâches aux workers volontaires ;
+- chaque tâche contient : type, paramètres, ressources requises.
+
+3.3 Exécution
+- le worker télécharge les artefacts nécessaires ;
+- exécute la tâche (CPU/GPU) ;
+- écrit les résultats en local (NVMe/HDD) ;
+- renvoie un résumé + artefacts au cloud.
+
+3.4 Validation
+- hash des résultats ;
+- double calcul possible pour vérification ;
+- DLQ pour les tâches en échec ;
+- retry/backoff pour erreurs temporaires.
+
+===============================================================
+4. MODÈLE DE WORKER
+===============================================================
+
+4.1 Worker local (PC utilisateur)
+- CPU : 4–16 cœurs ;
+- RAM : 8–32 Go ;
+- GPU : optionnel, recommandé (RTX 4070 ou équivalent) ;
+- NVMe : calcul intensif ;
+- HDD : stockage froid.
+
+4.2 Worker cloud
+- GPU : A100/H100 ou équivalent ;
+- RAM : 64–128 Go ;
+- orchestration : Kubernetes / Nomad / Ray.
+
+4.3 Quotas et sécurité
+- quotas CPU/GPU configurables ;
+- limitation de la mémoire ;
+- sandbox des tâches ;
+- aucune donnée sensible envoyée sans consentement.
+
+===============================================================
+5. PIPELINE DISTRIBUÉ ECOBIOME@HOME
+===============================================================
+
+Étapes :
+1. Collecte (YouTube, HTML, mesures) ;
+2. Transcription (audio → texte) ;
+3. Analyse (NLP, diagnostics, embeddings) ;
+4. Normalisation (formats, encodage, structure) ;
+5. Export cloud (artefacts, JSON, logs) ;
+6. Mise à disposition multi-utilisateurs (API, dashboard).
+
+Chaque étape peut être :
+- exécutée localement ;
+- distribuée à des workers volontaires ;
+- rejouée en cas d’échec.
+
+===============================================================
+6. STOCKAGE ET CALCUL
+===============================================================
+
+NVMe :
+- artefacts temporaires ;
+- caches ML ;
+- segments audio ;
+- fichiers intermédiaires.
+
+HDD :
+- archives ;
+- datasets ;
+- vidéos originales ;
+- logs historiques.
+
+Cloud :
+- résultats finaux ;
+- données publiques ;
+- index global.
+
+Réseau volontaire :
+- réserve commune de calcul ;
+- stockage distribué optionnel (si nécessaire) ;
+- tâches réparties selon les capacités.
+
+===============================================================
+7. PACKAGING ET CANONIQUE
+===============================================================
+
+- un seul package Python canonique « ecobiome » ;
+- suppression du package racine masquant ;
+- bolt-dashboard intégré ou référencé proprement ;
+- imports stables, reproductibles ;
+- aucun comportement dépendant du répertoire courant.
+
+===============================================================
+8. SÉCURITÉ
+===============================================================
+
+- JWT avec secret robuste (ECOBIOME_JWT_SECRET) ;
+- hachage des mots de passe avec scrypt ;
+- timeouts sur les requêtes réseau ;
+- erreurs ciblées (pas d’Exception large) ;
+- aucune donnée locale sensible dans Git ;
+- aucune fuite de secrets dans les logs.
+
+===============================================================
+9. DIMENSIONNEMENT
+===============================================================
+
+Minimum (développement) :
+- 8 Go RAM ;
+- 4 cœurs CPU ;
+- pas de GPU obligatoire.
+
+Recommandé (production légère) :
+- 32 Go RAM ;
+- 8–16 cœurs CPU ;
+- RTX 4070 ;
+- NVMe + HDD.
+
+Supercalculateur logiciel :
+- 64 Go RAM ;
+- 32 cœurs CPU ;
+- 2–8 GPU ;
+- NVMe 2–4 To ;
+- orchestration Kubernetes / Ray.
+
+===============================================================
+10. COLLABORATION INTER-IA
+===============================================================
+
+Les IA collaboratives doivent :
+- respecter les règles de stabilité ;
+- analyser avant d’agir ;
+- proposer des migrations par petits lots ;
+- documenter les décisions ;
+- ne jamais saturer les machines des utilisateurs ;
+- garantir la reproductibilité ;
+- ne jamais imposer Whisper au package racine ;
+- séparer audit et remédiation.
+
+===============================================================
+FIN DU DESIGN ECOBIOME@HOME
+===============================================================

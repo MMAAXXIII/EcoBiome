@@ -222,4 +222,3 @@ class FrozenSensorRule(ScientificRule):
             return quantity.value
 
         return None
-

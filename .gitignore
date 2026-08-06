@@ -10,8 +10,28 @@ dist/
 supabase/
 
 # Workspace EcoBiome
-workspace/
+/workspace/
 
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Backup files
+*.bak
+
+# Python bytecode and caches
+*.py[cod]
+
+# Local runtime data
+/cloud/cloud.db
+/data/audio_input.wav
+/data/transcription.txt
+/data/translation.txt
+/ecobiome.db
+/data/ia_input.json
+
+# Local development caches
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

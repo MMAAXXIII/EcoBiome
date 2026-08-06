@@ -76,4 +76,3 @@ class EventBus:
     def clear(self) -> None:
         """Remove every registered subscription."""
         self._subscriptions.clear()
-
