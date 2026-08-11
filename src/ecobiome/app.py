@@ -1,24 +1,8 @@
 """Main application for EcoBiome."""
 
-import platform
-from importlib.metadata import PackageNotFoundError, version
+from ecobiome.ui.web_launcher import run_web_frontend
 
 
 def run() -> None:
-    """Start the EcoBiome application."""
-
-    try:
-        app_version = version("ecobiome")
-    except PackageNotFoundError:
-        app_version = "development"
-
-    print("=" * 50)
-    print("🌍 EcoBiome")
-    print("Scientific Ecosystem Simulator")
-    print(f"Version : {app_version}")
-    print("=" * 50)
-    print()
-    print(f"Python : {platform.python_version()}")
-    print("Projet chargé : aucun")
-    print()
-    print("EcoBiome est prêt.")
+    """Start the canonical EcoBiome Bolt/React interface."""
+    run_web_frontend()

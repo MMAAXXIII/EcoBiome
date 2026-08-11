@@ -28,10 +28,13 @@ export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: Dashb
   const [projectInfo, setProjectInfo] = useState<ProjectDashboardSummary | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/dashboard")
-      .then((res) => res.json())
+    fetch('/api/dashboard', { cache: 'no-store' })
+      .then((res) => {
+        if (!res.ok) throw new Error(`EcoBiome API ${res.status}`);
+        return res.json();
+      })
       .then((json) => setProjectInfo(json))
-      .catch((err) => console.error("Erreur backend :", err));
+      .catch((err) => console.error('Erreur backend :', err));
   }, []);
 
   // 👉 Supabase hooks
