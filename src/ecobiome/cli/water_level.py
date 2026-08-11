@@ -131,7 +131,7 @@ def water_level_command(args: argparse.Namespace) -> int:
     print("=" * 64)
     print(f"Plan d'eau             : {previous_state.name}")
     print(f"Forme                  : {args.shape}")
-    print(f"Cause                  : {event.event_type.value}")
+    print(f"Cause                  : {event.cause}")
     print(f"Date UTC               : {event.occurred_at.isoformat()}")
     print(f"Identifiant événement  : {event.event_id}")
     print(f"Ancien niveau          : {result.previous_height_m:.3f} m")

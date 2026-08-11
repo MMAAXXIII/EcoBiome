@@ -38,6 +38,24 @@ def _required_string(
     return value.strip()
 
 
+
+
+def _optional_string(
+    payload: EventPayload,
+    field_name: str,
+    *,
+    default: str = "",
+) -> str:
+    """Read one optional string value."""
+    value = payload.get(field_name, default)
+
+    if not isinstance(value, str):
+        raise TypeError(
+            f"Event field {field_name!r} must be a string."
+        )
+
+    return value.strip()
+
 def _required_float(
     payload: EventPayload,
     field_name: str,
@@ -115,6 +133,7 @@ def decode_water_removed_event(
             "remaining_volume_liters",
         ),
         cause=_required_string(payload, "cause"),
+        note=_optional_string(payload, "note"),
     )
 
 

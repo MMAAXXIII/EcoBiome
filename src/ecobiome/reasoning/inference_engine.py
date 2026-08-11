@@ -122,6 +122,7 @@ class InferenceEngine:
                     *(
                         item.observation_id
                         for item in relevant_evidence
+                        if item.is_supporting
                     ),
                 )
             )

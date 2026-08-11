@@ -3,6 +3,52 @@
 import re
 
 
+def _split_oversized_paragraph(
+    paragraph: str,
+    *,
+    maximum_characters: int,
+) -> tuple[str, ...]:
+    """Split one oversized paragraph without exceeding the limit."""
+    remaining = paragraph.strip()
+    chunks: list[str] = []
+
+    while len(remaining) > maximum_characters:
+        window = remaining[: maximum_characters + 1]
+        sentence_breaks = [
+            match.start()
+            for match in re.finditer(r"(?<=[.!?])\s+", window)
+            if 0 < match.start() <= maximum_characters
+        ]
+
+        if sentence_breaks:
+            split_at = sentence_breaks[-1]
+        else:
+            whitespace_breaks = [
+                match.start()
+                for match in re.finditer(r"\s+", window)
+                if 0 < match.start() <= maximum_characters
+            ]
+            split_at = (
+                whitespace_breaks[-1]
+                if whitespace_breaks
+                else maximum_characters
+            )
+
+        chunk = remaining[:split_at].strip()
+
+        if not chunk:
+            split_at = maximum_characters
+            chunk = remaining[:split_at]
+
+        chunks.append(chunk)
+        remaining = remaining[split_at:].strip()
+
+    if remaining:
+        chunks.append(remaining)
+
+    return tuple(chunks)
+
+
 def split_into_passages(
     text: str,
     *,
@@ -22,6 +68,19 @@ def split_into_passages(
     current = ""
 
     for paragraph in paragraphs:
+        if len(paragraph) > maximum_characters:
+            if current:
+                passages.append(current)
+                current = ""
+
+            passages.extend(
+                _split_oversized_paragraph(
+                    paragraph,
+                    maximum_characters=maximum_characters,
+                )
+            )
+            continue
+
         candidate = (
             paragraph
             if not current
@@ -32,9 +91,7 @@ def split_into_passages(
             current = candidate
             continue
 
-        if current:
-            passages.append(current)
-
+        passages.append(current)
         current = paragraph
 
     if current:

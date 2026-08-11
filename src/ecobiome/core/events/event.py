@@ -24,11 +24,13 @@ class WaterRemovedEvent(Event):
     removed_volume_liters: float
     remaining_volume_liters: float
     cause: str = "user_removal"
+    note: str = ""
 
     def __post_init__(self) -> None:
         """Validate and normalize the event payload."""
         water_body_name = self.water_body_name.strip()
         cause = self.cause.strip().lower()
+        note = self.note.strip()
 
         if not water_body_name:
             raise ValueError(
@@ -61,3 +63,4 @@ class WaterRemovedEvent(Event):
             water_body_name,
         )
         object.__setattr__(self, "cause", cause)
+        object.__setattr__(self, "note", note)

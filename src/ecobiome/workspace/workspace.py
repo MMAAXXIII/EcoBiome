@@ -45,7 +45,8 @@ class ProjectWorkspace:
         self._media_library = MediaLibrary(
             LocalMediaStorage(
                 layout.media_directory
-            )
+            ),
+            index_path=layout.media_index_path,
         )
 
         self._integrations = JournalIntegrationService(

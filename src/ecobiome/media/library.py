@@ -10,6 +10,10 @@ from uuid import UUID
 
 from ecobiome.media.asset import MediaAsset
 from ecobiome.media.checksum import calculate_sha256
+from ecobiome.media.index_store import (
+    read_media_index,
+    write_media_index,
+)
 from ecobiome.media.media_type import (
     MediaType,
     infer_media_type,
@@ -29,40 +33,86 @@ class MediaLibrary:
         self,
         storage: LocalMediaStorage,
         assets: Iterable[MediaAsset] = (),
+        *,
+        index_path: str | Path | None = None,
     ) -> None:
         self._storage = storage
+        self._index_path = (
+            Path(index_path)
+            if index_path is not None
+            else None
+        )
         self._assets_by_id: dict[UUID, MediaAsset] = {}
         self._asset_ids_by_checksum: dict[str, UUID] = {}
 
-        for asset in assets:
-            self.add(asset)
+        provided_assets = tuple(assets)
+
+        if (
+            self._index_path is not None
+            and self._index_path.exists()
+            and provided_assets
+        ):
+            raise ValueError(
+                "Cannot combine explicit media assets with a persistent index."
+            )
+
+        initial_assets = (
+            read_media_index(
+                self._index_path,
+                storage_root=self._storage.root,
+            )
+            if self._index_path is not None
+            else provided_assets
+        )
+
+        if self._index_path is not None and not self._index_path.exists():
+            initial_assets = provided_assets
+
+        for asset in initial_assets:
+            self._index_asset(asset)
 
     @property
     def storage(self) -> LocalMediaStorage:
         """Return the configured media storage."""
         return self._storage
 
-    def add(self, asset: MediaAsset) -> None:
-        """Index one existing media asset."""
+    def _validate_new_asset(self, asset: MediaAsset) -> None:
+        """Reject duplicate asset identifiers and checksums."""
         if asset.asset_id in self._assets_by_id:
             raise ValueError(
                 f"Duplicate media asset identifier: "
                 f"{asset.asset_id}."
             )
 
-        if (
-            asset.checksum_sha256
-            in self._asset_ids_by_checksum
-        ):
+        if asset.checksum_sha256 in self._asset_ids_by_checksum:
             raise DuplicateMediaError(
                 "An identical media file already exists "
                 f"in the library: {asset.checksum_sha256}."
             )
 
+    def _index_asset(self, asset: MediaAsset) -> None:
+        """Add one already validated asset to the in-memory index."""
+        self._validate_new_asset(asset)
         self._assets_by_id[asset.asset_id] = asset
-        self._asset_ids_by_checksum[
-            asset.checksum_sha256
-        ] = asset.asset_id
+        self._asset_ids_by_checksum[asset.checksum_sha256] = asset.asset_id
+
+    def _persist_with(self, asset: MediaAsset) -> None:
+        """Persist the current index plus one new asset."""
+        if self._index_path is None:
+            return
+
+        write_media_index(
+            self._index_path,
+            (*self.all(), asset),
+            storage_root=self._storage.root,
+        )
+
+    def add(self, asset: MediaAsset) -> None:
+        """Index one existing media asset and persist the index."""
+        self._validate_new_asset(asset)
+        self._persist_with(asset)
+        self._assets_by_id[asset.asset_id] = asset
+        self._asset_ids_by_checksum[asset.checksum_sha256] = asset.asset_id
 
     def import_file(
         self,

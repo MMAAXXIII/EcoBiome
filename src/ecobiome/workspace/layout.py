@@ -39,6 +39,11 @@ class ProjectWorkspaceLayout:
         return self.root / "media"
 
     @property
+    def media_index_path(self) -> Path:
+        """Return the persistent media-index path."""
+        return self.root / "media-index.json"
+
+    @property
     def exports_directory(self) -> Path:
         """Return the future generated-export directory."""
         return self.root / "exports"
