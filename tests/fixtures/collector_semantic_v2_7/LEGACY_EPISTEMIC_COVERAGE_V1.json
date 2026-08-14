@@ -1,0 +1,406 @@
+{
+  "all_relation_epistemic_class": {
+    "accelerated_vs": "comparative_observation",
+    "adversely_affects": "explicit_causal_result",
+    "affected_gene_expression_in": "explicit_causal_result",
+    "associated_with": "association_only",
+    "caused": "explicit_causal_result",
+    "caused_decrease": "explicit_causal_result",
+    "co_occurred_in_context": "association_only",
+    "co_occurred_with": "association_only",
+    "could_potentially_affect": "modal_possibility",
+    "could_produce_state": "modal_possibility",
+    "decreased": "observational",
+    "decreased_to_near_zero": "observational",
+    "decreased_vs": "comparative_observation",
+    "derived_from_arithmetic": "meta_constraint_non_fact",
+    "does_not_live_in": "assertive_fact",
+    "does_not_occur_in": "assertive_fact",
+    "does_not_originate_from": "assertive_fact",
+    "does_not_tolerate": "capacity_or_trait",
+    "easy_to_keep": "capacity_or_trait",
+    "effective_against": "capacity_or_trait",
+    "enhanced_during_vs": "comparative_observation",
+    "evaluative_conclusion": "meta_constraint_non_fact",
+    "fed_at_rate": "assertive_fact",
+    "fed_with_frequency": "assertive_fact",
+    "forbidden_join": "meta_constraint_non_fact",
+    "greater_variability_vs": "comparative_observation",
+    "had_level": "observational",
+    "had_response_strength": "observational",
+    "higher_peak_vs": "comparative_observation",
+    "increased_gradually": "observational",
+    "increased_rapidly": "observational",
+    "increased_vs": "comparative_observation",
+    "intended_to_elucidate": "study_purpose_non_result",
+    "investigated_effects_on": "study_purpose_non_result",
+    "is_common_risk_factor": "dispositional_risk",
+    "is_not_robust": "capacity_or_trait",
+    "is_robust": "capacity_or_trait",
+    "lasted": "study_context_non_result",
+    "lives_in": "assertive_fact",
+    "maintained_at": "study_context_non_result",
+    "more_pronounced_at": "comparative_observation",
+    "not_easy_to_keep": "capacity_or_trait",
+    "not_effective_against": "capacity_or_trait",
+    "not_well_understood": "knowledge_state",
+    "occurs_in": "assertive_fact",
+    "originates_from": "assertive_fact",
+    "peaked_on_day": "observational",
+    "poses_significant_threat_to": "dispositional_risk",
+    "primarily_associated_with": "association_only",
+    "prone_to": "dispositional_risk",
+    "purpose_not_result": "meta_constraint_non_fact",
+    "relative_abundance_decreased": "observational",
+    "relative_abundance_increased": "observational",
+    "remained_low_initially": "observational",
+    "sampled_on_day": "study_context_non_result",
+    "shifted_toward": "observational_or_interpretive_result",
+    "significant_change_vs": "comparative_observation",
+    "studied": "study_context_non_result",
+    "supports_mechanistic_interpretation": "interpretive_support",
+    "tolerates": "capacity_or_trait",
+    "used_same_temperatures_as": "study_context_non_result",
+    "used_system": "study_context_non_result",
+    "without_accumulation": "observational"
+  },
+  "class_mismatch_never_sufficient_for_contradiction": true,
+  "forbidden_assertion_strength_upgrades": [
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "assertive_fact"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "association_only"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "capacity_or_trait"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "comparative_observation"
+    },
+    {
+      "candidate": "assertive_fact",
+      "expected": "dispositional_risk"
+    },
+    {
+      "candidate": "comparative_observation",
+      "expected": "dispositional_risk"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "dispositional_risk"
+    },
+    {
+      "candidate": "observational",
+      "expected": "dispositional_risk"
+    },
+    {
+      "candidate": "observational_or_interpretive_result",
+      "expected": "dispositional_risk"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "interpretive_support"
+    },
+    {
+      "candidate": "assertive_fact",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "association_only",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "capacity_or_trait",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "comparative_observation",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "dispositional_risk",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "interpretive_support",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "observational",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "observational_or_interpretive_result",
+      "expected": "knowledge_state"
+    },
+    {
+      "candidate": "assertive_fact",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "association_only",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "capacity_or_trait",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "comparative_observation",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "dispositional_risk",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "interpretive_support",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "observational",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "observational_or_interpretive_result",
+      "expected": "meta_constraint_non_fact"
+    },
+    {
+      "candidate": "assertive_fact",
+      "expected": "modal_possibility"
+    },
+    {
+      "candidate": "comparative_observation",
+      "expected": "modal_possibility"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "modal_possibility"
+    },
+    {
+      "candidate": "observational",
+      "expected": "modal_possibility"
+    },
+    {
+      "candidate": "observational_or_interpretive_result",
+      "expected": "modal_possibility"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "observational"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "observational_or_interpretive_result"
+    },
+    {
+      "candidate": "assertive_fact",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "association_only",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "capacity_or_trait",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "comparative_observation",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "dispositional_risk",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "interpretive_support",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "observational",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "observational_or_interpretive_result",
+      "expected": "study_context_non_result"
+    },
+    {
+      "candidate": "assertive_fact",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "association_only",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "capacity_or_trait",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "comparative_observation",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "dispositional_risk",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "explicit_causal_result",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "interpretive_support",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "observational",
+      "expected": "study_purpose_non_result"
+    },
+    {
+      "candidate": "observational_or_interpretive_result",
+      "expected": "study_purpose_non_result"
+    }
+  ],
+  "legacy_relation_count": 45,
+  "legacy_relation_epistemic_class": {
+    "accelerated_vs": "comparative_observation",
+    "adversely_affects": "explicit_causal_result",
+    "affected_gene_expression_in": "explicit_causal_result",
+    "caused": "explicit_causal_result",
+    "co_occurred_with": "association_only",
+    "decreased": "observational",
+    "decreased_to_near_zero": "observational",
+    "derived_from_arithmetic": "meta_constraint_non_fact",
+    "does_not_live_in": "assertive_fact",
+    "does_not_occur_in": "assertive_fact",
+    "does_not_originate_from": "assertive_fact",
+    "does_not_tolerate": "capacity_or_trait",
+    "easy_to_keep": "capacity_or_trait",
+    "effective_against": "capacity_or_trait",
+    "evaluative_conclusion": "meta_constraint_non_fact",
+    "fed_at_rate": "assertive_fact",
+    "fed_with_frequency": "assertive_fact",
+    "forbidden_join": "meta_constraint_non_fact",
+    "had_level": "observational",
+    "increased_gradually": "observational",
+    "increased_rapidly": "observational",
+    "is_common_risk_factor": "dispositional_risk",
+    "is_not_robust": "capacity_or_trait",
+    "is_robust": "capacity_or_trait",
+    "lasted": "study_context_non_result",
+    "lives_in": "assertive_fact",
+    "maintained_at": "study_context_non_result",
+    "more_pronounced_at": "comparative_observation",
+    "not_easy_to_keep": "capacity_or_trait",
+    "not_effective_against": "capacity_or_trait",
+    "not_well_understood": "knowledge_state",
+    "occurs_in": "assertive_fact",
+    "originates_from": "assertive_fact",
+    "peaked_on_day": "observational",
+    "poses_significant_threat_to": "dispositional_risk",
+    "primarily_associated_with": "association_only",
+    "purpose_not_result": "meta_constraint_non_fact",
+    "remained_low_initially": "observational",
+    "sampled_on_day": "study_context_non_result",
+    "significant_change_vs": "comparative_observation",
+    "studied": "study_context_non_result",
+    "tolerates": "capacity_or_trait",
+    "used_same_temperatures_as": "study_context_non_result",
+    "used_system": "study_context_non_result",
+    "without_accumulation": "observational"
+  },
+  "new_relation_count": 18,
+  "new_relation_epistemic_class": {
+    "associated_with": "association_only",
+    "caused_decrease": "explicit_causal_result",
+    "co_occurred_in_context": "association_only",
+    "could_potentially_affect": "modal_possibility",
+    "could_produce_state": "modal_possibility",
+    "decreased_vs": "comparative_observation",
+    "enhanced_during_vs": "comparative_observation",
+    "greater_variability_vs": "comparative_observation",
+    "had_response_strength": "observational",
+    "higher_peak_vs": "comparative_observation",
+    "increased_vs": "comparative_observation",
+    "intended_to_elucidate": "study_purpose_non_result",
+    "investigated_effects_on": "study_purpose_non_result",
+    "prone_to": "dispositional_risk",
+    "relative_abundance_decreased": "observational",
+    "relative_abundance_increased": "observational",
+    "shifted_toward": "observational_or_interpretive_result",
+    "supports_mechanistic_interpretation": "interpretive_support"
+  },
+  "policy_name": "full-registry-epistemic-coverage",
+  "policy_version": "1.0-audit-candidate",
+  "registry_version_target": "2.6",
+  "same_class_never_sufficient_for_entailment": true,
+  "status": "AUDIT_ONLY_NOT_INTEGRATED",
+  "taxonomy": {
+    "assertive_fact": {
+      "description": "A direct descriptive assertion that is neither a study-purpose statement nor a causal claim.",
+      "source": "v2_7_candidate"
+    },
+    "association_only": {
+      "source": "existing_v1"
+    },
+    "capacity_or_trait": {
+      "description": "A capability, tolerance, robustness, effectiveness, or husbandry trait. Occurrence of a particular causal event is not asserted.",
+      "source": "v2_7_candidate"
+    },
+    "comparative_observation": {
+      "source": "existing_v1"
+    },
+    "dispositional_risk": {
+      "source": "existing_v1"
+    },
+    "explicit_causal_result": {
+      "source": "existing_v1"
+    },
+    "interpretive_support": {
+      "source": "existing_v1"
+    },
+    "knowledge_state": {
+      "description": "A statement about the state, limitation, or gap of knowledge rather than a biological or physical result.",
+      "source": "v2_7_candidate"
+    },
+    "meta_constraint_non_fact": {
+      "description": "A benchmark/evaluator meta-constraint or exclusion marker; it is not a scientific fact proposition.",
+      "source": "v2_7_candidate"
+    },
+    "modal_possibility": {
+      "source": "existing_v1"
+    },
+    "observational": {
+      "source": "existing_v1"
+    },
+    "observational_or_interpretive_result": {
+      "source": "existing_v1"
+    },
+    "study_context_non_result": {
+      "description": "Experimental or study context, protocol, duration, sampling, or system setup. It must not be upgraded to an observed result.",
+      "source": "v2_7_candidate"
+    },
+    "study_purpose_non_result": {
+      "source": "existing_v1"
+    }
+  },
+  "total_relation_count": 63
+}

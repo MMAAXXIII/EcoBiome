@@ -1,0 +1,167 @@
+{
+  "coordinated_span_policy": {
+    "argument_representation": "scalar_open_text_with_exact_source_surface",
+    "automatic_cross_product": false,
+    "automatic_merge": false,
+    "automatic_split": false,
+    "coordination_patterns": [
+      "\\band\\b",
+      "\\bor\\b",
+      "\\bnor\\b"
+    ],
+    "eligible_roles": [
+      "cause",
+      "comparator",
+      "condition",
+      "context",
+      "entity_a",
+      "entity_b",
+      "event_a",
+      "event_b",
+      "exposure",
+      "factor",
+      "impact_scope",
+      "mechanism",
+      "mediator",
+      "outcome",
+      "process",
+      "response",
+      "state",
+      "subject",
+      "system",
+      "target",
+      "target_state",
+      "topic",
+      "variable"
+    ],
+    "exact_contiguous_source_span_required": true,
+    "grounded_coordinated_gets_entailment_credit": false,
+    "grounded_coordinated_state": "grounded_coordinated_unresolved",
+    "ineligible_coordinated_state": "role_cardinality_conflict",
+    "list_valued_arguments_introduced": false,
+    "provider_rule": "Preserve a coordinated phrase as one exact source-grounded scalar only when the role can denote that collective phrase. Do not manufacture separate conjunct claims unless each claim is independently supported by the source."
+  },
+  "design_context": {
+    "authored_after_fixture_3": true,
+    "fixture_3_is_regression_only": true,
+    "fixture_4_required_for_next_generalization_claim": true,
+    "new_generalization_claim": false
+  },
+  "epistemic_policy": {
+    "class_match_never_sufficient_for_entailment": true,
+    "different_unordered_state": "different_not_ordered",
+    "forbidden_upgrade_blocking": true,
+    "forbidden_upgrade_state": "epistemic_overclaim",
+    "forbidden_upgrades": [
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "association_only"
+      },
+      {
+        "candidate": "observational_or_interpretive_result",
+        "expected": "association_only"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "comparative_observation"
+      },
+      {
+        "candidate": "comparative_observation",
+        "expected": "dispositional_risk"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "dispositional_risk"
+      },
+      {
+        "candidate": "observational",
+        "expected": "dispositional_risk"
+      },
+      {
+        "candidate": "observational_or_interpretive_result",
+        "expected": "dispositional_risk"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "interpretive_support"
+      },
+      {
+        "candidate": "comparative_observation",
+        "expected": "modal_possibility"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "modal_possibility"
+      },
+      {
+        "candidate": "observational",
+        "expected": "modal_possibility"
+      },
+      {
+        "candidate": "observational_or_interpretive_result",
+        "expected": "modal_possibility"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "observational"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "observational_or_interpretive_result"
+      },
+      {
+        "candidate": "association_only",
+        "expected": "study_purpose_non_result"
+      },
+      {
+        "candidate": "comparative_observation",
+        "expected": "study_purpose_non_result"
+      },
+      {
+        "candidate": "dispositional_risk",
+        "expected": "study_purpose_non_result"
+      },
+      {
+        "candidate": "explicit_causal_result",
+        "expected": "study_purpose_non_result"
+      },
+      {
+        "candidate": "interpretive_support",
+        "expected": "study_purpose_non_result"
+      },
+      {
+        "candidate": "observational",
+        "expected": "study_purpose_non_result"
+      },
+      {
+        "candidate": "observational_or_interpretive_result",
+        "expected": "study_purpose_non_result"
+      }
+    ],
+    "golden_relation_or_other_frozen_reference_required_for_benchmark_upgrade_detection": true,
+    "known_classes": [
+      "association_only",
+      "comparative_observation",
+      "dispositional_risk",
+      "explicit_causal_result",
+      "interpretive_support",
+      "modal_possibility",
+      "observational",
+      "observational_or_interpretive_result",
+      "study_purpose_non_result"
+    ],
+    "same_class_state": "compatible_same_class",
+    "source_cue_classifier_in_core": false
+  },
+  "non_goals": [
+    "generic semantic synonym resolution",
+    "automatic conjunction splitting",
+    "automatic list-valued argument inference",
+    "LLM epistemic adjudication inside deterministic evaluator core",
+    "Fixture-specific aliasing",
+    "rewriting frozen provider scores"
+  ],
+  "policy_name": "coordinated-span-and-epistemic-enforcement",
+  "policy_version": "1.0-audit-candidate",
+  "status": "AUDIT_ONLY_NOT_INTEGRATED"
+}

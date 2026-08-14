@@ -1,0 +1,71 @@
+{
+  "automatic_scientific_acceptance": false,
+  "cursor": {
+    "forward_extension_advances_cursor": true,
+    "identity": "segment_index_plus_character_offset",
+    "monotonic": true,
+    "trim_requeues_exact_suffix": true
+  },
+  "evidence": {
+    "checksum_exact_source_slice_required": true,
+    "exact_source_slice_required": true,
+    "partial_segment_spans_allowed": true,
+    "segment_char_end_required": true,
+    "segment_char_start_required": true
+  },
+  "forward_extension_grace": {
+    "all_limits_must_hold": true,
+    "max_added_characters": 120,
+    "max_extension_seconds_conservative": 6.0,
+    "max_following_segments": 3,
+    "stop_at_first_safe_boundary": true
+  },
+  "no_cross_claim_semantic_join": true,
+  "policy_name": "source-statement-seam-stream-policy",
+  "policy_version": "2.2-audit-candidate",
+  "provider_statement_limits": {
+    "limit_counts_provider_eligible_statements_only": true,
+    "maximum_claim_characters": 350,
+    "maximum_window_seconds": 15.0
+  },
+  "scope": "ordered_timed_transcript_source_stream",
+  "source_accounting": {
+    "boundary_whitespace": "may_be_consumed_as_structural_separator_and_not_evidence",
+    "no_non_whitespace_duplication": true,
+    "no_silent_non_whitespace_loss": true,
+    "non_whitespace_characters_before_final_cursor": "exactly_one_of_provider_or_unresolved",
+    "provider_eligible_source_spans_must_not_overlap": true,
+    "unresolved_source_spans_must_not_overlap_provider_spans": true
+  },
+  "states": {
+    "extended_to_safe_boundary": {
+      "provider_eligible": true
+    },
+    "safe": {
+      "provider_eligible": true
+    },
+    "stream_stopped_unresolved": {
+      "provider_eligible": false,
+      "source_material_persisted": true
+    },
+    "trimmed_to_safe_boundary_with_carry": {
+      "carry_requeued": true,
+      "provider_eligible_prefix": true
+    },
+    "unresolved_region_to_safe_boundary": {
+      "provider_eligible": false,
+      "source_material_persisted": true
+    }
+  },
+  "status": "AUDIT_ONLY_NOT_INTEGRATED",
+  "supersedes": "source-statement-window-seam-policy/2.1-audit-candidate",
+  "unresolved_recovery": {
+    "if_no_boundary_within_limits": "stop_stream_extraction_without_skipping_source",
+    "max_characters": 2000,
+    "max_seconds_conservative": 60.0,
+    "max_segments": 30,
+    "provider_eligible": false,
+    "purpose": "resume extraction only after a safe boundary when a carried region cannot itself form a bounded safe provider statement",
+    "stop_at_first_safe_boundary": true
+  }
+}

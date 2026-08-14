@@ -1,0 +1,10 @@
+"""Persistence error taxonomy."""
+class ScientificFoundationPersistenceError(RuntimeError): pass
+class PersistenceConfigurationError(ScientificFoundationPersistenceError): pass
+class SchemaIdentityError(ScientificFoundationPersistenceError): pass
+class PersistenceIntegrityError(ScientificFoundationPersistenceError): pass
+class ArtifactStoreError(ScientificFoundationPersistenceError): pass
+class ArtifactMissingError(ArtifactStoreError): pass
+class ArtifactCorruptionError(ArtifactStoreError): pass
+class DuplicateIdentityConflict(PersistenceIntegrityError): pass
+class ScopeAlignmentError(PersistenceIntegrityError): pass

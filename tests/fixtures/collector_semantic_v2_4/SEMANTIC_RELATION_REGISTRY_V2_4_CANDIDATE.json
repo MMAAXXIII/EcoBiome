@@ -1,0 +1,420 @@
+{
+  "argument_roles": {
+    "analyte": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "cause": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "comparator": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "comparator_temperature_c": {
+      "type": "number"
+    },
+    "condition": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "day": {
+      "type": "integer"
+    },
+    "driver_temperature_c": {
+      "type": "number"
+    },
+    "event_a": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_b": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "experiment": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "exposure": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "factor": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "frequency": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "gene_set": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "habitat": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "impact_scope": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "label": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "level": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "life_stage": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "location": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "outcome": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "pathway": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "process": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "reference": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "species": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "system": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "target": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "temperature_c": {
+      "type": "number"
+    },
+    "temperature_scope": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "tissue": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "topic": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unit": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "value": {
+      "type": "number"
+    },
+    "variable": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "principles": [
+    "Relation identifiers and argument-role signatures are versioned infrastructure.",
+    "Categorical argument values are source-derived strings, not per-source enums.",
+    "Numeric values are copied from the same source Claim.",
+    "Exactly the declared argument keys are permitted for each relation.",
+    "No cross-Claim value resolution is allowed.",
+    "Registry extension must be reviewed before exposure to a new blind benchmark Golden."
+  ],
+  "registry_version": "ecobiome-semantic-relation-registry-v2.4-candidate",
+  "relations": {
+    "accelerated_vs": {
+      "argument_keys": [
+        "driver_temperature_c",
+        "comparator_temperature_c",
+        "outcome"
+      ]
+    },
+    "adversely_affects": {
+      "argument_keys": [
+        "cause",
+        "target"
+      ]
+    },
+    "affected_gene_expression_in": {
+      "argument_keys": [
+        "exposure",
+        "pathway"
+      ]
+    },
+    "caused": {
+      "argument_keys": [
+        "exposure",
+        "outcome",
+        "tissue"
+      ]
+    },
+    "co_occurred_with": {
+      "argument_keys": [
+        "event_a",
+        "event_b",
+        "temperature_scope"
+      ]
+    },
+    "decreased": {
+      "argument_keys": [
+        "analyte",
+        "temperature_scope"
+      ]
+    },
+    "decreased_to_near_zero": {
+      "argument_keys": [
+        "analyte"
+      ]
+    },
+    "derived_from_arithmetic": {
+      "argument_keys": []
+    },
+    "does_not_live_in": {
+      "argument_keys": [
+        "habitat"
+      ]
+    },
+    "does_not_occur_in": {
+      "argument_keys": [
+        "location"
+      ]
+    },
+    "does_not_originate_from": {
+      "argument_keys": [
+        "location"
+      ]
+    },
+    "does_not_tolerate": {
+      "argument_keys": [
+        "condition"
+      ]
+    },
+    "easy_to_keep": {
+      "argument_keys": []
+    },
+    "effective_against": {
+      "argument_keys": [
+        "target"
+      ]
+    },
+    "evaluative_conclusion": {
+      "argument_keys": []
+    },
+    "fed_at_rate": {
+      "argument_keys": [
+        "value",
+        "unit"
+      ]
+    },
+    "fed_with_frequency": {
+      "argument_keys": [
+        "frequency"
+      ]
+    },
+    "forbidden_join": {
+      "argument_keys": []
+    },
+    "had_level": {
+      "argument_keys": [
+        "label",
+        "day",
+        "analyte",
+        "level"
+      ]
+    },
+    "increased_gradually": {
+      "argument_keys": [
+        "analyte"
+      ]
+    },
+    "increased_rapidly": {
+      "argument_keys": [
+        "analyte",
+        "temperature_scope"
+      ]
+    },
+    "is_common_risk_factor": {
+      "argument_keys": [
+        "factor"
+      ]
+    },
+    "is_not_robust": {
+      "argument_keys": []
+    },
+    "is_robust": {
+      "argument_keys": []
+    },
+    "lasted": {
+      "argument_keys": [
+        "value",
+        "unit"
+      ]
+    },
+    "lives_in": {
+      "argument_keys": [
+        "habitat"
+      ]
+    },
+    "maintained_at": {
+      "argument_keys": [
+        "variable",
+        "value",
+        "unit"
+      ]
+    },
+    "more_pronounced_at": {
+      "argument_keys": [
+        "impact_scope",
+        "temperature_c"
+      ]
+    },
+    "not_easy_to_keep": {
+      "argument_keys": []
+    },
+    "not_effective_against": {
+      "argument_keys": [
+        "target"
+      ]
+    },
+    "not_well_understood": {
+      "argument_keys": [
+        "topic"
+      ]
+    },
+    "occurs_in": {
+      "argument_keys": [
+        "location"
+      ]
+    },
+    "originates_from": {
+      "argument_keys": [
+        "location"
+      ]
+    },
+    "peaked_on_day": {
+      "argument_keys": [
+        "analyte",
+        "day",
+        "temperature_c"
+      ]
+    },
+    "poses_significant_threat_to": {
+      "argument_keys": [
+        "cause",
+        "target"
+      ]
+    },
+    "primarily_associated_with": {
+      "argument_keys": [
+        "gene_set",
+        "process"
+      ]
+    },
+    "purpose_not_result": {
+      "argument_keys": []
+    },
+    "remained_low_initially": {
+      "argument_keys": [
+        "analyte"
+      ]
+    },
+    "sampled_on_day": {
+      "argument_keys": [
+        "day"
+      ]
+    },
+    "significant_change_vs": {
+      "argument_keys": [
+        "tissue",
+        "condition",
+        "comparator"
+      ]
+    },
+    "studied": {
+      "argument_keys": [
+        "life_stage",
+        "species"
+      ]
+    },
+    "tolerates": {
+      "argument_keys": [
+        "condition"
+      ]
+    },
+    "used_same_temperatures_as": {
+      "argument_keys": [
+        "experiment",
+        "reference"
+      ]
+    },
+    "used_system": {
+      "argument_keys": [
+        "system"
+      ]
+    },
+    "without_accumulation": {
+      "argument_keys": [
+        "experiment",
+        "analyte"
+      ]
+    }
+  },
+  "semantic_types": [
+    "absence_condition",
+    "application_claim",
+    "biological_effect",
+    "causal_inference",
+    "combined_effect",
+    "comparative_effect",
+    "cross_claim_resolution",
+    "derived_comparison",
+    "experiment_duration",
+    "experimental_condition",
+    "feeding_regimen",
+    "gene_expression_change",
+    "gene_function_association",
+    "geographic_distribution",
+    "geographic_origin",
+    "habitat",
+    "health_effect",
+    "husbandry",
+    "industry_impact",
+    "knowledge_gap",
+    "measurement_peak",
+    "measurement_trend",
+    "mosquito_control",
+    "ph_tolerance",
+    "risk_factor",
+    "robustness",
+    "sampling_event",
+    "sampling_state",
+    "severity_observation",
+    "study_context",
+    "study_purpose",
+    "study_subject",
+    "temperature_tolerance",
+    "temporal_association",
+    "volume_tolerance"
+  ],
+  "status": "audit_candidate_not_production_certified"
+}

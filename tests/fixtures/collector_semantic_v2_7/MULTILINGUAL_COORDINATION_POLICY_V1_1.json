@@ -1,0 +1,95 @@
+{
+  "automatic_cross_product": false,
+  "automatic_merge": false,
+  "automatic_split": false,
+  "eligible_roles": [
+    "cause",
+    "comparator",
+    "condition",
+    "context",
+    "entity_a",
+    "entity_b",
+    "event_a",
+    "event_b",
+    "exposure",
+    "factor",
+    "impact_scope",
+    "mechanism",
+    "mediator",
+    "outcome",
+    "process",
+    "response",
+    "state",
+    "subject",
+    "system",
+    "target",
+    "target_state",
+    "topic",
+    "variable"
+  ],
+  "exact_contiguous_source_span_required": true,
+  "grounded_coordinated_gets_entailment_credit": false,
+  "grounded_coordinated_state": "grounded_coordinated_unresolved",
+  "ineligible_coordinated_state": "role_cardinality_conflict",
+  "language_packs": {
+    "en": {
+      "paired": [
+        [
+          "either",
+          "or"
+        ],
+        [
+          "neither",
+          "nor"
+        ],
+        [
+          "both",
+          "and"
+        ]
+      ],
+      "single": [
+        "and",
+        "or",
+        "nor"
+      ]
+    },
+    "fr": {
+      "paired": [
+        [
+          "soit",
+          "soit"
+        ],
+        [
+          "ni",
+          "ni"
+        ],
+        [
+          "à la fois",
+          "et"
+        ]
+      ],
+      "single": [
+        "et",
+        "ou",
+        "ni"
+      ]
+    }
+  },
+  "language_source": "source_or_representation_language_metadata",
+  "list_valued_arguments_introduced": false,
+  "normalization": {
+    "diacritics_are_not_stripped": true,
+    "unicode_casefold": true,
+    "unicode_word_boundaries": true
+  },
+  "policy_name": "multilingual-coordinated-span-policy",
+  "policy_version": "1.1-audit-candidate",
+  "punctuation_series": {
+    "automatic_merge": false,
+    "automatic_split": false,
+    "comma_series_detection": "diagnostic_only"
+  },
+  "representation": "scalar_open_text_with_exact_source_surface",
+  "status": "AUDIT_ONLY_NOT_INTEGRATED",
+  "unknown_language_behavior": "detect_no_lexical_coordination"
+}

@@ -68,6 +68,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Run the central EcoBiome command-line interface."""
     arguments = list(argv) if argv is not None else sys.argv[1:]
 
+    if arguments and arguments[0] == "collector":
+        from ecobiome.knowledge_acquisition.collector_cli import (
+            main as collector_main,
+        )
+
+        return collector_main(arguments[1:])
+
     if arguments and arguments[0] == "import-transcript":
         from ecobiome.knowledge_acquisition.cli import (
             main as acquisition_main,

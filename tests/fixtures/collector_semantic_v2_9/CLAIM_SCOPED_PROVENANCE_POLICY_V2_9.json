@@ -1,0 +1,58 @@
+{
+  "admission_order": [
+    "wire_shape",
+    "source_scope",
+    "relation_type",
+    "claim_local_grounding",
+    "exact_deduplication"
+  ],
+  "base_contracts": {
+    "grounding_policy": "1.2",
+    "relation_type_contract": "2.8"
+  },
+  "evidence": {
+    "v2_8_failure_mode_audit_zip_sha256": "19185959910aaf3fdccd7599ff6697f5b5a5fe58c00bd9a826e80fada806ca42",
+    "v2_8_replay_zip_sha256": "3b0a399cf9b4e4bc06b72d784b0266fb50914f5d07793b748f30f8d1ccea836e",
+    "v2_9_design_audit_zip_sha256": "6e8ca210abc02d1ccb836b018a9f1f8f752a9d3dfe46cb2d9bf3583f58f15d40"
+  },
+  "explicit_non_goals": [
+    "semantic synonym resolution",
+    "automatic Evidence generation",
+    "cross-Claim resolution",
+    "scientific acceptance from wire validity alone"
+  ],
+  "policy_name": "ecobiome-claim-scoped-provider-provenance",
+  "policy_version": "2.9",
+  "principles": {
+    "automatic_scientific_acceptance": false,
+    "claim_and_semantic_contracts_are_factorized": true,
+    "claim_local_argument_grounding_is_required": true,
+    "evidence_ids_are_runtime_finite": true,
+    "evidence_parent_ownership_is_structural": true,
+    "exact_duplicates_are_deduplicated_before_downstream_admission": true,
+    "source_claim_ids_are_runtime_finite": true,
+    "zero_survivors_is_valid_abstention": true
+  },
+  "provider_wire_shape": {
+    "proposal_keys": [
+      "s",
+      "x"
+    ],
+    "semantic_assertion": {
+      "keys": [
+        "t",
+        "m"
+      ],
+      "relation_type_contract": "inherit_resolved_v2_8_provider_branches"
+    },
+    "source_scope": {
+      "claim_id": "const_per_runtime_claim_branch",
+      "evidence_ids": "enum_of_evidence_owned_by_that_claim",
+      "keys": [
+        "c",
+        "e"
+      ]
+    }
+  },
+  "status": "LOCAL_CONTRACT_CANDIDATE"
+}

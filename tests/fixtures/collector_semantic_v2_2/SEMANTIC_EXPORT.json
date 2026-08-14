@@ -1,0 +1,345 @@
+{
+  "rules": {
+    "atomic_propositions_only": true,
+    "automatic_scientific_acceptance": false,
+    "do_not_invent_evidence": true,
+    "evidence_ids_must_come_from_parent_claim": true,
+    "output_contract": "semantic-claim-contract-v1",
+    "skip_ambiguous_or_incomplete_statements": true
+  },
+  "schema_version": 1,
+  "source_claims": [
+    {
+      "claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "effective_text": "Euh Makaoriz la tip poisson venu d'Asie, Japon principalement euh qui vit dans la résière jusque dans les estuauires de la mer. Euh poisson hyper robuste qui résiste au froid, au chaud, à des",
+      "effective_text_sha256": "67ffb191aaa6c1e96e5124667137c9640c17036dc28beb0a89c4337e15274f1b",
+      "evidence": [
+        {
+          "end_seconds": 76.64,
+          "evidence_id": "ffb65502-1c67-402e-bf8b-a09c5c51e458",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "f39c1b9a-0b16-4770-b219-2b2aab5c5fd3",
+          "segment_index": 36,
+          "sha256": "ed13f99a2bfc619f1cc0d65b42d411036a68663ffecd524c22c61754ae5aeb87",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 71.119,
+          "text": "Euh Makaoriz la tip poisson venu d'Asie,"
+        },
+        {
+          "end_seconds": 79.08,
+          "evidence_id": "b2e23529-c077-4bf2-ab99-d3f91df6422f",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "b9c6657f-7cd6-4ff4-85f5-bfb1854dbb28",
+          "segment_index": 37,
+          "sha256": "0e801fb829d70a7df3cf61fb072278936eb9662109e3851fd7ad17841c91e6ca",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 74.0,
+          "text": "Japon principalement euh qui vit dans la"
+        },
+        {
+          "end_seconds": 82.04,
+          "evidence_id": "0d5a923e-193f-41c5-b7c8-32ff3fc42f44",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "6136a6f9-5885-4149-bc69-a98090754130",
+          "segment_index": 38,
+          "sha256": "07195385e4805ed10f4dbef034965a1bd1e7336b51dbddf8a643ec8d008ccc58",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 76.64,
+          "text": "résière jusque dans les estuauires"
+        },
+        {
+          "end_seconds": 83.4,
+          "evidence_id": "078067fb-31e4-4a33-ad84-921c876def7d",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "932c33a8-630a-40df-8d8a-639809ceef7b",
+          "segment_index": 39,
+          "sha256": "4c3b659990750242e39b2392731c42203cd4380f169401f3cda52582adda464a",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 79.08,
+          "text": "de la mer. Euh poisson hyper robuste qui"
+        },
+        {
+          "end_seconds": 85.92,
+          "evidence_id": "48cfb21a-3951-48c9-8b0a-4d8ef1463f9b",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "11532b25-1037-45ed-a2bf-164963bd130e",
+          "segment_index": 40,
+          "sha256": "92328380af635525adaab2e489774881f7da00a06e872b84360e42f357ac72a2",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 82.04,
+          "text": "résiste au froid, au chaud, à des"
+        }
+      ],
+      "review_status": "pending",
+      "text_was_corrected": false
+    },
+    {
+      "claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "effective_text": "variations de pH. Euh euh vraiment le poisson hyper facile et hyper costaud et une lutte redoutable contre les moustiques. Donc euh voilà avec ce côté joli en plus et qui n'a pas besoin de",
+      "effective_text_sha256": "fba36d6174454434939e4cec6b93c2a74a6f2149a90f4d7f1606f8d98da87d18",
+      "evidence": [
+        {
+          "end_seconds": 89.28,
+          "evidence_id": "d555e35e-cadb-44cd-afd0-91300c2a2db8",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "cf45d33a-af4e-404e-a59f-581e804a5db6",
+          "segment_index": 41,
+          "sha256": "29aec3c044fe0c658926f9267f28ed193962d10f464bda4d6614e21b02697d1e",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 83.4,
+          "text": "variations de pH. Euh euh vraiment le"
+        },
+        {
+          "end_seconds": 91.04,
+          "evidence_id": "3150cc16-bc54-4222-86d9-413761b2e8d7",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "bfb58ea6-d961-408b-a1ad-a7a438a57e1a",
+          "segment_index": 42,
+          "sha256": "b82f4d289287b0de33e0ba19ad3fae631ad6a2234ac7e88285690ce87eb92975",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 85.92,
+          "text": "poisson hyper facile et hyper costaud et"
+        },
+        {
+          "end_seconds": 93.2,
+          "evidence_id": "25f1bc86-9c5b-4960-8821-70dbd939ee34",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "d21fd90f-95be-4b7b-9490-043716fbae55",
+          "segment_index": 43,
+          "sha256": "0b79f4efb9ec467b69e8a2edadea16770a8de4125833e59be08b0436ab2ac9d4",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 89.28,
+          "text": "une lutte redoutable contre les"
+        },
+        {
+          "end_seconds": 95.28,
+          "evidence_id": "9e4733bf-ac2b-4198-829f-60ba8f7a5025",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "e63b7445-069c-4cfa-9175-941f4b4f01a0",
+          "segment_index": 44,
+          "sha256": "5f409b47d07a59fc5a6ac6a31f261dcce8b84c76e999f85b4b5841e2337e99d3",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 91.04,
+          "text": "moustiques. Donc euh voilà avec ce côté"
+        },
+        {
+          "end_seconds": 96.84,
+          "evidence_id": "7b503f87-476e-4773-884f-a4de150cf36d",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "99033fdd-11d1-41d9-86d9-f13714396d65",
+          "segment_index": 45,
+          "sha256": "44959ea88d022101da28e55cca4bbf750e9efb07434f1f4cbe8454112e8ef877",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 93.2,
+          "text": "joli en plus et qui n'a pas besoin de"
+        }
+      ],
+      "review_status": "pending",
+      "text_was_corrected": false
+    },
+    {
+      "claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "effective_text": "en Europe. Nord de toute façon. Donc forcément en France, c'est vraiment le diner héritier. Il craint ni le chaud, ni le froid, ni le trop petit volume, ni le trop grand volume. Il est parfait. Et il y a une quantité de morphes de",
+      "effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "evidence": [
+        {
+          "end_seconds": 112.0,
+          "evidence_id": "236b1fc8-cb3e-4117-90e8-a114d05a6f50",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "8d7992c1-3b2c-4e65-a2c2-4f794a27e30c",
+          "segment_index": 54,
+          "sha256": "2b299163acb5e777bb61bd62cbe803a379e88a1e331384e5553b5dd7e19e9c7f",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 107.479,
+          "text": "en Europe. Nord de toute façon. Donc"
+        },
+        {
+          "end_seconds": 113.96,
+          "evidence_id": "2c62c412-dd5c-4260-b6b9-b30babf518e4",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "1eaa3772-dc0f-4e1b-a5df-6882a3f2de18",
+          "segment_index": 55,
+          "sha256": "70eee459da3716141830e70fd10c69cddc68fae522d131bdf2aa61ce5307ae88",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 109.96,
+          "text": "forcément en France, c'est vraiment le"
+        },
+        {
+          "end_seconds": 115.92,
+          "evidence_id": "26ce3679-f3ee-41ee-a137-7fea82ca8745",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "4ac96759-d76b-4870-a8cb-0377222b1433",
+          "segment_index": 56,
+          "sha256": "e5c562225877e783ed8e01d1adea0122a35e38165e9790f9ca1f53de67fa4bc1",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 112.0,
+          "text": "diner héritier. Il craint ni le chaud,"
+        },
+        {
+          "end_seconds": 118.19999999999999,
+          "evidence_id": "0b20fa14-6a3f-4a1b-9b7a-d7819e5ccf1f",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "dc8f9065-e793-437e-89db-15957001c859",
+          "segment_index": 57,
+          "sha256": "88c37e952ab7601e1f1fd8ce01698566632a040a32275396ca402f47b74f7e3a",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 113.96,
+          "text": "ni le froid, ni le trop petit volume, ni"
+        },
+        {
+          "end_seconds": 120.119,
+          "evidence_id": "be51b52b-efa1-4e29-9835-afb88c7fc637",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "cf3bf408-6a36-4373-93f4-5bb8ab6302f3",
+          "segment_index": 58,
+          "sha256": "bb3d76fb12ea0ba44a7649b9c50d2b52e57b43091b82622a7bc4a9c1925f5790",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 115.92,
+          "text": "le trop grand volume. Il est parfait. Et"
+        },
+        {
+          "end_seconds": 122.119,
+          "evidence_id": "4984a1c0-f7ca-4fde-a6d1-6de6c1edf672",
+          "frame_end": null,
+          "frame_start": null,
+          "page_number": null,
+          "segment_id": "f69ff18d-586d-4ff4-befb-70d2567351aa",
+          "segment_index": 59,
+          "sha256": "7c29f7827695655e4488c499be7841821dbc303025cdd88d66765ee930377602",
+          "source": {
+            "author": "FLORE-AQUATIQUE",
+            "canonical_locator": "https://www.youtube.com/watch?v=A1VKJkJVqC8",
+            "source_id": "d2c0d8c2-50a0-4fbe-8d84-07147d050d2a",
+            "source_type": "youtube",
+            "title": "🇯🇵 La Plus Grosse Collection de Médakas de France ?! 🐟✨ - FLORE-AQUATIQUE"
+          },
+          "start_seconds": 118.2,
+          "text": "il y a une quantité de morphes de"
+        }
+      ],
+      "review_status": "pending",
+      "text_was_corrected": false
+    }
+  ],
+  "task": "extract_atomic_source_propositions"
+}

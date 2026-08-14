@@ -1,0 +1,22 @@
+{
+  "automatic_scientific_acceptance": false,
+  "not_yet_selected": {
+    "fully_claim_conditioned_schema": "Deferred because duplicating a relation-conditioned schema per source Claim can cause large Structured Output schemas."
+  },
+  "policy_name": "provider-provenance-constraint",
+  "policy_version": "1.1-audit-candidate",
+  "post_validation_rules": {
+    "foreign_parent_evidence_id": "blocking",
+    "same_parent_claim_evidence_ownership": "mandatory",
+    "unknown_claim_id": "blocking",
+    "unknown_evidence_id": "blocking"
+  },
+  "provider_schema_rules": {
+    "evidence_id": "enum_of_all_evidence_ids_in_current_batch",
+    "evidence_ids_min_items": 1,
+    "evidence_ids_unique": true,
+    "source_claim_id": "enum_of_all_source_claim_ids_in_current_batch"
+  },
+  "reason_for_global_evidence_enum": "It prevents invented Evidence IDs with modest schema growth while same-parent ownership remains a deterministic post-validator.",
+  "status": "AUDIT_ONLY_NOT_INTEGRATED"
+}

@@ -1,0 +1,500 @@
+{
+  "admissible_propositions": [
+    {
+      "canonical_text": "Lecture admissible : la source situe ce poisson en Europe.",
+      "evidence_rationale": "The auto-transcript fragment says 'en Europe' but omits an overt local predicate.",
+      "id": "medaka-g2a-01",
+      "meaning": {
+        "facet": "europe",
+        "relation": "occurs_in"
+      },
+      "minimal_evidence_ids": [
+        "236b1fc8-cb3e-4117-90e8-a114d05a6f50"
+      ],
+      "minimal_evidence_segment_indices": [
+        54
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "europe"
+        ]
+      ],
+      "reviewed_evidence_text": "en Europe. Nord de toute façon. Donc",
+      "semantic_type": "geographic_distribution",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "admissible"
+    },
+    {
+      "canonical_text": "Lecture admissible : la source le situe dans le nord de l'Europe.",
+      "evidence_rationale": "'en Europe. Nord de toute façon' is plausible but elliptical/ASR-fragmentary.",
+      "id": "medaka-g2a-02",
+      "meaning": {
+        "facet": "northern_europe",
+        "relation": "occurs_in"
+      },
+      "minimal_evidence_ids": [
+        "236b1fc8-cb3e-4117-90e8-a114d05a6f50"
+      ],
+      "minimal_evidence_segment_indices": [
+        54
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "europe"
+        ],
+        [
+          "nord"
+        ]
+      ],
+      "reviewed_evidence_text": "en Europe. Nord de toute façon. Donc",
+      "semantic_type": "geographic_distribution",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "admissible"
+    },
+    {
+      "canonical_text": "Lecture admissible : la source situe ce poisson en France.",
+      "evidence_rationale": "The fragment says 'forcément en France' without an overt local predicate.",
+      "id": "medaka-g2a-03",
+      "meaning": {
+        "facet": "france",
+        "relation": "occurs_in"
+      },
+      "minimal_evidence_ids": [
+        "2c62c412-dd5c-4260-b6b9-b30babf518e4"
+      ],
+      "minimal_evidence_segment_indices": [
+        55
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "france"
+        ]
+      ],
+      "reviewed_evidence_text": "forcément en France, c'est vraiment le",
+      "semantic_type": "geographic_distribution",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "admissible"
+    }
+  ],
+  "excluded_propositions": [
+    {
+      "canonical_text_v1": "La source associe ce poisson à une tolérance aux variations de pH.",
+      "id": "medaka-g2x-01",
+      "policy": "Do not infer missing joins across source Claims.",
+      "reason": "forbidden_cross_claim_join_required",
+      "semantic_type": "ph_tolerance",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "tier": "excluded"
+    }
+  ],
+  "fixture": {
+    "admissible_elliptical_count": 3,
+    "excluded_count": 1,
+    "name": "medaka-semantic-golden-v2.1",
+    "policy": {
+      "admissible": "plausible source-local elliptical/fragmentary readings; recognised but not mandatory",
+      "evidence": "explicit reviewed minimal Evidence sets; no automatic lexical minimisation",
+      "excluded": "readings forbidden by extraction policy; candidate extraction is a policy violation",
+      "required": "clear source-local atomic propositions; mandatory for strict coverage"
+    },
+    "scientific_correctness_measured": false,
+    "strict_required_count": 13
+  },
+  "required_propositions": [
+    {
+      "canonical_text": "La source présente le poisson évoqué comme originaire d'Asie, principalement du Japon.",
+      "evidence_rationale": "36 carries the origin predicate + Asia; 37 carries Japan.",
+      "id": "medaka-g2r-01",
+      "meaning": {
+        "facet": "asia_japan",
+        "relation": "originates_from"
+      },
+      "minimal_evidence_ids": [
+        "ffb65502-1c67-402e-bf8b-a09c5c51e458",
+        "b2e23529-c077-4bf2-ab99-d3f91df6422f"
+      ],
+      "minimal_evidence_segment_indices": [
+        36,
+        37
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "venu"
+        ],
+        [
+          "asie"
+        ],
+        [
+          "japon"
+        ]
+      ],
+      "reviewed_evidence_text": "Euh Makaoriz la tip poisson venu d'Asie, Japon principalement euh qui vit dans la",
+      "semantic_type": "geographic_origin",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source indique que ce poisson vit dans les rizières.",
+      "evidence_rationale": "37 carries the predicate 'vit'; 38 carries the rice-field object.",
+      "id": "medaka-g2r-02",
+      "meaning": {
+        "facet": "rice_fields",
+        "relation": "lives_in"
+      },
+      "minimal_evidence_ids": [
+        "b2e23529-c077-4bf2-ab99-d3f91df6422f",
+        "0d5a923e-193f-41c5-b7c8-32ff3fc42f44"
+      ],
+      "minimal_evidence_segment_indices": [
+        37,
+        38
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "vit"
+        ],
+        [
+          "rizi",
+          "resi"
+        ]
+      ],
+      "reviewed_evidence_text": "Japon principalement euh qui vit dans la résière jusque dans les estuauires",
+      "semantic_type": "habitat",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source indique que ce poisson est présent jusque dans des estuaires marins.",
+      "evidence_rationale": "37 carries the governing habitat predicate; 38 the estuary; 39 the marine qualifier.",
+      "id": "medaka-g2r-03",
+      "meaning": {
+        "facet": "marine_estuary",
+        "relation": "lives_in"
+      },
+      "minimal_evidence_ids": [
+        "b2e23529-c077-4bf2-ab99-d3f91df6422f",
+        "0d5a923e-193f-41c5-b7c8-32ff3fc42f44",
+        "078067fb-31e4-4a33-ad84-921c876def7d"
+      ],
+      "minimal_evidence_segment_indices": [
+        37,
+        38,
+        39
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "vit"
+        ],
+        [
+          "estua"
+        ],
+        [
+          "mer",
+          "marin"
+        ]
+      ],
+      "reviewed_evidence_text": "Japon principalement euh qui vit dans la résière jusque dans les estuauires de la mer. Euh poisson hyper robuste qui",
+      "semantic_type": "habitat",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source présente ce poisson comme très robuste.",
+      "evidence_rationale": "39 explicitly describes the fish as hyper robust.",
+      "id": "medaka-g2r-04",
+      "meaning": {
+        "facet": "generic_robustness",
+        "relation": "is_robust"
+      },
+      "minimal_evidence_ids": [
+        "078067fb-31e4-4a33-ad84-921c876def7d"
+      ],
+      "minimal_evidence_segment_indices": [
+        39
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "robust",
+          "costaud"
+        ]
+      ],
+      "reviewed_evidence_text": "de la mer. Euh poisson hyper robuste qui",
+      "semantic_type": "robustness",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source présente ce poisson comme facile à maintenir.",
+      "evidence_rationale": "42 explicitly describes the fish as hyper facile.",
+      "id": "medaka-g2r-05",
+      "meaning": {
+        "facet": "easy_to_keep",
+        "relation": "easy_to_keep"
+      },
+      "minimal_evidence_ids": [
+        "3150cc16-bc54-4222-86d9-413761b2e8d7"
+      ],
+      "minimal_evidence_segment_indices": [
+        42
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "facile"
+        ]
+      ],
+      "reviewed_evidence_text": "poisson hyper facile et hyper costaud et",
+      "semantic_type": "husbandry",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source présente ce poisson comme robuste.",
+      "evidence_rationale": "42 explicitly describes the fish as hyper costaud.",
+      "id": "medaka-g2r-06",
+      "meaning": {
+        "facet": "generic_robustness",
+        "relation": "is_robust"
+      },
+      "minimal_evidence_ids": [
+        "3150cc16-bc54-4222-86d9-413761b2e8d7"
+      ],
+      "minimal_evidence_segment_indices": [
+        42
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "costaud",
+          "robust"
+        ]
+      ],
+      "reviewed_evidence_text": "poisson hyper facile et hyper costaud et",
+      "semantic_type": "robustness",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson est efficace contre les moustiques.",
+      "evidence_rationale": "43 carries 'lutte redoutable contre'; 44 carries the mosquito object.",
+      "id": "medaka-g2r-07",
+      "meaning": {
+        "facet": "mosquito_control",
+        "relation": "effective_against"
+      },
+      "minimal_evidence_ids": [
+        "25f1bc86-9c5b-4960-8821-70dbd939ee34",
+        "9e4733bf-ac2b-4198-829f-60ba8f7a5025"
+      ],
+      "minimal_evidence_segment_indices": [
+        43,
+        44
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "lutte"
+        ],
+        [
+          "redoutable"
+        ],
+        [
+          "contre"
+        ],
+        [
+          "moustiq"
+        ]
+      ],
+      "reviewed_evidence_text": "une lutte redoutable contre les moustiques. Donc euh voilà avec ce côté",
+      "semantic_type": "mosquito_control",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson supporte le chaud.",
+      "evidence_rationale": "56 contains predicate, oral negation coordinator and heat object.",
+      "id": "medaka-g2r-08",
+      "meaning": {
+        "facet": "heat",
+        "relation": "tolerates"
+      },
+      "minimal_evidence_ids": [
+        "26ce3679-f3ee-41ee-a137-7fea82ca8745"
+      ],
+      "minimal_evidence_segment_indices": [
+        56
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "craint"
+        ],
+        [
+          "ni"
+        ],
+        [
+          "chaud"
+        ]
+      ],
+      "reviewed_evidence_text": "diner héritier. Il craint ni le chaud,",
+      "semantic_type": "temperature_tolerance",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson supporte le froid.",
+      "evidence_rationale": "56 carries the governing 'craint ni'; 57 carries the cold list item.",
+      "id": "medaka-g2r-09",
+      "meaning": {
+        "facet": "cold",
+        "relation": "tolerates"
+      },
+      "minimal_evidence_ids": [
+        "26ce3679-f3ee-41ee-a137-7fea82ca8745",
+        "0b20fa14-6a3f-4a1b-9b7a-d7819e5ccf1f"
+      ],
+      "minimal_evidence_segment_indices": [
+        56,
+        57
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "craint"
+        ],
+        [
+          "ni"
+        ],
+        [
+          "froid"
+        ]
+      ],
+      "reviewed_evidence_text": "diner héritier. Il craint ni le chaud, ni le froid, ni le trop petit volume, ni",
+      "semantic_type": "temperature_tolerance",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson peut vivre dans de petits volumes.",
+      "evidence_rationale": "56 carries the governing 'craint ni'; 57 carries the small-volume list item.",
+      "id": "medaka-g2r-10",
+      "meaning": {
+        "facet": "small_volume",
+        "relation": "tolerates"
+      },
+      "minimal_evidence_ids": [
+        "26ce3679-f3ee-41ee-a137-7fea82ca8745",
+        "0b20fa14-6a3f-4a1b-9b7a-d7819e5ccf1f"
+      ],
+      "minimal_evidence_segment_indices": [
+        56,
+        57
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "craint"
+        ],
+        [
+          "ni"
+        ],
+        [
+          "petit"
+        ],
+        [
+          "volume"
+        ]
+      ],
+      "reviewed_evidence_text": "diner héritier. Il craint ni le chaud, ni le froid, ni le trop petit volume, ni",
+      "semantic_type": "volume_tolerance",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson peut vivre dans de grands volumes.",
+      "evidence_rationale": "56 supplies the governing predicate, 57 the immediately preceding final 'ni', and 58 the large-volume object.",
+      "id": "medaka-g2r-11",
+      "meaning": {
+        "facet": "large_volume",
+        "relation": "tolerates"
+      },
+      "minimal_evidence_ids": [
+        "26ce3679-f3ee-41ee-a137-7fea82ca8745",
+        "0b20fa14-6a3f-4a1b-9b7a-d7819e5ccf1f",
+        "be51b52b-efa1-4e29-9835-afb88c7fc637"
+      ],
+      "minimal_evidence_segment_indices": [
+        56,
+        57,
+        58
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "craint"
+        ],
+        [
+          "ni"
+        ],
+        [
+          "grand"
+        ],
+        [
+          "volume"
+        ]
+      ],
+      "reviewed_evidence_text": "diner héritier. Il craint ni le chaud, ni le froid, ni le trop petit volume, ni le trop grand volume. Il est parfait. Et",
+      "semantic_type": "volume_tolerance",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson résiste au froid.",
+      "evidence_rationale": "40 explicitly contains 'résiste au froid'.",
+      "id": "medaka-g2r-12",
+      "meaning": {
+        "facet": "cold",
+        "relation": "tolerates"
+      },
+      "minimal_evidence_ids": [
+        "48cfb21a-3951-48c9-8b0a-4d8ef1463f9b"
+      ],
+      "minimal_evidence_segment_indices": [
+        40
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "resist"
+        ],
+        [
+          "froid"
+        ]
+      ],
+      "reviewed_evidence_text": "résiste au froid, au chaud, à des",
+      "semantic_type": "temperature_tolerance",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "tier": "required"
+    },
+    {
+      "canonical_text": "La source affirme que ce poisson résiste au chaud.",
+      "evidence_rationale": "40 explicitly contains 'résiste ... au chaud'.",
+      "id": "medaka-g2r-13",
+      "meaning": {
+        "facet": "heat",
+        "relation": "tolerates"
+      },
+      "minimal_evidence_ids": [
+        "48cfb21a-3951-48c9-8b0a-4d8ef1463f9b"
+      ],
+      "minimal_evidence_segment_indices": [
+        40
+      ],
+      "required_evidence_anchor_groups": [
+        [
+          "resist"
+        ],
+        [
+          "chaud"
+        ]
+      ],
+      "reviewed_evidence_text": "résiste au froid, au chaud, à des",
+      "semantic_type": "temperature_tolerance",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "tier": "required"
+    }
+  ],
+  "schema_version": "2.1"
+}

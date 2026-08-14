@@ -1,0 +1,322 @@
+{
+  "base_registry": {
+    "sha256": "cdc0debb45a5ac4182ff441ff1b7811e2571c03dc02b4bcdcf8b61ebbfd131db",
+    "version": "2.7"
+  },
+  "contract_name": "ecobiome-semantic-relation-type-contract",
+  "contract_version": "2.8",
+  "counts": {
+    "constrained_existing_v2_7": 18,
+    "constrained_reviewed_singleton_v2_8": 3,
+    "relations_total": 63,
+    "unresolved_blocked": 42
+  },
+  "evidence": {
+    "automatic_scientific_acceptance": false,
+    "matrix_audit_zip_sha256": "687bd3b49559e8bdb4c8d5b947364929b7e046a63f9ed2f403947b24f6786528",
+    "singleton_review_zip_sha256": "99cc4dd9c8e3fa0c2ec4de07a0703dbae4ba30839116482835e9a848a464f281"
+  },
+  "policy": {
+    "empty_allowed_list_means": "known_relation_but_semantic_type_contract_unresolved_and_blocked",
+    "every_relation_has_explicit_semantic_types_allowed": true,
+    "provider_replay_required_after_local_integration": true,
+    "unresolved_relations_fail_closed": true
+  },
+  "relations": {
+    "accelerated_vs": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "adversely_affects": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "affected_gene_expression_in": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "associated_with": {
+      "semantic_types_allowed": [
+        "gene_function_association"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "caused": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "caused_decrease": {
+      "semantic_types_allowed": [
+        "biological_effect"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "co_occurred_in_context": {
+      "semantic_types_allowed": [
+        "temporal_association"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "co_occurred_with": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "could_potentially_affect": {
+      "semantic_types_allowed": [
+        "causal_inference"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "could_produce_state": {
+      "semantic_types_allowed": [
+        "causal_inference"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "decreased": {
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ],
+      "state": "constrained_reviewed_singleton_v2_8"
+    },
+    "decreased_to_near_zero": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "decreased_vs": {
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "derived_from_arithmetic": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "does_not_live_in": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "does_not_occur_in": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "does_not_originate_from": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "does_not_tolerate": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "easy_to_keep": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "effective_against": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "enhanced_during_vs": {
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "evaluative_conclusion": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "fed_at_rate": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "fed_with_frequency": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "forbidden_join": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "greater_variability_vs": {
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "had_level": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "had_response_strength": {
+      "semantic_types_allowed": [
+        "severity_observation"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "higher_peak_vs": {
+      "semantic_types_allowed": [
+        "measurement_peak"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "increased_gradually": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "increased_rapidly": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "increased_vs": {
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "intended_to_elucidate": {
+      "semantic_types_allowed": [
+        "study_purpose"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "investigated_effects_on": {
+      "semantic_types_allowed": [
+        "study_purpose"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "is_common_risk_factor": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "is_not_robust": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "is_robust": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "lasted": {
+      "semantic_types_allowed": [
+        "experiment_duration"
+      ],
+      "state": "constrained_reviewed_singleton_v2_8"
+    },
+    "lives_in": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "maintained_at": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "more_pronounced_at": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "not_easy_to_keep": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "not_effective_against": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "not_well_understood": {
+      "semantic_types_allowed": [
+        "knowledge_gap"
+      ],
+      "state": "constrained_reviewed_singleton_v2_8"
+    },
+    "occurs_in": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "originates_from": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "peaked_on_day": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "poses_significant_threat_to": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "primarily_associated_with": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "prone_to": {
+      "semantic_types_allowed": [
+        "risk_factor"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "purpose_not_result": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "relative_abundance_decreased": {
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "relative_abundance_increased": {
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "remained_low_initially": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "sampled_on_day": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "shifted_toward": {
+      "semantic_types_allowed": [
+        "biological_effect"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "significant_change_vs": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "studied": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "supports_mechanistic_interpretation": {
+      "semantic_types_allowed": [
+        "causal_inference"
+      ],
+      "state": "constrained_existing_v2_7"
+    },
+    "tolerates": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "used_same_temperatures_as": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "used_system": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    },
+    "without_accumulation": {
+      "semantic_types_allowed": [],
+      "state": "unresolved_blocked"
+    }
+  },
+  "status": "LOCAL_CANDIDATE_REVIEWED_NOT_YET_PROVIDER_REPLAYED"
+}

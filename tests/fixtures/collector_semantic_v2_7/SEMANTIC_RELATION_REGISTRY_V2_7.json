@@ -1,0 +1,1033 @@
+{
+  "argument_role_semantics": {
+    "analyte": {
+      "description": "Measured chemical, biological, or physical analyte.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "measured_analyte_or_quantity"
+    },
+    "cause": {
+      "description": "Explicitly stated causal driver or factor.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "causal_driver_or_factor"
+    },
+    "comparator": {
+      "description": "Reference condition, group, or entity for comparison.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "comparison_reference"
+    },
+    "comparator_temperature_c": {
+      "description": "Comparator temperature in degrees Celsius.",
+      "grounding_class": "exact_numeric_source_grounded",
+      "semantic_domain": "temperature_celsius"
+    },
+    "condition": {
+      "description": "Condition, treatment, or state under comparison.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "condition_or_treatment"
+    },
+    "context": {
+      "description": "Context in which an observation, association, or change occurs; not interchangeable with a specialized domain role such as temperature_scope.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "environmental_temporal_or_experimental_context"
+    },
+    "day": {
+      "description": "Explicit day index.",
+      "grounding_class": "exact_numeric_source_grounded",
+      "semantic_domain": "day_index"
+    },
+    "driver_temperature_c": {
+      "description": "Driver temperature in degrees Celsius.",
+      "grounding_class": "exact_numeric_source_grounded",
+      "semantic_domain": "temperature_celsius"
+    },
+    "entity_a": {
+      "description": "First endpoint of a non-directional association.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "association_endpoint"
+    },
+    "entity_b": {
+      "description": "Second endpoint of a non-directional association.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "association_endpoint"
+    },
+    "event_a": {
+      "description": "First event or change in a relation.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "event_or_change"
+    },
+    "event_b": {
+      "description": "Second event or change in a relation.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "event_or_change"
+    },
+    "experiment": {
+      "description": "Experiment, protocol, or experimental design.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "experiment_or_protocol"
+    },
+    "exposure": {
+      "description": "Exposure, intervention, treatment, or stressor.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "exposure_intervention_or_stressor"
+    },
+    "factor": {
+      "description": "Factor or driver explicitly named in the source.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "factor_or_driver"
+    },
+    "frequency": {
+      "description": "Frequency or occurrence descriptor.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "frequency_descriptor"
+    },
+    "gene_set": {
+      "description": "Gene, gene family, or gene set.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "gene_or_gene_set"
+    },
+    "habitat": {
+      "description": "Habitat or ecosystem.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "habitat_or_ecosystem"
+    },
+    "impact_scope": {
+      "description": "Scope or extent of an impact.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "impact_scope"
+    },
+    "label": {
+      "description": "Explicit source label or category.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "source_label_or_category"
+    },
+    "level": {
+      "description": "Explicit level or strength descriptor.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "qualitative_or_quantitative_level"
+    },
+    "life_stage": {
+      "description": "Organism life stage; must not be used for communities.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "organism_life_stage"
+    },
+    "location": {
+      "description": "Geographic or experimental location.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "location"
+    },
+    "mechanism": {
+      "description": "Mechanistic pathway or explanatory mechanism explicitly proposed or supported by the source.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "proposed_or_interpreted_mechanism"
+    },
+    "mediator": {
+      "description": "Intermediate response, entity, or process through which a modal effect may occur.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "intermediate_entity_process_or_response"
+    },
+    "outcome": {
+      "description": "Outcome, effect, or response target.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "outcome_or_effect_target"
+    },
+    "pathway": {
+      "description": "Biological, biochemical, or chemical pathway.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "biological_or_chemical_pathway"
+    },
+    "process": {
+      "description": "Biological, ecological, chemical, or physical process.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "process"
+    },
+    "reference": {
+      "description": "Reference or baseline.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "reference_or_baseline"
+    },
+    "response": {
+      "description": "Observed or discussed response whose qualitative strength is being characterized.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "response_phenomenon"
+    },
+    "species": {
+      "description": "Species identity. Community, guild, phylum, or other non-species groups are invalid for this role.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "species_identity"
+    },
+    "state": {
+      "description": "Qualitative state explicitly attributed or modally attributed to a subject.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "qualitative_state"
+    },
+    "subject": {
+      "description": "Entity, population, pool, system, or other subject whose state or trajectory is being described.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "entity_or_system_being_characterized"
+    },
+    "system": {
+      "description": "Experimental, ecological, or engineered system.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "experimental_or_ecological_system"
+    },
+    "target": {
+      "description": "Target entity, process, or phenomenon.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "target_entity_or_process"
+    },
+    "target_state": {
+      "description": "State, strategy, or condition toward which a subject shifts.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "destination_state_or_strategy"
+    },
+    "taxon": {
+      "description": "Taxonomic group at any explicitly stated rank; unlike species, this role does not imply species-level identity.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "taxonomic_group"
+    },
+    "temperature_c": {
+      "description": "Temperature value in degrees Celsius.",
+      "grounding_class": "exact_numeric_source_grounded",
+      "semantic_domain": "temperature_celsius"
+    },
+    "temperature_scope": {
+      "description": "Temperature condition or temperature set only. Non-temperature environmental, temporal, chemical, or treatment contexts are not valid values.",
+      "grounding_class": "typed_open_text_source_grounded",
+      "semantic_domain": "temperature_condition_or_temperature_set"
+    },
+    "temporal_scope": {
+      "description": "Temporal scope over which variability or another comparison is described.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "temporal_scope_or_variability_window"
+    },
+    "tissue": {
+      "description": "Biological tissue.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "biological_tissue"
+    },
+    "topic": {
+      "description": "Topic or concept discussed in the source.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "topic_or_concept"
+    },
+    "unit": {
+      "description": "Controlled measurement or time unit.",
+      "grounding_class": "controlled_literal_source_grounded",
+      "semantic_domain": "controlled_measurement_or_time_unit"
+    },
+    "value": {
+      "description": "Exact numeric value grounded to the same source Claim.",
+      "grounding_class": "exact_numeric_source_grounded",
+      "semantic_domain": "numeric_value"
+    },
+    "variable": {
+      "description": "Measured or explicitly described variable.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "measurable_or_described_variable"
+    }
+  },
+  "argument_roles": {
+    "analyte": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "cause": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "comparator": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "comparator_temperature_c": {
+      "type": "number"
+    },
+    "condition": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "context": {
+      "description": "Context in which an observation, association, or change occurs; not interchangeable with a specialized domain role such as temperature_scope.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "environmental_temporal_or_experimental_context",
+      "type": "string"
+    },
+    "day": {
+      "type": "integer"
+    },
+    "driver_temperature_c": {
+      "type": "number"
+    },
+    "entity_a": {
+      "description": "First endpoint of a non-directional association.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "association_endpoint",
+      "type": "string"
+    },
+    "entity_b": {
+      "description": "Second endpoint of a non-directional association.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "association_endpoint",
+      "type": "string"
+    },
+    "event_a": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_b": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "experiment": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "exposure": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "factor": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "frequency": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "gene_set": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "habitat": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "impact_scope": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "label": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "level": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "life_stage": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "location": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "mechanism": {
+      "description": "Mechanistic pathway or explanatory mechanism explicitly proposed or supported by the source.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "proposed_or_interpreted_mechanism",
+      "type": "string"
+    },
+    "mediator": {
+      "description": "Intermediate response, entity, or process through which a modal effect may occur.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "intermediate_entity_process_or_response",
+      "type": "string"
+    },
+    "outcome": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "pathway": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "process": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "reference": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "response": {
+      "description": "Observed or discussed response whose qualitative strength is being characterized.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "response_phenomenon",
+      "type": "string"
+    },
+    "species": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "state": {
+      "description": "Qualitative state explicitly attributed or modally attributed to a subject.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "qualitative_state",
+      "type": "string"
+    },
+    "subject": {
+      "description": "Entity, population, pool, system, or other subject whose state or trajectory is being described.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "entity_or_system_being_characterized",
+      "type": "string"
+    },
+    "system": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "target": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "target_state": {
+      "description": "State, strategy, or condition toward which a subject shifts.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "destination_state_or_strategy",
+      "type": "string"
+    },
+    "taxon": {
+      "description": "Taxonomic group at any explicitly stated rank; unlike species, this role does not imply species-level identity.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "taxonomic_group",
+      "type": "string"
+    },
+    "temperature_c": {
+      "type": "number"
+    },
+    "temperature_scope": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "temporal_scope": {
+      "description": "Temporal scope over which variability or another comparison is described.",
+      "grounding_class": "open_text_source_grounded",
+      "minLength": 1,
+      "semantic_domain": "temporal_scope_or_variability_window",
+      "type": "string"
+    },
+    "tissue": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "topic": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unit": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "value": {
+      "type": "number"
+    },
+    "variable": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "compatibility": {
+    "breaking_signature_changes": 0,
+    "v2_4_argument_scalar_types_preserved": true,
+    "v2_4_relations_preserved_byte_semantics": true
+  },
+  "design_context": {
+    "authored_after_fixture_3": true,
+    "fixture_3_role": "regression_and_registry_debt_only",
+    "fixture_4_required_for_next_generalization_claim": true,
+    "fixture_4_used": false,
+    "generalization_claim": false,
+    "legacy_epistemic_coverage_policy_sha256": "801615c06ac5ce2f40a7938033c89d0fbb139f2483c17996d3a9dc127f1d389b",
+    "new_generalization_claim": false,
+    "v2_7_addition": "full_epistemic_class_coverage_for_legacy_relations"
+  },
+  "new_argument_roles": [
+    "context",
+    "entity_a",
+    "entity_b",
+    "mechanism",
+    "mediator",
+    "response",
+    "state",
+    "subject",
+    "target_state",
+    "taxon",
+    "temporal_scope"
+  ],
+  "new_relations": [
+    "associated_with",
+    "caused_decrease",
+    "co_occurred_in_context",
+    "could_potentially_affect",
+    "could_produce_state",
+    "decreased_vs",
+    "enhanced_during_vs",
+    "greater_variability_vs",
+    "had_response_strength",
+    "higher_peak_vs",
+    "increased_vs",
+    "intended_to_elucidate",
+    "investigated_effects_on",
+    "prone_to",
+    "relative_abundance_decreased",
+    "relative_abundance_increased",
+    "shifted_toward",
+    "supports_mechanistic_interpretation"
+  ],
+  "principles": [
+    "Relation identifiers and argument-role signatures are versioned infrastructure.",
+    "Categorical argument values are source-derived strings, not per-source enums.",
+    "Numeric values are copied from the same source Claim.",
+    "Exactly the declared argument keys are permitted for each relation.",
+    "No cross-Claim value resolution is allowed.",
+    "Registry extension must be reviewed before exposure to a new blind benchmark Golden.",
+    "Existing V2.4 relation signatures are not mutated; new generic relations are added when an old signature is domain-specific.",
+    "Every argument role has a machine-readable semantic domain and grounding class.",
+    "Study-purpose relations cannot be interpreted as biological results.",
+    "Association-only relations cannot be upgraded to causality.",
+    "Modal and interpretive epistemic classes must be preserved during evaluation.",
+    "Generic increase/decrease relations do not imply gradual, rapid, or other kinetic rates."
+  ],
+  "registry_version": "2.7-candidate",
+  "relations": {
+    "accelerated_vs": {
+      "argument_keys": [
+        "driver_temperature_c",
+        "comparator_temperature_c",
+        "outcome"
+      ],
+      "epistemic_class": "comparative_observation"
+    },
+    "adversely_affects": {
+      "argument_keys": [
+        "cause",
+        "target"
+      ],
+      "epistemic_class": "explicit_causal_result"
+    },
+    "affected_gene_expression_in": {
+      "argument_keys": [
+        "exposure",
+        "pathway"
+      ],
+      "epistemic_class": "explicit_causal_result"
+    },
+    "associated_with": {
+      "argument_keys": [
+        "entity_a",
+        "entity_b"
+      ],
+      "description": "Two source-grounded entities were associated. No causal direction is implied.",
+      "epistemic_class": "association_only",
+      "semantic_types_allowed": [
+        "gene_function_association"
+      ]
+    },
+    "caused": {
+      "argument_keys": [
+        "exposure",
+        "outcome",
+        "tissue"
+      ],
+      "epistemic_class": "explicit_causal_result"
+    },
+    "caused_decrease": {
+      "argument_keys": [
+        "exposure",
+        "variable"
+      ],
+      "description": "An exposure or event explicitly resulted in a decrease of a variable. No rate or kinetic shape is implied.",
+      "epistemic_class": "explicit_causal_result",
+      "semantic_types_allowed": [
+        "biological_effect"
+      ]
+    },
+    "co_occurred_in_context": {
+      "argument_keys": [
+        "event_a",
+        "event_b",
+        "context"
+      ],
+      "description": "Two events or changes co-occurred in a stated context. This does not assert that either caused the other.",
+      "epistemic_class": "association_only",
+      "semantic_types_allowed": [
+        "temporal_association"
+      ]
+    },
+    "co_occurred_with": {
+      "argument_keys": [
+        "event_a",
+        "event_b",
+        "temperature_scope"
+      ],
+      "epistemic_class": "association_only"
+    },
+    "could_potentially_affect": {
+      "argument_keys": [
+        "cause",
+        "mediator",
+        "target"
+      ],
+      "description": "A cause or driver could potentially affect a target through a stated mediator. The modality must be preserved.",
+      "epistemic_class": "modal_possibility",
+      "semantic_types_allowed": [
+        "causal_inference"
+      ]
+    },
+    "could_produce_state": {
+      "argument_keys": [
+        "subject",
+        "state"
+      ],
+      "description": "The source states that a subject could result in, become, or exhibit a qualitative state; possibility is preserved.",
+      "epistemic_class": "modal_possibility",
+      "semantic_types_allowed": [
+        "causal_inference"
+      ]
+    },
+    "decreased": {
+      "argument_keys": [
+        "analyte",
+        "temperature_scope"
+      ],
+      "epistemic_class": "observational"
+    },
+    "decreased_to_near_zero": {
+      "argument_keys": [
+        "analyte"
+      ],
+      "epistemic_class": "observational"
+    },
+    "decreased_vs": {
+      "argument_keys": [
+        "condition",
+        "comparator",
+        "variable"
+      ],
+      "description": "A variable was lower or decreased under one condition relative to an explicit comparator, without implying rate.",
+      "epistemic_class": "comparative_observation",
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ]
+    },
+    "derived_from_arithmetic": {
+      "argument_keys": [],
+      "epistemic_class": "meta_constraint_non_fact"
+    },
+    "does_not_live_in": {
+      "argument_keys": [
+        "habitat"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "does_not_occur_in": {
+      "argument_keys": [
+        "location"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "does_not_originate_from": {
+      "argument_keys": [
+        "location"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "does_not_tolerate": {
+      "argument_keys": [
+        "condition"
+      ],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "easy_to_keep": {
+      "argument_keys": [],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "effective_against": {
+      "argument_keys": [
+        "target"
+      ],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "enhanced_during_vs": {
+      "argument_keys": [
+        "condition",
+        "comparator",
+        "variable",
+        "context"
+      ],
+      "description": "A variable or process was explicitly enhanced in a stated context under one condition relative to a comparator.",
+      "epistemic_class": "comparative_observation",
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ]
+    },
+    "evaluative_conclusion": {
+      "argument_keys": [],
+      "epistemic_class": "meta_constraint_non_fact"
+    },
+    "fed_at_rate": {
+      "argument_keys": [
+        "value",
+        "unit"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "fed_with_frequency": {
+      "argument_keys": [
+        "frequency"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "forbidden_join": {
+      "argument_keys": [],
+      "epistemic_class": "meta_constraint_non_fact"
+    },
+    "greater_variability_vs": {
+      "argument_keys": [
+        "condition",
+        "comparator",
+        "variable",
+        "temporal_scope"
+      ],
+      "description": "A variable showed greater variability over a stated temporal scope under one condition relative to a comparator.",
+      "epistemic_class": "comparative_observation",
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ]
+    },
+    "had_level": {
+      "argument_keys": [
+        "label",
+        "day",
+        "analyte",
+        "level"
+      ],
+      "epistemic_class": "observational"
+    },
+    "had_response_strength": {
+      "argument_keys": [
+        "response",
+        "exposure",
+        "level"
+      ],
+      "description": "A response to an exposure was explicitly characterized with a qualitative strength or severity level.",
+      "epistemic_class": "observational",
+      "semantic_types_allowed": [
+        "severity_observation"
+      ]
+    },
+    "higher_peak_vs": {
+      "argument_keys": [
+        "condition",
+        "comparator",
+        "variable"
+      ],
+      "description": "Peak value or peak activity of a variable was higher under one condition relative to a comparator; no statement about the mean is implied.",
+      "epistemic_class": "comparative_observation",
+      "semantic_types_allowed": [
+        "measurement_peak"
+      ]
+    },
+    "increased_gradually": {
+      "argument_keys": [
+        "analyte"
+      ],
+      "epistemic_class": "observational"
+    },
+    "increased_rapidly": {
+      "argument_keys": [
+        "analyte",
+        "temperature_scope"
+      ],
+      "epistemic_class": "observational"
+    },
+    "increased_vs": {
+      "argument_keys": [
+        "condition",
+        "comparator",
+        "variable"
+      ],
+      "description": "A variable was greater or increased under one condition relative to an explicit comparator, without implying rate.",
+      "epistemic_class": "comparative_observation",
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ]
+    },
+    "intended_to_elucidate": {
+      "argument_keys": [
+        "target"
+      ],
+      "description": "A method, measurement set, or study component was explicitly used with the purpose of elucidating a target phenomenon.",
+      "epistemic_class": "study_purpose_non_result",
+      "semantic_types_allowed": [
+        "study_purpose"
+      ]
+    },
+    "investigated_effects_on": {
+      "argument_keys": [
+        "exposure",
+        "outcome"
+      ],
+      "description": "The study investigated the effects of an exposure, intervention, or driver on an outcome without asserting that the effect occurred.",
+      "epistemic_class": "study_purpose_non_result",
+      "semantic_types_allowed": [
+        "study_purpose"
+      ]
+    },
+    "is_common_risk_factor": {
+      "argument_keys": [
+        "factor"
+      ],
+      "epistemic_class": "dispositional_risk"
+    },
+    "is_not_robust": {
+      "argument_keys": [],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "is_robust": {
+      "argument_keys": [],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "lasted": {
+      "argument_keys": [
+        "value",
+        "unit"
+      ],
+      "epistemic_class": "study_context_non_result"
+    },
+    "lives_in": {
+      "argument_keys": [
+        "habitat"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "maintained_at": {
+      "argument_keys": [
+        "variable",
+        "value",
+        "unit"
+      ],
+      "epistemic_class": "study_context_non_result"
+    },
+    "more_pronounced_at": {
+      "argument_keys": [
+        "impact_scope",
+        "temperature_c"
+      ],
+      "epistemic_class": "comparative_observation"
+    },
+    "not_easy_to_keep": {
+      "argument_keys": [],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "not_effective_against": {
+      "argument_keys": [
+        "target"
+      ],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "not_well_understood": {
+      "argument_keys": [
+        "topic"
+      ],
+      "epistemic_class": "knowledge_state"
+    },
+    "occurs_in": {
+      "argument_keys": [
+        "location"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "originates_from": {
+      "argument_keys": [
+        "location"
+      ],
+      "epistemic_class": "assertive_fact"
+    },
+    "peaked_on_day": {
+      "argument_keys": [
+        "analyte",
+        "day",
+        "temperature_c"
+      ],
+      "epistemic_class": "observational"
+    },
+    "poses_significant_threat_to": {
+      "argument_keys": [
+        "cause",
+        "target"
+      ],
+      "epistemic_class": "dispositional_risk"
+    },
+    "primarily_associated_with": {
+      "argument_keys": [
+        "gene_set",
+        "process"
+      ],
+      "epistemic_class": "association_only"
+    },
+    "prone_to": {
+      "argument_keys": [
+        "subject",
+        "outcome"
+      ],
+      "description": "A subject is explicitly described as prone or susceptible to an outcome; occurrence is not asserted as observed.",
+      "epistemic_class": "dispositional_risk",
+      "semantic_types_allowed": [
+        "risk_factor"
+      ]
+    },
+    "purpose_not_result": {
+      "argument_keys": [],
+      "epistemic_class": "meta_constraint_non_fact"
+    },
+    "relative_abundance_decreased": {
+      "argument_keys": [
+        "taxon",
+        "context"
+      ],
+      "description": "Relative abundance of a taxon decreased in the stated context. No causal claim and no kinetic rate are implied.",
+      "epistemic_class": "observational",
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ]
+    },
+    "relative_abundance_increased": {
+      "argument_keys": [
+        "taxon",
+        "context"
+      ],
+      "description": "Relative abundance of a taxon increased in the stated context. No causal claim and no kinetic rate are implied.",
+      "epistemic_class": "observational",
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ]
+    },
+    "remained_low_initially": {
+      "argument_keys": [
+        "analyte"
+      ],
+      "epistemic_class": "observational"
+    },
+    "sampled_on_day": {
+      "argument_keys": [
+        "day"
+      ],
+      "epistemic_class": "study_context_non_result"
+    },
+    "shifted_toward": {
+      "argument_keys": [
+        "subject",
+        "condition",
+        "target_state"
+      ],
+      "description": "A subject was explicitly described as shifting toward a state or strategy under a stated condition.",
+      "epistemic_class": "observational_or_interpretive_result",
+      "semantic_types_allowed": [
+        "biological_effect"
+      ]
+    },
+    "significant_change_vs": {
+      "argument_keys": [
+        "tissue",
+        "condition",
+        "comparator"
+      ],
+      "epistemic_class": "comparative_observation"
+    },
+    "studied": {
+      "argument_keys": [
+        "life_stage",
+        "species"
+      ],
+      "epistemic_class": "study_context_non_result"
+    },
+    "supports_mechanistic_interpretation": {
+      "argument_keys": [
+        "cause",
+        "mechanism",
+        "outcome"
+      ],
+      "description": "Evidence supports an explicitly stated mechanistic interpretation linking a cause, proposed mechanism, and outcome. This is weaker than a directly established causal mechanism.",
+      "epistemic_class": "interpretive_support",
+      "semantic_types_allowed": [
+        "causal_inference"
+      ]
+    },
+    "tolerates": {
+      "argument_keys": [
+        "condition"
+      ],
+      "epistemic_class": "capacity_or_trait"
+    },
+    "used_same_temperatures_as": {
+      "argument_keys": [
+        "experiment",
+        "reference"
+      ],
+      "epistemic_class": "study_context_non_result"
+    },
+    "used_system": {
+      "argument_keys": [
+        "system"
+      ],
+      "epistemic_class": "study_context_non_result"
+    },
+    "without_accumulation": {
+      "argument_keys": [
+        "experiment",
+        "analyte"
+      ],
+      "epistemic_class": "observational"
+    }
+  },
+  "semantic_types": [
+    "absence_condition",
+    "application_claim",
+    "biological_effect",
+    "causal_inference",
+    "combined_effect",
+    "comparative_effect",
+    "cross_claim_resolution",
+    "derived_comparison",
+    "experiment_duration",
+    "experimental_condition",
+    "feeding_regimen",
+    "gene_expression_change",
+    "gene_function_association",
+    "geographic_distribution",
+    "geographic_origin",
+    "habitat",
+    "health_effect",
+    "husbandry",
+    "industry_impact",
+    "knowledge_gap",
+    "measurement_peak",
+    "measurement_trend",
+    "mosquito_control",
+    "ph_tolerance",
+    "risk_factor",
+    "robustness",
+    "sampling_event",
+    "sampling_state",
+    "severity_observation",
+    "study_context",
+    "study_purpose",
+    "study_subject",
+    "temperature_tolerance",
+    "temporal_association",
+    "volume_tolerance"
+  ],
+  "status": "LOCAL_INTEGRATION_CANDIDATE",
+  "supersedes_registry_version": "2.6-candidate"
+}
