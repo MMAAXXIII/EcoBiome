@@ -24,12 +24,15 @@ class PersistenceConfig:
     synchronous: str = "FULL"
     foreign_keys_required: bool = True
 
-    def validated(self, repo_root: Path) -> PersistenceConfig:
-        repo=repo_root.resolve()
+    def validated(self, repo_root: Path | None = None) -> PersistenceConfig:
         db=self.database_path.resolve()
         cas=self.artifact_store_root.resolve()
-        if _within(db, repo) or _within(cas, repo):
-            raise PersistenceConfigurationError("DB/CAS must remain outside Git repository")
+        if repo_root is not None:
+            repo=repo_root.resolve()
+            if _within(db, repo) or _within(cas, repo):
+                raise PersistenceConfigurationError(
+                    "DB/CAS must remain outside Git repository"
+                )
         if db == cas or _within(db, cas):
             raise PersistenceConfigurationError("DB path must not alias CAS root")
         if self.journal_mode.upper() != "DELETE" or self.synchronous.upper() != "FULL":

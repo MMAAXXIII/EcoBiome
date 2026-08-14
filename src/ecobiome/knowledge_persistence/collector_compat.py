@@ -1,6 +1,6 @@
-"""OFF-REPO prototype: CollectorStore compatibility facade over Schema V4.
+"""CollectorStore compatibility facade over Schema V4.
 
-This prototype preserves the current CollectorStore public method surface while
+This compatibility facade preserves the current CollectorStore public method surface while
 using exactly one Schema V4 SQLite database plus the validated SHA-256 CAS.
 It does not migrate or adopt legacy CollectorStore databases.
 """
@@ -165,7 +165,7 @@ class CollectorStoreCompatibilityFacade:
         )
         self._last_migration_result: MigrationResult | None = None
 
-    def _repo_root(self) -> Path:
+    def _repo_root(self) -> Path | None:
         explicit = os.environ.get("ECOBIOME_REPO_ROOT", "").strip()
         if explicit:
             root = Path(explicit).expanduser().resolve()
@@ -173,14 +173,11 @@ class CollectorStoreCompatibilityFacade:
                 return root
             raise RuntimeError("ECOBIOME_REPO_ROOT is not an EcoBiome repository")
 
-        candidates = [Path.cwd().resolve(), Path(__file__).resolve()]
-        for candidate in candidates:
-            for parent in (candidate, *candidate.parents):
-                if (parent / "pyproject.toml").is_file() and (parent / ".git").exists():
-                    return parent
-        raise RuntimeError(
-            "EcoBiome repository root is required; set ECOBIOME_REPO_ROOT"
-        )
+        candidate = Path.cwd().resolve()
+        for parent in (candidate, *candidate.parents):
+            if (parent / "pyproject.toml").is_file() and (parent / ".git").exists():
+                return parent
+        return None
 
     def _config(self) -> PersistenceConfig:
         return PersistenceConfig(

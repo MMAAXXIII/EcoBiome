@@ -196,7 +196,11 @@ def validate_schema(conn: sqlite3.Connection) -> None:
     integrity=[row[0] for row in conn.execute("PRAGMA integrity_check").fetchall()]
     if integrity != ["ok"]: raise PersistenceIntegrityError(f"integrity_check failed: {integrity[:20]!r}")
 
-def initialize_database(config: PersistenceConfig, *, repo_root: Path) -> str:
+def initialize_database(
+    config: PersistenceConfig,
+    *,
+    repo_root: Path | None = None,
+) -> str:
     config=config.validated(repo_root); path=config.database_path
     if path.exists():
         conn=_bootstrap_connection(path)

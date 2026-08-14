@@ -41,7 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     init_parser = commands.add_parser(
         "init",
-        help="Create or migrate a Collector SQLite database.",
+        help="Create or validate a fresh-only Collector SQLite database.",
     )
     init_parser.add_argument(
         "--database",
