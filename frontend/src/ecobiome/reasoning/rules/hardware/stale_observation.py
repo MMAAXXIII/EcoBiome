@@ -116,4 +116,3 @@ class StaleObservationRule(ScientificRule):
                 source_rule=self.identifier,
             ),
         )
-

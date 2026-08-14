@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useMedia, useWaterBodies } from '@/lib/hooks';
-import { Images, ArrowLeft, X, Calendar, Droplets } from 'lucide-react';
+import { Images, X, Calendar, Droplets } from 'lucide-react';
 import type { MediaItem } from '@/lib/types';
 
 export function MediaView() {

@@ -1,0 +1,7 @@
+id: physics.temperature_fluctuation
+name: Temperature Fluctuation
+description: >
+  Variation of temperature over a defined period of time.
+unit: K
+display_unit: °C
+category: physics

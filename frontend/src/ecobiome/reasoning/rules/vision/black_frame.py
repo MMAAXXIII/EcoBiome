@@ -191,4 +191,3 @@ class BlackFrameRule(ScientificRule):
             return None
 
         return luminance
-

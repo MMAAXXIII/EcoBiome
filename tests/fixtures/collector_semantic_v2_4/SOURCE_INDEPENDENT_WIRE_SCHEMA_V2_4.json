@@ -1,0 +1,1321 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "p": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "c": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "e": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "m": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "comparator_temperature_c": {
+                        "type": "number"
+                      },
+                      "driver_temperature_c": {
+                        "type": "number"
+                      },
+                      "outcome": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "driver_temperature_c",
+                      "comparator_temperature_c",
+                      "outcome"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "accelerated_vs"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "cause": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "target": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "cause",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "adversely_affects"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "exposure": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "pathway": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "exposure",
+                      "pathway"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "affected_gene_expression_in"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "exposure": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "outcome": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "tissue": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "exposure",
+                      "outcome",
+                      "tissue"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "caused"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "event_a": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "event_b": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "temperature_scope": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "event_a",
+                      "event_b",
+                      "temperature_scope"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "co_occurred_with"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "temperature_scope": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "analyte",
+                      "temperature_scope"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "decreased"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "analyte"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "decreased_to_near_zero"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "derived_from_arithmetic"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "habitat": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "habitat"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "does_not_live_in"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "location": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "location"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "does_not_occur_in"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "location": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "location"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "does_not_originate_from"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "condition": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "condition"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "does_not_tolerate"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "easy_to_keep"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "target": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "effective_against"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "evaluative_conclusion"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "unit": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "fed_at_rate"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "frequency": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "frequency"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "fed_with_frequency"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "forbidden_join"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "day": {
+                        "type": "integer"
+                      },
+                      "label": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "level": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "label",
+                      "day",
+                      "analyte",
+                      "level"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "had_level"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "analyte"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "increased_gradually"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "temperature_scope": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "analyte",
+                      "temperature_scope"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "increased_rapidly"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "factor": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "factor"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "is_common_risk_factor"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "is_not_robust"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "is_robust"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "unit": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "lasted"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "habitat": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "habitat"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "lives_in"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "unit": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "number"
+                      },
+                      "variable": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "variable",
+                      "value",
+                      "unit"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "maintained_at"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "impact_scope": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "temperature_c": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "impact_scope",
+                      "temperature_c"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "more_pronounced_at"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "not_easy_to_keep"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "target": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "not_effective_against"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "topic": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "topic"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "not_well_understood"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "location": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "location"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "occurs_in"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "location": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "location"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "originates_from"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "day": {
+                        "type": "integer"
+                      },
+                      "temperature_c": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "analyte",
+                      "day",
+                      "temperature_c"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "peaked_on_day"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "cause": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "target": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "cause",
+                      "target"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "poses_significant_threat_to"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "gene_set": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "process": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "gene_set",
+                      "process"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "primarily_associated_with"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {},
+                    "required": [],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "purpose_not_result"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "analyte"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "remained_low_initially"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "day": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "day"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "sampled_on_day"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "comparator": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "condition": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "tissue": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "tissue",
+                      "condition",
+                      "comparator"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "significant_change_vs"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "life_stage": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "species": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "life_stage",
+                      "species"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "studied"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "condition": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "condition"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "tolerates"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "experiment": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "reference": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "experiment",
+                      "reference"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "used_same_temperatures_as"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "system": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "system"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "used_system"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "a": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "analyte": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "experiment": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "experiment",
+                      "analyte"
+                    ],
+                    "type": "object"
+                  },
+                  "r": {
+                    "const": "without_accumulation"
+                  }
+                },
+                "required": [
+                  "r",
+                  "a"
+                ],
+                "type": "object"
+              }
+            ]
+          },
+          "t": {
+            "enum": [
+              "absence_condition",
+              "application_claim",
+              "biological_effect",
+              "causal_inference",
+              "combined_effect",
+              "comparative_effect",
+              "cross_claim_resolution",
+              "derived_comparison",
+              "experiment_duration",
+              "experimental_condition",
+              "feeding_regimen",
+              "gene_expression_change",
+              "gene_function_association",
+              "geographic_distribution",
+              "geographic_origin",
+              "habitat",
+              "health_effect",
+              "husbandry",
+              "industry_impact",
+              "knowledge_gap",
+              "measurement_peak",
+              "measurement_trend",
+              "mosquito_control",
+              "ph_tolerance",
+              "risk_factor",
+              "robustness",
+              "sampling_event",
+              "sampling_state",
+              "severity_observation",
+              "study_context",
+              "study_purpose",
+              "study_subject",
+              "temperature_tolerance",
+              "temporal_association",
+              "volume_tolerance"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "c",
+          "t",
+          "e",
+          "m"
+        ],
+        "type": "object"
+      },
+      "maxItems": 100,
+      "type": "array"
+    }
+  },
+  "required": [
+    "p"
+  ],
+  "type": "object"
+}

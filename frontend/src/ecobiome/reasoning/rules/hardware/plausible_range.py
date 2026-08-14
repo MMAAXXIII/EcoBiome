@@ -144,5 +144,3 @@ class PlausibleRangeRule(ScientificRule):
             )
 
         return None
-
-

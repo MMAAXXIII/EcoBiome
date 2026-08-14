@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import os
 import tkinter as tk
 from collections.abc import Callable
-import os
 from pathlib import Path
 from typing import Literal
 
@@ -1226,7 +1226,7 @@ class DashboardHeroBanner(tk.Frame):
                 method=Image.Resampling.LANCZOS,
                 centering=(0.5, 0.4),
             )
- 
+
         rgba_image = image.convert(
             "RGBA"
         )
@@ -1239,7 +1239,7 @@ class DashboardHeroBanner(tk.Frame):
             overlay,
             "RGBA",
         )
- 
+
         gradient_width = min(
             width,
             max(
@@ -1248,7 +1248,7 @@ class DashboardHeroBanner(tk.Frame):
             ),
         )
         steps = 64
- 
+
         for step in range(steps):
             start_x = round(
                 gradient_width * step / steps
@@ -1276,7 +1276,7 @@ class DashboardHeroBanner(tk.Frame):
                     alpha,
                 ),
             )
- 
+
         overlay_drawing.ellipse(
             (
                 round(width * 0.34),
@@ -1295,12 +1295,12 @@ class DashboardHeroBanner(tk.Frame):
             ),
             fill=(255, 255, 255, 12),
         )
- 
+
         composited = Image.alpha_composite(
             rgba_image,
             overlay,
         )
- 
+
         vignette_mask = Image.new(
             "L",
             (width, height),

@@ -1,0 +1,91 @@
+{
+  "base_policy": {
+    "canonical_sha256": "e7c566d78ec3eefbd30b9b424f92e35e25430933921f9a57f1c84efff232b6bf",
+    "name": "source-independent-semantic-resolution-numeric-grounding",
+    "version": "1.1"
+  },
+  "evidence": {
+    "contract_closure_audit_zip_sha256": "a5ce057da7b49512bcb186dd88b6ea1377ad51d0e076e7ad8f9df9b04b1dfa48",
+    "singleton_review_zip_sha256": "99cc4dd9c8e3fa0c2ec4de07a0703dbae4ba30839116482835e9a848a464f281"
+  },
+  "new_open_text_source_grounded_roles": [
+    "context",
+    "entity_a",
+    "entity_b",
+    "mechanism",
+    "mediator",
+    "response",
+    "state",
+    "subject",
+    "target_state",
+    "taxon",
+    "temporal_scope"
+  ],
+  "new_role_count": 11,
+  "policy_name": "ecobiome-source-grounding-role-extension",
+  "policy_version": "1.2",
+  "principles": {
+    "canonical_resolution_available": false,
+    "new_roles_are_opaque_source_grounded": true,
+    "new_roles_receive_scientific_credit": false,
+    "source_grounding_is_not_semantic_equivalence": true
+  },
+  "role_specs": {
+    "context": {
+      "description": "Context in which an observation, association, or change occurs; not interchangeable with a specialized domain role such as temperature_scope.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "environmental_temporal_or_experimental_context"
+    },
+    "entity_a": {
+      "description": "First endpoint of a non-directional association.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "association_endpoint"
+    },
+    "entity_b": {
+      "description": "Second endpoint of a non-directional association.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "association_endpoint"
+    },
+    "mechanism": {
+      "description": "Mechanistic pathway or explanatory mechanism explicitly proposed or supported by the source.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "proposed_or_interpreted_mechanism"
+    },
+    "mediator": {
+      "description": "Intermediate response, entity, or process through which a modal effect may occur.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "intermediate_entity_process_or_response"
+    },
+    "response": {
+      "description": "Observed or discussed response whose qualitative strength is being characterized.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "response_phenomenon"
+    },
+    "state": {
+      "description": "Qualitative state explicitly attributed or modally attributed to a subject.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "qualitative_state"
+    },
+    "subject": {
+      "description": "Entity, population, pool, system, or other subject whose state or trajectory is being described.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "entity_or_system_being_characterized"
+    },
+    "target_state": {
+      "description": "State, strategy, or condition toward which a subject shifts.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "destination_state_or_strategy"
+    },
+    "taxon": {
+      "description": "Taxonomic group at any explicitly stated rank; unlike species, this role does not imply species-level identity.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "taxonomic_group"
+    },
+    "temporal_scope": {
+      "description": "Temporal scope over which variability or another comparison is described.",
+      "grounding_class": "open_text_source_grounded",
+      "semantic_domain": "temporal_scope_or_variability_window"
+    }
+  },
+  "status": "LOCAL_CANDIDATE_REVIEWED_NOT_YET_PROVIDER_REPLAYED"
+}

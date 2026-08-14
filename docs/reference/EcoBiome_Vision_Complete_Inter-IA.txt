@@ -1,0 +1,136 @@
+# ===============================================================
+# ECOBIOME — DOCUMENT DE RÉFÉRENCE INTER-IA
+# Vision complète, version courte, version technique
+# ===============================================================
+
+===============================================================
+1. VERSION LONGUE ET DÉTAILLÉE
+===============================================================
+
+EcoBiome est une plateforme scientifique destinée à analyser, simuler et comprendre les écosystèmes aquatiques biomimétiques.
+Elle combine un moteur scientifique Python, une API FastAPI, une interface React, des collecteurs de données, des modules de transcription et une architecture distribuée.
+
+VISION LONG TERME :
+Créer une plateforme capable d’analyser automatiquement des sources, simuler des écosystèmes, mutualiser la puissance de calcul, fonctionner localement, en cloud ou en réseau volontaire, tout en restant légère pour les utilisateurs.
+
+ARCHITECTURE CIBLE :
+- Control Plane : API + Dashboard
+- Data Plane : collecteurs + analyse + transcription
+- Compute Plane : workers CPU/GPU + cloud + NVMe + HDD
+
+PHILOSOPHIE :
+- audits avant action
+- commits atomiques
+- tests obligatoires
+- sécurité robuste
+- pipeline distribué
+- stockage cloud
+- aucune surcharge utilisateur
+
+SUPER-CALCULATEUR LOGICIEL :
+EcoBiome peut distribuer les calculs, utiliser les GPU des utilisateurs, mutualiser les ressources, orchestrer des pipelines lourds, traiter des volumes importants de données et fonctionner en mode batch nocturne.
+
+STOCKAGE :
+- NVMe → calcul
+- HDD → stockage froid
+- Cloud → stockage partagé
+- Réseau volontaire → réserve commune
+
+DIMENSIONNEMENT :
+- Minimum : 8 Go RAM, 4 cœurs
+- Recommandé : 32 Go RAM, 8–16 cœurs, RTX 4070
+- Supercalculateur logiciel : 64 Go RAM, 32 cœurs, 2–8 GPU
+
+OBJECTIFS :
+Un package canonique, API stable, collecteurs robustes, workers ML isolés, pipeline distribué, CI complète, documentation claire, collaboration multi‑IA.
+
+MESSAGE AUX IA :
+Respecter les règles de stabilité, éviter les modifications massives, produire des audits avant action, proposer des migrations sûres, documenter les décisions, ne jamais saturer les machines des utilisateurs.
+
+===============================================================
+2. VERSION COURTE / ONBOARDING RAPIDE
+===============================================================
+
+EcoBiome = plateforme scientifique pour analyser et simuler des écosystèmes aquatiques.
+
+Composants :
+- moteur Python
+- API FastAPI
+- interface React
+- collecteurs de données
+- transcription et analyse
+- architecture distribuée
+
+Vision :
+Plateforme capable d’analyser automatiquement, simuler, mutualiser la puissance de calcul, fonctionner localement, en cloud ou en réseau volontaire.
+
+Architecture :
+- Control Plane
+- Data Plane
+- Compute Plane
+
+Principes :
+- audits
+- commits atomiques
+- tests
+- sécurité
+- pipeline distribué
+- stockage cloud
+
+Objectif final :
+Moteur scientifique distribué, stable, reproductible, collaboratif.
+
+===============================================================
+3. VERSION TECHNIQUE / IA EXPERTES
+===============================================================
+
+ARCHITECTURE TECHNIQUE :
+
+Control Plane :
+- FastAPI (lifespan, create_app)
+- React (Vite, TypeScript, Tailwind)
+- Workspace manifest
+- Orchestration des pipelines
+
+Data Plane :
+- Collecteurs : HTML, YouTube, mesures
+- Transcription : Whisper (worker isolé)
+- NLP : normalisation, extraction, embeddings
+- Artefacts : JSON, audio, caches
+
+Compute Plane :
+- Workers CPU/GPU
+- File de tâches (Redis / RabbitMQ / Ray)
+- NVMe pour calcul intensif
+- HDD pour stockage froid
+- Cloud pour stockage partagé
+- DLQ pour erreurs persistantes
+
+RÈGLES DE STABILITÉ :
+- audit → lecture seule
+- migration → petits lots
+- tests → obligatoires
+- CI → sans réseau externe
+- sécurité → JWT, scrypt, timeouts, erreurs ciblées
+- packaging → un seul ecobiome canonique
+- dépendances lourdes → isolées
+- données locales → hors Git
+
+DIMENSIONNEMENT :
+Worker local : CPU 8–16 cœurs, RAM 32 Go, GPU RTX 4070, NVMe + HDD
+Worker cloud : GPU A100/H100, RAM 64–128 Go, orchestration Kubernetes / Ray
+
+PIPELINE DISTRIBUÉ :
+1. Collecte
+2. Transcription
+3. Analyse
+4. Normalisation
+5. Export cloud
+6. Mise à disposition multi‑utilisateurs
+
+COLLABORATION INTER‑IA :
+Analyser avant d’agir, respecter les règles de stabilité, proposer des migrations sûres, documenter les décisions, éviter les actions destructrices, garantir la reproductibilité, ne jamais saturer les machines des utilisateurs.
+
+===============================================================
+FIN DU DOCUMENT
+===============================================================

@@ -1,0 +1,251 @@
+{
+  "extractor": {
+    "name": "ollama-qwen36-semantic-benchmark",
+    "version": "2.0"
+  },
+  "proposals": [
+    {
+      "evidence_ids": [
+        "ffb65502-1c67-402e-bf8b-a09c5c51e458",
+        "b2e23529-c077-4bf2-ab99-d3f91df6422f"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "geographic_origin",
+      "source_claim_effective_text_sha256": "67ffb191aaa6c1e96e5124667137c9640c17036dc28beb0a89c4337e15274f1b",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "text": "La source indique que ce poisson provient d'Asie, principalement du Japon."
+    },
+    {
+      "evidence_ids": [
+        "0d5a923e-193f-41c5-b7c8-32ff3fc42f44"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "habitat",
+      "source_claim_effective_text_sha256": "67ffb191aaa6c1e96e5124667137c9640c17036dc28beb0a89c4337e15274f1b",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "text": "La source indique que ce poisson vit dans les rizières."
+    },
+    {
+      "evidence_ids": [
+        "0d5a923e-193f-41c5-b7c8-32ff3fc42f44"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "habitat",
+      "source_claim_effective_text_sha256": "67ffb191aaa6c1e96e5124667137c9640c17036dc28beb0a89c4337e15274f1b",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "text": "La source indique que ce poisson vit dans les estuaires de la mer."
+    },
+    {
+      "evidence_ids": [
+        "078067fb-31e4-4a33-ad84-921c876def7d"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "temperature_tolerance",
+      "source_claim_effective_text_sha256": "67ffb191aaa6c1e96e5124667137c9640c17036dc28beb0a89c4337e15274f1b",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "text": "La source affirme que ce poisson résiste au froid."
+    },
+    {
+      "evidence_ids": [
+        "078067fb-31e4-4a33-ad84-921c876def7d"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "temperature_tolerance",
+      "source_claim_effective_text_sha256": "67ffb191aaa6c1e96e5124667137c9640c17036dc28beb0a89c4337e15274f1b",
+      "source_claim_id": "0449acf7-8dba-43c9-8990-fe811b7f4f2a",
+      "text": "La source affirme que ce poisson résiste au chaud."
+    },
+    {
+      "evidence_ids": [
+        "3150cc16-bc54-4222-86d9-413761b2e8d7"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "husbandry",
+      "source_claim_effective_text_sha256": "fba36d6174454434939e4cec6b93c2a74a6f2149a90f4d7f1606f8d98da87d18",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "text": "La source indique que ce poisson est facile à maintenir."
+    },
+    {
+      "evidence_ids": [
+        "3150cc16-bc54-4222-86d9-413761b2e8d7"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "robustness",
+      "source_claim_effective_text_sha256": "fba36d6174454434939e4cec6b93c2a74a6f2149a90f4d7f1606f8d98da87d18",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "text": "La source indique que ce poisson est robuste."
+    },
+    {
+      "evidence_ids": [
+        "25f1bc86-9c5b-4960-8821-70dbd939ee34",
+        "9e4733bf-ac2b-4198-829f-60ba8f7a5025"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "mosquito_control",
+      "source_claim_effective_text_sha256": "fba36d6174454434939e4cec6b93c2a74a6f2149a90f4d7f1606f8d98da87d18",
+      "source_claim_id": "d2e79c78-3921-4a56-9a70-532571a66c84",
+      "text": "La source affirme que ce poisson constitue une lutte redoutable contre les moustiques."
+    },
+    {
+      "evidence_ids": [
+        "236b1fc8-cb3e-4117-90e8-a114d05a6f50"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "geographic_distribution",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson se trouve en Europe."
+    },
+    {
+      "evidence_ids": [
+        "236b1fc8-cb3e-4117-90e8-a114d05a6f50"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "geographic_distribution",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson se trouve au nord de l'Europe."
+    },
+    {
+      "evidence_ids": [
+        "2c62c412-dd5c-4260-b6b9-b30babf518e4"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "geographic_distribution",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson se trouve en France."
+    },
+    {
+      "evidence_ids": [
+        "26ce3679-f3ee-41ee-a137-7fea82ca8745"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "temperature_tolerance",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson craint le chaud."
+    },
+    {
+      "evidence_ids": [
+        "0b20fa14-6a3f-4a1b-9b7a-d7819e5ccf1f"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "temperature_tolerance",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson craint le froid."
+    },
+    {
+      "evidence_ids": [
+        "0b20fa14-6a3f-4a1b-9b7a-d7819e5ccf1f"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "volume_tolerance",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson craint les petits volumes d'eau."
+    },
+    {
+      "evidence_ids": [
+        "be51b52b-efa1-4e29-9835-afb88c7fc637"
+      ],
+      "qualifiers": {
+        "automatic_scientific_acceptance": false,
+        "benchmark_only": true,
+        "method": "structured_output",
+        "model": "qwen3.6:latest",
+        "provider": "ollama"
+      },
+      "semantic_type": "volume_tolerance",
+      "source_claim_effective_text_sha256": "727709f070d9f269a6ac71de7d2f71129add185016ea9ad29a95595d64fd6060",
+      "source_claim_id": "02e357dc-e120-448d-954a-dd2171524d57",
+      "text": "La source indique que ce poisson craint les grands volumes d'eau."
+    }
+  ],
+  "schema_version": 1
+}

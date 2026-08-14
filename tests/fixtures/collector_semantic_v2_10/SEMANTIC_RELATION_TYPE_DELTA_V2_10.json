@@ -1,0 +1,303 @@
+{
+  "automatic_scientific_acceptance": false,
+  "base_contract": "semantic-relation-type-contract-v2.8",
+  "candidate_resolutions": {
+    "accelerated_vs": {
+      "argument_keys": [
+        "driver_temperature_c",
+        "comparator_temperature_c",
+        "outcome"
+      ],
+      "epistemic_class": "comparative_observation",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "comparative_effect"
+      ]
+    },
+    "adversely_affects": {
+      "argument_keys": [
+        "cause",
+        "target"
+      ],
+      "epistemic_class": "explicit_causal_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "health_effect",
+        "knowledge_gap"
+      ]
+    },
+    "affected_gene_expression_in": {
+      "argument_keys": [
+        "exposure",
+        "pathway"
+      ],
+      "epistemic_class": "explicit_causal_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "combined_effect"
+      ]
+    },
+    "caused": {
+      "argument_keys": [
+        "exposure",
+        "outcome",
+        "tissue"
+      ],
+      "epistemic_class": "explicit_causal_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "biological_effect"
+      ]
+    },
+    "co_occurred_with": {
+      "argument_keys": [
+        "event_a",
+        "event_b",
+        "temperature_scope"
+      ],
+      "epistemic_class": "association_only",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "temporal_association"
+      ]
+    },
+    "decreased_to_near_zero": {
+      "argument_keys": [
+        "analyte"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ]
+    },
+    "fed_at_rate": {
+      "argument_keys": [
+        "value",
+        "unit"
+      ],
+      "epistemic_class": "assertive_fact",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "feeding_regimen"
+      ]
+    },
+    "fed_with_frequency": {
+      "argument_keys": [
+        "frequency"
+      ],
+      "epistemic_class": "assertive_fact",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "feeding_regimen"
+      ]
+    },
+    "had_level": {
+      "argument_keys": [
+        "label",
+        "day",
+        "analyte",
+        "level"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "sampling_state"
+      ]
+    },
+    "increased_gradually": {
+      "argument_keys": [
+        "analyte"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ]
+    },
+    "increased_rapidly": {
+      "argument_keys": [
+        "analyte",
+        "temperature_scope"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ]
+    },
+    "is_common_risk_factor": {
+      "argument_keys": [
+        "factor"
+      ],
+      "epistemic_class": "dispositional_risk",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "risk_factor"
+      ]
+    },
+    "maintained_at": {
+      "argument_keys": [
+        "variable",
+        "value",
+        "unit"
+      ],
+      "epistemic_class": "study_context_non_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "experimental_condition"
+      ]
+    },
+    "more_pronounced_at": {
+      "argument_keys": [
+        "impact_scope",
+        "temperature_c"
+      ],
+      "epistemic_class": "comparative_observation",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "severity_observation"
+      ]
+    },
+    "peaked_on_day": {
+      "argument_keys": [
+        "analyte",
+        "day",
+        "temperature_c"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "measurement_peak"
+      ]
+    },
+    "poses_significant_threat_to": {
+      "argument_keys": [
+        "cause",
+        "target"
+      ],
+      "epistemic_class": "dispositional_risk",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "industry_impact",
+        "risk_factor"
+      ]
+    },
+    "primarily_associated_with": {
+      "argument_keys": [
+        "gene_set",
+        "process"
+      ],
+      "epistemic_class": "association_only",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "gene_function_association"
+      ]
+    },
+    "remained_low_initially": {
+      "argument_keys": [
+        "analyte"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "measurement_trend"
+      ]
+    },
+    "sampled_on_day": {
+      "argument_keys": [
+        "day"
+      ],
+      "epistemic_class": "study_context_non_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "sampling_event"
+      ]
+    },
+    "significant_change_vs": {
+      "argument_keys": [
+        "tissue",
+        "condition",
+        "comparator"
+      ],
+      "epistemic_class": "comparative_observation",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "gene_expression_change"
+      ]
+    },
+    "studied": {
+      "argument_keys": [
+        "life_stage",
+        "species"
+      ],
+      "epistemic_class": "study_context_non_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "study_subject"
+      ]
+    },
+    "used_same_temperatures_as": {
+      "argument_keys": [
+        "experiment",
+        "reference"
+      ],
+      "epistemic_class": "study_context_non_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "study_context"
+      ]
+    },
+    "used_system": {
+      "argument_keys": [
+        "system"
+      ],
+      "epistemic_class": "study_context_non_result",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "experimental_condition",
+        "study_context"
+      ]
+    },
+    "without_accumulation": {
+      "argument_keys": [
+        "experiment",
+        "analyte"
+      ],
+      "epistemic_class": "observational",
+      "semantic_type_contract_state": "historical_golden_reviewed_constrained",
+      "semantic_types_allowed": [
+        "absence_condition"
+      ]
+    }
+  },
+  "counts": {
+    "base_resolved": 21,
+    "candidate_newly_resolved": 24,
+    "projected_resolved": 45,
+    "projected_unresolved_blocked": 18,
+    "total_relations": 63
+  },
+  "remain_unresolved_blocked": [
+    "derived_from_arithmetic",
+    "does_not_live_in",
+    "does_not_occur_in",
+    "does_not_originate_from",
+    "does_not_tolerate",
+    "easy_to_keep",
+    "effective_against",
+    "evaluative_conclusion",
+    "forbidden_join",
+    "is_not_robust",
+    "is_robust",
+    "lives_in",
+    "not_easy_to_keep",
+    "not_effective_against",
+    "occurs_in",
+    "originates_from",
+    "purpose_not_result",
+    "tolerates"
+  ],
+  "schema_version": "ecobiome-semantic-relation-type-contract-v2.10-review-candidate-v1",
+  "status": "HUMAN_REVIEWED_CANDIDATE_NOT_INTEGRATED"
+}

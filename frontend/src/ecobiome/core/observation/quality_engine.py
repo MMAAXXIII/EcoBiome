@@ -200,5 +200,3 @@ class ObservationQualityEngine:
             executed_rule_ids=tuple(executed_rule_ids),
             failures=tuple(failures),
         )
-
-

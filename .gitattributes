@@ -1,0 +1,9 @@
+.gitattributes text eol=lf
+.gitignore text eol=lf
+pyproject.toml text eol=lf
+src/ecobiome/cli/main.py text eol=lf
+src/ecobiome/__main__.py text eol=lf
+tests/test_knowledge_acquisition.py text eol=lf
+tests/test_knowledge_acquisition_cli.py text eol=lf
+tests/test_source_encoding.py text eol=lf
+docs/handoffs/PASSATION_ECOBIOME_SPRINT_58A_v1.md text eol=lf

@@ -9,6 +9,7 @@ from enum import StrEnum
 from typing import Any
 
 from PIL import Image, ImageDraw, ImageTk
+
 from ecobiome.ui.desktop.design_tokens import surface_geometry
 
 
