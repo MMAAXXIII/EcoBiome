@@ -1,0 +1,774 @@
+"""Fail-closed projection from V2.11 candidates to scientific assertions V1."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+from typing import Any
+
+from ecobiome.knowledge_acquisition.semantic_candidate_v2_11 import (
+    validate_semantic_candidate_v2_11,
+)
+from ecobiome.knowledge_persistence.contracts import (
+    ClaimEvidenceLinksRow,
+    ClaimReviewEventsRow,
+    SegmentReviewEventsRow,
+    SegmentsRow,
+    SourceClaimsRow,
+    SourceEvidenceRow,
+)
+from ecobiome.knowledge_persistence.serialization import (
+    canonical_assertion_payload,
+    canonical_json_text,
+    canonical_sha256,
+    decimal_value,
+    entity_ref,
+)
+
+PROJECTION_SCHEMA_VERSION = "ecobiome-scientific-assertion-projection-v1"
+PROJECTION_CONTRACT_NAME = "ecobiome-scientific-assertion-projection"
+PROJECTION_CONTRACT_VERSION = "1"
+
+ENTITY_ARGUMENT = "ENTITY_ARGUMENT"
+EXACT_NUMERIC_ARGUMENT = "EXACT_NUMERIC_ARGUMENT"
+CONTROLLED_LITERAL_ARGUMENT = "CONTROLLED_LITERAL_ARGUMENT"
+CONTEXT_ARGUMENT = "CONTEXT_ARGUMENT"
+
+_REVIEWED_MAPPING_STATUSES = frozenset({"exact", "synonym"})
+_REVIEW_CONFIRMED = "reviewed_confirmed"
+_HASH_LENGTH = 64
+
+
+class ScientificAssertionProjectionV1Error(ValueError):
+    """Raised when a candidate cannot cross the fail-closed projection gate."""
+
+
+@dataclass(frozen=True, slots=True)
+class ReviewedEntityArgumentV1:
+    role: str
+    candidate_argument_sha256: str
+    entity_id: str
+    entity_revision: int
+    mapping_status: str
+    mapping_review_status: str
+    reviewed_by: str
+
+
+@dataclass(frozen=True, slots=True)
+class ReviewedContextArgumentV1:
+    role: str
+    candidate_argument_sha256: str
+    canonical_value: str
+    mapping_review_status: str
+    reviewed_by: str
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectionSpecV1:
+    spec_id: str
+    semantic_type: str
+    relation: str
+    assertion_kind: str
+    predicate: str
+    role_classes: tuple[tuple[str, str], ...]
+
+
+_PROJECTION_SPECS = (
+    ProjectionSpecV1(
+        spec_id="maintained_at.measurement.v1",
+        semantic_type="experimental_condition",
+        relation="maintained_at",
+        assertion_kind="measurement",
+        predicate="maintained_at",
+        role_classes=(
+            ("variable", ENTITY_ARGUMENT),
+            ("value", EXACT_NUMERIC_ARGUMENT),
+            ("unit", CONTROLLED_LITERAL_ARGUMENT),
+        ),
+    ),
+)
+
+
+def _sha256_text(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _require_sha256(value: object, label: str) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != _HASH_LENGTH
+        or any(char not in "0123456789abcdef" for char in value)
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            f"{label} must be a lowercase SHA-256"
+        )
+    return value
+
+
+def _require_nonempty_string(value: object, label: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ScientificAssertionProjectionV1Error(
+            f"{label} must be a non-empty string"
+        )
+    return value
+
+
+def _candidate_source(candidate: Mapping[str, Any]) -> Mapping[str, Any]:
+    source = candidate.get("source")
+    if not isinstance(source, Mapping):
+        raise ScientificAssertionProjectionV1Error(
+            "candidate.source must be an object"
+        )
+    return source
+
+
+def _candidate_semantic(candidate: Mapping[str, Any]) -> Mapping[str, Any]:
+    semantic = candidate.get("semantic")
+    if not isinstance(semantic, Mapping):
+        raise ScientificAssertionProjectionV1Error(
+            "candidate.semantic must be an object"
+        )
+    return semantic
+
+
+def _candidate_arguments(
+    candidate: Mapping[str, Any],
+) -> dict[str, Mapping[str, Any]]:
+    semantic = _candidate_semantic(candidate)
+    raw_arguments = semantic.get("arguments")
+    if not isinstance(raw_arguments, list) or not raw_arguments:
+        raise ScientificAssertionProjectionV1Error(
+            "candidate.semantic.arguments must be non-empty"
+        )
+
+    by_role: dict[str, Mapping[str, Any]] = {}
+    for raw_argument in raw_arguments:
+        if not isinstance(raw_argument, Mapping):
+            raise ScientificAssertionProjectionV1Error(
+                "candidate argument must be an object"
+            )
+        role = _require_nonempty_string(
+            raw_argument.get("role"),
+            "candidate argument role",
+        )
+        if role in by_role:
+            raise ScientificAssertionProjectionV1Error(
+                f"duplicate candidate argument role: {role}"
+            )
+        by_role[role] = raw_argument
+    return by_role
+
+
+def candidate_argument_sha256_v1(argument: Mapping[str, Any]) -> str:
+    """Bind a human-reviewed mapping to one exact V2.11 argument."""
+    return canonical_sha256(argument)
+
+
+def _latest_review_event(
+    events: Sequence[ClaimReviewEventsRow],
+) -> ClaimReviewEventsRow:
+    if not events:
+        raise ScientificAssertionProjectionV1Error(
+            "source Claim requires at least one human review event"
+        )
+    return max(events, key=lambda item: (item.reviewed_at, item.id))
+
+
+def _effective_claim_sha256(
+    claim: SourceClaimsRow,
+    events: Sequence[ClaimReviewEventsRow],
+) -> tuple[str, ClaimReviewEventsRow]:
+    if _sha256_text(claim.claim_text) != claim.claim_text_sha256:
+        raise ScientificAssertionProjectionV1Error(
+            "source Claim claim_text_sha256 does not match claim_text"
+        )
+
+    ordered = sorted(events, key=lambda item: (item.reviewed_at, item.id))
+    latest = _latest_review_event(ordered)
+    if latest.claim_id != claim.id:
+        raise ScientificAssertionProjectionV1Error(
+            "latest Claim review belongs to a different Claim"
+        )
+    if latest.decision == "reject":
+        raise ScientificAssertionProjectionV1Error(
+            "latest source Claim review is rejected"
+        )
+    _require_nonempty_string(
+        latest.reviewer,
+        "latest source Claim reviewer",
+    )
+
+    effective_sha = claim.claim_text_sha256
+    for event in ordered:
+        if event.claim_id != claim.id:
+            raise ScientificAssertionProjectionV1Error(
+                "Claim review event belongs to a different Claim"
+            )
+        if event.decision not in {"accept", "correct", "reject"}:
+            raise ScientificAssertionProjectionV1Error(
+                f"invalid Claim review decision: {event.decision!r}"
+            )
+        if event.decision != "correct":
+            continue
+        corrected_text = _require_nonempty_string(
+            event.corrected_text,
+            "corrected Claim text",
+        )
+        corrected_sha = _require_sha256(
+            event.corrected_text_sha256,
+            "corrected Claim text SHA",
+        )
+        if _sha256_text(corrected_text) != corrected_sha:
+            raise ScientificAssertionProjectionV1Error(
+                "corrected Claim SHA does not match corrected text"
+            )
+        effective_sha = corrected_sha
+
+    return effective_sha, latest
+
+
+def _validate_claim_binding(
+    candidate: Mapping[str, Any],
+    claim: SourceClaimsRow,
+    claim_reviews: Sequence[ClaimReviewEventsRow],
+) -> dict[str, str]:
+    source = _candidate_source(candidate)
+    candidate_claim_id = _require_nonempty_string(
+        source.get("source_statement_claim_id"),
+        "candidate source Claim ID",
+    )
+    if candidate_claim_id != claim.id:
+        raise ScientificAssertionProjectionV1Error(
+            "candidate is linked to a different source Claim"
+        )
+    if claim.claim_layer != "atomic":
+        raise ScientificAssertionProjectionV1Error(
+            "scientific projection requires an atomic source Claim"
+        )
+
+    effective_sha, latest_review = _effective_claim_sha256(
+        claim,
+        claim_reviews,
+    )
+    candidate_effective_sha = _require_sha256(
+        source.get("source_claim_effective_text_sha256"),
+        "candidate source Claim effective-text SHA",
+    )
+    if candidate_effective_sha != effective_sha:
+        raise ScientificAssertionProjectionV1Error(
+            "candidate is stale against the reviewed source Claim effective text"
+        )
+
+    return {
+        "claim_id": claim.id,
+        "effective_text_sha256": effective_sha,
+        "latest_review_id": latest_review.id,
+        "latest_review_decision": latest_review.decision,
+        "latest_reviewer": str(latest_review.reviewer),
+    }
+
+
+def _latest_segment_review(
+    events: Sequence[SegmentReviewEventsRow],
+) -> SegmentReviewEventsRow | None:
+    if not events:
+        return None
+    return max(events, key=lambda item: (item.reviewed_at, item.id))
+
+
+def _validate_evidence_binding(
+    candidate: Mapping[str, Any],
+    claim: SourceClaimsRow,
+    claim_evidence_links: Sequence[ClaimEvidenceLinksRow],
+    evidence_rows: Sequence[SourceEvidenceRow],
+    segments: Mapping[str, SegmentsRow],
+    segment_reviews: Mapping[str, Sequence[SegmentReviewEventsRow]],
+) -> dict[str, object]:
+    source = _candidate_source(candidate)
+    raw_ids = source.get("evidence_ids")
+    if (
+        not isinstance(raw_ids, list)
+        or not raw_ids
+        or not all(isinstance(item, str) and item for item in raw_ids)
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            "candidate Evidence IDs must be non-empty strings"
+        )
+    candidate_ids = tuple(raw_ids)
+    if list(candidate_ids) != sorted(set(candidate_ids)):
+        raise ScientificAssertionProjectionV1Error(
+            "candidate Evidence IDs must be sorted and unique"
+        )
+
+    links_by_evidence: dict[str, ClaimEvidenceLinksRow] = {}
+    for link in claim_evidence_links:
+        if link.claim_id != claim.id:
+            continue
+        if link.evidence_id in links_by_evidence:
+            raise ScientificAssertionProjectionV1Error(
+                f"duplicate Claim/Evidence link: {link.evidence_id}"
+            )
+        links_by_evidence[link.evidence_id] = link
+
+    evidence_by_id: dict[str, SourceEvidenceRow] = {}
+    for evidence in evidence_rows:
+        if evidence.id in evidence_by_id:
+            raise ScientificAssertionProjectionV1Error(
+                f"duplicate Evidence row: {evidence.id}"
+            )
+        evidence_by_id[evidence.id] = evidence
+
+    segment_ids: list[str] = []
+    for evidence_id in candidate_ids:
+        candidate_link = links_by_evidence.get(evidence_id)
+        if candidate_link is None:
+            raise ScientificAssertionProjectionV1Error(
+                f"candidate Evidence is not linked to the atomic Claim: {evidence_id}"
+            )
+        if candidate_link.link_role != "supports_source_claim":
+            raise ScientificAssertionProjectionV1Error(
+                "candidate Evidence link has unsupported role: "
+                f"{candidate_link.link_role}"
+            )
+
+        candidate_evidence = evidence_by_id.get(evidence_id)
+        if candidate_evidence is None:
+            raise ScientificAssertionProjectionV1Error(
+                f"candidate Evidence row is missing: {evidence_id}"
+            )
+        segment = segments.get(candidate_evidence.segment_id)
+        if segment is None:
+            raise ScientificAssertionProjectionV1Error(
+                f"Evidence segment is missing: {candidate_evidence.segment_id}"
+            )
+        if segment.review_status == "rejected":
+            raise ScientificAssertionProjectionV1Error(
+                f"Evidence segment is rejected: {segment.id}"
+            )
+
+        reviews = segment_reviews.get(segment.id, ())
+        for review in reviews:
+            if review.segment_id != segment.id:
+                raise ScientificAssertionProjectionV1Error(
+                    "segment review is attached to a different segment"
+                )
+        latest = _latest_segment_review(reviews)
+        if latest is not None and latest.decision == "reject":
+            raise ScientificAssertionProjectionV1Error(
+                f"latest Evidence segment review is rejected: {segment.id}"
+            )
+        segment_ids.append(segment.id)
+
+    return {
+        "evidence_ids": list(candidate_ids),
+        "segment_ids": sorted(set(segment_ids)),
+    }
+
+
+def _find_projection_spec(
+    candidate: Mapping[str, Any],
+) -> ProjectionSpecV1:
+    semantic = _candidate_semantic(candidate)
+    semantic_type = _require_nonempty_string(
+        semantic.get("semantic_type"),
+        "candidate semantic type",
+    )
+    relation = _require_nonempty_string(
+        semantic.get("relation"),
+        "candidate relation",
+    )
+    matches = [
+        spec
+        for spec in _PROJECTION_SPECS
+        if spec.semantic_type == semantic_type and spec.relation == relation
+    ]
+    if len(matches) != 1:
+        raise ScientificAssertionProjectionV1Error(
+            "no exact Scientific Assertion Projection V1 mapping exists for "
+            f"{semantic_type}/{relation}"
+        )
+    return matches[0]
+
+
+def _validate_exact_role_signature(
+    spec: ProjectionSpecV1,
+    arguments: Mapping[str, Mapping[str, Any]],
+) -> None:
+    expected_roles = [role for role, _ in spec.role_classes]
+    if set(arguments) != set(expected_roles):
+        raise ScientificAssertionProjectionV1Error(
+            "projection role signature does not exactly match the candidate"
+        )
+    if len(expected_roles) != len(set(expected_roles)):
+        raise ScientificAssertionProjectionV1Error(
+            "projection spec contains duplicate roles"
+        )
+
+
+def _validate_entity_resolution(
+    role: str,
+    argument: Mapping[str, Any],
+    resolution: ReviewedEntityArgumentV1 | None,
+) -> dict[str, object]:
+    if argument.get("resolution_state") != "grounded_opaque_unresolved":
+        raise ScientificAssertionProjectionV1Error(
+            f"entity argument is not source-grounded for role: {role}"
+        )
+    argument_value = argument.get("value")
+    if (
+        not isinstance(argument_value, Mapping)
+        or argument_value.get("kind") != "source_text"
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            f"entity argument must preserve source text for role: {role}"
+        )
+    if resolution is None:
+        raise ScientificAssertionProjectionV1Error(
+            f"human-reviewed entity mapping is required for role: {role}"
+        )
+    if resolution.role != role:
+        raise ScientificAssertionProjectionV1Error(
+            f"entity mapping role mismatch for: {role}"
+        )
+    expected_argument_sha = candidate_argument_sha256_v1(argument)
+    if resolution.candidate_argument_sha256 != expected_argument_sha:
+        raise ScientificAssertionProjectionV1Error(
+            f"entity mapping is stale for candidate role: {role}"
+        )
+    if resolution.mapping_status not in _REVIEWED_MAPPING_STATUSES:
+        raise ScientificAssertionProjectionV1Error(
+            f"entity mapping is not exact/synonym for role: {role}"
+        )
+    if resolution.mapping_review_status != _REVIEW_CONFIRMED:
+        raise ScientificAssertionProjectionV1Error(
+            f"entity mapping is not human-reviewed for role: {role}"
+        )
+    _require_nonempty_string(
+        resolution.reviewed_by,
+        f"entity mapping reviewer for {role}",
+    )
+    _require_nonempty_string(
+        resolution.entity_id,
+        f"entity ID for {role}",
+    )
+    if (
+        isinstance(resolution.entity_revision, bool)
+        or not isinstance(resolution.entity_revision, int)
+        or resolution.entity_revision < 1
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            f"entity revision must be >= 1 for role: {role}"
+        )
+    return entity_ref(
+        resolution.entity_id,
+        resolution.entity_revision,
+    )
+
+
+def _validate_numeric_argument(
+    role: str,
+    argument: Mapping[str, Any],
+) -> dict[str, str]:
+    if argument.get("resolution_state") != "resolved":
+        raise ScientificAssertionProjectionV1Error(
+            f"numeric grounding is unresolved for role: {role}"
+        )
+    value = argument.get("value")
+    if not isinstance(value, Mapping):
+        raise ScientificAssertionProjectionV1Error(
+            f"numeric value must be typed for role: {role}"
+        )
+    kind = value.get("kind")
+    if kind == "decimal":
+        raw = value.get("value")
+        if not isinstance(raw, str):
+            raise ScientificAssertionProjectionV1Error(
+                f"decimal value must be canonical text for role: {role}"
+            )
+        return decimal_value(raw)
+    if kind == "integer":
+        raw = value.get("value")
+        if isinstance(raw, bool) or not isinstance(raw, int):
+            raise ScientificAssertionProjectionV1Error(
+                f"integer value must be an integer for role: {role}"
+            )
+        return decimal_value(raw)
+    raise ScientificAssertionProjectionV1Error(
+        f"unsupported exact numeric kind for role {role}: {kind!r}"
+    )
+
+
+def _validate_controlled_literal_argument(
+    role: str,
+    argument: Mapping[str, Any],
+) -> str:
+    if argument.get("resolution_state") != "resolved":
+        raise ScientificAssertionProjectionV1Error(
+            f"controlled literal is unresolved for role: {role}"
+        )
+    value = argument.get("value")
+    if not isinstance(value, Mapping):
+        raise ScientificAssertionProjectionV1Error(
+            f"controlled literal must be typed for role: {role}"
+        )
+    if value.get("kind") != "controlled_literal":
+        raise ScientificAssertionProjectionV1Error(
+            f"role is not a controlled literal: {role}"
+        )
+    return _require_nonempty_string(
+        value.get("value"),
+        f"controlled literal value for {role}",
+    )
+
+
+def _validate_context_resolution(
+    role: str,
+    argument: Mapping[str, Any],
+    resolution: ReviewedContextArgumentV1 | None,
+) -> str:
+    if resolution is None:
+        raise ScientificAssertionProjectionV1Error(
+            f"human-reviewed context mapping is required for role: {role}"
+        )
+    if resolution.role != role:
+        raise ScientificAssertionProjectionV1Error(
+            f"context mapping role mismatch for: {role}"
+        )
+    if (
+        resolution.candidate_argument_sha256
+        != candidate_argument_sha256_v1(argument)
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            f"context mapping is stale for candidate role: {role}"
+        )
+    if resolution.mapping_review_status != _REVIEW_CONFIRMED:
+        raise ScientificAssertionProjectionV1Error(
+            f"context mapping is not human-reviewed for role: {role}"
+        )
+    _require_nonempty_string(
+        resolution.reviewed_by,
+        f"context mapping reviewer for {role}",
+    )
+    return _require_nonempty_string(
+        resolution.canonical_value,
+        f"canonical context value for {role}",
+    )
+
+
+def _build_maintained_at_measurement(
+    *,
+    spec: ProjectionSpecV1,
+    candidate: Mapping[str, Any],
+    arguments: Mapping[str, Mapping[str, Any]],
+    entity_resolutions: Mapping[str, ReviewedEntityArgumentV1],
+    context_resolutions: Mapping[str, ReviewedContextArgumentV1],
+) -> tuple[dict[str, Any], str]:
+    if spec.spec_id != "maintained_at.measurement.v1":
+        raise ScientificAssertionProjectionV1Error(
+            f"unsupported reviewed projection spec: {spec.spec_id}"
+        )
+
+    variable = _validate_entity_resolution(
+        "variable",
+        arguments["variable"],
+        entity_resolutions.get("variable"),
+    )
+    amount = _validate_numeric_argument(
+        "value",
+        arguments["value"],
+    )
+    unit = _validate_controlled_literal_argument(
+        "unit",
+        arguments["unit"],
+    )
+    if context_resolutions:
+        raise ScientificAssertionProjectionV1Error(
+            "maintained_at projection accepts no context reconstruction"
+        )
+
+    semantic = _candidate_semantic(candidate)
+    payload = canonical_assertion_payload(
+        assertion_kind=spec.assertion_kind,
+        predicate=spec.predicate,
+        participants=[
+            {
+                "role": "variable",
+                "entity": variable,
+            }
+        ],
+        value={
+            "kind": "measurement",
+            "amount": amount,
+            "unit": unit,
+        },
+        qualifiers={
+            "semantic_type": semantic["semantic_type"],
+        },
+    )
+
+    entity_id = variable["entity_id"]
+    entity_revision = variable["entity_revision"]
+    amount_text = amount["value"]
+    normalized_text = (
+        f'{spec.predicate}('
+        f'variable=entity_ref("{entity_id}",{entity_revision}), '
+        f"value={amount_text}, "
+        f"unit={json.dumps(unit, ensure_ascii=False)}"
+        ")"
+    )
+    return payload, normalized_text
+
+
+def project_scientific_assertion_v1(
+    candidate: Mapping[str, Any],
+    *,
+    source_claim: SourceClaimsRow,
+    claim_reviews: Sequence[ClaimReviewEventsRow],
+    claim_evidence_links: Sequence[ClaimEvidenceLinksRow],
+    evidence_rows: Sequence[SourceEvidenceRow],
+    segments: Mapping[str, SegmentsRow],
+    segment_reviews: Mapping[str, Sequence[SegmentReviewEventsRow]],
+    entity_resolutions: Mapping[str, ReviewedEntityArgumentV1],
+    context_resolutions: Mapping[str, ReviewedContextArgumentV1] | None = None,
+) -> dict[str, Any]:
+    """Project one reviewed V2.11 candidate or fail closed without persistence."""
+    validate_semantic_candidate_v2_11(candidate)
+
+    claim_trace = _validate_claim_binding(
+        candidate,
+        source_claim,
+        claim_reviews,
+    )
+    evidence_trace = _validate_evidence_binding(
+        candidate,
+        source_claim,
+        claim_evidence_links,
+        evidence_rows,
+        segments,
+        segment_reviews,
+    )
+    spec = _find_projection_spec(candidate)
+    arguments = _candidate_arguments(candidate)
+    _validate_exact_role_signature(spec, arguments)
+
+    class_by_role = dict(spec.role_classes)
+    for role, argument in arguments.items():
+        role_class = class_by_role[role]
+        if role_class == ENTITY_ARGUMENT:
+            _validate_entity_resolution(
+                role,
+                argument,
+                entity_resolutions.get(role),
+            )
+        elif role_class == EXACT_NUMERIC_ARGUMENT:
+            _validate_numeric_argument(role, argument)
+        elif role_class == CONTROLLED_LITERAL_ARGUMENT:
+            _validate_controlled_literal_argument(role, argument)
+        elif role_class == CONTEXT_ARGUMENT:
+            _validate_context_resolution(
+                role,
+                argument,
+                (context_resolutions or {}).get(role),
+            )
+        else:
+            raise ScientificAssertionProjectionV1Error(
+                f"unsupported projection role class: {role_class}"
+            )
+
+    unused_entity_roles = set(entity_resolutions) - {
+        role
+        for role, role_class in spec.role_classes
+        if role_class == ENTITY_ARGUMENT
+    }
+    if unused_entity_roles:
+        raise ScientificAssertionProjectionV1Error(
+            "cross-Claim or extra entity reconstruction is forbidden: "
+            f"{sorted(unused_entity_roles)}"
+        )
+
+    supplied_context = context_resolutions or {}
+    unused_context_roles = set(supplied_context) - {
+        role
+        for role, role_class in spec.role_classes
+        if role_class == CONTEXT_ARGUMENT
+    }
+    if unused_context_roles:
+        raise ScientificAssertionProjectionV1Error(
+            "cross-Claim or extra context reconstruction is forbidden: "
+            f"{sorted(unused_context_roles)}"
+        )
+
+    assertion_payload, normalized_text = _build_maintained_at_measurement(
+        spec=spec,
+        candidate=candidate,
+        arguments=arguments,
+        entity_resolutions=entity_resolutions,
+        context_resolutions=supplied_context,
+    )
+    assertion_sha = canonical_sha256(assertion_payload)
+
+    candidate_sha = _require_sha256(
+        candidate.get("canonical_candidate_sha256"),
+        "candidate canonical SHA",
+    )
+    projection_audit = {
+        "projection_spec_id": spec.spec_id,
+        "semantic_candidate_sha256": candidate_sha,
+        "source_claim_id": source_claim.id,
+        "source_claim_effective_text_sha256": claim_trace[
+            "effective_text_sha256"
+        ],
+        "claim_review_id": claim_trace["latest_review_id"],
+        "evidence_ids": evidence_trace["evidence_ids"],
+        "entity_argument_sha256": {
+            role: resolution.candidate_argument_sha256
+            for role, resolution in sorted(entity_resolutions.items())
+        },
+        "context_argument_sha256": {
+            role: resolution.candidate_argument_sha256
+            for role, resolution in sorted(supplied_context.items())
+        },
+        "scientific_assertion_payload_sha256": assertion_sha,
+    }
+
+    result = {
+        "schema_version": PROJECTION_SCHEMA_VERSION,
+        "contract": {
+            "name": PROJECTION_CONTRACT_NAME,
+            "version": PROJECTION_CONTRACT_VERSION,
+            "projection_spec_id": spec.spec_id,
+        },
+        "source": {
+            "semantic_candidate_sha256": candidate_sha,
+            "source_claim_id": source_claim.id,
+            "source_claim_effective_text_sha256": claim_trace[
+                "effective_text_sha256"
+            ],
+            "claim_review_id": claim_trace["latest_review_id"],
+            "claim_review_decision": claim_trace[
+                "latest_review_decision"
+            ],
+            "evidence_ids": evidence_trace["evidence_ids"],
+            "segment_ids": evidence_trace["segment_ids"],
+        },
+        "assertion": {
+            "payload": assertion_payload,
+            "canonical_payload_sha256": assertion_sha,
+            "normalized_text": normalized_text,
+        },
+        "claim_link_proposal": {
+            "claim_id": source_claim.id,
+            "stance": "supports",
+            "support_mode": "unknown",
+            "scope_alignment": "exact",
+            "semantic_alignment": "exact",
+            "requires_persistence_review": True,
+        },
+        "projection_audit_sha256": canonical_sha256(projection_audit),
+        "projection_gate_passed": True,
+        "automatic_persistence": False,
+    }
+    canonical_json_text(result)
+    return result
