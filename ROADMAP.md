@@ -1,154 +1,210 @@
-# EcoBiome — Roadmap de Développement
-Version : 1.2
-Auteur : Maxime
-Dernière mise à jour : 2026-08-04
+# EcoBiome — Roadmap canonique
 
-============================================================
-1. Vision du projet
-============================================================
+**Version :** 2.0
+**Date de révision :** 15 août 2026
+**Statut :** feuille de route de référence ; l'état Git et les tests restent la
+source de vérité sur l'implémentation.
 
-EcoBiome est un système intelligent capable de :
-- collecter des données scientifiques fiables
-- agréger des observations utilisateurs
-- analyser les paramètres écologiques
-- ingérer des données capteurs
-- détecter des tendances
-- prédire des événements biologiques
-- générer des biomes optimisés
-- évoluer automatiquement avec le temps
+## 1. Pourquoi cette révision
 
-Objectif final :
-Créer un observatoire écologique autonome, modulaire, participatif, et scientifiquement crédible.
+La roadmap 1.2 du 4 août 2026 ne reflétait plus le dépôt :
 
-============================================================
-2. Architecture globale
-============================================================
+- le socle Git/CI est largement consolidé ;
+- SQLite a déjà été retenu pour le cœur scientifique local ;
+- la persistence scientifique V4 existe ;
+- le Collector, Claim/Evidence et les reviews existent ;
+- Semantic Candidate V2.11 est intégré ;
+- Scientific Assertion Projection Contract V1 est publié sur `main` ;
+- ses CI post-push sont vertes ;
+- plusieurs concepts initialement décrits comme futures « tables » doivent
+  maintenant être des vues ou produits dérivés de la connaissance canonique.
 
-EcoBiome repose sur :
-- un backend FastAPI
-- un dashboard frontend
-- une base de données scientifique
-- un système de collecte modulaire
-- un agent autonome de veille d’information
-- un collecteur de données utilisateurs
-- un collecteur de données capteurs
-- des modules d’analyse et de cohérence
-- un module IA d’analyse avancée
+Cette roadmap remplace donc l'ancienne progression linéaire par des jalons
+dépendants les uns des autres.
 
-============================================================
-3. Phases du projet
-============================================================
+## 2. North Star
 
-------------------------------------------------------------
-Phase 1 — Fondations techniques (70% terminé)
-------------------------------------------------------------
-1.1 Dépôt Git structuré ?
-1.2 Nettoyage du code ?
-1.3 Ajout du LICENSE ?
-1.4 Ajout du fichier SOURCES.md ?
-1.5 Ajout du fichier COLLECTOR_REFERENCE.md ?
-1.6 Tag v0.1 ?
-1.7 Correction du workflow CI ?
-1.8 Passage du dépôt en privé ?
+Construire un EcoBiome capable de :
 
-------------------------------------------------------------
-Phase 2 — Base de données scientifique EcoBiome
-------------------------------------------------------------
-Tables :
-- Species
-- OptimalParameters
-- StressSignals
-- Sources
-- BiomeCompatibility
-- UserObservation
-- UserEnvironment
-- UserMeasurement
-- UserEvent
-- Trends
-- Conflicts
-- Biomes
-- SensorData
+1. représenter un écosystème réel ;
+2. ingérer observations, capteurs et sources scientifiques sans les confondre ;
+3. transformer les sources en connaissances traçables et revues ;
+4. expliquer les mécanismes plausibles d'un état observé ;
+5. simuler des scénarios avec incertitude ;
+6. proposer des mesures ou interventions justifiées ;
+7. apprendre de plusieurs projets sous gouvernance explicite.
 
-------------------------------------------------------------
-Phase 3 — Collecteurs automatiques (modules)
-------------------------------------------------------------
+Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
-3.1 CollectorCore (module principal)
-3.2 ScientificCollector
-3.3 ProfessionalCollector
-3.4 MediaCollector
-3.5 WebCollector
-3.6 UserDataCollector
-3.7 SensorCollector
+## 3. État global au 15 août 2026
 
-------------------------------------------------------------
-Phase 4 — Modules d’analyse et cohérence
-------------------------------------------------------------
+Canon distant vérifié après Phase B :
+`main@7c17e5d0db8d17d97bf4e6e557d96a7b5349a769`.
 
-4.1 ConflictDetector
-4.2 SourceReliabilityEngine
-4.3 DuplicateResolver
-4.4 TrendAnalyzer
-4.5 EventPredictor
-4.6 BiomeGenerator
-4.7 SpeciesEvolutionTracker
+| Jalon | État | Estimation indicative |
+|---|---|---:|
+| M0 — Socle, CI, hygiène de livraison | `ADVANCED` | 90 % |
+| M1 — Chaîne de confiance scientifique | `ADVANCED` | 85 % |
+| M2 — Persistence sémantique V5 | `OPEN` | 20 % |
+| M3 — Couverture sémantique et entités | `PARTIAL` | 15 % |
+| M4 — Métamodèle écologique exécutable | `PROPOSED` | 20 % |
+| M5 — Collecteurs spécialisés | `PARTIAL` | 35 % |
+| M6 — Synthèse, conflits et tendances | `PARTIAL` | 25 % |
+| M7 — Moteur de processus et simulation | `PROPOSED` | 10 % |
+| M8 — Prédiction / recommandations / biomes | `DEFERRED` | 5 % |
+| M9 — Produit et UX scientifique | `PARTIAL` | 35 % |
+| M10 — Distribution, EcoBiome@home, v1.0 | `DEFERRED` | 10 % |
 
-------------------------------------------------------------
-Phase 5 — Analyse intelligente (IA)
-------------------------------------------------------------
+Ces estimations par jalon sont **indicatives et non pondérées**. Elles ne sont
+pas agrégées en un pourcentage global de projet tant qu'une méthode de
+pondération reproductible n'est pas définie.
 
-5.1 AIAnalyzer
-- corrélations avancées
-- prédictions
-- recommandations
-- amélioration autonome des fiches
+## 4. Priorités
 
-------------------------------------------------------------
-Phase 6 — Interface utilisateur (Dashboard)
-------------------------------------------------------------
+### P0 — Fermer la chaîne de vérité scientifique
 
-6.1 Vue Species
-6.2 Vue Observations
-6.3 Vue Biomes
-6.4 Vue Paramètres optimaux
-6.5 Vue Statistiques globales
-6.6 Vue Sources
-6.7 Vue Collecteurs
-6.8 Vue Capteurs
-6.9 Vue Tendances
-6.10 Vue Conflits
+1. **terminé** — publier/revoir Scientific Assertion Projection V1 ;
+2. résoudre explicitement la persistence durable et append-only de la **review
+   humaine des candidats V2.11** ;
+3. auditer puis figer les primitives, tables, index, invariants et la rétention
+   CAS du Schema V5 ;
+4. implémenter Schema V5 en fresh-database ;
+5. persister les candidats sémantiques, leurs origins et les runs provider ;
+6. prouver identité de schéma, intégrité/FK, rétention CAS et compatibilité
+   Collector.
 
-------------------------------------------------------------
-Phase 7 — Version publique
-------------------------------------------------------------
+### P1 — Étendre sans perdre le fail-closed
 
-7.1 Release v1.0
-7.2 Documentation complète
-7.3 Page de présentation
-7.4 Version compilée (EXE)
-7.5 Dépôt public ou semi-public
+1. entity resolution avec review humaine ;
+2. mappings de projection relation par relation ;
+3. aucun « accept all » universel ;
+4. read models pour Species, tolérances, paramètres et interactions ;
+5. synthèses corroboration/contradiction avec niveau de preuve.
 
-============================================================
-Résumé des jalons
-============================================================
+### P2 — Construire le vertical slice écologique
 
-Fondations techniques : ? 70%
-Base scientifique : À faire
-Collecteurs automatiques : À faire
-Collecte utilisateurs : À faire
-Collecte capteurs : À faire
-Modules d’analyse : À faire
-Analyse IA : À venir
-Dashboard complet : En cours
-Release v1.0 : À venir
+Premier objectif produit de bout en bout :
 
-============================================================
-Prochaines étapes recommandées
-============================================================
+```text
+profil aquarium ou mare
+→ zones / structures / flux
+→ observations et interventions
+→ connaissances scientifiques
+→ un petit ensemble de processus déterministes
+→ état / risque / incertitude
+→ « Pourquoi ça marche ? »
+```
 
-1. Finaliser le modèle de base de données
-2. Choisir la base (SQLite ou Supabase)
-3. Créer le CollectorCore
-4. Développer ScientificCollector, MediaCollector, UserDataCollector
-5. Ajouter SensorCollector
-6. Implémenter TrendAnalyzer
+Le vertical slice doit fonctionner avant l'infrastructure distribuée.
+
+### P3 — Étendre les sources et les usages
+
+- ScientificCollector ;
+- ProfessionalCollector ;
+- Web/MediaCollector ;
+- UserDataCollector ;
+- SensorCollector ;
+- météo et forçages externes versionnés.
+
+### P4 — Simulation, prédiction et conception
+
+- TrendAnalyzer ;
+- EventPredictor ;
+- moteur de scénarios ;
+- BiomeGenerator contraint par preuves ;
+- comparaison prévu/réel ;
+- recommandations explicables.
+
+### P5 — Distribution et apprentissage gouverné
+
+- worker local ;
+- scheduler ;
+- quotas et mode sûr ;
+- cloud optionnel ;
+- EcoBiome@home ;
+- agrégation communautaire consentie.
+
+## 5. Décisions structurantes
+
+### Le cœur canonique n'est pas une collection de tables métier plates
+
+Les anciens concepts `Species`, `OptimalParameters`, `StressSignals`,
+`BiomeCompatibility`, `Trends` et `Conflicts` restent utiles, mais doivent
+principalement devenir des **read models, synthèses ou vues** construites à
+partir :
+
+- des entités scientifiques ;
+- des assertions scientifiques ;
+- de leurs preuves et reviews ;
+- du contexte écologique ;
+- des observations du projet.
+
+Ils ne doivent pas dupliquer la vérité canonique.
+
+### SQLite est la base locale canonique actuelle
+
+Le choix « SQLite ou Supabase » n'est plus une question ouverte pour le cœur
+scientifique local. Une couche cloud future doit rester une frontière de
+service optionnelle.
+
+### IA ≠ vérité
+
+Les providers IA peuvent proposer ou extraire. La promotion scientifique reste
+déterministe, auditée et revue.
+
+### Distribué après le vertical slice
+
+EcoBiome@home, GPU mutualisé et orchestration cloud restent dans la vision,
+mais ne doivent pas retarder le premier produit scientifique explicable.
+
+## 6. Prochains gates
+
+Ordre recommandé :
+
+```text
+G0  TERMINÉ — review du commit Projection V1
+G1  TERMINÉ — publication fast-forward + CI post-push de Projection V1
+G2  Résoudre la review humaine append-only des Semantic Candidates V2.11
+G3  Audit final et gel du design V5
+G4  Schema V5 fresh-database + tests d'identité/intégrité
+G5  Persistence provider-neutral semantic_candidates + reviews
+G6  Persistence provider-run/origins/CAS
+G7  Entity resolution + mappings reviewés
+G8  Extension progressive des projections
+G9  Vertical slice aquarium/mare « Pourquoi ça marche ? »
+G10 Collecteurs user/sensor + synthèse/trends
+G11 Simulation et UX intégrée
+```
+
+Chaque gate garde les règles EcoBiome : audit, périmètre exact, validation,
+journal, passation et autorisation distincte pour les mutations sensibles.
+
+## 7. Définition de la première vraie démonstration EcoBiome
+
+Le projet aura franchi un cap produit majeur lorsqu'une démonstration pourra :
+
+1. créer un aquarium ou une mare avec géométrie, zones et organismes ;
+2. importer quelques observations utilisateur ;
+3. rattacher des mesures instrumentales ;
+4. importer au moins une source scientifique ;
+5. produire Claim/Evidence/review/candidat/assertion ;
+6. synthétiser ce qui est supporté ou contesté ;
+7. exécuter un processus écologique déterministe ;
+8. expliquer un état observé avec provenance ;
+9. afficher l'incertitude et les données manquantes ;
+10. comparer une intervention simulée à l'état actuel.
+
+C'est la priorité produit avant le « supercalculateur logiciel ».
+
+## 8. Documents liés
+
+- `docs/vision/VISION.md`
+- `docs/vision/GOVERNING_PRINCIPLES.md`
+- `docs/roadmap/ROADMAP.md`
+- `docs/roadmap/LONG_TERM_ROADMAP.md`
+- `docs/roadmap/INTER_AI_IDEAS.md`
+- `docs/architecture/ARCHITECTURE.md`
+- `docs/architecture/DATA_MODEL.md`
+- `docs/scientific/UNIVERSAL_ECOSYSTEM_METAMODEL.md`
+- `docs/scientific/ECOSYSTEM_MODES_AND_KNOWLEDGE.md`
+- `docs/SOURCE_REGISTER.md`
