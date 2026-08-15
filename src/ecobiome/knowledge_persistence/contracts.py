@@ -479,6 +479,26 @@ class SemanticCandidateEvidenceLinksRow:
 
 
 @dataclass(frozen=True, slots=True)
+class SemanticCandidateEntityResolutionEventsRow:
+    id: str
+    semantic_candidate_id: str
+    semantic_candidate_sha256: str
+    role: str
+    candidate_argument_sha256: str
+    entity_name_usage_id: str
+    entity_id: str
+    entity_revision: int
+    mapping_status: str
+    decision: str
+    reviewer: str
+    rationale: str
+    review_policy_name: str
+    review_policy_version: str
+    review_policy_sha256: str
+    reviewed_at: str
+
+
+@dataclass(frozen=True, slots=True)
 class SemanticCandidateReviewEventsRow:
     id: str
     semantic_candidate_id: str
@@ -542,6 +562,15 @@ class ScientificEntityRepository(Protocol):
     def add_identifier(self, row: ScientificEntityIdentifiersRow) -> bool: ...
     def add_name_usage(self, row: ScientificEntityNameUsagesRow) -> bool: ...
     def add_entity_relation(self, row: ScientificEntityRelationsRow) -> bool: ...
+    def add_candidate_entity_resolution_event(
+        self, row: SemanticCandidateEntityResolutionEventsRow
+    ) -> bool: ...
+    def list_candidate_entity_resolution_events(
+        self, candidate_id: str, role: str | None = None
+    ) -> Sequence[SemanticCandidateEntityResolutionEventsRow]: ...
+    def get_name_usage(
+        self, name_usage_id: str
+    ) -> ScientificEntityNameUsagesRow | None: ...
     def get_entity_revision(self, entity_id: str, revision: int) -> ScientificEntityRevisionsRow | None: ...
 
 

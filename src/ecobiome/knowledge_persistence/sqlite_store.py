@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
+import unicodedata
 from contextlib import suppress
 from dataclasses import fields
 from datetime import UTC, datetime
@@ -33,6 +34,7 @@ from .contracts import (
     ScientificEntityRevisionsRow,
     SegmentReviewEventsRow,
     SegmentsRow,
+    SemanticCandidateEntityResolutionEventsRow,
     SemanticCandidateEvidenceLinksRow,
     SemanticCandidateReviewEventsRow,
     SemanticCandidatesRow,
@@ -139,6 +141,7 @@ _TABLE_SPECS = {
     SemanticProviderRunEvidenceInputsRow: ('semantic_provider_run_evidence_inputs', ('run_id', 'claim_id', 'evidence_id', 'evidence_order', 'evidence_text_sha256', 'segment_review_status_at_run', 'created_at'), ('run_id', 'evidence_id')),
     SemanticProviderRunEventsRow: ('semantic_provider_run_events', ('id', 'run_id', 'event_index', 'event_type', 'model_returned', 'provider_request_id', 'provider_response_id', 'http_status_code', 'response_status', 'content_type', 'response_body_sha256', 'response_artifact_store_key', 'validated_output_sha256', 'validated_output_artifact_store_key', 'usage_json', 'diagnostics_json', 'proposal_count', 'created_at'), ('id',)),
     SemanticCandidatesRow: ('semantic_candidates', ('id', 'schema_version', 'semantic_contract_name', 'semantic_contract_version', 'semantic_contract_sha256', 'relation_type_basis_version', 'relation_type_registry_sha256', 'grounding_policy_sha256', 'claim_scoped_provenance_policy_sha256', 'source_statement_claim_id', 'source_claim_effective_text_sha256', 'semantic_type', 'relation', 'epistemic_class', 'promotion_readiness', 'automatic_scientific_acceptance', 'canonical_candidate_sha256', 'canonical_candidate_document_sha256', 'canonical_candidate_json', 'created_at'), ('id',)),
+    SemanticCandidateEntityResolutionEventsRow: ('semantic_candidate_entity_resolution_events', ('id', 'semantic_candidate_id', 'semantic_candidate_sha256', 'role', 'candidate_argument_sha256', 'entity_name_usage_id', 'entity_id', 'entity_revision', 'mapping_status', 'decision', 'reviewer', 'rationale', 'review_policy_name', 'review_policy_version', 'review_policy_sha256', 'reviewed_at'), ('id',)),
     SemanticCandidateEvidenceLinksRow: ('semantic_candidate_evidence_links', ('semantic_candidate_id', 'source_statement_claim_id', 'evidence_id', 'evidence_order', 'created_at'), ('semantic_candidate_id', 'evidence_id')),
     SemanticCandidateReviewEventsRow: ('semantic_candidate_review_events', ('id', 'semantic_candidate_id', 'semantic_candidate_sha256', 'decision', 'reviewer', 'review_text', 'review_text_sha256', 'rationale', 'review_metadata_json', 'review_policy_name', 'review_policy_version', 'review_policy_sha256', 'replacement_candidate_id', 'replacement_candidate_sha256', 'reviewed_at'), ('id',)),
     SemanticProviderCandidateOriginsRow: ('semantic_provider_candidate_origins', ('run_id', 'proposal_index', 'semantic_candidate_id', 'proposal_sha256', 'created_at'), ('run_id', 'proposal_index')),
@@ -535,6 +538,225 @@ class SQLiteScientificEntityRepository:
 
     def add_entity_relation(self, row: ScientificEntityRelationsRow) -> bool:
         return _insert_immutable(self._conn, row)
+
+    def add_candidate_entity_resolution_event(
+        self,
+        row: SemanticCandidateEntityResolutionEventsRow,
+    ) -> bool:
+        _require_lower_sha256(row.semantic_candidate_sha256, "semantic_candidate_sha256")
+        _require_lower_sha256(row.candidate_argument_sha256, "candidate_argument_sha256")
+        _require_lower_sha256(row.review_policy_sha256, "review_policy_sha256")
+        if row.mapping_status not in {"exact", "synonym"}:
+            raise PersistenceIntegrityError(
+                "Entity resolution mapping_status must be exact/synonym"
+            )
+        if row.decision not in {"accept", "reject"}:
+            raise PersistenceIntegrityError(
+                "Entity resolution decision must be accept/reject"
+            )
+        if not row.role.strip() or not row.reviewer.strip():
+            raise PersistenceIntegrityError(
+                "Entity resolution requires non-empty role and reviewer"
+            )
+        if (
+            row.review_policy_name != "ecobiome-semantic-candidate-entity-resolution"
+            or row.review_policy_version != "1"
+            or row.review_policy_sha256
+            != "c2e31ae42c25610e4b6c299269bf50f05476b71772d1a0aefe01ff88329e329e"
+        ):
+            raise PersistenceIntegrityError(
+                "Entity resolution review policy identity mismatch"
+            )
+
+        candidate = _fetch(
+            self._conn,
+            SemanticCandidatesRow,
+            (row.semantic_candidate_id,),
+        )
+        if candidate is None:
+            raise PersistenceIntegrityError(
+                "Entity resolution semantic candidate is missing"
+            )
+        if candidate.canonical_candidate_sha256 != row.semantic_candidate_sha256:
+            raise PersistenceIntegrityError(
+                "Entity resolution candidate SHA binding mismatch"
+            )
+        try:
+            payload = json.loads(candidate.canonical_candidate_json)
+        except json.JSONDecodeError as exc:
+            raise PersistenceIntegrityError(
+                "Persisted semantic candidate JSON is invalid"
+            ) from exc
+        semantic = payload.get("semantic")
+        if not isinstance(semantic, dict):
+            raise PersistenceIntegrityError(
+                "Persisted semantic candidate semantic object is missing"
+            )
+        raw_arguments = semantic.get("arguments")
+        if not isinstance(raw_arguments, list):
+            raise PersistenceIntegrityError(
+                "Persisted semantic candidate arguments are missing"
+            )
+        matches = [
+            item
+            for item in raw_arguments
+            if isinstance(item, dict) and item.get("role") == row.role
+        ]
+        if len(matches) != 1:
+            raise PersistenceIntegrityError(
+                "Entity resolution role must match exactly one candidate argument"
+            )
+        argument = matches[0]
+        if canonical_sha256(argument) != row.candidate_argument_sha256:
+            raise PersistenceIntegrityError(
+                "Entity resolution candidate argument SHA mismatch"
+            )
+        if argument.get("resolution_state") != "grounded_opaque_unresolved":
+            raise PersistenceIntegrityError(
+                "Entity resolution requires grounded opaque source text"
+            )
+        value = argument.get("value")
+        if not isinstance(value, dict) or value.get("kind") != "source_text":
+            raise PersistenceIntegrityError(
+                "Entity resolution candidate argument is not source_text"
+            )
+        source_surface = value.get("source_surface")
+        if not isinstance(source_surface, str) or not source_surface:
+            raise PersistenceIntegrityError(
+                "Entity resolution source_surface is missing"
+            )
+
+        name_usage = _fetch(
+            self._conn,
+            ScientificEntityNameUsagesRow,
+            (row.entity_name_usage_id,),
+        )
+        if name_usage is None:
+            raise PersistenceIntegrityError(
+                "Entity resolution name usage is missing"
+            )
+        if name_usage.mapping_review_status != "reviewed_confirmed":
+            raise PersistenceIntegrityError(
+                "Entity resolution name usage is not human-reviewed"
+            )
+        if name_usage.entity_id != row.entity_id:
+            raise PersistenceIntegrityError(
+                "Entity resolution name usage entity does not match event"
+            )
+
+        claim = _fetch(
+            self._conn,
+            SourceClaimsRow,
+            (candidate.source_statement_claim_id,),
+        )
+        if claim is None:
+            raise PersistenceIntegrityError(
+                "Entity resolution source Claim is missing"
+            )
+        if name_usage.source_id != claim.source_id:
+            raise PersistenceIntegrityError(
+                "Entity resolution name usage source does not match source Claim"
+            )
+        if (
+            name_usage.segment_id is None
+            or name_usage.segment_char_start is None
+            or name_usage.segment_char_end is None
+        ):
+            raise PersistenceIntegrityError(
+                "Entity resolution requires exact segment offsets"
+            )
+        start = int(name_usage.segment_char_start)
+        end = int(name_usage.segment_char_end)
+        evidence_spans = self._conn.execute(
+            "SELECT se.segment_id,se.segment_char_start,se.segment_char_end "
+            "FROM semantic_candidate_evidence_links scel "
+            "JOIN source_evidence se ON se.id=scel.evidence_id "
+            "WHERE scel.semantic_candidate_id=?",
+            (row.semantic_candidate_id,),
+        ).fetchall()
+        if not any(
+            str(segment_id) == name_usage.segment_id
+            and int(ev_start) <= start
+            and end <= int(ev_end)
+            for segment_id, ev_start, ev_end in evidence_spans
+        ):
+            raise PersistenceIntegrityError(
+                "Entity resolution name usage is outside candidate Evidence"
+            )
+
+        segment = _fetch(self._conn, SegmentsRow, (name_usage.segment_id,))
+        if segment is None or segment.text_inline is None:
+            raise PersistenceIntegrityError(
+                "Entity resolution segment text is unavailable"
+            )
+        if hashlib.sha256(segment.text_inline.encode("utf-8")).hexdigest() != segment.text_sha256:
+            raise PersistenceIntegrityError(
+                "Entity resolution segment text SHA mismatch"
+            )
+        if start < 0 or end <= start or end > len(segment.text_inline):
+            raise PersistenceIntegrityError(
+                "Entity resolution name usage offsets are invalid"
+            )
+        span = segment.text_inline[start:end]
+        normalized = {
+            unicodedata.normalize("NFC", span),
+            unicodedata.normalize("NFC", name_usage.verbatim_name),
+            unicodedata.normalize("NFC", source_surface),
+        }
+        if len(normalized) != 1:
+            raise PersistenceIntegrityError(
+                "Entity resolution source surface/verbatim span mismatch"
+            )
+
+        revision = _fetch(
+            self._conn,
+            ScientificEntityRevisionsRow,
+            (row.entity_id, row.entity_revision),
+        )
+        if revision is None:
+            raise PersistenceIntegrityError(
+                "Entity resolution entity revision is missing"
+            )
+        if revision.review_status != "reviewed_confirmed":
+            raise PersistenceIntegrityError(
+                "Entity resolution entity revision is not human-reviewed"
+            )
+        return _insert_immutable(self._conn, row)
+
+    def list_candidate_entity_resolution_events(
+        self,
+        candidate_id: str,
+        role: str | None = None,
+    ) -> tuple[SemanticCandidateEntityResolutionEventsRow, ...]:
+        table, columns, _ = _TABLE_SPECS[
+            SemanticCandidateEntityResolutionEventsRow
+        ]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        if role is None:
+            rows = self._conn.execute(
+                f'SELECT {quoted} FROM "{table}" '
+                "WHERE semantic_candidate_id=? ORDER BY reviewed_at,id",
+                (candidate_id,),
+            ).fetchall()
+        else:
+            rows = self._conn.execute(
+                f'SELECT {quoted} FROM "{table}" '
+                "WHERE semantic_candidate_id=? AND role=? ORDER BY reviewed_at,id",
+                (candidate_id, role),
+            ).fetchall()
+        return tuple(
+            SemanticCandidateEntityResolutionEventsRow(*item) for item in rows
+        )
+
+    def get_name_usage(
+        self,
+        name_usage_id: str,
+    ) -> ScientificEntityNameUsagesRow | None:
+        return _fetch(
+            self._conn,
+            ScientificEntityNameUsagesRow,
+            (name_usage_id,),
+        )
 
     def get_entity_revision(self,entity_id:str,revision:int)->ScientificEntityRevisionsRow|None:
         return _fetch(self._conn,ScientificEntityRevisionsRow,(entity_id,revision))

@@ -90,8 +90,8 @@ def test_schema_contains_v4_provenance_tables_behind_v2_compatibility(
         "passages",
     }.isdisjoint(tables)
     assert physical == (
-        5,
-        "d13f146dfd6f394ebb660e420c09305a6daca6c0d34232713c9b91b21879310e",
+        6,
+        "e0c732320b8bf901de3fd285ffcc41b74db8f1e0a227df89e0428e893e4f9181",
     )
     assert store.schema_version() == 2
 

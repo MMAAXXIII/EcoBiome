@@ -34,7 +34,13 @@ from ecobiome.knowledge_persistence.serialization import (
 
 PROJECTION_SCHEMA_VERSION = "ecobiome-scientific-assertion-projection-v1"
 PROJECTION_CONTRACT_NAME = "ecobiome-scientific-assertion-projection"
-PROJECTION_CONTRACT_VERSION = "1"
+PROJECTION_CONTRACT_VERSION = "1.1"
+PROJECTION_CONTRACT_SHA256 = (
+    "3c4e468391a25b6df826da960d71b8af014ba501721c6bfec2c51edc97e7d4ce"
+)
+ENTITY_RESOLUTION_POLICY_SHA256 = (
+    "c2e31ae42c25610e4b6c299269bf50f05476b71772d1a0aefe01ff88329e329e"
+)
 
 ENTITY_ARGUMENT = "ENTITY_ARGUMENT"
 EXACT_NUMERIC_ARGUMENT = "EXACT_NUMERIC_ARGUMENT"
@@ -77,6 +83,7 @@ class ProjectionSpecV1:
     relation: str
     assertion_kind: str
     predicate: str
+    builder: str
     role_classes: tuple[tuple[str, str], ...]
 
 
@@ -87,13 +94,54 @@ _PROJECTION_SPECS = (
         relation="maintained_at",
         assertion_kind="measurement",
         predicate="maintained_at",
+        builder="maintained_at_measurement_v1",
         role_classes=(
             ("variable", ENTITY_ARGUMENT),
             ("value", EXACT_NUMERIC_ARGUMENT),
             ("unit", CONTROLLED_LITERAL_ARGUMENT),
         ),
     ),
+    ProjectionSpecV1(
+        spec_id="adversely_affects.health_effect.relational.v1",
+        semantic_type="health_effect",
+        relation="adversely_affects",
+        assertion_kind="relational",
+        predicate="adversely_affects",
+        builder="binary_entity_relation_v1",
+        role_classes=(("cause", ENTITY_ARGUMENT), ("target", ENTITY_ARGUMENT)),
+    ),
+    ProjectionSpecV1(
+        spec_id="poses_significant_threat_to.risk_factor.relational.v1",
+        semantic_type="risk_factor",
+        relation="poses_significant_threat_to",
+        assertion_kind="relational",
+        predicate="poses_significant_threat_to",
+        builder="binary_entity_relation_v1",
+        role_classes=(("cause", ENTITY_ARGUMENT), ("target", ENTITY_ARGUMENT)),
+    ),
 )
+
+PROJECTION_CONTRACT_DESCRIPTOR_V1_1 = {
+    "automatic_persistence": False,
+    "entity_resolution_policy_sha256": ENTITY_RESOLUTION_POLICY_SHA256,
+    "name": PROJECTION_CONTRACT_NAME,
+    "schema_version": PROJECTION_SCHEMA_VERSION,
+    "specs": [
+        {
+            "assertion_kind": spec.assertion_kind,
+            "builder": spec.builder,
+            "predicate": spec.predicate,
+            "relation": spec.relation,
+            "role_classes": spec.role_classes,
+            "semantic_type": spec.semantic_type,
+            "spec_id": spec.spec_id,
+        }
+        for spec in _PROJECTION_SPECS
+    ],
+    "version": PROJECTION_CONTRACT_VERSION,
+}
+if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_1) != PROJECTION_CONTRACT_SHA256:
+    raise RuntimeError("Scientific Assertion Projection V1.1 identity mismatch")
 
 
 def _sha256_text(text: str) -> str:
@@ -626,6 +674,48 @@ def _build_maintained_at_measurement(
     return payload, normalized_text
 
 
+def _build_binary_entity_relation(
+    *,
+    spec: ProjectionSpecV1,
+    candidate: Mapping[str, Any],
+    arguments: Mapping[str, Mapping[str, Any]],
+    entity_resolutions: Mapping[str, ReviewedEntityArgumentV1],
+    context_resolutions: Mapping[str, ReviewedContextArgumentV1],
+) -> tuple[dict[str, Any], str]:
+    if spec.builder != "binary_entity_relation_v1":
+        raise ScientificAssertionProjectionV1Error(
+            f"unsupported binary entity projection spec: {spec.spec_id}"
+        )
+    if context_resolutions:
+        raise ScientificAssertionProjectionV1Error(
+            "binary entity relation accepts no context reconstruction"
+        )
+    cause = _validate_entity_resolution(
+        "cause", arguments["cause"], entity_resolutions.get("cause")
+    )
+    target = _validate_entity_resolution(
+        "target", arguments["target"], entity_resolutions.get("target")
+    )
+    semantic = _candidate_semantic(candidate)
+    payload = canonical_assertion_payload(
+        assertion_kind=spec.assertion_kind,
+        predicate=spec.predicate,
+        participants=[
+            {"role": "cause", "entity": cause},
+            {"role": "target", "entity": target},
+        ],
+        value={"kind": "none"},
+        qualifiers={"semantic_type": semantic["semantic_type"]},
+    )
+    normalized_text = (
+        f'{spec.predicate}('
+        f'cause=entity_ref("{cause["entity_id"]}",{cause["entity_revision"]}), '
+        f'target=entity_ref("{target["entity_id"]}",{target["entity_revision"]})'
+        ")"
+    )
+    return payload, normalized_text
+
+
 def project_scientific_assertion_v1(
     candidate: Mapping[str, Any],
     *,
@@ -713,13 +803,26 @@ def project_scientific_assertion_v1(
             f"{sorted(unused_context_roles)}"
         )
 
-    assertion_payload, normalized_text = _build_maintained_at_measurement(
-        spec=spec,
-        candidate=candidate,
-        arguments=arguments,
-        entity_resolutions=entity_resolutions,
-        context_resolutions=supplied_context,
-    )
+    if spec.builder == "maintained_at_measurement_v1":
+        assertion_payload, normalized_text = _build_maintained_at_measurement(
+            spec=spec,
+            candidate=candidate,
+            arguments=arguments,
+            entity_resolutions=entity_resolutions,
+            context_resolutions=supplied_context,
+        )
+    elif spec.builder == "binary_entity_relation_v1":
+        assertion_payload, normalized_text = _build_binary_entity_relation(
+            spec=spec,
+            candidate=candidate,
+            arguments=arguments,
+            entity_resolutions=entity_resolutions,
+            context_resolutions=supplied_context,
+        )
+    else:
+        raise ScientificAssertionProjectionV1Error(
+            f"unsupported reviewed projection builder: {spec.builder}"
+        )
     assertion_sha = canonical_sha256(assertion_payload)
 
     candidate_sha = _require_sha256(
@@ -727,6 +830,8 @@ def project_scientific_assertion_v1(
         "candidate canonical SHA",
     )
     projection_audit = {
+        "projection_contract_sha256": PROJECTION_CONTRACT_SHA256,
+        "entity_resolution_policy_sha256": ENTITY_RESOLUTION_POLICY_SHA256,
         "projection_spec_id": spec.spec_id,
         "semantic_candidate_sha256": candidate_sha,
         "candidate_review_id": candidate_review_trace["review_id"],
@@ -753,6 +858,8 @@ def project_scientific_assertion_v1(
         "contract": {
             "name": PROJECTION_CONTRACT_NAME,
             "version": PROJECTION_CONTRACT_VERSION,
+            "canonical_sha256": PROJECTION_CONTRACT_SHA256,
+            "entity_resolution_policy_sha256": ENTITY_RESOLUTION_POLICY_SHA256,
             "projection_spec_id": spec.spec_id,
         },
         "source": {

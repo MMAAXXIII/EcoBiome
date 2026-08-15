@@ -9,6 +9,7 @@ from ecobiome.knowledge_persistence.contracts import (
     ScientificEntityIdentifiersRow,
     ScientificEntityNameUsagesRow,
     ScientificEntityRelationsRow,
+    SemanticCandidateEntityResolutionEventsRow,
 )
 from ecobiome.knowledge_persistence.sqlite_schema import (
     EXPECTED_INDEXES,
@@ -20,12 +21,12 @@ from ecobiome.knowledge_persistence.sqlite_store import initialize_database
 
 
 def test_frozen_schema_contract_constants() -> None:
-    assert SCHEMA_VERSION == 5
-    assert len(EXPECTED_TABLES) == 33
-    assert len(EXPECTED_INDEXES) == 43
+    assert SCHEMA_VERSION == 6
+    assert len(EXPECTED_TABLES) == 34
+    assert len(EXPECTED_INDEXES) == 45
     assert "segment_review_events" in EXPECTED_TABLES
     assert "segment_review_events_segment_time_idx" in EXPECTED_INDEXES
-    assert RUNTIME_SCHEMA_DESIGN_SHA256 == 'd13f146dfd6f394ebb660e420c09305a6daca6c0d34232713c9b91b21879310e'
+    assert RUNTIME_SCHEMA_DESIGN_SHA256 == 'e0c732320b8bf901de3fd285ffcc41b74db8f1e0a227df89e0428e893e4f9181'
 
 
 def test_v4_collector_compatibility_row_contracts() -> None:
@@ -105,3 +106,31 @@ def test_v5_semantic_provider_and_candidate_schema_names() -> None:
         "semantic_candidate_review_events_candidate_time_idx",
         "semantic_candidate_review_events_replacement_idx",
     } <= set(EXPECTED_INDEXES)
+
+
+def test_v6_entity_resolution_schema_and_row_contract() -> None:
+    assert "semantic_candidate_entity_resolution_events" in EXPECTED_TABLES
+    assert {
+        "semantic_candidate_entity_resolution_events_candidate_role_time_idx",
+        "semantic_candidate_entity_resolution_events_entity_idx",
+    } <= set(EXPECTED_INDEXES)
+    assert tuple(
+        field.name for field in fields(SemanticCandidateEntityResolutionEventsRow)
+    ) == (
+        "id",
+        "semantic_candidate_id",
+        "semantic_candidate_sha256",
+        "role",
+        "candidate_argument_sha256",
+        "entity_name_usage_id",
+        "entity_id",
+        "entity_revision",
+        "mapping_status",
+        "decision",
+        "reviewer",
+        "rationale",
+        "review_policy_name",
+        "review_policy_version",
+        "review_policy_sha256",
+        "reviewed_at",
+    )
