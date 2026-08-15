@@ -541,3 +541,59 @@ def test_claim_review_history_order_is_deterministic(tmp_path: Path) -> None:
         "claim-review-event-1",
         "claim-review-event-2",
     ]
+def test_v5_uow_exposes_provider_and_candidate_repositories(
+    tmp_path: Path,
+) -> None:
+    config, artifacts, repo = _config_and_artifacts(tmp_path)
+    with SQLiteScientificFoundationUnitOfWork(
+        config,
+        repo_root=repo,
+        artifact_store=artifacts,
+    ) as uow:
+        assert uow.provider_audit is not None
+        assert uow.semantic_candidates is not None
+
+
+def test_v5_provider_run_requires_matching_cas_request(
+    tmp_path: Path,
+) -> None:
+    from ecobiome.knowledge_persistence.contracts import SemanticProviderRunsRow
+
+    config, artifacts, repo = _config_and_artifacts(tmp_path)
+    stored = artifacts.put(b'{"request":"fixture"}')
+    row = SemanticProviderRunsRow(
+        id="run-1",
+        run_kind="semantic_extraction",
+        provider_name="fixture",
+        provider_adapter_name="fixture",
+        provider_adapter_version="1",
+        endpoint=None,
+        model_requested="fixture-model",
+        semantic_contract_name="fixture-contract",
+        semantic_contract_version="1",
+        semantic_contract_sha256="1" * 64,
+        instruction_sha256="2" * 64,
+        output_schema_sha256="3" * 64,
+        source_request_sha256="4" * 64,
+        request_body_sha256=stored.sha256,
+        request_artifact_store_key=stored.key,
+        request_fingerprint_sha256="5" * 64,
+        safe_configuration_json="{}",
+        started_at=CREATED_AT,
+        created_at=CREATED_AT,
+    )
+    with SQLiteScientificFoundationUnitOfWork(
+        config,
+        repo_root=repo,
+        artifact_store=artifacts,
+    ) as uow:
+        assert uow.provider_audit.add_provider_run(row) is True
+        uow.commit()
+
+    bad = replace(row, id="run-2", request_body_sha256="f" * 64)
+    with SQLiteScientificFoundationUnitOfWork(
+        config,
+        repo_root=repo,
+        artifact_store=artifacts,
+    ) as uow, pytest.raises(PersistenceIntegrityError, match="CAS artifact"):
+        uow.provider_audit.add_provider_run(bad)

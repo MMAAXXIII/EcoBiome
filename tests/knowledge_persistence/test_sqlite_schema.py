@@ -20,12 +20,12 @@ from ecobiome.knowledge_persistence.sqlite_store import initialize_database
 
 
 def test_frozen_schema_contract_constants() -> None:
-    assert SCHEMA_VERSION == 4
-    assert len(EXPECTED_TABLES) == 25
-    assert len(EXPECTED_INDEXES) == 32
+    assert SCHEMA_VERSION == 5
+    assert len(EXPECTED_TABLES) == 33
+    assert len(EXPECTED_INDEXES) == 43
     assert "segment_review_events" in EXPECTED_TABLES
     assert "segment_review_events_segment_time_idx" in EXPECTED_INDEXES
-    assert RUNTIME_SCHEMA_DESIGN_SHA256 == '7f222dc5296397b3f943e50849a9600161e7840be8e3545d8b2df019953bfa05'
+    assert RUNTIME_SCHEMA_DESIGN_SHA256 == 'd13f146dfd6f394ebb660e420c09305a6daca6c0d34232713c9b91b21879310e'
 
 
 def test_v4_collector_compatibility_row_contracts() -> None:
@@ -88,3 +88,20 @@ def test_initializer_is_idempotent(tmp_path: Path) -> None:
     )
     assert initialize_database(config, repo_root=repo) == "INITIALIZED_NEW"
     assert initialize_database(config, repo_root=repo) == "ALREADY_INITIALIZED_EXACT"
+def test_v5_semantic_provider_and_candidate_schema_names() -> None:
+    assert {
+        "semantic_provider_runs",
+        "semantic_provider_run_claim_inputs",
+        "semantic_provider_run_evidence_inputs",
+        "semantic_provider_run_events",
+        "semantic_candidates",
+        "semantic_candidate_evidence_links",
+        "semantic_candidate_review_events",
+        "semantic_provider_candidate_origins",
+    } <= set(EXPECTED_TABLES)
+    assert {
+        "semantic_provider_run_events_one_validated_idx",
+        "semantic_provider_run_events_one_terminal_idx",
+        "semantic_candidate_review_events_candidate_time_idx",
+        "semantic_candidate_review_events_replacement_idx",
+    } <= set(EXPECTED_INDEXES)

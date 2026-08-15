@@ -8,6 +8,10 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
+from ecobiome.knowledge_acquisition.semantic_candidate_review_v1 import (
+    SemanticCandidateReviewV1Error,
+    require_candidate_acceptance_v1,
+)
 from ecobiome.knowledge_acquisition.semantic_candidate_v2_11 import (
     validate_semantic_candidate_v2_11,
 )
@@ -16,6 +20,7 @@ from ecobiome.knowledge_persistence.contracts import (
     ClaimReviewEventsRow,
     SegmentReviewEventsRow,
     SegmentsRow,
+    SemanticCandidateReviewEventsRow,
     SourceClaimsRow,
     SourceEvidenceRow,
 )
@@ -626,6 +631,7 @@ def project_scientific_assertion_v1(
     *,
     source_claim: SourceClaimsRow,
     claim_reviews: Sequence[ClaimReviewEventsRow],
+    candidate_reviews: Sequence[SemanticCandidateReviewEventsRow],
     claim_evidence_links: Sequence[ClaimEvidenceLinksRow],
     evidence_rows: Sequence[SourceEvidenceRow],
     segments: Mapping[str, SegmentsRow],
@@ -635,6 +641,13 @@ def project_scientific_assertion_v1(
 ) -> dict[str, Any]:
     """Project one reviewed V2.11 candidate or fail closed without persistence."""
     validate_semantic_candidate_v2_11(candidate)
+    try:
+        candidate_review_trace = require_candidate_acceptance_v1(
+            candidate,
+            candidate_reviews,
+        )
+    except SemanticCandidateReviewV1Error as exc:
+        raise ScientificAssertionProjectionV1Error(str(exc)) from exc
 
     claim_trace = _validate_claim_binding(
         candidate,
@@ -716,6 +729,8 @@ def project_scientific_assertion_v1(
     projection_audit = {
         "projection_spec_id": spec.spec_id,
         "semantic_candidate_sha256": candidate_sha,
+        "candidate_review_id": candidate_review_trace["review_id"],
+        "candidate_review_policy_sha256": candidate_review_trace["review_policy_sha256"],
         "source_claim_id": source_claim.id,
         "source_claim_effective_text_sha256": claim_trace[
             "effective_text_sha256"
@@ -742,6 +757,9 @@ def project_scientific_assertion_v1(
         },
         "source": {
             "semantic_candidate_sha256": candidate_sha,
+            "candidate_review_id": candidate_review_trace["review_id"],
+            "candidate_reviewer": candidate_review_trace["reviewer"],
+            "candidate_review_policy_sha256": candidate_review_trace["review_policy_sha256"],
             "source_claim_id": source_claim.id,
             "source_claim_effective_text_sha256": claim_trace[
                 "effective_text_sha256"

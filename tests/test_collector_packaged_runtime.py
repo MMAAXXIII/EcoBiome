@@ -64,7 +64,7 @@ def test_collector_store_initializes_outside_git_checkout(
             "SELECT schema_version FROM sf_schema_metadata "
             "WHERE schema_name='scientific_foundation'"
         ).fetchone()
-    assert metadata == (4,)
+    assert metadata == (5,)
 
 
 def test_collector_init_help_describes_fresh_only_database_contract() -> None:

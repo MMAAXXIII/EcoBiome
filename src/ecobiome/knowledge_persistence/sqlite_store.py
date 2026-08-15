@@ -33,6 +33,14 @@ from .contracts import (
     ScientificEntityRevisionsRow,
     SegmentReviewEventsRow,
     SegmentsRow,
+    SemanticCandidateEvidenceLinksRow,
+    SemanticCandidateReviewEventsRow,
+    SemanticCandidatesRow,
+    SemanticProviderCandidateOriginsRow,
+    SemanticProviderRunClaimInputsRow,
+    SemanticProviderRunEventsRow,
+    SemanticProviderRunEvidenceInputsRow,
+    SemanticProviderRunsRow,
     SfSchemaMetadataRow,
     SourceAssessmentsRow,
     SourceClaimsRow,
@@ -126,6 +134,14 @@ _TABLE_SPECS = {
     SourceClaimsRow: ('source_claims', ('id', 'source_id', 'representation_id', 'parent_claim_id', 'claim_layer', 'claim_text', 'claim_text_sha256', 'claim_kind', 'semantic_type', 'qualifiers_json', 'extraction_confidence_decimal', 'source_claim_effective_text_sha256', 'notes', 'initial_review_status', 'created_at'), ('id',)),
     SourceEvidenceRow: ('source_evidence', ('id', 'segment_id', 'segment_char_start', 'segment_char_end', 'evidence_text_sha256', 'start_seconds_decimal', 'end_seconds_decimal', 'page_number', 'frame_start', 'frame_end', 'evidence_metadata_json', 'created_at'), ('id',)),
     SourceLineageEdgesRow: ('source_lineage_edges', ('id', 'parent_source_id', 'child_source_id', 'relation', 'basis_claim_id', 'basis_evidence_json', 'review_status', 'created_at'), ('id',)),
+    SemanticProviderRunsRow: ('semantic_provider_runs', ('id', 'run_kind', 'provider_name', 'provider_adapter_name', 'provider_adapter_version', 'endpoint', 'model_requested', 'semantic_contract_name', 'semantic_contract_version', 'semantic_contract_sha256', 'instruction_sha256', 'output_schema_sha256', 'source_request_sha256', 'request_body_sha256', 'request_artifact_store_key', 'request_fingerprint_sha256', 'safe_configuration_json', 'started_at', 'created_at'), ('id',)),
+    SemanticProviderRunClaimInputsRow: ('semantic_provider_run_claim_inputs', ('run_id', 'claim_id', 'input_order', 'claim_effective_text_sha256', 'claim_review_status_at_run', 'created_at'), ('run_id', 'claim_id')),
+    SemanticProviderRunEvidenceInputsRow: ('semantic_provider_run_evidence_inputs', ('run_id', 'claim_id', 'evidence_id', 'evidence_order', 'evidence_text_sha256', 'segment_review_status_at_run', 'created_at'), ('run_id', 'evidence_id')),
+    SemanticProviderRunEventsRow: ('semantic_provider_run_events', ('id', 'run_id', 'event_index', 'event_type', 'model_returned', 'provider_request_id', 'provider_response_id', 'http_status_code', 'response_status', 'content_type', 'response_body_sha256', 'response_artifact_store_key', 'validated_output_sha256', 'validated_output_artifact_store_key', 'usage_json', 'diagnostics_json', 'proposal_count', 'created_at'), ('id',)),
+    SemanticCandidatesRow: ('semantic_candidates', ('id', 'schema_version', 'semantic_contract_name', 'semantic_contract_version', 'semantic_contract_sha256', 'relation_type_basis_version', 'relation_type_registry_sha256', 'grounding_policy_sha256', 'claim_scoped_provenance_policy_sha256', 'source_statement_claim_id', 'source_claim_effective_text_sha256', 'semantic_type', 'relation', 'epistemic_class', 'promotion_readiness', 'automatic_scientific_acceptance', 'canonical_candidate_sha256', 'canonical_candidate_document_sha256', 'canonical_candidate_json', 'created_at'), ('id',)),
+    SemanticCandidateEvidenceLinksRow: ('semantic_candidate_evidence_links', ('semantic_candidate_id', 'source_statement_claim_id', 'evidence_id', 'evidence_order', 'created_at'), ('semantic_candidate_id', 'evidence_id')),
+    SemanticCandidateReviewEventsRow: ('semantic_candidate_review_events', ('id', 'semantic_candidate_id', 'semantic_candidate_sha256', 'decision', 'reviewer', 'review_text', 'review_text_sha256', 'rationale', 'review_metadata_json', 'review_policy_name', 'review_policy_version', 'review_policy_sha256', 'replacement_candidate_id', 'replacement_candidate_sha256', 'reviewed_at'), ('id',)),
+    SemanticProviderCandidateOriginsRow: ('semantic_provider_candidate_origins', ('run_id', 'proposal_index', 'semantic_candidate_id', 'proposal_sha256', 'created_at'), ('run_id', 'proposal_index')),
 }
 
 def _comment_only(text: str) -> bool:
@@ -567,6 +583,629 @@ class SQLiteKnowledgeSynthesisRepository:
         rows=self._conn.execute(f'SELECT {quoted} FROM "{table}" WHERE assertion_id=? AND assertion_revision=? ORDER BY synthesis_revision',(assertion_id,revision)).fetchall()
         return tuple(row_type(*row) for row in rows)
 
+
+_PROVIDER_EVENT_TYPES = frozenset({
+    "provider_response_received",
+    "provider_refusal",
+    "transport_failed",
+    "provider_failed",
+    "output_validation_failed",
+    "validated",
+    "completed",
+    "cancelled",
+})
+_CANDIDATE_REVIEW_DECISIONS = frozenset({"accept", "correct", "reject"})
+_SHA_HEX = frozenset("0123456789abcdef")
+_SECRET_KEYS = frozenset({
+    "api_key",
+    "apikey",
+    "authorization",
+    "proxy_authorization",
+    "password",
+    "secret",
+    "access_token",
+    "refresh_token",
+    "bearer_token",
+    "cookie",
+    "set-cookie",
+})
+_SECRET_VALUE_PREFIXES = (
+    "sk-",
+    "ghp_",
+    "github_pat_",
+    "bearer ",
+    "-----begin private key-----",
+)
+
+
+def _require_lower_sha256(value: str | None, label: str) -> str:
+    if (
+        value is None
+        or len(value) != 64
+        or any(character not in _SHA_HEX for character in value)
+    ):
+        raise PersistenceIntegrityError(f"{label} must be lowercase SHA-256")
+    return value
+
+
+def _json_object(text: str, label: str, *, secret_safe: bool = False) -> dict[str, Any]:
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise PersistenceIntegrityError(f"{label} must be valid JSON") from exc
+    if not isinstance(value, dict):
+        raise PersistenceIntegrityError(f"{label} must decode to an object")
+    if secret_safe:
+        stack: list[object] = [value]
+        while stack:
+            current = stack.pop()
+            if isinstance(current, dict):
+                for key, item in current.items():
+                    normalized = str(key).strip().lower().replace("-", "_")
+                    if (
+                        normalized in _SECRET_KEYS
+                        or normalized.endswith(
+                            ("_api_key", "_password", "_secret", "_access_token")
+                        )
+                    ) and item not in (None, "", False):
+                        raise PersistenceIntegrityError(
+                            f"{label} contains a secret-bearing key: {key}"
+                        )
+                    stack.append(item)
+            elif isinstance(current, list):
+                stack.extend(current)
+            elif isinstance(current, str):
+                lowered = current.strip().lower()
+                if any(lowered.startswith(prefix) for prefix in _SECRET_VALUE_PREFIXES):
+                    raise PersistenceIntegrityError(
+                        f"{label} contains a secret-like value"
+                    )
+    return value
+
+
+def _current_claim_effective_sha(
+    conn: sqlite3.Connection,
+    claim_id: str,
+) -> tuple[str, str]:
+    claim = _fetch(conn, SourceClaimsRow, (claim_id,))
+    if claim is None:
+        raise PersistenceIntegrityError(f"Unknown source Claim: {claim_id}")
+    if hashlib.sha256(claim.claim_text.encode("utf-8")).hexdigest() != claim.claim_text_sha256:
+        raise PersistenceIntegrityError("Source Claim text SHA mismatch")
+    table, columns, _ = _TABLE_SPECS[ClaimReviewEventsRow]
+    quoted = ", ".join(f'"{name}"' for name in columns)
+    events = [
+        ClaimReviewEventsRow(*row)
+        for row in conn.execute(
+            f'SELECT {quoted} FROM "{table}" WHERE claim_id=? '
+            "ORDER BY reviewed_at, id",
+            (claim_id,),
+        ).fetchall()
+    ]
+    if not events:
+        raise PersistenceIntegrityError(
+            "Semantic candidate source Claim requires human review history"
+        )
+    latest = events[-1]
+    if latest.decision == "reject":
+        raise PersistenceIntegrityError(
+            "Semantic candidate source Claim latest review is rejected"
+        )
+    effective = claim.claim_text_sha256
+    for event in events:
+        if event.decision == "correct":
+            corrected = event.corrected_text
+            corrected_sha = event.corrected_text_sha256
+            if corrected is None or corrected_sha is None:
+                raise PersistenceIntegrityError("Malformed Claim correction history")
+            actual = hashlib.sha256(corrected.encode("utf-8")).hexdigest()
+            if actual != corrected_sha:
+                raise PersistenceIntegrityError("Claim correction SHA mismatch")
+            effective = corrected_sha
+    return effective, latest.decision
+
+
+class SQLiteSemanticProviderAuditRepository:
+    def __init__(
+        self,
+        conn: sqlite3.Connection,
+        artifact_store: RawArtifactStore,
+    ) -> None:
+        self._conn = conn
+        self._artifact_store = artifact_store
+
+    def _verify_artifact(self, key: str, expected_sha: str, label: str) -> None:
+        expected = _require_lower_sha256(expected_sha, label)
+        stored = self._artifact_store.verify(key)
+        if stored.sha256 != expected:
+            raise PersistenceIntegrityError(
+                f"{label} does not match referenced CAS artifact"
+            )
+
+    def add_provider_run(self, row: SemanticProviderRunsRow) -> bool:
+        if row.run_kind != "semantic_extraction":
+            raise PersistenceIntegrityError("Unsupported provider run_kind")
+        for label, value in (
+            ("semantic_contract_sha256", row.semantic_contract_sha256),
+            ("instruction_sha256", row.instruction_sha256),
+            ("output_schema_sha256", row.output_schema_sha256),
+            ("source_request_sha256", row.source_request_sha256),
+            ("request_body_sha256", row.request_body_sha256),
+            ("request_fingerprint_sha256", row.request_fingerprint_sha256),
+        ):
+            _require_lower_sha256(value, label)
+        _json_object(
+            row.safe_configuration_json,
+            "safe_configuration_json",
+            secret_safe=True,
+        )
+        self._verify_artifact(
+            row.request_artifact_store_key,
+            row.request_body_sha256,
+            "request_body_sha256",
+        )
+        return _insert_immutable(self._conn, row)
+
+    def add_provider_run_claim_inputs(
+        self,
+        rows: tuple[SemanticProviderRunClaimInputsRow, ...]
+        | list[SemanticProviderRunClaimInputsRow],
+    ) -> int:
+        for row in rows:
+            _require_lower_sha256(
+                row.claim_effective_text_sha256,
+                "claim_effective_text_sha256",
+            )
+        return sum(_insert_immutable(self._conn, row) for row in rows)
+
+    def add_provider_run_evidence_inputs(
+        self,
+        rows: tuple[SemanticProviderRunEvidenceInputsRow, ...]
+        | list[SemanticProviderRunEvidenceInputsRow],
+    ) -> int:
+        for row in rows:
+            _require_lower_sha256(
+                row.evidence_text_sha256,
+                "evidence_text_sha256",
+            )
+        return sum(_insert_immutable(self._conn, row) for row in rows)
+
+    def add_provider_run_events(
+        self,
+        rows: tuple[SemanticProviderRunEventsRow, ...]
+        | list[SemanticProviderRunEventsRow],
+    ) -> int:
+        inserted = 0
+        for row in rows:
+            if row.event_type not in _PROVIDER_EVENT_TYPES:
+                raise PersistenceIntegrityError(
+                    f"Unsupported provider event_type: {row.event_type!r}"
+                )
+            _json_object(row.usage_json, "usage_json")
+            _json_object(row.diagnostics_json, "diagnostics_json", secret_safe=True)
+            if (row.response_body_sha256 is None) != (
+                row.response_artifact_store_key is None
+            ):
+                raise PersistenceIntegrityError(
+                    "response SHA/CAS key must be both null or both present"
+                )
+            if (row.validated_output_sha256 is None) != (
+                row.validated_output_artifact_store_key is None
+            ):
+                raise PersistenceIntegrityError(
+                    "validated-output SHA/CAS key must be both null or both present"
+                )
+            if row.response_body_sha256 is not None:
+                self._verify_artifact(
+                    str(row.response_artifact_store_key),
+                    row.response_body_sha256,
+                    "response_body_sha256",
+                )
+            if row.validated_output_sha256 is not None:
+                self._verify_artifact(
+                    str(row.validated_output_artifact_store_key),
+                    row.validated_output_sha256,
+                    "validated_output_sha256",
+                )
+            inserted += int(_insert_immutable(self._conn, row))
+        return inserted
+
+    def list_provider_run_events(
+        self,
+        run_id: str,
+    ) -> tuple[SemanticProviderRunEventsRow, ...]:
+        table, columns, _ = _TABLE_SPECS[SemanticProviderRunEventsRow]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        rows = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" WHERE run_id=? '
+            "ORDER BY event_index, id",
+            (run_id,),
+        ).fetchall()
+        return tuple(SemanticProviderRunEventsRow(*row) for row in rows)
+
+    def add_provider_candidate_origins(
+        self,
+        rows: tuple[SemanticProviderCandidateOriginsRow, ...]
+        | list[SemanticProviderCandidateOriginsRow],
+    ) -> int:
+        inserted = 0
+        for row in rows:
+            _require_lower_sha256(row.proposal_sha256, "proposal_sha256")
+            validated = self._conn.execute(
+                "SELECT 1 FROM semantic_provider_run_events "
+                "WHERE run_id=? AND event_type='validated' LIMIT 1",
+                (row.run_id,),
+            ).fetchone()
+            if validated is None:
+                raise PersistenceIntegrityError(
+                    "Provider candidate origin requires validated provider output"
+                )
+            inserted += int(_insert_immutable(self._conn, row))
+        return inserted
+
+
+class SQLiteSemanticCandidateRepository:
+    def __init__(self, conn: sqlite3.Connection) -> None:
+        self._conn = conn
+
+    def _validate_candidate_row(
+        self,
+        row: SemanticCandidatesRow,
+    ) -> dict[str, Any]:
+        _require_lower_sha256(
+            row.canonical_candidate_sha256,
+            "canonical_candidate_sha256",
+        )
+        _require_lower_sha256(
+            row.canonical_candidate_document_sha256,
+            "canonical_candidate_document_sha256",
+        )
+        actual_document_sha = hashlib.sha256(
+            row.canonical_candidate_json.encode("utf-8")
+        ).hexdigest()
+        if actual_document_sha != row.canonical_candidate_document_sha256:
+            raise PersistenceIntegrityError(
+                "Candidate document SHA does not match canonical JSON bytes"
+            )
+        payload = _json_object(
+            row.canonical_candidate_json,
+            "canonical_candidate_json",
+        )
+        if canonical_json_text(payload) != row.canonical_candidate_json:
+            raise PersistenceIntegrityError(
+                "canonical_candidate_json is not canonical JSON"
+            )
+        contract = payload.get("contract")
+        source = payload.get("source")
+        semantic = payload.get("semantic")
+        if not isinstance(contract, dict) or not isinstance(source, dict) or not isinstance(semantic, dict):
+            raise PersistenceIntegrityError(
+                "Candidate JSON lacks contract/source/semantic objects"
+            )
+        expected_scalars = {
+            "schema_version": payload.get("schema_version"),
+            "semantic_contract_name": contract.get("name"),
+            "semantic_contract_version": contract.get("version"),
+            "semantic_contract_sha256": contract.get("canonical_sha256"),
+            "relation_type_basis_version": contract.get("relation_type_basis_version"),
+            "relation_type_registry_sha256": contract.get("relation_type_registry_sha256"),
+            "grounding_policy_sha256": contract.get("grounding_policy_sha256"),
+            "claim_scoped_provenance_policy_sha256": contract.get(
+                "claim_scoped_provenance_policy_sha256"
+            ),
+            "source_statement_claim_id": source.get("source_statement_claim_id"),
+            "source_claim_effective_text_sha256": source.get(
+                "source_claim_effective_text_sha256"
+            ),
+            "semantic_type": semantic.get("semantic_type"),
+            "relation": semantic.get("relation"),
+            "epistemic_class": semantic.get("epistemic_class"),
+            "promotion_readiness": payload.get("promotion_readiness"),
+            "canonical_candidate_sha256": payload.get(
+                "canonical_candidate_sha256"
+            ),
+        }
+        for field_name, expected in expected_scalars.items():
+            if getattr(row, field_name) != expected:
+                raise PersistenceIntegrityError(
+                    f"Candidate scalar/JSON mismatch: {field_name}"
+                )
+        if payload.get("automatic_scientific_acceptance") is not False:
+            raise PersistenceIntegrityError(
+                "Candidate JSON must deny automatic scientific acceptance"
+            )
+        if row.automatic_scientific_acceptance != 0:
+            raise PersistenceIntegrityError(
+                "Persisted candidate must deny automatic scientific acceptance"
+            )
+        for field_name in (
+            "semantic_contract_sha256",
+            "relation_type_registry_sha256",
+            "grounding_policy_sha256",
+            "claim_scoped_provenance_policy_sha256",
+            "source_claim_effective_text_sha256",
+        ):
+            _require_lower_sha256(getattr(row, field_name), field_name)
+        current_sha, _ = _current_claim_effective_sha(
+            self._conn,
+            row.source_statement_claim_id,
+        )
+        if current_sha != row.source_claim_effective_text_sha256:
+            raise PersistenceIntegrityError(
+                "Semantic candidate is stale against current source Claim"
+            )
+        return payload
+
+    def get_candidate(
+        self,
+        candidate_id: str,
+    ) -> SemanticCandidatesRow | None:
+        return _fetch(self._conn, SemanticCandidatesRow, (candidate_id,))
+
+    def get_candidate_evidence_links(
+        self,
+        candidate_id: str,
+    ) -> tuple[SemanticCandidateEvidenceLinksRow, ...]:
+        table, columns, _ = _TABLE_SPECS[SemanticCandidateEvidenceLinksRow]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        rows = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" WHERE semantic_candidate_id=? '
+            "ORDER BY evidence_order, evidence_id",
+            (candidate_id,),
+        ).fetchall()
+        return tuple(SemanticCandidateEvidenceLinksRow(*row) for row in rows)
+
+    def find_by_canonical_candidate_sha256(
+        self,
+        sha256: str,
+    ) -> SemanticCandidatesRow | None:
+        _require_lower_sha256(sha256, "canonical candidate lookup SHA")
+        table, columns, _ = _TABLE_SPECS[SemanticCandidatesRow]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        row = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" '
+            "WHERE canonical_candidate_sha256=?",
+            (sha256,),
+        ).fetchone()
+        return None if row is None else SemanticCandidatesRow(*row)
+
+    def _validate_evidence_links(
+        self,
+        row: SemanticCandidatesRow,
+        payload: dict[str, Any],
+        evidence_links: tuple[SemanticCandidateEvidenceLinksRow, ...]
+        | list[SemanticCandidateEvidenceLinksRow],
+    ) -> tuple[SemanticCandidateEvidenceLinksRow, ...]:
+        source = payload["source"]
+        expected_ids = source.get("evidence_ids")
+        if (
+            not isinstance(expected_ids, list)
+            or not expected_ids
+            or expected_ids != sorted(set(expected_ids))
+        ):
+            raise PersistenceIntegrityError(
+                "Candidate Evidence IDs must be sorted and unique"
+            )
+        ordered = tuple(sorted(evidence_links, key=lambda item: item.evidence_order))
+        if [link.evidence_order for link in ordered] != list(range(len(ordered))):
+            raise PersistenceIntegrityError(
+                "Candidate Evidence ordering must be contiguous from zero"
+            )
+        if [link.evidence_id for link in ordered] != expected_ids:
+            raise PersistenceIntegrityError(
+                "Candidate Evidence links do not exactly match candidate JSON"
+            )
+        for link in ordered:
+            if link.semantic_candidate_id != row.id:
+                raise PersistenceIntegrityError(
+                    "Candidate Evidence link candidate ID mismatch"
+                )
+            if link.source_statement_claim_id != row.source_statement_claim_id:
+                raise PersistenceIntegrityError(
+                    "Candidate Evidence link source Claim mismatch"
+                )
+            ownership = self._conn.execute(
+                "SELECT 1 FROM claim_evidence_links "
+                "WHERE claim_id=? AND evidence_id=?",
+                (link.source_statement_claim_id, link.evidence_id),
+            ).fetchone()
+            if ownership is None:
+                raise PersistenceIntegrityError(
+                    "Candidate Evidence is not owned by source Claim"
+                )
+        return ordered
+
+    def add_candidate(
+        self,
+        row: SemanticCandidatesRow,
+        evidence_links: tuple[SemanticCandidateEvidenceLinksRow, ...]
+        | list[SemanticCandidateEvidenceLinksRow],
+    ) -> tuple[SemanticCandidatesRow, bool]:
+        payload = self._validate_candidate_row(row)
+        ordered = self._validate_evidence_links(row, payload, evidence_links)
+        existing = self.find_by_canonical_candidate_sha256(
+            row.canonical_candidate_sha256
+        )
+        if existing is not None:
+            existing_links = self.get_candidate_evidence_links(existing.id)
+            normalized_requested = tuple(
+                (
+                    item.source_statement_claim_id,
+                    item.evidence_id,
+                    item.evidence_order,
+                )
+                for item in ordered
+            )
+            normalized_existing = tuple(
+                (
+                    item.source_statement_claim_id,
+                    item.evidence_id,
+                    item.evidence_order,
+                )
+                for item in existing_links
+            )
+            comparable_fields = (
+                "schema_version",
+                "semantic_contract_name",
+                "semantic_contract_version",
+                "semantic_contract_sha256",
+                "relation_type_basis_version",
+                "relation_type_registry_sha256",
+                "grounding_policy_sha256",
+                "claim_scoped_provenance_policy_sha256",
+                "source_statement_claim_id",
+                "source_claim_effective_text_sha256",
+                "semantic_type",
+                "relation",
+                "epistemic_class",
+                "promotion_readiness",
+                "automatic_scientific_acceptance",
+                "canonical_candidate_sha256",
+                "canonical_candidate_document_sha256",
+                "canonical_candidate_json",
+            )
+            if (
+                any(
+                    getattr(existing, field) != getattr(row, field)
+                    for field in comparable_fields
+                )
+                or normalized_existing != normalized_requested
+            ):
+                raise DuplicateIdentityConflict(
+                    "Canonical semantic candidate identity conflicts with "
+                    "persisted row/link identity"
+                )
+            return existing, False
+
+        savepoint = f"candidate_{hashlib.sha256(row.id.encode()).hexdigest()[:16]}"
+        self._conn.execute(f"SAVEPOINT {savepoint}")
+        try:
+            _insert_immutable(self._conn, row)
+            for link in ordered:
+                _insert_immutable(self._conn, link)
+            self._conn.execute(f"RELEASE SAVEPOINT {savepoint}")
+        except Exception:
+            self._conn.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+            self._conn.execute(f"RELEASE SAVEPOINT {savepoint}")
+            raise
+        return row, True
+
+    def add_candidate_evidence_links(
+        self,
+        rows: tuple[SemanticCandidateEvidenceLinksRow, ...]
+        | list[SemanticCandidateEvidenceLinksRow],
+    ) -> int:
+        return sum(_insert_immutable(self._conn, row) for row in rows)
+
+    def _correction_reaches(
+        self,
+        start_candidate_id: str,
+        target_candidate_id: str,
+    ) -> bool:
+        stack = [start_candidate_id]
+        seen: set[str] = set()
+        while stack:
+            current = stack.pop()
+            if current == target_candidate_id:
+                return True
+            if current in seen:
+                continue
+            seen.add(current)
+            rows = self._conn.execute(
+                "SELECT replacement_candidate_id "
+                "FROM semantic_candidate_review_events "
+                "WHERE semantic_candidate_id=? AND decision='correct' "
+                "AND replacement_candidate_id IS NOT NULL",
+                (current,),
+            ).fetchall()
+            stack.extend(str(row[0]) for row in rows)
+        return False
+
+    def add_review_event(
+        self,
+        row: SemanticCandidateReviewEventsRow,
+    ) -> bool:
+        if row.decision not in _CANDIDATE_REVIEW_DECISIONS:
+            raise PersistenceIntegrityError(
+                f"Invalid semantic candidate review decision: {row.decision!r}"
+            )
+        if not row.reviewer.strip() or not row.review_text.strip():
+            raise PersistenceIntegrityError(
+                "Candidate review requires reviewer and review_text"
+            )
+        if hashlib.sha256(row.review_text.encode("utf-8")).hexdigest() != (
+            row.review_text_sha256
+        ):
+            raise PersistenceIntegrityError("Candidate review text SHA mismatch")
+        _require_lower_sha256(
+            row.semantic_candidate_sha256,
+            "semantic_candidate_sha256",
+        )
+        _require_lower_sha256(row.review_policy_sha256, "review_policy_sha256")
+        if (
+            row.review_policy_name != "ecobiome-semantic-candidate-human-review"
+            or row.review_policy_version != "1"
+            or row.review_policy_sha256
+            != "cb68231ccb26d398ce3c42c9cae33c8470325390b8e3c524f9d9a1b5a1bc8f61"
+        ):
+            raise PersistenceIntegrityError(
+                "Candidate review policy identity is not the frozen V1 contract"
+            )
+        _json_object(row.review_metadata_json, "review_metadata_json", secret_safe=True)
+
+        candidate = self.get_candidate(row.semantic_candidate_id)
+        if candidate is None:
+            raise PersistenceIntegrityError("Reviewed semantic candidate is missing")
+        if candidate.canonical_candidate_sha256 != row.semantic_candidate_sha256:
+            raise PersistenceIntegrityError("Candidate review SHA binding mismatch")
+
+        if row.decision == "correct":
+            if row.replacement_candidate_id is None or row.replacement_candidate_sha256 is None:
+                raise PersistenceIntegrityError(
+                    "Candidate correction requires replacement candidate"
+                )
+            if row.replacement_candidate_id == row.semantic_candidate_id:
+                raise PersistenceIntegrityError(
+                    "Candidate correction cannot self-replace"
+                )
+            replacement = self.get_candidate(row.replacement_candidate_id)
+            if replacement is None:
+                raise PersistenceIntegrityError("Replacement candidate is missing")
+            if replacement.canonical_candidate_sha256 != row.replacement_candidate_sha256:
+                raise PersistenceIntegrityError("Replacement candidate SHA mismatch")
+            if replacement.source_statement_claim_id != candidate.source_statement_claim_id:
+                raise PersistenceIntegrityError(
+                    "Candidate correction replacement must retain source Claim"
+                )
+            if self._correction_reaches(
+                replacement.id,
+                candidate.id,
+            ):
+                raise PersistenceIntegrityError(
+                    "Candidate correction lineage cycle is forbidden"
+                )
+        elif (
+            row.replacement_candidate_id is not None
+            or row.replacement_candidate_sha256 is not None
+        ):
+            raise PersistenceIntegrityError(
+                "accept/reject candidate reviews cannot carry replacement"
+            )
+        return _insert_immutable(self._conn, row)
+
+    def list_review_events(
+        self,
+        candidate_id: str,
+    ) -> tuple[SemanticCandidateReviewEventsRow, ...]:
+        table, columns, _ = _TABLE_SPECS[SemanticCandidateReviewEventsRow]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        rows = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" WHERE semantic_candidate_id=? '
+            "ORDER BY reviewed_at, id",
+            (candidate_id,),
+        ).fetchall()
+        return tuple(SemanticCandidateReviewEventsRow(*row) for row in rows)
+
 class SQLiteScientificFoundationUnitOfWork:
     def __init__(self,config:PersistenceConfig,*,repo_root:Path,artifact_store:RawArtifactStore)->None:
         self._config=config.validated(repo_root); self._artifact_store=artifact_store; self._conn:sqlite3.Connection|None=None
@@ -580,6 +1219,12 @@ class SQLiteScientificFoundationUnitOfWork:
         self.assertions=SQLiteScientificAssertionRepository(self._conn)
         self.assessments=SQLiteScientificAssessmentRepository(self._conn)
         self.syntheses=SQLiteKnowledgeSynthesisRepository(self._conn)
+        self.provider_audit=SQLiteSemanticProviderAuditRepository(
+            self._conn, self._artifact_store
+        )
+        self.semantic_candidates=SQLiteSemanticCandidateRepository(
+            self._conn
+        )
         return self
     def __exit__(self,exc_type:object,exc:object,tb:object)->None:
         if self._conn is None: return

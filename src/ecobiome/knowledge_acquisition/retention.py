@@ -76,6 +76,16 @@ def _table_columns(
     }
 
 
+def _table_exists(
+    connection: sqlite3.Connection,
+    table: str,
+) -> bool:
+    return connection.execute(
+        "SELECT 1 FROM sqlite_schema WHERE type='table' AND name=?",
+        (table,),
+    ).fetchone() is not None
+
+
 def _cas_relpath_from_store_key(store_key: object) -> str:
     key = str(store_key)
     prefix = "sha256:"
@@ -132,6 +142,27 @@ def _database_referenced_artifacts(
             """
         )
     }
+    if _table_exists(connection, "semantic_provider_runs"):
+        store_keys |= {
+            str(row[0])
+            for row in connection.execute(
+                "SELECT request_artifact_store_key "
+                "FROM semantic_provider_runs "
+                "WHERE request_artifact_store_key IS NOT NULL"
+            )
+        }
+    if _table_exists(connection, "semantic_provider_run_events"):
+        for column in (
+            "response_artifact_store_key",
+            "validated_output_artifact_store_key",
+        ):
+            store_keys |= {
+                str(row[0])
+                for row in connection.execute(
+                    f"SELECT {column} FROM semantic_provider_run_events "
+                    f"WHERE {column} IS NOT NULL"
+                )
+            }
     return {
         _cas_relpath_from_store_key(store_key)
         for store_key in store_keys

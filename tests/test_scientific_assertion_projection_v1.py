@@ -11,6 +11,9 @@ from ecobiome.knowledge_acquisition.scientific_assertion_projection_v1 import (
     candidate_argument_sha256_v1,
     project_scientific_assertion_v1,
 )
+from ecobiome.knowledge_acquisition.semantic_candidate_review_v1 import (
+    build_semantic_candidate_review_event_v1,
+)
 from ecobiome.knowledge_acquisition.semantic_candidate_v2_11 import (
     build_semantic_candidate_v2_11,
 )
@@ -19,6 +22,7 @@ from ecobiome.knowledge_persistence.contracts import (
     ClaimReviewEventsRow,
     SegmentReviewEventsRow,
     SegmentsRow,
+    SemanticCandidateReviewEventsRow,
     SourceClaimsRow,
     SourceEvidenceRow,
 )
@@ -157,6 +161,34 @@ def _accept_review() -> ClaimReviewEventsRow:
     )
 
 
+def _candidate_accept_review(
+    candidate: dict[str, object],
+    *,
+    decision: str = "accept",
+    event_id: str = "candidate-review-1",
+    reviewed_at: str = "2026-08-14T20:11:00+00:00",
+) -> SemanticCandidateReviewEventsRow:
+    if decision == "correct":
+        return build_semantic_candidate_review_event_v1(
+            candidate,
+            event_id=event_id,
+            semantic_candidate_id="candidate-1",
+            decision=decision,
+            reviewer="candidate-reviewer",
+            reviewed_at=reviewed_at,
+            replacement_candidate_id="candidate-2",
+            replacement_candidate_sha256="0" * 64,
+        )
+    return build_semantic_candidate_review_event_v1(
+        candidate,
+        event_id=event_id,
+        semantic_candidate_id="candidate-1",
+        decision=decision,
+        reviewer="candidate-reviewer",
+        reviewed_at=reviewed_at,
+    )
+
+
 def _evidence_links() -> list[ClaimEvidenceLinksRow]:
     return [
         ClaimEvidenceLinksRow(
@@ -271,6 +303,7 @@ def _project(
     *,
     claim: SourceClaimsRow | None = None,
     claim_reviews: list[ClaimReviewEventsRow] | None = None,
+    candidate_reviews: list[SemanticCandidateReviewEventsRow] | None = None,
     links: list[ClaimEvidenceLinksRow] | None = None,
     evidence_rows: list[SourceEvidenceRow] | None = None,
     segments: dict[str, SegmentsRow] | None = None,
@@ -287,6 +320,11 @@ def _project(
             [_accept_review()]
             if claim_reviews is None
             else claim_reviews
+        ),
+        candidate_reviews=(
+            [_candidate_accept_review(current_candidate)]
+            if candidate_reviews is None
+            else candidate_reviews
         ),
         claim_evidence_links=links or _evidence_links(),
         evidence_rows=evidence_rows or _evidence_rows(),
@@ -530,6 +568,7 @@ def test_projection_rejects_extra_cross_claim_entity_reconstruction() -> None:
             candidate,
             source_claim=_claim(),
             claim_reviews=[_accept_review()],
+            candidate_reviews=[_candidate_accept_review(candidate)],
             claim_evidence_links=_evidence_links(),
             evidence_rows=_evidence_rows(),
             segments=_segments(),
@@ -658,9 +697,31 @@ def test_projection_fails_closed_without_exact_projection_mapping() -> None:
             candidate,
             source_claim=claim,
             claim_reviews=[review],
+            candidate_reviews=[_candidate_accept_review(candidate)],
             claim_evidence_links=[link],
             evidence_rows=[evidence],
             segments={"seg-study": segment},
             segment_reviews={},
             entity_resolutions={},
         )
+def test_projection_requires_human_candidate_acceptance() -> None:
+    with pytest.raises(
+        ScientificAssertionProjectionV1Error,
+        match="Candidate requires at least one human review",
+    ):
+        _project(candidate_reviews=[])
+
+
+def test_projection_rejects_latest_rejected_candidate() -> None:
+    candidate = _candidate()
+    rejected = _candidate_accept_review(
+        candidate,
+        decision="reject",
+        event_id="candidate-review-reject",
+        reviewed_at="2026-08-14T20:12:00+00:00",
+    )
+    with pytest.raises(
+        ScientificAssertionProjectionV1Error,
+        match="latest semantic Candidate review is 'reject'",
+    ):
+        _project(candidate, candidate_reviews=[rejected])

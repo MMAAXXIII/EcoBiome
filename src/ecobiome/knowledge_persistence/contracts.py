@@ -379,6 +379,133 @@ class SourceLineageEdgesRow:
     created_at: str
 
 
+@dataclass(frozen=True, slots=True)
+class SemanticProviderRunsRow:
+    id: str
+    run_kind: str
+    provider_name: str
+    provider_adapter_name: str
+    provider_adapter_version: str
+    endpoint: str | None
+    model_requested: str
+    semantic_contract_name: str
+    semantic_contract_version: str
+    semantic_contract_sha256: str
+    instruction_sha256: str
+    output_schema_sha256: str
+    source_request_sha256: str
+    request_body_sha256: str
+    request_artifact_store_key: str
+    request_fingerprint_sha256: str
+    safe_configuration_json: str
+    started_at: str | None
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticProviderRunClaimInputsRow:
+    run_id: str
+    claim_id: str
+    input_order: int
+    claim_effective_text_sha256: str
+    claim_review_status_at_run: str
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticProviderRunEvidenceInputsRow:
+    run_id: str
+    claim_id: str
+    evidence_id: str
+    evidence_order: int
+    evidence_text_sha256: str
+    segment_review_status_at_run: str
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticProviderRunEventsRow:
+    id: str
+    run_id: str
+    event_index: int
+    event_type: str
+    model_returned: str | None
+    provider_request_id: str | None
+    provider_response_id: str | None
+    http_status_code: int | None
+    response_status: str | None
+    content_type: str | None
+    response_body_sha256: str | None
+    response_artifact_store_key: str | None
+    validated_output_sha256: str | None
+    validated_output_artifact_store_key: str | None
+    usage_json: str
+    diagnostics_json: str
+    proposal_count: int | None
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticCandidatesRow:
+    id: str
+    schema_version: str
+    semantic_contract_name: str
+    semantic_contract_version: str
+    semantic_contract_sha256: str
+    relation_type_basis_version: str
+    relation_type_registry_sha256: str
+    grounding_policy_sha256: str
+    claim_scoped_provenance_policy_sha256: str
+    source_statement_claim_id: str
+    source_claim_effective_text_sha256: str
+    semantic_type: str
+    relation: str
+    epistemic_class: str
+    promotion_readiness: str
+    automatic_scientific_acceptance: int
+    canonical_candidate_sha256: str
+    canonical_candidate_document_sha256: str
+    canonical_candidate_json: str
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticCandidateEvidenceLinksRow:
+    semantic_candidate_id: str
+    source_statement_claim_id: str
+    evidence_id: str
+    evidence_order: int
+    created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticCandidateReviewEventsRow:
+    id: str
+    semantic_candidate_id: str
+    semantic_candidate_sha256: str
+    decision: str
+    reviewer: str
+    review_text: str
+    review_text_sha256: str
+    rationale: str
+    review_metadata_json: str
+    review_policy_name: str
+    review_policy_version: str
+    review_policy_sha256: str
+    replacement_candidate_id: str | None
+    replacement_candidate_sha256: str | None
+    reviewed_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticProviderCandidateOriginsRow:
+    run_id: str
+    proposal_index: int
+    semantic_candidate_id: str
+    proposal_sha256: str
+    created_at: str
+
+
 class RawArtifactStore(Protocol):
     def put(self, data: bytes) -> StoredArtifact: ...
     def get(self, key: str) -> bytes: ...
@@ -437,12 +564,55 @@ class KnowledgeSynthesisRepository(Protocol):
     def list_for_assertion(self, assertion_id: str, revision: int) -> Sequence[KnowledgeSynthesesRow]: ...
 
 
+class SemanticProviderAuditRepository(Protocol):
+    def add_provider_run(self, row: SemanticProviderRunsRow) -> bool: ...
+    def add_provider_run_claim_inputs(
+        self, rows: Sequence[SemanticProviderRunClaimInputsRow]
+    ) -> int: ...
+    def add_provider_run_evidence_inputs(
+        self, rows: Sequence[SemanticProviderRunEvidenceInputsRow]
+    ) -> int: ...
+    def add_provider_run_events(
+        self, rows: Sequence[SemanticProviderRunEventsRow]
+    ) -> int: ...
+    def list_provider_run_events(
+        self, run_id: str
+    ) -> Sequence[SemanticProviderRunEventsRow]: ...
+    def add_provider_candidate_origins(
+        self, rows: Sequence[SemanticProviderCandidateOriginsRow]
+    ) -> int: ...
+
+
+class SemanticCandidateRepository(Protocol):
+    def add_candidate(
+        self,
+        row: SemanticCandidatesRow,
+        evidence_links: Sequence[SemanticCandidateEvidenceLinksRow],
+    ) -> tuple[SemanticCandidatesRow, bool]: ...
+    def add_candidate_evidence_links(
+        self, rows: Sequence[SemanticCandidateEvidenceLinksRow]
+    ) -> int: ...
+    def get_candidate(self, candidate_id: str) -> SemanticCandidatesRow | None: ...
+    def get_candidate_evidence_links(
+        self, candidate_id: str
+    ) -> Sequence[SemanticCandidateEvidenceLinksRow]: ...
+    def find_by_canonical_candidate_sha256(
+        self, sha256: str
+    ) -> SemanticCandidatesRow | None: ...
+    def add_review_event(self, row: SemanticCandidateReviewEventsRow) -> bool: ...
+    def list_review_events(
+        self, candidate_id: str
+    ) -> Sequence[SemanticCandidateReviewEventsRow]: ...
+
+
 class ScientificFoundationUnitOfWork(Protocol):
     provenance: ProvenanceRepository
     entities: ScientificEntityRepository
     assertions: ScientificAssertionRepository
     assessments: ScientificAssessmentRepository
     syntheses: KnowledgeSynthesisRepository
+    provider_audit: SemanticProviderAuditRepository
+    semantic_candidates: SemanticCandidateRepository
     artifact_store: RawArtifactStore
 
     def __enter__(self) -> Self: ...
