@@ -1,0 +1,118 @@
+{
+  "id": "profile-aquarium-v1",
+  "profile_kind": "aquarium",
+  "label": "Reference aquarium",
+  "structures": [
+    {
+      "id": "tank",
+      "structure_type": "container",
+      "label": "Tank",
+      "properties": {
+        "shape": "rectangular"
+      }
+    }
+  ],
+  "zones": [
+    {
+      "id": "water",
+      "zone_type": "open_water",
+      "label": "Open water",
+      "hosted_by_structure_id": "tank",
+      "properties": {}
+    },
+    {
+      "id": "substrate",
+      "zone_type": "benthic_substrate",
+      "label": "Substrate",
+      "hosted_by_structure_id": "tank",
+      "properties": {}
+    }
+  ],
+  "functional_systems": [
+    {
+      "id": "biofilter",
+      "system_type": "biofilm_filter",
+      "label": "Biofilter",
+      "zone_ids": [
+        "water"
+      ],
+      "properties": {}
+    }
+  ],
+  "populations": [
+    {
+      "id": "fish",
+      "population_type": "animal_population",
+      "label": "Fish",
+      "zone_ids": [
+        "water"
+      ],
+      "scientific_entity": null,
+      "properties": {}
+    },
+    {
+      "id": "plants",
+      "population_type": "plant_population",
+      "label": "Aquatic plants",
+      "zone_ids": [
+        "water"
+      ],
+      "scientific_entity": null,
+      "properties": {}
+    },
+    {
+      "id": "microbes",
+      "population_type": "microbial_community",
+      "label": "Nitrifying community",
+      "zone_ids": [
+        "water",
+        "substrate"
+      ],
+      "scientific_entity": null,
+      "properties": {}
+    }
+  ],
+  "material_components": [
+    {
+      "id": "reduced_inorganic_nitrogen",
+      "component_type": "elemental_n_pool",
+      "label": "Reduced inorganic nitrogen",
+      "scientific_entity": null
+    },
+    {
+      "id": "oxidized_inorganic_nitrogen",
+      "component_type": "elemental_n_pool",
+      "label": "Oxidized inorganic nitrogen",
+      "scientific_entity": null
+    },
+    {
+      "id": "biological_nitrogen",
+      "component_type": "elemental_n_pool",
+      "label": "Biological nitrogen",
+      "scientific_entity": null
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-reduced-to-biofilter",
+      "source_node_id": "water",
+      "target_node_id": "biofilter",
+      "material_component_id": "reduced_inorganic_nitrogen",
+      "flow_kind": "transport"
+    },
+    {
+      "id": "flow-oxidized-from-biofilter",
+      "source_node_id": "biofilter",
+      "target_node_id": "water",
+      "material_component_id": "oxidized_inorganic_nitrogen",
+      "flow_kind": "transport"
+    },
+    {
+      "id": "flow-oxidized-to-plants",
+      "source_node_id": "water",
+      "target_node_id": "plants",
+      "material_component_id": "oxidized_inorganic_nitrogen",
+      "flow_kind": "uptake"
+    }
+  ]
+}

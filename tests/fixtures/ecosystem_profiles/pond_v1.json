@@ -1,0 +1,108 @@
+{
+  "id": "profile-pond-v1",
+  "profile_kind": "pond",
+  "label": "Reference small pond",
+  "structures": [
+    {
+      "id": "basin",
+      "structure_type": "pond_basin",
+      "label": "Basin",
+      "properties": {
+        "exposure": "outdoor"
+      }
+    }
+  ],
+  "zones": [
+    {
+      "id": "water",
+      "zone_type": "open_water",
+      "label": "Open water",
+      "hosted_by_structure_id": "basin",
+      "properties": {}
+    },
+    {
+      "id": "substrate",
+      "zone_type": "benthic_substrate",
+      "label": "Benthic substrate",
+      "hosted_by_structure_id": "basin",
+      "properties": {}
+    },
+    {
+      "id": "planted",
+      "zone_type": "planted_water",
+      "label": "Planted water",
+      "hosted_by_structure_id": "basin",
+      "properties": {}
+    }
+  ],
+  "functional_systems": [
+    {
+      "id": "biofilm",
+      "system_type": "natural_biofilm",
+      "label": "Biofilm",
+      "zone_ids": [
+        "water",
+        "substrate"
+      ],
+      "properties": {}
+    }
+  ],
+  "populations": [
+    {
+      "id": "fish",
+      "population_type": "animal_population",
+      "label": "Fish",
+      "zone_ids": [
+        "water"
+      ],
+      "scientific_entity": null,
+      "properties": {}
+    },
+    {
+      "id": "plants",
+      "population_type": "plant_population",
+      "label": "Aquatic plants",
+      "zone_ids": [
+        "planted"
+      ],
+      "scientific_entity": null,
+      "properties": {}
+    }
+  ],
+  "material_components": [
+    {
+      "id": "reduced_inorganic_nitrogen",
+      "component_type": "elemental_n_pool",
+      "label": "Reduced inorganic nitrogen",
+      "scientific_entity": null
+    },
+    {
+      "id": "oxidized_inorganic_nitrogen",
+      "component_type": "elemental_n_pool",
+      "label": "Oxidized inorganic nitrogen",
+      "scientific_entity": null
+    },
+    {
+      "id": "biological_nitrogen",
+      "component_type": "elemental_n_pool",
+      "label": "Biological nitrogen",
+      "scientific_entity": null
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-reduced-to-biofilm",
+      "source_node_id": "water",
+      "target_node_id": "biofilm",
+      "material_component_id": "reduced_inorganic_nitrogen",
+      "flow_kind": "transport"
+    },
+    {
+      "id": "flow-oxidized-to-plants",
+      "source_node_id": "water",
+      "target_node_id": "plants",
+      "material_component_id": "oxidized_inorganic_nitrogen",
+      "flow_kind": "uptake"
+    }
+  ]
+}

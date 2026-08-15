@@ -14,6 +14,11 @@ from ecobiome.reasoning.consistency import (
     ConsistencyRuleFailure,
     ConsistencyStatus,
 )
+from ecobiome.reasoning.ecosystem_explanation_v1 import (
+    CausalStepV1,
+    EcosystemExplanationTraceV1,
+    build_ecosystem_explanation_v1,
+)
 from ecobiome.reasoning.evidence import (
     Evidence,
     EvidenceRelation,
@@ -47,6 +52,7 @@ __all__ = [
     "CausalChainEngine",
     "CausalChainResult",
     "CausalStep",
+    "CausalStepV1",
     "ConsistencyAssessment",
     "ConsistencyEngine",
     "ConsistencyEvaluationReport",
@@ -54,6 +60,7 @@ __all__ = [
     "ConsistencyRule",
     "ConsistencyRuleFailure",
     "ConsistencyStatus",
+    "EcosystemExplanationTraceV1",
     "Evidence",
     "EvidenceRelation",
     "ExplanationEngine",
@@ -70,4 +77,5 @@ __all__ = [
     "RuleExecutionReport",
     "RuleFailure",
     "ScientificRule",
+    "build_ecosystem_explanation_v1",
 ]
