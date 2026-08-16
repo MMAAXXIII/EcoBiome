@@ -1,7 +1,29 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  getAllMeasurements,
+  getDiagnosticFindings,
+  getDiagnostics,
+  getEcology,
+  getEquipment,
+  getGuidance,
+  getJournal,
+  getMeasurements,
+  getMedia,
+  getOrganisms,
+  getWaterBodies,
+} from '@/lib/api';
 import type {
-  WaterBody, Measurement, Diagnostic, JournalEntry, MediaItem, Organism, Metric,
+  Diagnostic,
+  EcologySnapshot,
+  EquipmentItem,
+  ExperienceLevel,
+  GuidanceSnapshot,
+  JournalEntry,
+  Measurement,
+  MediaItem,
+  Metric,
+  Organism,
+  WaterBody,
 } from '@/lib/types';
 
 export function useWaterBodies() {
@@ -11,173 +33,352 @@ export function useWaterBodies() {
 
   const refetch = useCallback(async () => {
     setLoading(true);
-    const { data: rows, error: err } = await supabase
-      .from('water_bodies')
-      .select('*')
-      .order('created_at', { ascending: true });
-    if (err) setError(err.message);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getWaterBodies());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { refetch(); }, [refetch]);
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
   return { data, loading, error, refetch };
 }
 
 export function useMeasurements(waterBodyId: string | null) {
   const [data, setData] = useState<Measurement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
-    if (!waterBodyId) { setData([]); setLoading(false); return; }
+    if (!waterBodyId) {
+      setData([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('measurements')
-      .select('*')
-      .eq('water_body_id', waterBodyId)
-      .order('recorded_at', { ascending: true });
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getMeasurements(waterBodyId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, [waterBodyId]);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
 export function useAllMeasurements() {
   const [data, setData] = useState<Measurement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('measurements')
-      .select('*')
-      .order('recorded_at', { ascending: true });
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getAllMeasurements());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
 export function useDiagnostics() {
   const [data, setData] = useState<Diagnostic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('diagnostics')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getDiagnostics());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
 export function useDiagnosticFindings(diagnosticId: string | null) {
-  const [data, setData] = useState<{ id: string; severity: string; metric: string; observation: string; explanation: string; causal_chain: string[] }[]>([]);
+  const [data, setData] = useState<Array<{
+    id: string;
+    severity: string;
+    metric: string;
+    observation: string;
+    explanation: string;
+    causal_chain: string[];
+  }>>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
-    if (!diagnosticId) { setData([]); setLoading(false); return; }
+    if (!diagnosticId) {
+      setData([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('diagnostic_findings')
-      .select('*')
-      .eq('diagnostic_id', diagnosticId);
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getDiagnosticFindings(diagnosticId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, [diagnosticId]);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
 export function useJournal() {
   const [data, setData] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('journal_entries')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getJournal());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
 export function useMedia() {
   const [data, setData] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('media_items')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getMedia());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+export function useEcology(waterBodyId: string | null) {
+  const [data, setData] = useState<EcologySnapshot>({
+    livestock: [],
+    plants: [],
+    water_sources: [],
+    substrate_layers: [],
+    feed_products: [],
+    known_livestock_biomass_g: 0,
+    operation_count: 0,
+    feeding_event_count: 0,
+    derived_indicators: {},
+    recent_operations: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refetch = useCallback(async () => {
+    if (!waterBodyId) {
+      setLoading(false);
+      setError(null);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      setData(await getEcology(waterBodyId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  }, [waterBodyId]);
+
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+export function useGuidance(
+  waterBodyId: string | null,
+  level: ExperienceLevel,
+) {
+  const [data, setData] = useState<GuidanceSnapshot | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refetch = useCallback(async () => {
+    if (!waterBodyId) {
+      setData(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      setData(await getGuidance(waterBodyId, level));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  }, [level, waterBodyId]);
+
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+export function useEquipment(waterBodyId: string | null) {
+  const [data, setData] = useState<EquipmentItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refetch = useCallback(async () => {
+    if (!waterBodyId) {
+      setData([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      setData(await getEquipment(waterBodyId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  }, [waterBodyId]);
+
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
 export function useOrganisms(waterBodyId: string | null) {
   const [data, setData] = useState<Organism[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
-    if (!waterBodyId) { setData([]); setLoading(false); return; }
+    if (!waterBodyId) {
+      setData([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
-    const { data: rows, error } = await supabase
-      .from('organisms')
-      .select('*')
-      .eq('water_body_id', waterBodyId)
-      .order('kind', { ascending: true });
-    if (error) console.error(error);
-    else setData(rows ?? []);
-    setLoading(false);
+    setError(null);
+    try {
+      setData(await getOrganisms(waterBodyId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }, [waterBodyId]);
 
-  useEffect(() => { refetch(); }, [refetch]);
-  return { data, loading, refetch };
+  useEffect(() => {
+    void refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }
 
-// Helper: get latest value per metric for a water body
-export function getLatestByMetric(measurements: Measurement[]): Record<Metric, number | null> {
+export function getLatestByMetric(
+  measurements: Measurement[],
+): Record<Metric, number | null> {
   const result = {} as Record<Metric, number | null>;
-  const sorted = [...measurements].sort((a, b) => new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime());
-  for (const m of sorted) {
-    if (result[m.metric] === undefined) {
-      result[m.metric] = m.value;
+  const sorted = [...measurements].sort(
+    (a, b) =>
+      new Date(b.recorded_at).getTime() -
+      new Date(a.recorded_at).getTime(),
+  );
+
+  for (const measurement of sorted) {
+    if (result[measurement.metric] === undefined) {
+      result[measurement.metric] = measurement.value;
     }
   }
+
   return result;
 }
 
-// Helper: get time series for a specific metric
-export function getMetricSeries(measurements: Measurement[], metric: Metric): number[] {
+export function getMetricSeries(
+  measurements: Measurement[],
+  metric: Metric,
+): number[] {
   return measurements
-    .filter((m) => m.metric === metric)
-    .sort((a, b) => new Date(a.recorded_at).getTime() - new Date(b.recorded_at).getTime())
-    .map((m) => m.value);
+    .filter((measurement) => measurement.metric === metric)
+    .sort(
+      (a, b) =>
+        new Date(a.recorded_at).getTime() -
+        new Date(b.recorded_at).getTime(),
+    )
+    .map((measurement) => measurement.value);
 }
