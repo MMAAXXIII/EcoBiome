@@ -126,7 +126,7 @@ export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: Dashb
         <div className="lg:col-span-1">
           {selectedWb && (
             <div onClick={() => onNavigateToWaterBody(selectedWb)} className="cursor-pointer group">
-              <WaterTankViz waterBody={selectedWb} fillPercent={72} />
+              <WaterTankViz waterBody={selectedWb} />
               <p className="mt-2 text-xs text-slate-500 group-hover:text-teal-400 transition-colors flex items-center gap-1">
                 Voir le détail <ChevronRight className="w-3 h-3" />
               </p>
@@ -222,7 +222,7 @@ export function DashboardView({ onNavigateToWaterBody, onNavigateToView }: Dashb
                 <StatusDot status={wb.status} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate group-hover:text-teal-300 transition-colors">{wb.name}</p>
-                  <p className="text-xs text-slate-500">{wb.type} · {wb.volume_liters} L</p>
+                  <p className="text-xs text-slate-500">{wb.type} · {wb.current_volume_liters.toFixed(1)} / {wb.capacity_liters.toFixed(1)} L</p>
                 </div>
                 <StatusBadge status={wb.status} />
                 <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-teal-400 transition-colors" />
