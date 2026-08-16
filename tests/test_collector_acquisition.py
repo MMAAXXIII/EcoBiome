@@ -17,11 +17,13 @@ from ecobiome.knowledge_acquisition.acquisition import (
     AmbiguousAdapterError,
     CanonicalSource,
     RetrievedPayload,
-    UnsupportedSourceError,
     validate_acquisition_result,
 )
 from ecobiome.knowledge_acquisition.adapters.local_file import LocalFileAdapter
-from ecobiome.knowledge_acquisition.collector_acquire import acquire_source
+from ecobiome.knowledge_acquisition.collector_acquire import (
+    acquire_source,
+    default_adapter_registry,
+)
 from ecobiome.knowledge_acquisition.collector_cli import main as collector_main
 from ecobiome.knowledge_acquisition.persistence import CollectorStore
 
@@ -85,16 +87,13 @@ def test_registry_rejects_equal_priority_ambiguity() -> None:
         registry.select(AcquisitionRequest("fixture"))
 
 
-def test_http_source_is_unsupported_without_network(tmp_path: Path) -> None:
-    database = tmp_path / "collector.sqlite3"
+def test_http_source_routes_to_generic_web_without_network() -> None:
+    adapter, match = default_adapter_registry().select(
+        AcquisitionRequest("https://example.invalid/source")
+    )
 
-    with pytest.raises(UnsupportedSourceError):
-        acquire_source(
-            source="https://example.invalid/source",
-            database=database,
-        )
-
-    assert not database.exists()
+    assert adapter.name == "web-page"
+    assert match.reason == "generic_public_http_or_https_url"
 
 
 def test_local_file_acquisition_persists_v2_provenance(

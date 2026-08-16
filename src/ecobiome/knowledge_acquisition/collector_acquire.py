@@ -15,7 +15,11 @@ from ecobiome.knowledge_acquisition.acquisition import (
     CanonicalSource,
     validate_acquisition_result,
 )
-from ecobiome.knowledge_acquisition.adapters import LocalFileAdapter, YouTubeAdapter
+from ecobiome.knowledge_acquisition.adapters import (
+    LocalFileAdapter,
+    WebPageAdapter,
+    YouTubeAdapter,
+)
 from ecobiome.knowledge_acquisition.persistence import (
     AcquisitionReceipt,
     CollectorStore,
@@ -35,7 +39,7 @@ class AcquisitionRun:
 
 def default_adapter_registry() -> AdapterRegistry:
     """Return the deterministic built-in acquisition adapter registry."""
-    return AdapterRegistry((YouTubeAdapter(), LocalFileAdapter()))
+    return AdapterRegistry((YouTubeAdapter(), LocalFileAdapter(), WebPageAdapter()))
 
 
 def acquire_source(
