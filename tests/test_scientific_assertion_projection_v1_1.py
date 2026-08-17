@@ -5,7 +5,6 @@ import hashlib
 import pytest
 
 from ecobiome.knowledge_acquisition.scientific_assertion_projection_v1 import (
-    ScientificAssertionProjectionV1Error,
     candidate_argument_sha256_v1,
     project_scientific_assertion_v1,
 )
@@ -227,18 +226,19 @@ def _project(relation: str, semantic_type: str) -> dict[str, object]:
     ("relation", "semantic_type"),
     [
         ("adversely_affects", "health_effect"),
+        ("adversely_affects", "knowledge_gap"),
         ("poses_significant_threat_to", "risk_factor"),
         ("poses_significant_threat_to", "industry_impact"),
     ],
 )
-def test_projection_v1_2_builds_reviewed_binary_entity_relation(
+def test_projection_v1_3_builds_reviewed_binary_entity_relation(
     relation: str,
     semantic_type: str,
 ) -> None:
     result = _project(relation, semantic_type)
-    assert result["contract"]["version"] == "1.2"
+    assert result["contract"]["version"] == "1.3"
     assert result["contract"]["canonical_sha256"] == (
-        "628dacf8a2a21c94d62d0374e9f0872ea9e1d547272fcb2600bc037786316526"
+        "e17859fb66e49343a564ccf756e7f12e3b879d68af7b1a9fcd60fe5c63cb3fa3"
     )
     payload = result["assertion"]["payload"]
     assert payload["assertion_kind"] == "relational"
@@ -265,20 +265,3 @@ def test_projection_v1_2_builds_reviewed_binary_entity_relation(
     ]
     assert result["projection_gate_passed"] is True
     assert result["automatic_persistence"] is False
-
-
-@pytest.mark.parametrize(
-    ("relation", "semantic_type"),
-    [
-        ("adversely_affects", "knowledge_gap"),
-    ],
-)
-def test_projection_v1_2_keeps_other_relation_type_pairs_fail_closed(
-    relation: str,
-    semantic_type: str,
-) -> None:
-    with pytest.raises(
-        ScientificAssertionProjectionV1Error,
-        match="no exact Scientific Assertion Projection V1 mapping",
-    ):
-        _project(relation, semantic_type)
