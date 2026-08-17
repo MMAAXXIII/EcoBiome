@@ -575,7 +575,12 @@ class ScientificEntityRepository(Protocol):
     def get_name_usage(
         self, name_usage_id: str
     ) -> ScientificEntityNameUsagesRow | None: ...
-    def get_entity_revision(self, entity_id: str, revision: int) -> ScientificEntityRevisionsRow | None: ...
+    def get_entity_revision(
+        self, entity_id: str, revision: int
+    ) -> ScientificEntityRevisionsRow | None: ...
+    def list_reviewed_entity_revisions(
+        self, *, label: str, limit: int = 50
+    ) -> Sequence[ScientificEntityRevisionsRow]: ...
 
 
 class ScientificAssertionRepository(Protocol):

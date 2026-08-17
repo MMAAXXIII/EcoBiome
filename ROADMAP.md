@@ -1,6 +1,6 @@
 # EcoBiome — Roadmap canonique
 
-**Version :** 2.3
+**Version :** 2.4
 **Date de révision :** 17 août 2026
 **Statut :** feuille de route de référence ; l'état Git et les tests restent la
 source de vérité sur l'implémentation.
@@ -39,15 +39,15 @@ Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
 ## 3. État global au 17 août 2026
 
-Base canonique utilisée pour la clôture G4 :
-`main@5ccefc2c0b7c7a4b7d8354ed2c7e523be218b577` (merge G3 / PR #15).
+Canon distant après clôture G4 / PR #16 :
+`main@7c3432ea70d3374bcc2e370557193b619a9f319c`.
 
 | Jalon | État | Estimation indicative |
 |---|---|---:|
 | M0 — Socle, CI, hygiène de livraison | `ADVANCED` | 90 % |
 | M1 — Chaîne de confiance scientifique | `ADVANCED` | 85 % |
 | M2 — Persistence scientifique et sémantique V6 | `ADVANCED` | 75 % |
-| M3 — Couverture sémantique et entités | `PARTIAL` | 15 % |
+| M3 — Couverture sémantique et entités | `PARTIAL` | 25 % |
 | M4 — Métamodèle écologique exécutable | `PROPOSED` | 20 % |
 | M5 — Collecteurs spécialisés | `PARTIAL` | 35 % |
 | M6 — Synthèse, conflits et tendances | `PARTIAL` | 25 % |
@@ -80,9 +80,9 @@ pondération reproductible n'est pas définie.
 
 ### P1 — Étendre sans perdre le fail-closed
 
-1. **partiel** — entity resolution avec review humaine : persistence et
-   événements de review V6 existent ; workflow opérateur et mappings étendus
-   restent à compléter ;
+1. **terminé pour G5** — entity resolution humaine sur V6 : workflow
+   opérateur, ancrage source/Evidence exact, name usages reviewés et
+   historique append-only sont disponibles ;
 2. mappings de projection relation par relation ;
 3. aucun « accept all » universel ;
 4. read models pour Species, tolérances, paramètres et interactions ;
@@ -174,7 +174,7 @@ G1  TERMINÉ — publication fast-forward + CI post-push de Projection V1
 G2  TERMINÉ — review humaine append-only des Semantic Candidates V2.11 + CLI opérateur
 G3  TERMINÉ — audit de cohérence + réconciliation roadmap / Scientific Foundation V6
 G4  TERMINÉ — provider-run/origins/CAS + compatibilité Collector sur V6
-G5  Compléter entity-resolution opérateur + mappings reviewés
+G5  TERMINÉ — entity-resolution opérateur + mappings reviewés sur V6
 G6  Étendre progressivement les projections relation par relation
 G7  Vertical slice aquarium/mare « Pourquoi ça marche ? »
 G8  Collecteurs user/sensor + synthèse/trends
