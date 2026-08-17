@@ -522,6 +522,14 @@ class SQLiteProvenanceRepository:
     def get_source_claim(self,claim_id:str)->SourceClaimsRow|None:
         return _fetch(self._conn,SourceClaimsRow,(claim_id,))
 
+    def get_source_evidence(
+        self, evidence_id: str
+    ) -> SourceEvidenceRow | None:
+        return _fetch(self._conn, SourceEvidenceRow, (evidence_id,))
+
+    def get_segment(self, segment_id: str) -> SegmentsRow | None:
+        return _fetch(self._conn, SegmentsRow, (segment_id,))
+
 class SQLiteScientificEntityRepository:
     def __init__(self,conn:sqlite3.Connection)->None: self._conn=conn
     def add_entity(self, row: ScientificEntitiesRow) -> bool:
