@@ -228,16 +228,17 @@ def _project(relation: str, semantic_type: str) -> dict[str, object]:
     [
         ("adversely_affects", "health_effect"),
         ("poses_significant_threat_to", "risk_factor"),
+        ("poses_significant_threat_to", "industry_impact"),
     ],
 )
-def test_projection_v1_1_builds_reviewed_binary_entity_relation(
+def test_projection_v1_2_builds_reviewed_binary_entity_relation(
     relation: str,
     semantic_type: str,
 ) -> None:
     result = _project(relation, semantic_type)
-    assert result["contract"]["version"] == "1.1"
+    assert result["contract"]["version"] == "1.2"
     assert result["contract"]["canonical_sha256"] == (
-        "3c4e468391a25b6df826da960d71b8af014ba501721c6bfec2c51edc97e7d4ce"
+        "628dacf8a2a21c94d62d0374e9f0872ea9e1d547272fcb2600bc037786316526"
     )
     payload = result["assertion"]["payload"]
     assert payload["assertion_kind"] == "relational"
@@ -270,10 +271,9 @@ def test_projection_v1_1_builds_reviewed_binary_entity_relation(
     ("relation", "semantic_type"),
     [
         ("adversely_affects", "knowledge_gap"),
-        ("poses_significant_threat_to", "industry_impact"),
     ],
 )
-def test_projection_v1_1_keeps_other_relation_type_pairs_fail_closed(
+def test_projection_v1_2_keeps_other_relation_type_pairs_fail_closed(
     relation: str,
     semantic_type: str,
 ) -> None:
