@@ -34,9 +34,9 @@ from ecobiome.knowledge_persistence.serialization import (
 
 PROJECTION_SCHEMA_VERSION = "ecobiome-scientific-assertion-projection-v1"
 PROJECTION_CONTRACT_NAME = "ecobiome-scientific-assertion-projection"
-PROJECTION_CONTRACT_VERSION = "1.3"
+PROJECTION_CONTRACT_VERSION = "1.4"
 PROJECTION_CONTRACT_SHA256 = (
-    "e17859fb66e49343a564ccf756e7f12e3b879d68af7b1a9fcd60fe5c63cb3fa3"
+    "c6fe1e0262fb08c4ad21d161e713f5fe6eb3f222cecb773db9b8d329452e3e0f"
 )
 ENTITY_RESOLUTION_POLICY_SHA256 = (
     "c2e31ae42c25610e4b6c299269bf50f05476b71772d1a0aefe01ff88329e329e"
@@ -137,9 +137,21 @@ _PROJECTION_SPECS = (
         builder="binary_entity_relation_v1",
         role_classes=(("cause", ENTITY_ARGUMENT), ("target", ENTITY_ARGUMENT)),
     ),
+    ProjectionSpecV1(
+        spec_id="caused_decrease.biological_effect.relational.v1",
+        semantic_type="biological_effect",
+        relation="caused_decrease",
+        assertion_kind="relational",
+        predicate="caused_decrease",
+        builder="spec_binary_entity_relation_v1",
+        role_classes=(
+            ("exposure", ENTITY_ARGUMENT),
+            ("variable", ENTITY_ARGUMENT),
+        ),
+    ),
 )
 
-PROJECTION_CONTRACT_DESCRIPTOR_V1_3 = {
+PROJECTION_CONTRACT_DESCRIPTOR_V1_4 = {
     "automatic_persistence": False,
     "entity_resolution_policy_sha256": ENTITY_RESOLUTION_POLICY_SHA256,
     "name": PROJECTION_CONTRACT_NAME,
@@ -158,8 +170,8 @@ PROJECTION_CONTRACT_DESCRIPTOR_V1_3 = {
     ],
     "version": PROJECTION_CONTRACT_VERSION,
 }
-if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_3) != PROJECTION_CONTRACT_SHA256:
-    raise RuntimeError("Scientific Assertion Projection V1.3 identity mismatch")
+if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_4) != PROJECTION_CONTRACT_SHA256:
+    raise RuntimeError("Scientific Assertion Projection V1.4 identity mismatch")
 
 
 def _sha256_text(text: str) -> str:
@@ -734,6 +746,98 @@ def _build_binary_entity_relation(
     return payload, normalized_text
 
 
+def _build_spec_binary_entity_relation(
+    *,
+    spec: ProjectionSpecV1,
+    candidate: Mapping[str, Any],
+    arguments: Mapping[str, Mapping[str, Any]],
+    entity_resolutions: Mapping[str, ReviewedEntityArgumentV1],
+    context_resolutions: Mapping[str, ReviewedContextArgumentV1],
+) -> tuple[dict[str, Any], str]:
+    if spec.builder != "spec_binary_entity_relation_v1":
+        raise ScientificAssertionProjectionV1Error(
+            f"unsupported spec-binary entity projection spec: {spec.spec_id}"
+        )
+    if context_resolutions:
+        raise ScientificAssertionProjectionV1Error(
+            "spec-binary entity relation accepts no context reconstruction"
+        )
+    if (
+        len(spec.role_classes) != 2
+        or any(
+            role_class != ENTITY_ARGUMENT
+            for _, role_class in spec.role_classes
+        )
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            "spec-binary entity relation requires exactly two ENTITY_ARGUMENT roles"
+        )
+
+    participants: list[dict[str, object]] = []
+    for role, _ in spec.role_classes:
+        entity = _validate_entity_resolution(
+            role,
+            arguments[role],
+            entity_resolutions.get(role),
+        )
+        participants.append({"role": role, "entity": entity})
+
+    semantic = _candidate_semantic(candidate)
+    payload = canonical_assertion_payload(
+        assertion_kind=spec.assertion_kind,
+        predicate=spec.predicate,
+        participants=participants,
+        value={"kind": "none"},
+        qualifiers={"semantic_type": semantic["semantic_type"]},
+    )
+
+    canonical_participants = payload.get("participants")
+    if (
+        not isinstance(canonical_participants, list)
+        or len(canonical_participants) != 2
+    ):
+        raise ScientificAssertionProjectionV1Error(
+            "canonical spec-binary relation must contain exactly two participants"
+        )
+
+    normalized_parts: list[str] = []
+    for participant in canonical_participants:
+        if not isinstance(participant, Mapping):
+            raise ScientificAssertionProjectionV1Error(
+                "canonical participant must be an object"
+            )
+        role = _require_nonempty_string(
+            participant.get("role"),
+            "canonical participant role",
+        )
+        participant_entity = participant.get("entity")
+        if not isinstance(participant_entity, Mapping):
+            raise ScientificAssertionProjectionV1Error(
+                f"canonical participant entity is invalid for role: {role}"
+            )
+        entity_id = _require_nonempty_string(
+            participant_entity.get("entity_id"),
+            f"canonical participant entity ID for {role}",
+        )
+        revision = participant_entity.get("entity_revision")
+        if (
+            isinstance(revision, bool)
+            or not isinstance(revision, int)
+            or revision < 1
+        ):
+            raise ScientificAssertionProjectionV1Error(
+                f"canonical participant entity revision is invalid for role: {role}"
+            )
+        normalized_parts.append(
+            f'{role}=entity_ref("{entity_id}",{revision})'
+        )
+
+    normalized_text = (
+        f"{spec.predicate}(" + ", ".join(normalized_parts) + ")"
+    )
+    return payload, normalized_text
+
+
 def project_scientific_assertion_v1(
     candidate: Mapping[str, Any],
     *,
@@ -831,6 +935,14 @@ def project_scientific_assertion_v1(
         )
     elif spec.builder == "binary_entity_relation_v1":
         assertion_payload, normalized_text = _build_binary_entity_relation(
+            spec=spec,
+            candidate=candidate,
+            arguments=arguments,
+            entity_resolutions=entity_resolutions,
+            context_resolutions=supplied_context,
+        )
+    elif spec.builder == "spec_binary_entity_relation_v1":
+        assertion_payload, normalized_text = _build_spec_binary_entity_relation(
             spec=spec,
             candidate=candidate,
             arguments=arguments,
