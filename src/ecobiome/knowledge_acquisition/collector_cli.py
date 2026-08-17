@@ -10,6 +10,11 @@ from pathlib import Path
 from ecobiome.knowledge_acquisition.collector_acquire import acquire_source
 from ecobiome.knowledge_acquisition.persistence import CollectorStore
 from ecobiome.knowledge_acquisition.processing import split_into_passages
+from ecobiome.knowledge_acquisition.semantic_candidate_review_cli_v1 import (
+    SEMANTIC_CANDIDATE_REVIEW_COMMANDS,
+    add_semantic_candidate_review_parsers,
+    run_semantic_candidate_review_command,
+)
 from ecobiome.knowledge_acquisition.semantic_claims import (
     load_atomic_claim_batch,
 )
@@ -233,6 +238,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--diagnostics-output",
         type=Path,
     )
+
+    add_semantic_candidate_review_parsers(commands)
 
     review_parser = commands.add_parser(
         "review",
@@ -733,6 +740,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return semantic_evaluate_command(args)
     if args.command == "semantic-openai":
         return semantic_openai_command(args)
+    if args.command in SEMANTIC_CANDIDATE_REVIEW_COMMANDS:
+        return run_semantic_candidate_review_command(args)
     if args.command == "review":
         return review_command(args)
 

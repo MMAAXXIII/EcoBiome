@@ -1,7 +1,7 @@
 # EcoBiome — Roadmap canonique
 
-**Version :** 2.0
-**Date de révision :** 15 août 2026
+**Version :** 2.1
+**Date de révision :** 17 août 2026
 **Statut :** feuille de route de référence ; l'état Git et les tests restent la
 source de vérité sur l'implémentation.
 
@@ -38,8 +38,8 @@ Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
 ## 3. État global au 15 août 2026
 
-Canon distant vérifié après Phase B :
-`main@7c17e5d0db8d17d97bf4e6e557d96a7b5349a769`.
+Canon distant vérifié après intégration de la PR #13 :
+`main@02539f7854f1cebdcf8b74c75c9abefd157df6b6`.
 
 | Jalon | État | Estimation indicative |
 |---|---|---:|
@@ -64,8 +64,8 @@ pondération reproductible n'est pas définie.
 ### P0 — Fermer la chaîne de vérité scientifique
 
 1. **terminé** — publier/revoir Scientific Assertion Projection V1 ;
-2. résoudre explicitement la persistence durable et append-only de la **review
-   humaine des candidats V2.11** ;
+2. **terminé** — persistence durable append-only et surface opérateur de
+   **review humaine des candidats V2.11** ;
 3. auditer puis figer les primitives, tables, index, invariants et la rétention
    CAS du Schema V5 ;
 4. implémenter Schema V5 en fresh-database ;
@@ -164,8 +164,8 @@ Ordre recommandé :
 ```text
 G0  TERMINÉ — review du commit Projection V1
 G1  TERMINÉ — publication fast-forward + CI post-push de Projection V1
-G2  Résoudre la review humaine append-only des Semantic Candidates V2.11
-G3  Audit final et gel du design V5
+G2  TERMINÉ — review humaine append-only des Semantic Candidates V2.11 + CLI opérateur
+G3  Audit de cohérence roadmap/persistence et gel du design scientifique V6 courant
 G4  Schema V5 fresh-database + tests d'identité/intégrité
 G5  Persistence provider-neutral semantic_candidates + reviews
 G6  Persistence provider-run/origins/CAS
