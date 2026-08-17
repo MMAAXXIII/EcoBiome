@@ -34,9 +34,9 @@ from ecobiome.knowledge_persistence.serialization import (
 
 PROJECTION_SCHEMA_VERSION = "ecobiome-scientific-assertion-projection-v1"
 PROJECTION_CONTRACT_NAME = "ecobiome-scientific-assertion-projection"
-PROJECTION_CONTRACT_VERSION = "1.2"
+PROJECTION_CONTRACT_VERSION = "1.3"
 PROJECTION_CONTRACT_SHA256 = (
-    "628dacf8a2a21c94d62d0374e9f0872ea9e1d547272fcb2600bc037786316526"
+    "e17859fb66e49343a564ccf756e7f12e3b879d68af7b1a9fcd60fe5c63cb3fa3"
 )
 ENTITY_RESOLUTION_POLICY_SHA256 = (
     "c2e31ae42c25610e4b6c299269bf50f05476b71772d1a0aefe01ff88329e329e"
@@ -111,6 +111,15 @@ _PROJECTION_SPECS = (
         role_classes=(("cause", ENTITY_ARGUMENT), ("target", ENTITY_ARGUMENT)),
     ),
     ProjectionSpecV1(
+        spec_id="adversely_affects.knowledge_gap.relational.v1",
+        semantic_type="knowledge_gap",
+        relation="adversely_affects",
+        assertion_kind="relational",
+        predicate="adversely_affects",
+        builder="binary_entity_relation_v1",
+        role_classes=(("cause", ENTITY_ARGUMENT), ("target", ENTITY_ARGUMENT)),
+    ),
+    ProjectionSpecV1(
         spec_id="poses_significant_threat_to.risk_factor.relational.v1",
         semantic_type="risk_factor",
         relation="poses_significant_threat_to",
@@ -130,7 +139,7 @@ _PROJECTION_SPECS = (
     ),
 )
 
-PROJECTION_CONTRACT_DESCRIPTOR_V1_2 = {
+PROJECTION_CONTRACT_DESCRIPTOR_V1_3 = {
     "automatic_persistence": False,
     "entity_resolution_policy_sha256": ENTITY_RESOLUTION_POLICY_SHA256,
     "name": PROJECTION_CONTRACT_NAME,
@@ -149,8 +158,8 @@ PROJECTION_CONTRACT_DESCRIPTOR_V1_2 = {
     ],
     "version": PROJECTION_CONTRACT_VERSION,
 }
-if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_2) != PROJECTION_CONTRACT_SHA256:
-    raise RuntimeError("Scientific Assertion Projection V1.2 identity mismatch")
+if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_3) != PROJECTION_CONTRACT_SHA256:
+    raise RuntimeError("Scientific Assertion Projection V1.3 identity mismatch")
 
 
 def _sha256_text(text: str) -> str:

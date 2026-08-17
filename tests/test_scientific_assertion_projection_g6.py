@@ -2,14 +2,11 @@ from __future__ import annotations
 
 import hashlib
 
-import pytest
-
 from ecobiome.knowledge_acquisition.scientific_assertion_projection_v1 import (
-    PROJECTION_CONTRACT_DESCRIPTOR_V1_2,
+    PROJECTION_CONTRACT_DESCRIPTOR_V1_3,
     PROJECTION_CONTRACT_SHA256,
     PROJECTION_CONTRACT_VERSION,
     ReviewedEntityArgumentV1,
-    ScientificAssertionProjectionV1Error,
     candidate_argument_sha256_v1,
     project_scientific_assertion_v1,
 )
@@ -262,7 +259,7 @@ def test_g6_industry_impact_reuses_reviewed_binary_projection() -> None:
     candidate = _candidate()
     result = _project(candidate)
 
-    assert result["contract"]["version"] == "1.2"
+    assert result["contract"]["version"] == "1.3"
     assert result["contract"]["projection_spec_id"] == (
         "poses_significant_threat_to.industry_impact.relational.v1"
     )
@@ -296,17 +293,17 @@ def test_g6_industry_impact_reuses_reviewed_binary_projection() -> None:
     assert result["claim_link_proposal"]["requires_persistence_review"] is True
 
 
-def test_g6_projection_contract_identity_and_exact_scope() -> None:
-    assert PROJECTION_CONTRACT_VERSION == "1.2"
+def test_g6_projection_contract_v1_3_identity_and_exact_scope() -> None:
+    assert PROJECTION_CONTRACT_VERSION == "1.3"
     assert PROJECTION_CONTRACT_SHA256 == (
-        "628dacf8a2a21c94d62d0374e9f0872ea9e1d547272fcb2600bc037786316526"
+        "e17859fb66e49343a564ccf756e7f12e3b879d68af7b1a9fcd60fe5c63cb3fa3"
     )
     assert (
-        canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_2)
+        canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_3)
         == PROJECTION_CONTRACT_SHA256
     )
 
-    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_2["specs"]
+    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_3["specs"]
     pairs = {
         (spec["relation"], spec["semantic_type"])
         for spec in specs
@@ -314,19 +311,32 @@ def test_g6_projection_contract_identity_and_exact_scope() -> None:
     assert pairs == {
         ("maintained_at", "experimental_condition"),
         ("adversely_affects", "health_effect"),
+        ("adversely_affects", "knowledge_gap"),
         ("poses_significant_threat_to", "risk_factor"),
         ("poses_significant_threat_to", "industry_impact"),
     }
 
 
-def test_g6_keeps_adversely_affects_knowledge_gap_fail_closed() -> None:
-    candidate = _candidate(
-        relation="adversely_affects",
-        semantic_type="knowledge_gap",
-    )
+def test_g6_knowledge_gap_reuses_reviewed_binary_projection_spec() -> None:
+    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_3["specs"]
+    matching = [
+        spec
+        for spec in specs
+        if spec["relation"] == "adversely_affects"
+        and spec["semantic_type"] == "knowledge_gap"
+    ]
 
-    with pytest.raises(
-        ScientificAssertionProjectionV1Error,
-        match="no exact Scientific Assertion Projection V1 mapping",
-    ):
-        _project(candidate)
+    assert matching == [
+        {
+            "assertion_kind": "relational",
+            "builder": "binary_entity_relation_v1",
+            "predicate": "adversely_affects",
+            "relation": "adversely_affects",
+            "role_classes": (
+                ("cause", "ENTITY_ARGUMENT"),
+                ("target", "ENTITY_ARGUMENT"),
+            ),
+            "semantic_type": "knowledge_gap",
+            "spec_id": "adversely_affects.knowledge_gap.relational.v1",
+        }
+    ]
