@@ -1,6 +1,6 @@
 # EcoBiome — Roadmap canonique
 
-**Version :** 2.1
+**Version :** 2.2
 **Date de révision :** 17 août 2026
 **Statut :** feuille de route de référence ; l'état Git et les tests restent la
 source de vérité sur l'implémentation.
@@ -11,7 +11,8 @@ La roadmap 1.2 du 4 août 2026 ne reflétait plus le dépôt :
 
 - le socle Git/CI est largement consolidé ;
 - SQLite a déjà été retenu pour le cœur scientifique local ;
-- la persistence scientifique V4 existe ;
+- la persistence scientifique **V6** est le runtime physique canonique (34 tables,
+  45 index) ;
 - le Collector, Claim/Evidence et les reviews existent ;
 - Semantic Candidate V2.11 est intégré ;
 - Scientific Assertion Projection Contract V1 est publié sur `main` ;
@@ -36,16 +37,16 @@ Construire un EcoBiome capable de :
 
 Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
-## 3. État global au 15 août 2026
+## 3. État global au 17 août 2026
 
-Canon distant vérifié après intégration de la PR #13 :
-`main@02539f7854f1cebdcf8b74c75c9abefd157df6b6`.
+Canon distant vérifié après intégration de la PR #14 :
+`main@e84f389cd3698328f0fee8f1907001ff808dad76`.
 
 | Jalon | État | Estimation indicative |
 |---|---|---:|
 | M0 — Socle, CI, hygiène de livraison | `ADVANCED` | 90 % |
 | M1 — Chaîne de confiance scientifique | `ADVANCED` | 85 % |
-| M2 — Persistence sémantique V5 | `OPEN` | 20 % |
+| M2 — Persistence scientifique et sémantique V6 | `ADVANCED` | 75 % |
 | M3 — Couverture sémantique et entités | `PARTIAL` | 15 % |
 | M4 — Métamodèle écologique exécutable | `PROPOSED` | 20 % |
 | M5 — Collecteurs spécialisés | `PARTIAL` | 35 % |
@@ -66,16 +67,22 @@ pondération reproductible n'est pas définie.
 1. **terminé** — publier/revoir Scientific Assertion Projection V1 ;
 2. **terminé** — persistence durable append-only et surface opérateur de
    **review humaine des candidats V2.11** ;
-3. auditer puis figer les primitives, tables, index, invariants et la rétention
-   CAS du Schema V5 ;
-4. implémenter Schema V5 en fresh-database ;
-5. persister les candidats sémantiques, leurs origins et les runs provider ;
-6. prouver identité de schéma, intégrité/FK, rétention CAS et compatibilité
-   Collector.
+3. **terminé** — auditer et figer l'identité physique du **Schema V6** :
+   34 tables, 45 index, identité de design, intégrité/FK et fresh-database ;
+4. **terminé / supplanté** — l'ancien objectif « Schema V5 fresh-database »
+   est déjà couvert par le runtime V6 canonique ; aucune migration V5
+   rétroactive ne doit être créée ;
+5. **terminé au niveau persistence** — Semantic Candidates, reviews,
+   provider runs et candidate origins possèdent déjà leurs structures V6 ;
+6. **partiel** — CAS et intégrité sont testés ; il reste à prouver explicitement
+   le parcours end-to-end Collector → provider-run → candidate-origin → CAS
+   avant de fermer le jalon opérationnel.
 
 ### P1 — Étendre sans perdre le fail-closed
 
-1. entity resolution avec review humaine ;
+1. **partiel** — entity resolution avec review humaine : persistence et
+   événements de review V6 existent ; workflow opérateur et mappings étendus
+   restent à compléter ;
 2. mappings de projection relation par relation ;
 3. aucun « accept all » universel ;
 4. read models pour Species, tolérances, paramètres et interactions ;
@@ -165,15 +172,13 @@ Ordre recommandé :
 G0  TERMINÉ — review du commit Projection V1
 G1  TERMINÉ — publication fast-forward + CI post-push de Projection V1
 G2  TERMINÉ — review humaine append-only des Semantic Candidates V2.11 + CLI opérateur
-G3  Audit de cohérence roadmap/persistence et gel du design scientifique V6 courant
-G4  Schema V5 fresh-database + tests d'identité/intégrité
-G5  Persistence provider-neutral semantic_candidates + reviews
-G6  Persistence provider-run/origins/CAS
-G7  Entity resolution + mappings reviewés
-G8  Extension progressive des projections
-G9  Vertical slice aquarium/mare « Pourquoi ça marche ? »
-G10 Collecteurs user/sensor + synthèse/trends
-G11 Simulation et UX intégrée
+G3  TERMINÉ — audit de cohérence + réconciliation roadmap / Scientific Foundation V6
+G4  Prouver end-to-end provider-run/origins/CAS + compatibilité Collector
+G5  Compléter entity-resolution opérateur + mappings reviewés
+G6  Étendre progressivement les projections relation par relation
+G7  Vertical slice aquarium/mare « Pourquoi ça marche ? »
+G8  Collecteurs user/sensor + synthèse/trends
+G9  Simulation et UX scientifique intégrée
 ```
 
 Chaque gate garde les règles EcoBiome : audit, périmètre exact, validation,
