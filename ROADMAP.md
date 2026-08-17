@@ -1,6 +1,6 @@
 # EcoBiome — Roadmap canonique
 
-**Version :** 2.4
+**Version :** 2.5
 **Date de révision :** 17 août 2026
 **Statut :** feuille de route de référence ; l'état Git et les tests restent la
 source de vérité sur l'implémentation.
@@ -39,8 +39,8 @@ Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
 ## 3. État global au 17 août 2026
 
-Canon distant après clôture G4 / PR #16 :
-`main@7c3432ea70d3374bcc2e370557193b619a9f319c`.
+Canon distant après clôture G5 / PR #17 :
+`main@68175025607a1daaef0bbeac59afd5bd8ea640e3`.
 
 | Jalon | État | Estimation indicative |
 |---|---|---:|
@@ -83,7 +83,7 @@ pondération reproductible n'est pas définie.
 1. **terminé pour G5** — entity resolution humaine sur V6 : workflow
    opérateur, ancrage source/Evidence exact, name usages reviewés et
    historique append-only sont disponibles ;
-2. mappings de projection relation par relation ;
+2. **en cours pour G6** — mappings de projection relation par relation ; premier slice : `poses_significant_threat_to / industry_impact` ;
 3. aucun « accept all » universel ;
 4. read models pour Species, tolérances, paramètres et interactions ;
 5. synthèses corroboration/contradiction avec niveau de preuve.
@@ -175,7 +175,7 @@ G2  TERMINÉ — review humaine append-only des Semantic Candidates V2.11 + CLI 
 G3  TERMINÉ — audit de cohérence + réconciliation roadmap / Scientific Foundation V6
 G4  TERMINÉ — provider-run/origins/CAS + compatibilité Collector sur V6
 G5  TERMINÉ — entity-resolution opérateur + mappings reviewés sur V6
-G6  Étendre progressivement les projections relation par relation
+G6  EN COURS — premier slice relation/type : `poses_significant_threat_to / industry_impact`
 G7  Vertical slice aquarium/mare « Pourquoi ça marche ? »
 G8  Collecteurs user/sensor + synthèse/trends
 G9  Simulation et UX scientifique intégrée
