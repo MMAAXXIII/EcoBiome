@@ -84,6 +84,99 @@ def _candidate_arguments(
     return result
 
 
+
+def build_semantic_candidate_entity_resolution_event_v1(
+    candidate: Mapping[str, Any],
+    *,
+    event_id: str,
+    semantic_candidate_id: str,
+    role: str,
+    entity_name_usage_id: str,
+    entity_id: str,
+    entity_revision: int,
+    mapping_status: str,
+    decision: str,
+    reviewer: str,
+    reviewed_at: str,
+    rationale: str = "",
+) -> SemanticCandidateEntityResolutionEventsRow:
+    """Build one append-only human entity-resolution review event."""
+    validate_semantic_candidate_v2_11(candidate)
+
+    required_strings = {
+        "event_id": event_id,
+        "semantic_candidate_id": semantic_candidate_id,
+        "role": role,
+        "entity_name_usage_id": entity_name_usage_id,
+        "entity_id": entity_id,
+        "reviewer": reviewer,
+        "reviewed_at": reviewed_at,
+    }
+    for label, value in required_strings.items():
+        if not value.strip():
+            raise SemanticCandidateEntityResolutionV1Error(
+                f"{label} must be non-empty"
+            )
+
+    if mapping_status not in _ALLOWED_MAPPING_STATUSES:
+        raise SemanticCandidateEntityResolutionV1Error(
+            f"unsupported entity mapping status: {mapping_status}"
+        )
+    if decision not in _ALLOWED_DECISIONS:
+        raise SemanticCandidateEntityResolutionV1Error(
+            f"unsupported entity-resolution decision: {decision}"
+        )
+    if isinstance(entity_revision, bool) or entity_revision < 1:
+        raise SemanticCandidateEntityResolutionV1Error(
+            "entity_revision must be a positive integer"
+        )
+
+    arguments = _candidate_arguments(candidate)
+    argument = arguments.get(role)
+    if argument is None:
+        raise SemanticCandidateEntityResolutionV1Error(
+            f"entity-resolution role is absent from candidate: {role}"
+        )
+    if argument.get("resolution_state") != "grounded_opaque_unresolved":
+        raise SemanticCandidateEntityResolutionV1Error(
+            f"entity-resolution role is not grounded opaque text: {role}"
+        )
+    argument_value = argument.get("value")
+    if (
+        not isinstance(argument_value, Mapping)
+        or argument_value.get("kind") != "source_text"
+        or not isinstance(argument_value.get("source_surface"), str)
+        or not argument_value["source_surface"]
+    ):
+        raise SemanticCandidateEntityResolutionV1Error(
+            f"entity-resolution role lacks an exact source surface: {role}"
+        )
+
+    candidate_sha = candidate.get("canonical_candidate_sha256")
+    if not isinstance(candidate_sha, str) or len(candidate_sha) != 64:
+        raise SemanticCandidateEntityResolutionV1Error(
+            "candidate canonical SHA is invalid"
+        )
+
+    return SemanticCandidateEntityResolutionEventsRow(
+        id=event_id,
+        semantic_candidate_id=semantic_candidate_id,
+        semantic_candidate_sha256=candidate_sha,
+        role=role,
+        candidate_argument_sha256=canonical_sha256(argument),
+        entity_name_usage_id=entity_name_usage_id,
+        entity_id=entity_id,
+        entity_revision=entity_revision,
+        mapping_status=mapping_status,
+        decision=decision,
+        reviewer=reviewer,
+        rationale=rationale,
+        review_policy_name=ENTITY_RESOLUTION_POLICY_NAME,
+        review_policy_version=ENTITY_RESOLUTION_POLICY_VERSION,
+        review_policy_sha256=ENTITY_RESOLUTION_POLICY_SHA256,
+        reviewed_at=reviewed_at,
+    )
+
 def require_reviewed_entity_resolutions_v1(
     candidate: Mapping[str, Any],
     *,

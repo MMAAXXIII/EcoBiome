@@ -766,8 +766,38 @@ class SQLiteScientificEntityRepository:
             (name_usage_id,),
         )
 
-    def get_entity_revision(self,entity_id:str,revision:int)->ScientificEntityRevisionsRow|None:
-        return _fetch(self._conn,ScientificEntityRevisionsRow,(entity_id,revision))
+    def get_entity_revision(
+        self,
+        entity_id: str,
+        revision: int,
+    ) -> ScientificEntityRevisionsRow | None:
+        return _fetch(
+            self._conn,
+            ScientificEntityRevisionsRow,
+            (entity_id, revision),
+        )
+
+    def list_reviewed_entity_revisions(
+        self,
+        *,
+        label: str,
+        limit: int = 50,
+    ) -> tuple[ScientificEntityRevisionsRow, ...]:
+        if not label.strip():
+            raise ValueError("label must be non-empty")
+        if limit < 1 or limit > 500:
+            raise ValueError("limit must be between 1 and 500")
+        row_type = ScientificEntityRevisionsRow
+        table, columns, _ = _TABLE_SPECS[row_type]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        rows = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" '
+            "WHERE review_status='reviewed_confirmed' "
+            "AND canonical_label=? "
+            "ORDER BY entity_id, revision DESC LIMIT ?",
+            (label, limit),
+        ).fetchall()
+        return tuple(row_type(*row) for row in rows)
 
 class SQLiteScientificAssertionRepository:
     def __init__(self,conn:sqlite3.Connection)->None: self._conn=conn
