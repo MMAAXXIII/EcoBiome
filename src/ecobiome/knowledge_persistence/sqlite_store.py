@@ -1164,6 +1164,24 @@ class SQLiteSemanticCandidateRepository:
     ) -> SemanticCandidatesRow | None:
         return _fetch(self._conn, SemanticCandidatesRow, (candidate_id,))
 
+    def list_candidates(
+        self,
+        *,
+        limit: int = 50,
+    ) -> tuple[SemanticCandidatesRow, ...]:
+        if limit < 1 or limit > 500:
+            raise PersistenceIntegrityError(
+                "Semantic candidate list limit must be between 1 and 500"
+            )
+        table, columns, _ = _TABLE_SPECS[SemanticCandidatesRow]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        rows = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" '
+            "ORDER BY created_at, id LIMIT ?",
+            (limit,),
+        ).fetchall()
+        return tuple(SemanticCandidatesRow(*row) for row in rows)
+
     def get_candidate_evidence_links(
         self,
         candidate_id: str,
