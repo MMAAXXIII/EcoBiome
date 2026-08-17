@@ -1,6 +1,6 @@
 # EcoBiome — Roadmap canonique
 
-**Version :** 2.2
+**Version :** 2.3
 **Date de révision :** 17 août 2026
 **Statut :** feuille de route de référence ; l'état Git et les tests restent la
 source de vérité sur l'implémentation.
@@ -39,8 +39,8 @@ Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
 ## 3. État global au 17 août 2026
 
-Canon distant vérifié après intégration de la PR #14 :
-`main@e84f389cd3698328f0fee8f1907001ff808dad76`.
+Base canonique utilisée pour la clôture G4 :
+`main@5ccefc2c0b7c7a4b7d8354ed2c7e523be218b577` (merge G3 / PR #15).
 
 | Jalon | État | Estimation indicative |
 |---|---|---:|
@@ -74,9 +74,9 @@ pondération reproductible n'est pas définie.
    rétroactive ne doit être créée ;
 5. **terminé au niveau persistence** — Semantic Candidates, reviews,
    provider runs et candidate origins possèdent déjà leurs structures V6 ;
-6. **partiel** — CAS et intégrité sont testés ; il reste à prouver explicitement
-   le parcours end-to-end Collector → provider-run → candidate-origin → CAS
-   avant de fermer le jalon opérationnel.
+6. **terminé** — parcours end-to-end Collector → provider-run →
+   candidate-origin → CAS prouvé sur V6 par un bridge transactionnel
+   append-only, sans Schema V7 et sans acceptation scientifique automatique.
 
 ### P1 — Étendre sans perdre le fail-closed
 
@@ -173,7 +173,7 @@ G0  TERMINÉ — review du commit Projection V1
 G1  TERMINÉ — publication fast-forward + CI post-push de Projection V1
 G2  TERMINÉ — review humaine append-only des Semantic Candidates V2.11 + CLI opérateur
 G3  TERMINÉ — audit de cohérence + réconciliation roadmap / Scientific Foundation V6
-G4  Prouver end-to-end provider-run/origins/CAS + compatibilité Collector
+G4  TERMINÉ — provider-run/origins/CAS + compatibilité Collector sur V6
 G5  Compléter entity-resolution opérateur + mappings reviewés
 G6  Étendre progressivement les projections relation par relation
 G7  Vertical slice aquarium/mare « Pourquoi ça marche ? »
