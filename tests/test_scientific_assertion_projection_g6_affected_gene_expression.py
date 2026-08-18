@@ -25,8 +25,8 @@ from ecobiome.knowledge_persistence.contracts import (
     SourceEvidenceRow,
 )
 
-CREATED_AT = "2026-08-17T21:00:00+00:00"
-TEXT = "Heat exposure caused a decrease in growth."
+CREATED_AT = "2026-08-18T00:00:00+00:00"
+TEXT = "Heat exposure affected gene expression in the MAPK pathway."
 
 
 def _sha(text: str) -> str:
@@ -36,13 +36,13 @@ def _sha(text: str) -> str:
 def _registry() -> dict[str, object]:
     return {
         "relations": {
-            "caused_decrease": {
-                "argument_keys": ["exposure", "variable"],
+            "affected_gene_expression_in": {
+                "argument_keys": ["exposure", "pathway"],
                 "epistemic_class": "explicit_causal_result",
                 "semantic_type_contract_state": (
                     "historical_golden_reviewed_constrained"
                 ),
-                "semantic_types_allowed": ["biological_effect"],
+                "semantic_types_allowed": ["combined_effect"],
             },
         },
         "argument_role_semantics": {
@@ -50,9 +50,9 @@ def _registry() -> dict[str, object]:
                 "grounding_class": "open_text_source_grounded",
                 "semantic_domain": "exposure_intervention_or_stressor",
             },
-            "variable": {
+            "pathway": {
                 "grounding_class": "open_text_source_grounded",
-                "semantic_domain": "measurable_or_described_variable",
+                "semantic_domain": "biological_or_chemical_pathway",
             },
         },
     }
@@ -61,25 +61,25 @@ def _registry() -> dict[str, object]:
 def _candidate() -> dict[str, object]:
     return build_semantic_candidate_v2_11(
         {
-            "c": "claim-decrease",
-            "e": ["ev-decrease"],
-            "t": "biological_effect",
+            "c": "claim-pathway",
+            "e": ["ev-pathway"],
+            "t": "combined_effect",
             "m": {
-                "r": "caused_decrease",
+                "r": "affected_gene_expression_in",
                 "a": {
                     "exposure": "Heat exposure",
-                    "variable": "growth",
+                    "pathway": "MAPK pathway",
                 },
             },
         },
         {
             "source_claims": [
                 {
-                    "claim_id": "claim-decrease",
+                    "claim_id": "claim-pathway",
                     "effective_text": TEXT,
                     "evidence": [
                         {
-                            "evidence_id": "ev-decrease",
+                            "evidence_id": "ev-pathway",
                             "text": TEXT,
                         }
                     ],
@@ -101,28 +101,28 @@ def _argument(
 def _entity_resolutions(
     candidate: dict[str, object],
     *,
-    include_exposure: bool = True,
+    include_pathway: bool = True,
 ) -> dict[str, ReviewedEntityArgumentV1]:
     rows = {
-        "variable": ReviewedEntityArgumentV1(
-            role="variable",
+        "exposure": ReviewedEntityArgumentV1(
+            role="exposure",
             candidate_argument_sha256=candidate_argument_sha256_v1(
-                _argument(candidate, "variable")
+                _argument(candidate, "exposure")
             ),
-            entity_id="entity-growth",
+            entity_id="entity-heat-exposure",
             entity_revision=1,
             mapping_status="exact",
             mapping_review_status="reviewed_confirmed",
             reviewed_by="human-reviewer",
         ),
     }
-    if include_exposure:
-        rows["exposure"] = ReviewedEntityArgumentV1(
-            role="exposure",
+    if include_pathway:
+        rows["pathway"] = ReviewedEntityArgumentV1(
+            role="pathway",
             candidate_argument_sha256=candidate_argument_sha256_v1(
-                _argument(candidate, "exposure")
+                _argument(candidate, "pathway")
             ),
-            entity_id="entity-heat-exposure",
+            entity_id="entity-mapk-pathway",
             entity_revision=1,
             mapping_status="exact",
             mapping_review_status="reviewed_confirmed",
@@ -134,10 +134,10 @@ def _entity_resolutions(
 def _project(
     candidate: dict[str, object],
     *,
-    include_exposure: bool = True,
+    include_pathway: bool = True,
 ) -> dict[str, object]:
     claim = SourceClaimsRow(
-        id="claim-decrease",
+        id="claim-pathway",
         source_id="source-1",
         representation_id="rep-1",
         parent_claim_id="parent-1",
@@ -145,7 +145,7 @@ def _project(
         claim_text=TEXT,
         claim_text_sha256=_sha(TEXT),
         claim_kind="statement",
-        semantic_type="biological_effect",
+        semantic_type="combined_effect",
         qualifiers_json="{}",
         extraction_confidence_decimal=None,
         source_claim_effective_text_sha256=_sha(TEXT),
@@ -154,8 +154,8 @@ def _project(
         created_at=CREATED_AT,
     )
     claim_review = ClaimReviewEventsRow(
-        id="claim-review-decrease",
-        claim_id="claim-decrease",
+        id="claim-review-pathway",
+        claim_id="claim-pathway",
         decision="accept",
         reviewer="human-reviewer",
         notes="",
@@ -166,15 +166,15 @@ def _project(
     )
     candidate_review = build_semantic_candidate_review_event_v1(
         candidate,
-        event_id="candidate-review-decrease",
-        semantic_candidate_id="candidate-decrease",
+        event_id="candidate-review-pathway",
+        semantic_candidate_id="candidate-pathway",
         decision="accept",
         reviewer="candidate-reviewer",
         reviewed_at=CREATED_AT,
     )
     evidence = SourceEvidenceRow(
-        id="ev-decrease",
-        segment_id="seg-decrease",
+        id="ev-pathway",
+        segment_id="seg-pathway",
         segment_char_start=0,
         segment_char_end=len(TEXT),
         evidence_text_sha256=_sha(TEXT),
@@ -187,7 +187,7 @@ def _project(
         created_at=CREATED_AT,
     )
     segment = SegmentsRow(
-        id="seg-decrease",
+        id="seg-pathway",
         representation_id="rep-1",
         segment_index=0,
         text_inline=TEXT,
@@ -211,35 +211,35 @@ def _project(
         candidate_reviews=[candidate_review],
         claim_evidence_links=[
             ClaimEvidenceLinksRow(
-                claim_id="claim-decrease",
-                evidence_id="ev-decrease",
+                claim_id="claim-pathway",
+                evidence_id="ev-pathway",
                 evidence_order=0,
                 link_role="supports_source_claim",
                 created_at=CREATED_AT,
             )
         ],
         evidence_rows=[evidence],
-        segments={"seg-decrease": segment},
+        segments={"seg-pathway": segment},
         segment_reviews={},
         entity_resolutions=_entity_resolutions(
             candidate,
-            include_exposure=include_exposure,
+            include_pathway=include_pathway,
         ),
     )
 
 
-def test_g6_caused_decrease_projects_two_reviewed_entities() -> None:
+def test_g6_affected_gene_expression_projects_reviewed_pathway_entity() -> None:
     candidate = _candidate()
     result = _project(candidate)
 
     assert result["contract"]["version"] == "1.5"
     assert result["contract"]["projection_spec_id"] == (
-        "caused_decrease.biological_effect.relational.v1"
+        "affected_gene_expression_in.combined_effect.relational.v1"
     )
     assert result["assertion"]["payload"] == {
         "schema_version": "scientific-assertion-v1.1",
         "assertion_kind": "relational",
-        "predicate": "caused_decrease",
+        "predicate": "affected_gene_expression_in",
         "participants": [
             {
                 "role": "exposure",
@@ -250,56 +250,59 @@ def test_g6_caused_decrease_projects_two_reviewed_entities() -> None:
                 },
             },
             {
-                "role": "variable",
+                "role": "pathway",
                 "entity": {
                     "type": "entity_ref",
-                    "entity_id": "entity-growth",
+                    "entity_id": "entity-mapk-pathway",
                     "entity_revision": 1,
                 },
             },
         ],
         "value": {"kind": "none"},
-        "qualifiers": {"semantic_type": "biological_effect"},
+        "qualifiers": {"semantic_type": "combined_effect"},
     }
     assert result["assertion"]["normalized_text"] == (
-        'caused_decrease('
+        'affected_gene_expression_in('
         'exposure=entity_ref("entity-heat-exposure",1), '
-        'variable=entity_ref("entity-growth",1))'
+        'pathway=entity_ref("entity-mapk-pathway",1))'
     )
     assert result["projection_gate_passed"] is True
     assert result["automatic_persistence"] is False
     assert result["claim_link_proposal"]["requires_persistence_review"] is True
 
 
-def test_g6_caused_decrease_uses_spec_binary_builder() -> None:
+def test_g6_affected_gene_expression_uses_spec_binary_builder() -> None:
     matching = [
         spec
         for spec in PROJECTION_CONTRACT_DESCRIPTOR_V1_5["specs"]
-        if spec["relation"] == "caused_decrease"
-        and spec["semantic_type"] == "biological_effect"
+        if spec["relation"] == "affected_gene_expression_in"
+        and spec["semantic_type"] == "combined_effect"
     ]
 
     assert matching == [
         {
             "assertion_kind": "relational",
             "builder": "spec_binary_entity_relation_v1",
-            "predicate": "caused_decrease",
-            "relation": "caused_decrease",
+            "predicate": "affected_gene_expression_in",
+            "relation": "affected_gene_expression_in",
             "role_classes": (
                 ("exposure", "ENTITY_ARGUMENT"),
-                ("variable", "ENTITY_ARGUMENT"),
+                ("pathway", "ENTITY_ARGUMENT"),
             ),
-            "semantic_type": "biological_effect",
-            "spec_id": "caused_decrease.biological_effect.relational.v1",
+            "semantic_type": "combined_effect",
+            "spec_id": (
+                "affected_gene_expression_in."
+                "combined_effect.relational.v1"
+            ),
         }
     ]
 
 
-def test_g6_caused_decrease_requires_reviewed_exposure_entity() -> None:
+def test_g6_affected_gene_expression_requires_reviewed_pathway_entity() -> None:
     candidate = _candidate()
 
     with pytest.raises(
         ScientificAssertionProjectionV1Error,
-        match="human-reviewed entity mapping is required for role: exposure",
+        match="human-reviewed entity mapping is required for role: pathway",
     ):
-        _project(candidate, include_exposure=False)
+        _project(candidate, include_pathway=False)
