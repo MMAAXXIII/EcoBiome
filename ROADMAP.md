@@ -1,7 +1,7 @@
 # EcoBiome — Roadmap canonique
 
-**Version :** 2.7
-**Date de révision :** 17 août 2026
+**Version :** 2.8
+**Date de révision :** 18 août 2026
 **Statut :** feuille de route de référence ; l'état Git et les tests restent la
 source de vérité sur l'implémentation.
 
@@ -37,10 +37,10 @@ Construire un EcoBiome capable de :
 
 Cas d'usage directeur : **« Pourquoi ça marche ? »**
 
-## 3. État global au 17 août 2026
+## 3. État global au 18 août 2026
 
-Canon distant après deuxième slice G6 / PR #19 :
-`main@f20177a979e231791ad0f8e9c1e7746eba04794c`.
+Canon distant après troisième slice G6 / PR #20 :
+`main@a7ec87841f384a036bc9fa749b0960b1fa9f3cc1`.
 
 | Jalon | État | Estimation indicative |
 |---|---|---:|
@@ -83,7 +83,7 @@ pondération reproductible n'est pas définie.
 1. **terminé pour G5** — entity resolution humaine sur V6 : workflow
    opérateur, ancrage source/Evidence exact, name usages reviewés et
    historique append-only sont disponibles ;
-2. **en cours pour G6** — mappings de projection relation par relation ; slices couverts : `poses_significant_threat_to / industry_impact`, `adversely_affects / knowledge_gap`, puis `caused_decrease / biological_effect` ;
+2. **en cours pour G6** — mappings de projection relation par relation ; slices couverts : `poses_significant_threat_to / industry_impact`, `adversely_affects / knowledge_gap`, `caused_decrease / biological_effect`, puis `affected_gene_expression_in / combined_effect` ;
 3. aucun « accept all » universel ;
 4. read models pour Species, tolérances, paramètres et interactions ;
 5. synthèses corroboration/contradiction avec niveau de preuve.
@@ -175,7 +175,7 @@ G2  TERMINÉ — review humaine append-only des Semantic Candidates V2.11 + CLI 
 G3  TERMINÉ — audit de cohérence + réconciliation roadmap / Scientific Foundation V6
 G4  TERMINÉ — provider-run/origins/CAS + compatibilité Collector sur V6
 G5  TERMINÉ — entity-resolution opérateur + mappings reviewés sur V6
-G6  EN COURS — trois slices relation/type : `poses_significant_threat_to / industry_impact`, `adversely_affects / knowledge_gap`, `caused_decrease / biological_effect`
+G6  EN COURS — quatre slices relation/type : `poses_significant_threat_to / industry_impact`, `adversely_affects / knowledge_gap`, `caused_decrease / biological_effect`, `affected_gene_expression_in / combined_effect`
 G7  Vertical slice aquarium/mare « Pourquoi ça marche ? »
 G8  Collecteurs user/sensor + synthèse/trends
 G9  Simulation et UX scientifique intégrée

@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 
 from ecobiome.knowledge_acquisition.scientific_assertion_projection_v1 import (
-    PROJECTION_CONTRACT_DESCRIPTOR_V1_4,
+    PROJECTION_CONTRACT_DESCRIPTOR_V1_5,
     PROJECTION_CONTRACT_SHA256,
     PROJECTION_CONTRACT_VERSION,
     ReviewedEntityArgumentV1,
@@ -259,7 +259,7 @@ def test_g6_industry_impact_reuses_reviewed_binary_projection() -> None:
     candidate = _candidate()
     result = _project(candidate)
 
-    assert result["contract"]["version"] == "1.4"
+    assert result["contract"]["version"] == "1.5"
     assert result["contract"]["projection_spec_id"] == (
         "poses_significant_threat_to.industry_impact.relational.v1"
     )
@@ -293,17 +293,17 @@ def test_g6_industry_impact_reuses_reviewed_binary_projection() -> None:
     assert result["claim_link_proposal"]["requires_persistence_review"] is True
 
 
-def test_g6_projection_contract_v1_4_identity_and_exact_scope() -> None:
-    assert PROJECTION_CONTRACT_VERSION == "1.4"
+def test_g6_projection_contract_v1_5_identity_and_exact_scope() -> None:
+    assert PROJECTION_CONTRACT_VERSION == "1.5"
     assert PROJECTION_CONTRACT_SHA256 == (
-        "c6fe1e0262fb08c4ad21d161e713f5fe6eb3f222cecb773db9b8d329452e3e0f"
+        "b6db1e8c939a78bde7e9929cd5387b2f7bb63f9a5760aa6f1f42372e50079987"
     )
     assert (
-        canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_4)
+        canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_5)
         == PROJECTION_CONTRACT_SHA256
     )
 
-    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_4["specs"]
+    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_5["specs"]
     pairs = {
         (spec["relation"], spec["semantic_type"])
         for spec in specs
@@ -315,11 +315,12 @@ def test_g6_projection_contract_v1_4_identity_and_exact_scope() -> None:
         ("poses_significant_threat_to", "risk_factor"),
         ("poses_significant_threat_to", "industry_impact"),
         ("caused_decrease", "biological_effect"),
+        ("affected_gene_expression_in", "combined_effect"),
     }
 
 
 def test_g6_knowledge_gap_reuses_reviewed_binary_projection_spec() -> None:
-    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_4["specs"]
+    specs = PROJECTION_CONTRACT_DESCRIPTOR_V1_5["specs"]
     matching = [
         spec
         for spec in specs
