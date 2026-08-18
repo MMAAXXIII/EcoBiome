@@ -50,13 +50,11 @@ def _registry() -> dict[str, object]:
         "argument_role_semantics": {
             "gene_set": {
                 "grounding_class": "open_text_source_grounded",
-                "semantic_domain": "gene_gene_family_or_gene_set",
+                "semantic_domain": "gene_or_gene_set",
             },
             "process": {
                 "grounding_class": "open_text_source_grounded",
-                "semantic_domain": (
-                    "biological_ecological_chemical_or_physical_process"
-                ),
+                "semantic_domain": "process",
             },
         },
     }
