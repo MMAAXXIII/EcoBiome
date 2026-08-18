@@ -25,8 +25,10 @@ from ecobiome.knowledge_persistence.contracts import (
     SourceEvidenceRow,
 )
 
-CREATED_AT = "2026-08-17T21:00:00+00:00"
-TEXT = "Heat exposure caused a decrease in growth."
+CREATED_AT = "2026-08-18T09:30:00+00:00"
+TEXT = (
+    "Heat-response genes were primarily associated with oxidative stress response."
+)
 
 
 def _sha(text: str) -> str:
@@ -36,23 +38,25 @@ def _sha(text: str) -> str:
 def _registry() -> dict[str, object]:
     return {
         "relations": {
-            "caused_decrease": {
-                "argument_keys": ["exposure", "variable"],
-                "epistemic_class": "explicit_causal_result",
+            "primarily_associated_with": {
+                "argument_keys": ["gene_set", "process"],
+                "epistemic_class": "association_only",
                 "semantic_type_contract_state": (
                     "historical_golden_reviewed_constrained"
                 ),
-                "semantic_types_allowed": ["biological_effect"],
-            },
+                "semantic_types_allowed": ["gene_function_association"],
+            }
         },
         "argument_role_semantics": {
-            "exposure": {
+            "gene_set": {
                 "grounding_class": "open_text_source_grounded",
-                "semantic_domain": "exposure_intervention_or_stressor",
+                "semantic_domain": "gene_gene_family_or_gene_set",
             },
-            "variable": {
+            "process": {
                 "grounding_class": "open_text_source_grounded",
-                "semantic_domain": "measurable_or_described_variable",
+                "semantic_domain": (
+                    "biological_ecological_chemical_or_physical_process"
+                ),
             },
         },
     }
@@ -61,28 +65,23 @@ def _registry() -> dict[str, object]:
 def _candidate() -> dict[str, object]:
     return build_semantic_candidate_v2_11(
         {
-            "c": "claim-decrease",
-            "e": ["ev-decrease"],
-            "t": "biological_effect",
+            "c": "claim-gene-function",
+            "e": ["ev-gene-function"],
+            "t": "gene_function_association",
             "m": {
-                "r": "caused_decrease",
+                "r": "primarily_associated_with",
                 "a": {
-                    "exposure": "Heat exposure",
-                    "variable": "growth",
+                    "gene_set": "Heat-response genes",
+                    "process": "oxidative stress response",
                 },
             },
         },
         {
             "source_claims": [
                 {
-                    "claim_id": "claim-decrease",
+                    "claim_id": "claim-gene-function",
                     "effective_text": TEXT,
-                    "evidence": [
-                        {
-                            "evidence_id": "ev-decrease",
-                            "text": TEXT,
-                        }
-                    ],
+                    "evidence": [{"evidence_id": "ev-gene-function", "text": TEXT}],
                 }
             ]
         },
@@ -90,54 +89,53 @@ def _candidate() -> dict[str, object]:
     )
 
 
-def _argument(
-    candidate: dict[str, object],
-    role: str,
-) -> dict[str, object]:
+def _argument(candidate: dict[str, object], role: str) -> dict[str, object]:
     arguments = candidate["semantic"]["arguments"]
     return next(item for item in arguments if item["role"] == role)
 
 
-def _entity_resolutions(
+def _resolutions(
     candidate: dict[str, object],
     *,
-    include_exposure: bool = True,
+    gene_set: bool = True,
+    process: bool = True,
 ) -> dict[str, ReviewedEntityArgumentV1]:
-    rows = {
-        "variable": ReviewedEntityArgumentV1(
-            role="variable",
+    result: dict[str, ReviewedEntityArgumentV1] = {}
+    if gene_set:
+        result["gene_set"] = ReviewedEntityArgumentV1(
+            role="gene_set",
             candidate_argument_sha256=candidate_argument_sha256_v1(
-                _argument(candidate, "variable")
+                _argument(candidate, "gene_set")
             ),
-            entity_id="entity-growth",
-            entity_revision=1,
-            mapping_status="exact",
-            mapping_review_status="reviewed_confirmed",
-            reviewed_by="human-reviewer",
-        ),
-    }
-    if include_exposure:
-        rows["exposure"] = ReviewedEntityArgumentV1(
-            role="exposure",
-            candidate_argument_sha256=candidate_argument_sha256_v1(
-                _argument(candidate, "exposure")
-            ),
-            entity_id="entity-heat-exposure",
+            entity_id="entity-heat-response-genes",
             entity_revision=1,
             mapping_status="exact",
             mapping_review_status="reviewed_confirmed",
             reviewed_by="human-reviewer",
         )
-    return rows
+    if process:
+        result["process"] = ReviewedEntityArgumentV1(
+            role="process",
+            candidate_argument_sha256=candidate_argument_sha256_v1(
+                _argument(candidate, "process")
+            ),
+            entity_id="entity-oxidative-stress-response",
+            entity_revision=1,
+            mapping_status="exact",
+            mapping_review_status="reviewed_confirmed",
+            reviewed_by="human-reviewer",
+        )
+    return result
 
 
 def _project(
     candidate: dict[str, object],
     *,
-    include_exposure: bool = True,
+    gene_set: bool = True,
+    process: bool = True,
 ) -> dict[str, object]:
     claim = SourceClaimsRow(
-        id="claim-decrease",
+        id="claim-gene-function",
         source_id="source-1",
         representation_id="rep-1",
         parent_claim_id="parent-1",
@@ -145,7 +143,7 @@ def _project(
         claim_text=TEXT,
         claim_text_sha256=_sha(TEXT),
         claim_kind="statement",
-        semantic_type="biological_effect",
+        semantic_type="gene_function_association",
         qualifiers_json="{}",
         extraction_confidence_decimal=None,
         source_claim_effective_text_sha256=_sha(TEXT),
@@ -153,9 +151,9 @@ def _project(
         initial_review_status="unreviewed",
         created_at=CREATED_AT,
     )
-    claim_review = ClaimReviewEventsRow(
-        id="claim-review-decrease",
-        claim_id="claim-decrease",
+    review = ClaimReviewEventsRow(
+        id="claim-review-gene-function",
+        claim_id="claim-gene-function",
         decision="accept",
         reviewer="human-reviewer",
         notes="",
@@ -166,15 +164,15 @@ def _project(
     )
     candidate_review = build_semantic_candidate_review_event_v1(
         candidate,
-        event_id="candidate-review-decrease",
-        semantic_candidate_id="candidate-decrease",
+        event_id="candidate-review-gene-function",
+        semantic_candidate_id="candidate-gene-function",
         decision="accept",
         reviewer="candidate-reviewer",
         reviewed_at=CREATED_AT,
     )
     evidence = SourceEvidenceRow(
-        id="ev-decrease",
-        segment_id="seg-decrease",
+        id="ev-gene-function",
+        segment_id="seg-gene-function",
         segment_char_start=0,
         segment_char_end=len(TEXT),
         evidence_text_sha256=_sha(TEXT),
@@ -187,7 +185,7 @@ def _project(
         created_at=CREATED_AT,
     )
     segment = SegmentsRow(
-        id="seg-decrease",
+        id="seg-gene-function",
         representation_id="rep-1",
         segment_index=0,
         text_inline=TEXT,
@@ -207,99 +205,104 @@ def _project(
     return project_scientific_assertion_v1(
         candidate,
         source_claim=claim,
-        claim_reviews=[claim_review],
+        claim_reviews=[review],
         candidate_reviews=[candidate_review],
         claim_evidence_links=[
             ClaimEvidenceLinksRow(
-                claim_id="claim-decrease",
-                evidence_id="ev-decrease",
+                claim_id="claim-gene-function",
+                evidence_id="ev-gene-function",
                 evidence_order=0,
                 link_role="supports_source_claim",
                 created_at=CREATED_AT,
             )
         ],
         evidence_rows=[evidence],
-        segments={"seg-decrease": segment},
+        segments={"seg-gene-function": segment},
         segment_reviews={},
-        entity_resolutions=_entity_resolutions(
+        entity_resolutions=_resolutions(
             candidate,
-            include_exposure=include_exposure,
+            gene_set=gene_set,
+            process=process,
         ),
     )
 
 
-def test_g6_caused_decrease_projects_two_reviewed_entities() -> None:
+def test_g6_gene_function_association_projects_reviewed_entities() -> None:
     candidate = _candidate()
+    assert candidate["semantic"]["epistemic_class"] == "association_only"
+
     result = _project(candidate)
 
     assert result["contract"]["version"] == "1.6"
     assert result["contract"]["projection_spec_id"] == (
-        "caused_decrease.biological_effect.relational.v1"
+        "primarily_associated_with.gene_function_association.relational.v1"
     )
     assert result["assertion"]["payload"] == {
         "schema_version": "scientific-assertion-v1.1",
         "assertion_kind": "relational",
-        "predicate": "caused_decrease",
+        "predicate": "primarily_associated_with",
         "participants": [
             {
-                "role": "exposure",
+                "role": "gene_set",
                 "entity": {
                     "type": "entity_ref",
-                    "entity_id": "entity-heat-exposure",
+                    "entity_id": "entity-heat-response-genes",
                     "entity_revision": 1,
                 },
             },
             {
-                "role": "variable",
+                "role": "process",
                 "entity": {
                     "type": "entity_ref",
-                    "entity_id": "entity-growth",
+                    "entity_id": "entity-oxidative-stress-response",
                     "entity_revision": 1,
                 },
             },
         ],
         "value": {"kind": "none"},
-        "qualifiers": {"semantic_type": "biological_effect"},
+        "qualifiers": {"semantic_type": "gene_function_association"},
     }
-    assert result["assertion"]["normalized_text"] == (
-        'caused_decrease('
-        'exposure=entity_ref("entity-heat-exposure",1), '
-        'variable=entity_ref("entity-growth",1))'
-    )
-    assert result["projection_gate_passed"] is True
     assert result["automatic_persistence"] is False
-    assert result["claim_link_proposal"]["requires_persistence_review"] is True
 
 
-def test_g6_caused_decrease_uses_spec_binary_builder() -> None:
+def test_g6_gene_function_association_uses_spec_binary_builder() -> None:
     matching = [
         spec
         for spec in PROJECTION_CONTRACT_DESCRIPTOR_V1_6["specs"]
-        if spec["relation"] == "caused_decrease"
-        and spec["semantic_type"] == "biological_effect"
+        if spec["relation"] == "primarily_associated_with"
+        and spec["semantic_type"] == "gene_function_association"
     ]
-
     assert matching == [
         {
             "assertion_kind": "relational",
             "builder": "spec_binary_entity_relation_v1",
-            "predicate": "caused_decrease",
-            "relation": "caused_decrease",
+            "predicate": "primarily_associated_with",
+            "relation": "primarily_associated_with",
             "role_classes": (
-                ("exposure", "ENTITY_ARGUMENT"),
-                ("variable", "ENTITY_ARGUMENT"),
+                ("gene_set", "ENTITY_ARGUMENT"),
+                ("process", "ENTITY_ARGUMENT"),
             ),
-            "semantic_type": "biological_effect",
-            "spec_id": "caused_decrease.biological_effect.relational.v1",
+            "semantic_type": "gene_function_association",
+            "spec_id": (
+                "primarily_associated_with."
+                "gene_function_association.relational.v1"
+            ),
         }
     ]
 
 
-def test_g6_caused_decrease_requires_reviewed_exposure_entity() -> None:
+@pytest.mark.parametrize("missing_role", ["gene_set", "process"])
+def test_g6_gene_function_association_requires_both_reviewed_entities(
+    missing_role: str,
+) -> None:
     candidate = _candidate()
 
     with pytest.raises(
         ScientificAssertionProjectionV1Error,
-        match="human-reviewed entity mapping is required for role: exposure",
+        match=f"human-reviewed entity mapping is required for role: {missing_role}",
     ):
-        _project(candidate, include_exposure=False)
+        _project(
+            candidate,
+            gene_set=missing_role != "gene_set",
+            process=missing_role != "process",
+        )
