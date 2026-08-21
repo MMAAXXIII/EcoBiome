@@ -12,6 +12,7 @@ from ecobiome.simulation.ecosystem_state_v1 import EcosystemStateV1
 from ecobiome.simulation.process_v1 import (
     ProcessDeltaV1,
     ProcessEvaluationV1,
+    ProcessScientificSupportV1,
     ScientificAssertionRefV1,
 )
 
@@ -29,6 +30,7 @@ _SUPPORT_STATUSES = frozenset(
     {
         "deterministic_identity",
         "scenario_hypothesis",
+        "scientific_alignment_reviewed",
         "support_missing",
     }
 )
@@ -55,6 +57,12 @@ def _canonical_refs(values: tuple[str, ...], field_name: str) -> tuple[str, ...]
     if len(set(normalized)) != len(normalized):
         raise ValueError(f"{field_name} must not contain duplicate references")
     return tuple(sorted(normalized))
+
+
+def _scientific_support_key(
+    support: ProcessScientificSupportV1,
+) -> str:
+    return canonical_payload_sha256(support.canonical_payload())
 
 
 def _evaluation_intervention_ref(
@@ -86,6 +94,7 @@ class CausalStepV1:
     scientific_assertion_refs: tuple[ScientificAssertionRefV1, ...]
     assumptions: tuple[str, ...]
     unknowns: tuple[str, ...]
+    scientific_supports: tuple[ProcessScientificSupportV1, ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(
@@ -112,6 +121,35 @@ class CausalStepV1:
         ]
         if len(set(assertion_keys)) != len(assertion_keys):
             raise ValueError("causal-step ScientificAssertion refs must be unique")
+        support_keys = [
+            _scientific_support_key(item)
+            for item in self.scientific_supports
+        ]
+        if len(set(support_keys)) != len(support_keys):
+            raise ValueError("causal-step scientific supports must be unique")
+        support_assertion_keys = {
+            (
+                item.assertion_ref.assertion_id,
+                item.assertion_ref.assertion_revision,
+                item.assertion_ref.canonical_payload_sha256,
+            )
+            for item in self.scientific_supports
+        }
+        if status == "scientific_alignment_reviewed":
+            if not self.scientific_supports:
+                raise ValueError(
+                    "scientific_alignment_reviewed causal step requires supports"
+                )
+            if support_assertion_keys != set(assertion_keys):
+                raise ValueError(
+                    "causal-step scientific supports must exactly match "
+                    "ScientificAssertion refs"
+                )
+        elif self.scientific_supports:
+            raise ValueError(
+                "causal-step scientific supports require "
+                "scientific_alignment_reviewed"
+            )
         for field_name in ("assumptions", "unknowns"):
             values = tuple(_nonempty(item, field_name) for item in getattr(self, field_name))
             if len(set(values)) != len(values):
@@ -132,6 +170,13 @@ class CausalStepV1:
                     key=lambda item: (item.assertion_id, item.assertion_revision),
                 )
             ],
+            "scientific_supports": [
+                item.canonical_payload()
+                for item in sorted(
+                    self.scientific_supports,
+                    key=_scientific_support_key,
+                )
+            ],
             "assumptions": list(self.assumptions),
             "unknowns": list(self.unknowns),
         }
@@ -150,6 +195,7 @@ class EcosystemExplanationTraceV1:
     assumptions: tuple[str, ...]
     unknowns: tuple[str, ...]
     warnings: tuple[str, ...]
+    scientific_supports: tuple[ProcessScientificSupportV1, ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "profile_id", _nonempty(self.profile_id, "profile_id"))
@@ -224,6 +270,41 @@ class EcosystemExplanationTraceV1:
             "scientific_assertion_refs",
             tuple(assertion_by_key[key] for key in sorted(assertion_by_key)),
         )
+        support_by_key = {
+            _scientific_support_key(item): item
+            for item in self.scientific_supports
+        }
+        if len(support_by_key) != len(self.scientific_supports):
+            raise ValueError("trace scientific supports must be unique")
+        step_support_keys = {
+            _scientific_support_key(item)
+            for step in self.causal_steps
+            for item in step.scientific_supports
+        }
+        if set(support_by_key) != step_support_keys:
+            raise ValueError(
+                "trace scientific supports must exactly match causal-step supports"
+            )
+        support_assertion_keys = {
+            (
+                item.assertion_ref.assertion_id,
+                item.assertion_ref.assertion_revision,
+                item.assertion_ref.canonical_payload_sha256,
+            )
+            for item in self.scientific_supports
+        }
+        if not support_assertion_keys.issubset(set(assertion_by_key)):
+            raise ValueError(
+                "trace scientific supports reference unbound ScientificAssertions"
+            )
+        object.__setattr__(
+            self,
+            "scientific_supports",
+            tuple(
+                support_by_key[key]
+                for key in sorted(support_by_key)
+            ),
+        )
         for field_name in ("assumptions", "unknowns", "warnings"):
             values = tuple(_nonempty(item, field_name) for item in getattr(self, field_name))
             if len(set(values)) != len(values):
@@ -242,6 +323,10 @@ class EcosystemExplanationTraceV1:
             "scientific_assertion_refs": [
                 item.canonical_payload()
                 for item in self.scientific_assertion_refs
+            ],
+            "scientific_supports": [
+                item.canonical_payload()
+                for item in self.scientific_supports
             ],
             "causal_steps": [item.canonical_payload() for item in self.causal_steps],
             "assumptions": list(self.assumptions),
@@ -299,6 +384,7 @@ def build_ecosystem_explanation_v1(
 
     causal_steps: list[CausalStepV1] = []
     assertion_by_key: dict[tuple[str, int, str], ScientificAssertionRefV1] = {}
+    support_by_key: dict[str, ProcessScientificSupportV1] = {}
     assumptions: list[str] = []
     unknowns: list[str] = []
     warnings: list[str] = []
@@ -329,6 +415,14 @@ def build_ecosystem_explanation_v1(
                     assertion.canonical_payload_sha256,
                 )
             ] = assertion
+        for support in evaluation.scientific_supports:
+            support_by_key[_scientific_support_key(support)] = support
+            for warning in support.warnings:
+                if warning not in warnings:
+                    warnings.append(warning)
+            for uncertainty in support.uncertainties:
+                if uncertainty not in unknowns:
+                    unknowns.append(uncertainty)
         for value, target in (
             (evaluation.assumptions, assumptions),
             (evaluation.unknowns, unknowns),
@@ -363,6 +457,7 @@ def build_ecosystem_explanation_v1(
                     scientific_assertion_refs=evaluation.scientific_assertion_refs,
                     assumptions=evaluation.assumptions,
                     unknowns=evaluation.unknowns,
+                    scientific_supports=evaluation.scientific_supports,
                 )
             )
         for delta in ordered_deltas:
@@ -411,6 +506,9 @@ def build_ecosystem_explanation_v1(
             assertion_by_key[key] for key in sorted(assertion_by_key)
         ),
         causal_steps=tuple(causal_steps),
+        scientific_supports=tuple(
+            support_by_key[key] for key in sorted(support_by_key)
+        ),
         assumptions=tuple(assumptions),
         unknowns=tuple(unknowns),
         warnings=tuple(warnings),

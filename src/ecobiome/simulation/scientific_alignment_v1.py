@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from dataclasses import dataclass, replace
 from typing import Any
 
@@ -9,7 +10,10 @@ from ecobiome.knowledge_persistence.contracts import (
     KnowledgeSynthesisRepository,
     ScientificAssertionRepository,
 )
-from ecobiome.knowledge_persistence.serialization import canonical_sha256
+from ecobiome.knowledge_persistence.serialization import (
+    canonical_json_text,
+    canonical_sha256,
+)
 from ecobiome.simulation.process_v1 import (
     ProcessDefinitionV1,
     ProcessEvaluationV1,
@@ -23,6 +27,11 @@ ALIGNMENT_POLICY_DESIGN_SHA256 = (
 _ALIGNMENT_CLASSES = frozenset(
     {"direct_mechanism_support", "interpretive_mechanism_support"}
 )
+_MATCH_MODES = frozenset({"contains_exact_required", "exact"})
+_ALLOWED_EPISTEMIC_BY_ALIGNMENT = {
+    "direct_mechanism_support": frozenset({"explicit_causal_result"}),
+    "interpretive_mechanism_support": frozenset({"interpretive_support"}),
+}
 
 
 class ScientificProcessAlignmentV1Error(ValueError):
@@ -50,6 +59,65 @@ def _ordered_unique(
     return normalized
 
 
+def _canonical_optional_json(
+    value: str | None,
+    field_name: str,
+) -> str | None:
+    if value is None:
+        return None
+    try:
+        payload = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise ScientificProcessAlignmentV1Error(
+            f"{field_name} must contain valid JSON"
+        ) from exc
+    return canonical_json_text(payload)
+
+
+@dataclass(frozen=True, slots=True)
+class ProcessScientificParticipantRequirementV1:
+    """Exact role-sensitive ScientificAssertion participant identity."""
+
+    role: str
+    entity_id: str
+    entity_revision: int
+    occurrence_json: str | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "role", _nonempty(self.role, "role"))
+        object.__setattr__(
+            self,
+            "entity_id",
+            _nonempty(self.entity_id, "entity_id"),
+        )
+        if (
+            isinstance(self.entity_revision, bool)
+            or not isinstance(self.entity_revision, int)
+            or self.entity_revision < 1
+        ):
+            raise ScientificProcessAlignmentV1Error(
+                "entity_revision must be an integer >= 1"
+            )
+        object.__setattr__(
+            self,
+            "occurrence_json",
+            _canonical_optional_json(
+                self.occurrence_json,
+                "occurrence_json",
+            ),
+        )
+
+    def canonical_payload(self) -> dict[str, object]:
+        payload: dict[str, object] = {
+            "role": self.role,
+            "entity_id": self.entity_id,
+            "entity_revision": self.entity_revision,
+        }
+        if self.occurrence_json is not None:
+            payload["occurrence"] = json.loads(self.occurrence_json)
+        return payload
+
+
 @dataclass(frozen=True, slots=True)
 class ProcessScientificAlignmentPolicyV1:
     """Frozen process-specific matcher built on the reviewed G7A policy design."""
@@ -62,7 +130,12 @@ class ProcessScientificAlignmentPolicyV1:
     allowed_predicates: tuple[str, ...]
     alignment_class: str
     epistemic_class: str
-    required_entity_ids: tuple[str, ...] = ()
+    required_participants: tuple[
+        ProcessScientificParticipantRequirementV1, ...
+    ] = ()
+    required_qualifiers_json: str = "{}"
+    participant_match_mode: str = "exact"
+    qualifier_match_mode: str = "exact"
     design_basis_sha256: str = ALIGNMENT_POLICY_DESIGN_SHA256
 
     def __post_init__(self) -> None:
@@ -74,6 +147,8 @@ class ProcessScientificAlignmentPolicyV1:
             "role",
             "alignment_class",
             "epistemic_class",
+            "participant_match_mode",
+            "qualifier_match_mode",
         ):
             object.__setattr__(
                 self,
@@ -84,6 +159,23 @@ class ProcessScientificAlignmentPolicyV1:
             raise ScientificProcessAlignmentV1Error(
                 f"unsupported alignment_class: {self.alignment_class!r}"
             )
+        allowed_epistemic = _ALLOWED_EPISTEMIC_BY_ALIGNMENT[
+            self.alignment_class
+        ]
+        if self.epistemic_class not in allowed_epistemic:
+            raise ScientificProcessAlignmentV1Error(
+                "alignment_class cannot increase or reinterpret epistemic strength: "
+                f"{self.alignment_class!r} / {self.epistemic_class!r}"
+            )
+        for field_name in (
+            "participant_match_mode",
+            "qualifier_match_mode",
+        ):
+            if getattr(self, field_name) not in _MATCH_MODES:
+                raise ScientificProcessAlignmentV1Error(
+                    f"unsupported {field_name}: {getattr(self, field_name)!r}"
+                )
+
         predicates = _ordered_unique(
             tuple(self.allowed_predicates),
             "allowed_predicates",
@@ -93,14 +185,48 @@ class ProcessScientificAlignmentPolicyV1:
                 "allowed_predicates must not be empty"
             )
         object.__setattr__(self, "allowed_predicates", predicates)
+
+        participants = tuple(self.required_participants)
+        if not participants:
+            raise ScientificProcessAlignmentV1Error(
+                "required_participants must not be empty for mechanism support"
+            )
+        if len(set(participants)) != len(participants):
+            raise ScientificProcessAlignmentV1Error(
+                "required_participants must be unique"
+            )
         object.__setattr__(
             self,
-            "required_entity_ids",
-            _ordered_unique(
-                tuple(self.required_entity_ids),
-                "required_entity_ids",
+            "required_participants",
+            tuple(
+                sorted(
+                    participants,
+                    key=lambda item: (
+                        item.role,
+                        item.entity_id,
+                        item.entity_revision,
+                        item.occurrence_json or "",
+                    ),
+                )
             ),
         )
+
+        try:
+            required_qualifiers = json.loads(self.required_qualifiers_json)
+        except json.JSONDecodeError as exc:
+            raise ScientificProcessAlignmentV1Error(
+                "required_qualifiers_json must contain valid JSON"
+            ) from exc
+        if not isinstance(required_qualifiers, dict):
+            raise ScientificProcessAlignmentV1Error(
+                "required_qualifiers_json must decode to an object"
+            )
+        object.__setattr__(
+            self,
+            "required_qualifiers_json",
+            canonical_json_text(required_qualifiers),
+        )
+
         digest = self.design_basis_sha256.strip()
         if digest != ALIGNMENT_POLICY_DESIGN_SHA256:
             raise ScientificProcessAlignmentV1Error(
@@ -119,7 +245,15 @@ class ProcessScientificAlignmentPolicyV1:
             "allowed_predicates": list(self.allowed_predicates),
             "alignment_class": self.alignment_class,
             "epistemic_class": self.epistemic_class,
-            "required_entity_ids": sorted(self.required_entity_ids),
+            "required_participants": [
+                item.canonical_payload()
+                for item in self.required_participants
+            ],
+            "required_qualifiers": json.loads(
+                self.required_qualifiers_json
+            ),
+            "participant_match_mode": self.participant_match_mode,
+            "qualifier_match_mode": self.qualifier_match_mode,
             "design_basis_sha256": self.design_basis_sha256,
         }
 
@@ -128,7 +262,9 @@ class ProcessScientificAlignmentPolicyV1:
         return canonical_sha256(self.canonical_payload())
 
 
-def _entity_ids_from_participants_json(participants_json: str) -> set[str]:
+def _participant_requirements_from_json(
+    participants_json: str,
+) -> tuple[ProcessScientificParticipantRequirementV1, ...]:
     try:
         participants = json.loads(participants_json)
     except json.JSONDecodeError as exc:
@@ -139,19 +275,132 @@ def _entity_ids_from_participants_json(participants_json: str) -> set[str]:
         raise ScientificProcessAlignmentV1Error(
             "assertion participants_json must decode to a list"
         )
-    entity_ids: set[str] = set()
+
+    result: list[ProcessScientificParticipantRequirementV1] = []
     for participant in participants:
         if not isinstance(participant, dict):
-            continue
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participant must be an object"
+            )
+        role = participant.get("role")
         entity = participant.get("entity")
+        if not isinstance(role, str) or not role.strip():
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participant role must be non-empty"
+            )
         if not isinstance(entity, dict):
-            continue
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participant entity must be an object"
+            )
         if entity.get("type") != "entity_ref":
-            continue
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participant entity must be entity_ref"
+            )
         entity_id = entity.get("entity_id")
-        if isinstance(entity_id, str) and entity_id.strip():
-            entity_ids.add(entity_id.strip())
-    return entity_ids
+        revision = entity.get("entity_revision")
+        if not isinstance(entity_id, str) or not entity_id.strip():
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participant entity_id must be non-empty"
+            )
+        if (
+            isinstance(revision, bool)
+            or not isinstance(revision, int)
+            or revision < 1
+        ):
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participant entity_revision must be >= 1"
+            )
+        occurrence_json = (
+            None
+            if "occurrence" not in participant
+            else canonical_json_text(participant["occurrence"])
+        )
+        result.append(
+            ProcessScientificParticipantRequirementV1(
+                role=role,
+                entity_id=entity_id,
+                entity_revision=revision,
+                occurrence_json=occurrence_json,
+            )
+        )
+    return tuple(
+        sorted(
+            result,
+            key=lambda item: (
+                item.role,
+                item.entity_id,
+                item.entity_revision,
+                item.occurrence_json or "",
+            ),
+        )
+    )
+
+
+def _require_participant_match(
+    *,
+    observed: tuple[ProcessScientificParticipantRequirementV1, ...],
+    policy: ProcessScientificAlignmentPolicyV1,
+) -> None:
+    observed_counts = Counter(observed)
+    required_counts = Counter(policy.required_participants)
+
+    if policy.participant_match_mode == "exact":
+        if observed_counts != required_counts:
+            raise ScientificProcessAlignmentV1Error(
+                "assertion participants do not exactly match reviewed "
+                "role/entity/revision requirements"
+            )
+        return
+
+    missing = required_counts - observed_counts
+    if missing:
+        raise ScientificProcessAlignmentV1Error(
+            "assertion participants are missing reviewed "
+            "role/entity/revision requirements"
+        )
+
+
+def _qualifiers_object(qualifiers_json: str) -> dict[str, object]:
+    try:
+        qualifiers = json.loads(qualifiers_json)
+    except json.JSONDecodeError as exc:
+        raise ScientificProcessAlignmentV1Error(
+            "assertion qualifiers_json must be valid JSON"
+        ) from exc
+    if not isinstance(qualifiers, dict):
+        raise ScientificProcessAlignmentV1Error(
+            "assertion qualifiers_json must decode to an object"
+        )
+    return qualifiers
+
+
+def _require_qualifier_match(
+    *,
+    observed: dict[str, object],
+    policy: ProcessScientificAlignmentPolicyV1,
+) -> None:
+    required = json.loads(policy.required_qualifiers_json)
+    if not isinstance(required, dict):
+        raise ScientificProcessAlignmentV1Error(
+            "policy required qualifiers must remain an object"
+        )
+    if policy.qualifier_match_mode == "exact":
+        if observed != required:
+            raise ScientificProcessAlignmentV1Error(
+                "assertion qualifiers do not exactly match reviewed policy"
+            )
+        return
+
+    mismatched = [
+        key
+        for key, required_value in required.items()
+        if key not in observed or observed[key] != required_value
+    ]
+    if mismatched:
+        raise ScientificProcessAlignmentV1Error(
+            "assertion qualifiers are missing or conflict with reviewed "
+            f"requirements: {sorted(mismatched)!r}"
+        )
 
 
 def _json_messages(raw: str, label: str) -> tuple[str, ...]:
@@ -185,6 +434,18 @@ def _json_messages(raw: str, label: str) -> tuple[str, ...]:
             ),
         )
     return (f"{label}: {value}",)
+
+
+def _is_stale_alignment_unknown(value: str) -> bool:
+    normalized = value.strip().lower()
+    return (
+        "alignment" in normalized
+        and ("not reviewed" in normalized or "pending" in normalized)
+    )
+
+
+def _ordered_distinct(values: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(dict.fromkeys(values))
 
 
 def align_scientific_assertion_to_process_v1(
@@ -273,15 +534,16 @@ def align_scientific_assertion_to_process_v1(
             "assertion predicate is not allowed by the process-specific policy"
         )
 
-    observed_entity_ids = _entity_ids_from_participants_json(
-        revision.participants_json
+    _require_participant_match(
+        observed=_participant_requirements_from_json(
+            revision.participants_json
+        ),
+        policy=policy,
     )
-    missing_entity_ids = set(policy.required_entity_ids) - observed_entity_ids
-    if missing_entity_ids:
-        raise ScientificProcessAlignmentV1Error(
-            "assertion participants are missing required exact entity identities: "
-            f"{sorted(missing_entity_ids)!r}"
-        )
+    _require_qualifier_match(
+        observed=_qualifiers_object(revision.qualifiers_json),
+        policy=policy,
+    )
 
     synthesis_rows = tuple(
         syntheses.list_for_assertion(
@@ -378,6 +640,22 @@ def attach_scientific_supports_v1(
             "reviewed supports do not match the evaluation assertion refs"
         )
 
+    filtered_unknowns = tuple(
+        item
+        for item in evaluation.unknowns
+        if not _is_stale_alignment_unknown(item)
+    )
+    support_warnings = tuple(
+        warning
+        for support in supports
+        for warning in support.warnings
+    )
+    support_uncertainties = tuple(
+        uncertainty
+        for support in supports
+        for uncertainty in support.uncertainties
+    )
+
     return replace(
         evaluation,
         support_status="scientific_alignment_reviewed",
@@ -391,5 +669,11 @@ def attach_scientific_supports_v1(
                     item.assertion_ref.assertion_revision,
                 ),
             )
+        ),
+        warnings=_ordered_distinct(
+            evaluation.warnings + support_warnings
+        ),
+        unknowns=_ordered_distinct(
+            filtered_unknowns + support_uncertainties
         ),
     )

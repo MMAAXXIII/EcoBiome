@@ -31,6 +31,7 @@ from ecobiome.simulation.process_v1 import (
 from ecobiome.simulation.scientific_alignment_v1 import (
     ALIGNMENT_POLICY_DESIGN_SHA256,
     ProcessScientificAlignmentPolicyV1,
+    ProcessScientificParticipantRequirementV1,
     ScientificProcessAlignmentV1Error,
     align_scientific_assertion_to_process_v1,
     attach_scientific_supports_v1,
@@ -49,6 +50,7 @@ __all__ = [
     "ProcessDeltaV1",
     "ProcessEvaluationV1",
     "ProcessScientificAlignmentPolicyV1",
+    "ProcessScientificParticipantRequirementV1",
     "ProcessScientificSupportV1",
     "QuantityBasisV1",
     "ReplacementCompositionV1",

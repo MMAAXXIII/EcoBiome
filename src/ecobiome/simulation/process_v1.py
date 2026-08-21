@@ -24,6 +24,10 @@ _SUPPORT_STATUSES = frozenset(
         "support_missing",
     }
 )
+_SCIENTIFIC_SUPPORT_EPISTEMIC_BY_ALIGNMENT = {
+    "direct_mechanism_support": frozenset({"explicit_causal_result"}),
+    "interpretive_mechanism_support": frozenset({"interpretive_support"}),
+}
 
 
 def _nonempty(value: str, field_name: str) -> str:
@@ -31,6 +35,14 @@ def _nonempty(value: str, field_name: str) -> str:
     if not normalized:
         raise ValueError(f"{field_name} must be non-empty")
     return normalized
+
+
+def _is_stale_scientific_alignment_unknown(value: str) -> bool:
+    normalized = value.strip().lower()
+    return (
+        "alignment" in normalized
+        and ("not reviewed" in normalized or "pending" in normalized)
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -88,12 +100,16 @@ class ProcessScientificSupportV1:
                 field_name,
                 _nonempty(str(getattr(self, field_name)), field_name),
             )
-        if self.alignment_class not in {
-            "direct_mechanism_support",
-            "interpretive_mechanism_support",
-        }:
+        if self.alignment_class not in _SCIENTIFIC_SUPPORT_EPISTEMIC_BY_ALIGNMENT:
             raise ValueError(
                 f"unsupported alignment_class: {self.alignment_class!r}"
+            )
+        allowed_epistemic = _SCIENTIFIC_SUPPORT_EPISTEMIC_BY_ALIGNMENT[
+            self.alignment_class
+        ]
+        if self.epistemic_class not in allowed_epistemic:
+            raise ValueError(
+                "alignment_class cannot increase or reinterpret epistemic strength"
             )
         digest = self.alignment_policy_sha256.strip()
         if not _SHA256_RE.fullmatch(digest):
@@ -270,6 +286,30 @@ class ProcessEvaluationV1:
                 raise ValueError(
                     "scientific_alignment_reviewed requires scientific_supports"
                 )
+            stale_alignment_unknowns = tuple(
+                item
+                for item in self.unknowns
+                if _is_stale_scientific_alignment_unknown(item)
+            )
+            if stale_alignment_unknowns:
+                raise ValueError(
+                    "scientific_alignment_reviewed forbids pending/not-reviewed "
+                    "alignment unknowns"
+                )
+            support_keys = [
+                (
+                    item.role,
+                    item.assertion_ref.assertion_id,
+                    item.assertion_ref.assertion_revision,
+                    item.assertion_ref.canonical_payload_sha256,
+                    item.alignment_class,
+                    item.epistemic_class,
+                    item.alignment_policy_sha256,
+                )
+                for item in self.scientific_supports
+            ]
+            if len(set(support_keys)) != len(support_keys):
+                raise ValueError("scientific_supports must be unique")
             support_roles = {item.role for item in self.scientific_supports}
             missing_roles = (
                 set(self.definition.required_scientific_assertion_roles)

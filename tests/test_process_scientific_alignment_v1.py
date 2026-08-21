@@ -21,6 +21,7 @@ from ecobiome.simulation.process_v1 import (
 from ecobiome.simulation.scientific_alignment_v1 import (
     ALIGNMENT_POLICY_DESIGN_SHA256,
     ProcessScientificAlignmentPolicyV1,
+    ProcessScientificParticipantRequirementV1,
     ScientificProcessAlignmentV1Error,
     align_scientific_assertion_to_process_v1,
     attach_scientific_supports_v1,
@@ -159,6 +160,8 @@ def _revision(
     *,
     predicate: str = "fixture_direct_mechanism",
     sha: str = "a" * 64,
+    participants_json: str | None = None,
+    qualifiers_json: str = "{}",
 ) -> ScientificAssertionRevisionsRow:
     return ScientificAssertionRevisionsRow(
         assertion_id="assertion-1",
@@ -166,9 +169,13 @@ def _revision(
         schema_version="scientific-assertion-v1.1",
         assertion_kind="relational",
         predicate=predicate,
-        participants_json=_participants(),
+        participants_json=(
+            _participants()
+            if participants_json is None
+            else participants_json
+        ),
         value_json='{"kind":"none"}',
-        qualifiers_json="{}",
+        qualifiers_json=qualifiers_json,
         normalized_text="fixture direct mechanism",
         canonical_payload_sha256=sha,
         created_at=CREATED_AT,
@@ -227,10 +234,23 @@ def _policy(
     predicate: str = "fixture_direct_mechanism",
     alignment_class: str = "direct_mechanism_support",
     epistemic_class: str = "explicit_causal_result",
-    required_entity_ids: tuple[str, ...] = (
-        "entity-source",
-        "entity-target",
+    required_participants: tuple[
+        ProcessScientificParticipantRequirementV1, ...
+    ] = (
+        ProcessScientificParticipantRequirementV1(
+            role="source",
+            entity_id="entity-source",
+            entity_revision=1,
+        ),
+        ProcessScientificParticipantRequirementV1(
+            role="target",
+            entity_id="entity-target",
+            entity_revision=1,
+        ),
     ),
+    required_qualifiers_json: str = "{}",
+    participant_match_mode: str = "exact",
+    qualifier_match_mode: str = "exact",
 ) -> ProcessScientificAlignmentPolicyV1:
     return ProcessScientificAlignmentPolicyV1(
         name="fixture-process-alignment",
@@ -241,7 +261,10 @@ def _policy(
         allowed_predicates=(predicate,),
         alignment_class=alignment_class,
         epistemic_class=epistemic_class,
-        required_entity_ids=required_entity_ids,
+        required_participants=required_participants,
+        required_qualifiers_json=required_qualifiers_json,
+        participant_match_mode=participant_match_mode,
+        qualifier_match_mode=qualifier_match_mode,
     )
 
 
@@ -329,6 +352,13 @@ def test_exact_reviewed_alignment_and_attach_preserve_synthesis_uncertainty() ->
     assert aligned.support_status == "scientific_alignment_reviewed"
     assert aligned.scientific_assertion_refs == (_assertion_ref(),)
     assert aligned.scientific_supports == (support,)
+    assert "scientific alignment pending" not in aligned.unknowns
+    assert aligned.unknowns == (
+        "synthesis_uncertainty: temperature scope unresolved",
+    )
+    assert aligned.warnings == (
+        "synthesis_conflict: one contradictory source",
+    )
     payload = aligned.canonical_payload()
     assert payload["scientific_supports"][0]["role"] == "mechanism"
 
@@ -419,8 +449,17 @@ def test_interpretive_support_remains_interpretive() -> None:
             _root(),
             _revision(),
             (_link(),),
-            _policy(required_entity_ids=("entity-missing",)),
-            "missing required exact entity",
+            _policy(
+                required_participants=(
+                    ProcessScientificParticipantRequirementV1(
+                        role="source",
+                        entity_id="entity-missing",
+                        entity_revision=1,
+                    ),
+                ),
+                participant_match_mode="contains_exact_required",
+            ),
+            "missing reviewed role/entity/revision",
         ),
     ],
 )
@@ -485,3 +524,171 @@ def test_positive_status_cannot_exist_without_structured_support() -> None:
 def test_legacy_evaluation_payload_is_stable_when_no_supports_are_attached() -> None:
     payload = _base_evaluation().canonical_payload()
     assert "scientific_supports" not in payload
+
+def test_alignment_rejects_reversed_participant_roles() -> None:
+    reversed_participants = canonical_json_text(
+        [
+            {
+                "role": "source",
+                "entity": {
+                    "type": "entity_ref",
+                    "entity_id": "entity-target",
+                    "entity_revision": 1,
+                },
+            },
+            {
+                "role": "target",
+                "entity": {
+                    "type": "entity_ref",
+                    "entity_id": "entity-source",
+                    "entity_revision": 1,
+                },
+            },
+        ]
+    )
+    assertions, syntheses = _repos(
+        revision=_revision(participants_json=reversed_participants)
+    )
+    with pytest.raises(
+        ScientificProcessAlignmentV1Error,
+        match="role/entity/revision",
+    ):
+        align_scientific_assertion_to_process_v1(
+            definition=_definition(),
+            assertion_ref=_assertion_ref(),
+            policy=_policy(),
+            assertions=assertions,
+            syntheses=syntheses,
+        )
+
+
+def test_alignment_rejects_entity_revision_mismatch() -> None:
+    participants = canonical_json_text(
+        [
+            {
+                "role": "source",
+                "entity": {
+                    "type": "entity_ref",
+                    "entity_id": "entity-source",
+                    "entity_revision": 2,
+                },
+            },
+            {
+                "role": "target",
+                "entity": {
+                    "type": "entity_ref",
+                    "entity_id": "entity-target",
+                    "entity_revision": 1,
+                },
+            },
+        ]
+    )
+    assertions, syntheses = _repos(
+        revision=_revision(participants_json=participants)
+    )
+    with pytest.raises(
+        ScientificProcessAlignmentV1Error,
+        match="role/entity/revision",
+    ):
+        align_scientific_assertion_to_process_v1(
+            definition=_definition(),
+            assertion_ref=_assertion_ref(),
+            policy=_policy(),
+            assertions=assertions,
+            syntheses=syntheses,
+        )
+
+
+def test_alignment_rejects_required_qualifier_mismatch() -> None:
+    assertions, syntheses = _repos(
+        revision=_revision(qualifiers_json='{"medium":"air"}')
+    )
+    with pytest.raises(ScientificProcessAlignmentV1Error, match="qualifiers"):
+        align_scientific_assertion_to_process_v1(
+            definition=_definition(),
+            assertion_ref=_assertion_ref(),
+            policy=_policy(
+                required_qualifiers_json='{"medium":"water"}'
+            ),
+            assertions=assertions,
+            syntheses=syntheses,
+        )
+
+
+def test_alignment_exact_qualifiers_reject_unreviewed_extra_context() -> None:
+    assertions, syntheses = _repos(
+        revision=_revision(
+            qualifiers_json='{"medium":"water","temperature":"20C"}'
+        )
+    )
+    with pytest.raises(
+        ScientificProcessAlignmentV1Error,
+        match="exactly match reviewed policy",
+    ):
+        align_scientific_assertion_to_process_v1(
+            definition=_definition(),
+            assertion_ref=_assertion_ref(),
+            policy=_policy(
+                required_qualifiers_json='{"medium":"water"}'
+            ),
+            assertions=assertions,
+            syntheses=syntheses,
+        )
+
+
+def test_alignment_subset_qualifiers_require_exact_declared_values() -> None:
+    assertions, syntheses = _repos(
+        revision=_revision(
+            qualifiers_json='{"medium":"water","temperature":"20C"}'
+        )
+    )
+    support = align_scientific_assertion_to_process_v1(
+        definition=_definition(),
+        assertion_ref=_assertion_ref(),
+        policy=_policy(
+            required_qualifiers_json='{"medium":"water"}',
+            qualifier_match_mode="contains_exact_required",
+        ),
+        assertions=assertions,
+        syntheses=syntheses,
+    )
+    assert support.alignment_class == "direct_mechanism_support"
+
+
+@pytest.mark.parametrize(
+    ("alignment_class", "epistemic_class"),
+    [
+        ("direct_mechanism_support", "interpretive_support"),
+        ("interpretive_mechanism_support", "explicit_causal_result"),
+    ],
+)
+def test_policy_rejects_epistemic_strength_reinterpretation(
+    alignment_class: str,
+    epistemic_class: str,
+) -> None:
+    with pytest.raises(
+        ScientificProcessAlignmentV1Error,
+        match="epistemic strength",
+    ):
+        _policy(
+            alignment_class=alignment_class,
+            epistemic_class=epistemic_class,
+        )
+
+
+def test_positive_evaluation_rejects_pending_alignment_unknown() -> None:
+    assertions, syntheses = _repos()
+    support = align_scientific_assertion_to_process_v1(
+        definition=_definition(),
+        assertion_ref=_assertion_ref(),
+        policy=_policy(),
+        assertions=assertions,
+        syntheses=syntheses,
+    )
+    with pytest.raises(ValueError, match="pending/not-reviewed"):
+        replace(
+            _base_evaluation(),
+            support_status="scientific_alignment_reviewed",
+            scientific_supports=(support,),
+        )
+
