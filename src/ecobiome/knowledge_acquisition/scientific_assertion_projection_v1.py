@@ -34,9 +34,9 @@ from ecobiome.knowledge_persistence.serialization import (
 
 PROJECTION_SCHEMA_VERSION = "ecobiome-scientific-assertion-projection-v1"
 PROJECTION_CONTRACT_NAME = "ecobiome-scientific-assertion-projection"
-PROJECTION_CONTRACT_VERSION = "1.6"
+PROJECTION_CONTRACT_VERSION = "1.7"
 PROJECTION_CONTRACT_SHA256 = (
-    "bf1a839602b76b4475651c3c07fb701d77ad96fd5ecd90c3ffff71d555755d54"
+    "11c72c4411c98191413c5288d0a1ad76655c92c8bd731c317591a5c5bdd87c75"
 )
 ENTITY_RESOLUTION_POLICY_SHA256 = (
     "c2e31ae42c25610e4b6c299269bf50f05476b71772d1a0aefe01ff88329e329e"
@@ -173,9 +173,21 @@ _PROJECTION_SPECS = (
             ("process", ENTITY_ARGUMENT),
         ),
     ),
+    ProjectionSpecV1(
+        spec_id="prone_to.risk_factor.relational.v1",
+        semantic_type="risk_factor",
+        relation="prone_to",
+        assertion_kind="relational",
+        predicate="prone_to",
+        builder="spec_binary_entity_relation_v1",
+        role_classes=(
+            ("subject", ENTITY_ARGUMENT),
+            ("outcome", ENTITY_ARGUMENT),
+        ),
+    ),
 )
 
-PROJECTION_CONTRACT_DESCRIPTOR_V1_6 = {
+PROJECTION_CONTRACT_DESCRIPTOR_V1_7 = {
     "automatic_persistence": False,
     "entity_resolution_policy_sha256": ENTITY_RESOLUTION_POLICY_SHA256,
     "name": PROJECTION_CONTRACT_NAME,
@@ -194,8 +206,8 @@ PROJECTION_CONTRACT_DESCRIPTOR_V1_6 = {
     ],
     "version": PROJECTION_CONTRACT_VERSION,
 }
-if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_6) != PROJECTION_CONTRACT_SHA256:
-    raise RuntimeError("Scientific Assertion Projection V1.6 identity mismatch")
+if canonical_sha256(PROJECTION_CONTRACT_DESCRIPTOR_V1_7) != PROJECTION_CONTRACT_SHA256:
+    raise RuntimeError("Scientific Assertion Projection V1.7 identity mismatch")
 
 
 def _sha256_text(text: str) -> str:

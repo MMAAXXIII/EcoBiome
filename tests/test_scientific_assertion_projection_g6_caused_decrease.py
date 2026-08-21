@@ -5,7 +5,7 @@ import hashlib
 import pytest
 
 from ecobiome.knowledge_acquisition.scientific_assertion_projection_v1 import (
-    PROJECTION_CONTRACT_DESCRIPTOR_V1_6,
+    PROJECTION_CONTRACT_DESCRIPTOR_V1_7,
     ReviewedEntityArgumentV1,
     ScientificAssertionProjectionV1Error,
     candidate_argument_sha256_v1,
@@ -232,7 +232,7 @@ def test_g6_caused_decrease_projects_two_reviewed_entities() -> None:
     candidate = _candidate()
     result = _project(candidate)
 
-    assert result["contract"]["version"] == "1.6"
+    assert result["contract"]["version"] == "1.7"
     assert result["contract"]["projection_spec_id"] == (
         "caused_decrease.biological_effect.relational.v1"
     )
@@ -274,7 +274,7 @@ def test_g6_caused_decrease_projects_two_reviewed_entities() -> None:
 def test_g6_caused_decrease_uses_spec_binary_builder() -> None:
     matching = [
         spec
-        for spec in PROJECTION_CONTRACT_DESCRIPTOR_V1_6["specs"]
+        for spec in PROJECTION_CONTRACT_DESCRIPTOR_V1_7["specs"]
         if spec["relation"] == "caused_decrease"
         and spec["semantic_type"] == "biological_effect"
     ]

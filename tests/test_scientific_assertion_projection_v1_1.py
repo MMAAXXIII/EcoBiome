@@ -231,14 +231,14 @@ def _project(relation: str, semantic_type: str) -> dict[str, object]:
         ("poses_significant_threat_to", "industry_impact"),
     ],
 )
-def test_projection_v1_6_builds_reviewed_binary_entity_relation(
+def test_projection_v1_7_builds_reviewed_binary_entity_relation(
     relation: str,
     semantic_type: str,
 ) -> None:
     result = _project(relation, semantic_type)
-    assert result["contract"]["version"] == "1.6"
+    assert result["contract"]["version"] == "1.7"
     assert result["contract"]["canonical_sha256"] == (
-        "bf1a839602b76b4475651c3c07fb701d77ad96fd5ecd90c3ffff71d555755d54"
+        "11c72c4411c98191413c5288d0a1ad76655c92c8bd731c317591a5c5bdd87c75"
     )
     payload = result["assertion"]["payload"]
     assert payload["assertion_kind"] == "relational"
