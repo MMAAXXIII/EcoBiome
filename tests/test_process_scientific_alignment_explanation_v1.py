@@ -334,6 +334,9 @@ def test_v6_reviewed_alignment_reaches_explanation_trace(
     assert trace.scientific_assertion_refs == (assertion_ref,)
     assert trace.scientific_supports == (support,)
     assert trace.causal_steps[0].scientific_supports == (support,)
+    trace_payload = trace.canonical_payload()
+    assert "scientific_supports" in trace_payload
+    assert "scientific_supports" in trace_payload["causal_steps"][0]
     assert "synthesis_conflict: one contradictory source" in trace.warnings
     assert (
         "synthesis_uncertainty: temperature scope unresolved"

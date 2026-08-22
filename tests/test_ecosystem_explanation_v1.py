@@ -239,3 +239,18 @@ def test_direct_trace_rejects_scientific_refs_not_present_in_steps() -> None:
             trace,
             scientific_assertion_refs=(),
         )
+
+def test_legacy_explanation_payload_omits_empty_scientific_supports() -> None:
+    start, end, transform_eval, exchange_eval = _chain()
+    trace = build_ecosystem_explanation_v1(
+        start,
+        end,
+        (transform_eval, exchange_eval),
+    )
+    payload = trace.canonical_payload()
+    assert "scientific_supports" not in payload
+    assert all(
+        "scientific_supports" not in step
+        for step in payload["causal_steps"]
+    )
+

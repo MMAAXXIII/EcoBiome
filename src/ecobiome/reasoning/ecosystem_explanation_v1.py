@@ -170,13 +170,19 @@ class CausalStepV1:
                     key=lambda item: (item.assertion_id, item.assertion_revision),
                 )
             ],
-            "scientific_supports": [
-                item.canonical_payload()
-                for item in sorted(
-                    self.scientific_supports,
-                    key=_scientific_support_key,
-                )
-            ],
+            **(
+                {
+                    "scientific_supports": [
+                        item.canonical_payload()
+                        for item in sorted(
+                            self.scientific_supports,
+                            key=_scientific_support_key,
+                        )
+                    ]
+                }
+                if self.scientific_supports
+                else {}
+            ),
             "assumptions": list(self.assumptions),
             "unknowns": list(self.unknowns),
         }
@@ -324,10 +330,16 @@ class EcosystemExplanationTraceV1:
                 item.canonical_payload()
                 for item in self.scientific_assertion_refs
             ],
-            "scientific_supports": [
-                item.canonical_payload()
-                for item in self.scientific_supports
-            ],
+            **(
+                {
+                    "scientific_supports": [
+                        item.canonical_payload()
+                        for item in self.scientific_supports
+                    ]
+                }
+                if self.scientific_supports
+                else {}
+            ),
             "causal_steps": [item.canonical_payload() for item in self.causal_steps],
             "assumptions": list(self.assumptions),
             "unknowns": list(self.unknowns),

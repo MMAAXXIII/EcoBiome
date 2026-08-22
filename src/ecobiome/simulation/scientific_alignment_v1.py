@@ -436,12 +436,14 @@ def _json_messages(raw: str, label: str) -> tuple[str, ...]:
     return (f"{label}: {value}",)
 
 
+_SCIENTIFIC_ALIGNMENT_NOT_REVIEWED_UNKNOWN = (
+    "scientific assertion refs supplied but process-to-assertion alignment "
+    "is not reviewed in N4 V1"
+)
+
+
 def _is_stale_alignment_unknown(value: str) -> bool:
-    normalized = value.strip().lower()
-    return (
-        "alignment" in normalized
-        and ("not reviewed" in normalized or "pending" in normalized)
-    )
+    return value.strip() == _SCIENTIFIC_ALIGNMENT_NOT_REVIEWED_UNKNOWN
 
 
 def _ordered_distinct(values: tuple[str, ...]) -> tuple[str, ...]:

@@ -37,12 +37,14 @@ def _nonempty(value: str, field_name: str) -> str:
     return normalized
 
 
+_SCIENTIFIC_ALIGNMENT_NOT_REVIEWED_UNKNOWN = (
+    "scientific assertion refs supplied but process-to-assertion alignment "
+    "is not reviewed in N4 V1"
+)
+
+
 def _is_stale_scientific_alignment_unknown(value: str) -> bool:
-    normalized = value.strip().lower()
-    return (
-        "alignment" in normalized
-        and ("not reviewed" in normalized or "pending" in normalized)
-    )
+    return value.strip() == _SCIENTIFIC_ALIGNMENT_NOT_REVIEWED_UNKNOWN
 
 
 @dataclass(frozen=True, slots=True)

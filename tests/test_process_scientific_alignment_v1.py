@@ -28,6 +28,11 @@ from ecobiome.simulation.scientific_alignment_v1 import (
 )
 
 CREATED_AT = "2026-08-21T00:00:00Z"
+STALE_ALIGNMENT_UNKNOWN = (
+    "scientific assertion refs supplied but process-to-assertion alignment "
+    "is not reviewed in N4 V1"
+)
+UNRELATED_ALIGNMENT_UNKNOWN = "sensor alignment pending calibration"
 
 
 class FakeAssertionRepository:
@@ -316,7 +321,7 @@ def _base_evaluation(
                 unit="fixture",
             ),
         ),
-        unknowns=("scientific alignment pending",),
+        unknowns=(STALE_ALIGNMENT_UNKNOWN,),
     )
 
 
@@ -352,7 +357,7 @@ def test_exact_reviewed_alignment_and_attach_preserve_synthesis_uncertainty() ->
     assert aligned.support_status == "scientific_alignment_reviewed"
     assert aligned.scientific_assertion_refs == (_assertion_ref(),)
     assert aligned.scientific_supports == (support,)
-    assert "scientific alignment pending" not in aligned.unknowns
+    assert STALE_ALIGNMENT_UNKNOWN not in aligned.unknowns
     assert aligned.unknowns == (
         "synthesis_uncertainty: temperature scope unresolved",
     )
@@ -691,4 +696,46 @@ def test_positive_evaluation_rejects_pending_alignment_unknown() -> None:
             support_status="scientific_alignment_reviewed",
             scientific_supports=(support,),
         )
+
+def test_attach_preserves_unrelated_alignment_unknown() -> None:
+    assertions, syntheses = _repos(syntheses=(_synthesis(),))
+    support = align_scientific_assertion_to_process_v1(
+        definition=_definition(),
+        assertion_ref=_assertion_ref(),
+        policy=_policy(),
+        assertions=assertions,
+        syntheses=syntheses,
+    )
+    evaluation = replace(
+        _base_evaluation(),
+        unknowns=(
+            STALE_ALIGNMENT_UNKNOWN,
+            UNRELATED_ALIGNMENT_UNKNOWN,
+        ),
+    )
+    aligned = attach_scientific_supports_v1(
+        evaluation,
+        (support,),
+    )
+    assert STALE_ALIGNMENT_UNKNOWN not in aligned.unknowns
+    assert UNRELATED_ALIGNMENT_UNKNOWN in aligned.unknowns
+    assert "synthesis_uncertainty: temperature scope unresolved" in aligned.unknowns
+
+
+def test_positive_evaluation_allows_unrelated_alignment_unknown() -> None:
+    assertions, syntheses = _repos()
+    support = align_scientific_assertion_to_process_v1(
+        definition=_definition(),
+        assertion_ref=_assertion_ref(),
+        policy=_policy(),
+        assertions=assertions,
+        syntheses=syntheses,
+    )
+    evaluation = replace(
+        _base_evaluation(),
+        unknowns=(UNRELATED_ALIGNMENT_UNKNOWN,),
+        support_status="scientific_alignment_reviewed",
+        scientific_supports=(support,),
+    )
+    assert evaluation.unknowns == (UNRELATED_ALIGNMENT_UNKNOWN,)
 
