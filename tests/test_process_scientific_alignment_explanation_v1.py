@@ -32,6 +32,8 @@ from ecobiome.simulation.process_v1 import (
     ProcessDefinitionV1,
     ProcessDeltaV1,
     ProcessEvaluationV1,
+    ProcessScientificEvaluationScopeV1,
+    ProcessScientificParameterBindingV1,
     ScientificAssertionRefV1,
 )
 from ecobiome.simulation.scientific_alignment_v1 import (
@@ -237,6 +239,17 @@ def test_v6_reviewed_alignment_reaches_explanation_trace(
         allowed_predicates=("fixture_direct_mechanism",),
         alignment_class="direct_mechanism_support",
         epistemic_class="explicit_causal_result",
+        evaluation_scope=ProcessScientificEvaluationScopeV1(
+            process_id=definition.process_id,
+            process_version=definition.version,
+            role="mechanism",
+            required_parameter_bindings=(
+                ProcessScientificParameterBindingV1(
+                    json_pointer="/mechanism_kind",
+                    expected_value_json='"fixture"',
+                ),
+            ),
+        ),
         required_participants=(
             ProcessScientificParticipantRequirementV1(
                 role="source",
@@ -254,13 +267,35 @@ def test_v6_reviewed_alignment_reaches_explanation_trace(
         qualifier_match_mode="exact",
     )
 
+    alignment_context = ProcessEvaluationV1(
+        evaluation_id="evaluation-reviewed-alignment-context",
+        definition=definition,
+        profile_id="profile-reviewed-alignment",
+        input_state_sha256="7" * 64,
+        output_state_sha256="8" * 64,
+        parameters_json=canonical_json_text({"mechanism_kind": "fixture"}),
+        support_status="support_missing",
+        parameter_bases=(
+            QuantityBasisV1(kind="observation", reference_id="observation-reviewed"),
+        ),
+        scientific_assertion_refs=(assertion_ref,),
+        deltas=(
+            ProcessDeltaV1(
+                variable_id="fixture_quantity", zone_id=None,
+                material_component_id=None, before_decimal=1,
+                change_decimal=1, after_decimal=2, unit="fixture-unit",
+            ),
+        ),
+        unknowns=(STALE_ALIGNMENT_UNKNOWN,),
+    )
+
     with SQLiteScientificFoundationUnitOfWork(
         config,
         repo_root=repo,
         artifact_store=artifacts,
     ) as uow:
         support = align_scientific_assertion_to_process_v1(
-            definition=definition,
+            evaluation=alignment_context,
             assertion_ref=assertion_ref,
             policy=policy,
             assertions=uow.assertions,
@@ -287,7 +322,7 @@ def test_v6_reviewed_alignment_reaches_explanation_trace(
         profile_id=start.profile_id,
         input_state_sha256=start.canonical_sha256,
         output_state_sha256=end.canonical_sha256,
-        parameters_json="{}",
+        parameters_json=canonical_json_text({"mechanism_kind": "fixture"}),
         support_status="support_missing",
         parameter_bases=(
             QuantityBasisV1(
@@ -334,6 +369,7 @@ def test_v6_reviewed_alignment_reaches_explanation_trace(
     assert trace.scientific_assertion_refs == (assertion_ref,)
     assert trace.scientific_supports == (support,)
     assert trace.causal_steps[0].scientific_supports == (support,)
+    assert support.evaluation_scope_sha256 == support.evaluation_scope.canonical_sha256
     trace_payload = trace.canonical_payload()
     assert "scientific_supports" in trace_payload
     assert "scientific_supports" in trace_payload["causal_steps"][0]

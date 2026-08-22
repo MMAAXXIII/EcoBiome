@@ -12,10 +12,15 @@ from ecobiome.knowledge_persistence.contracts import (
 )
 from ecobiome.knowledge_persistence.serialization import canonical_json_text
 from ecobiome.simulation.ecosystem_state_v1 import QuantityBasisV1
+from ecobiome.simulation.material_balance_v1 import (
+    NITROGEN_TRANSFORMATION_EXTENT_V1,
+)
 from ecobiome.simulation.process_v1 import (
     ProcessDefinitionV1,
     ProcessDeltaV1,
     ProcessEvaluationV1,
+    ProcessScientificEvaluationScopeV1,
+    ProcessScientificParameterBindingV1,
     ScientificAssertionRefV1,
 )
 from ecobiome.simulation.scientific_alignment_v1 import (
@@ -234,6 +239,20 @@ def _synthesis() -> KnowledgeSynthesesRow:
     )
 
 
+def _fixture_evaluation_scope() -> ProcessScientificEvaluationScopeV1:
+    return ProcessScientificEvaluationScopeV1(
+        process_id="fixture-reviewed-process",
+        process_version="1",
+        role="mechanism",
+        required_parameter_bindings=(
+            ProcessScientificParameterBindingV1(
+                json_pointer="/mechanism_kind",
+                expected_value_json='"fixture"',
+            ),
+        ),
+    )
+
+
 def _policy(
     *,
     predicate: str = "fixture_direct_mechanism",
@@ -256,6 +275,7 @@ def _policy(
     required_qualifiers_json: str = "{}",
     participant_match_mode: str = "exact",
     qualifier_match_mode: str = "exact",
+    evaluation_scope: ProcessScientificEvaluationScopeV1 | None = None,
 ) -> ProcessScientificAlignmentPolicyV1:
     return ProcessScientificAlignmentPolicyV1(
         name="fixture-process-alignment",
@@ -266,6 +286,11 @@ def _policy(
         allowed_predicates=(predicate,),
         alignment_class=alignment_class,
         epistemic_class=epistemic_class,
+        evaluation_scope=(
+            _fixture_evaluation_scope()
+            if evaluation_scope is None
+            else evaluation_scope
+        ),
         required_participants=required_participants,
         required_qualifiers_json=required_qualifiers_json,
         participant_match_mode=participant_match_mode,
@@ -301,7 +326,7 @@ def _base_evaluation(
         profile_id="profile-1",
         input_state_sha256="1" * 64,
         output_state_sha256="2" * 64,
-        parameters_json="{}",
+        parameters_json=canonical_json_text({"mechanism_kind": "fixture"}),
         support_status="support_missing",
         parameter_bases=(
             QuantityBasisV1(
@@ -334,7 +359,7 @@ def test_alignment_policy_is_bound_to_audited_design() -> None:
 def test_exact_reviewed_alignment_and_attach_preserve_synthesis_uncertainty() -> None:
     assertions, syntheses = _repos(syntheses=(_synthesis(),))
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(),
         assertions=assertions,
@@ -371,7 +396,7 @@ def test_exact_reviewed_alignment_and_attach_preserve_synthesis_uncertainty() ->
 def test_interpretive_support_remains_interpretive() -> None:
     assertions, syntheses = _repos()
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(
             alignment_class="interpretive_mechanism_support",
@@ -478,7 +503,7 @@ def test_alignment_fail_closed(
     assertions = FakeAssertionRepository(root, revision, links)
     with pytest.raises(ScientificProcessAlignmentV1Error, match=message):
         align_scientific_assertion_to_process_v1(
-            definition=_definition(),
+            evaluation=_base_evaluation(),
             assertion_ref=_assertion_ref(),
             policy=policy,
             assertions=assertions,
@@ -489,13 +514,19 @@ def test_alignment_fail_closed(
 def test_attach_requires_exact_declared_role_coverage_and_matching_refs() -> None:
     assertions, syntheses = _repos()
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(),
         assertions=assertions,
         syntheses=syntheses,
     )
-    wrong_role = replace(support, role="other-role")
+    wrong_scope = replace(support.evaluation_scope, role="other-role")
+    wrong_role = replace(
+        support,
+        role="other-role",
+        evaluation_scope=wrong_scope,
+        evaluation_scope_sha256=wrong_scope.canonical_sha256,
+    )
     with pytest.raises(ScientificProcessAlignmentV1Error, match="undeclared"):
         attach_scientific_supports_v1(
             _base_evaluation(),
@@ -559,7 +590,7 @@ def test_alignment_rejects_reversed_participant_roles() -> None:
         match="role/entity/revision",
     ):
         align_scientific_assertion_to_process_v1(
-            definition=_definition(),
+            evaluation=_base_evaluation(),
             assertion_ref=_assertion_ref(),
             policy=_policy(),
             assertions=assertions,
@@ -596,7 +627,7 @@ def test_alignment_rejects_entity_revision_mismatch() -> None:
         match="role/entity/revision",
     ):
         align_scientific_assertion_to_process_v1(
-            definition=_definition(),
+            evaluation=_base_evaluation(),
             assertion_ref=_assertion_ref(),
             policy=_policy(),
             assertions=assertions,
@@ -610,7 +641,7 @@ def test_alignment_rejects_required_qualifier_mismatch() -> None:
     )
     with pytest.raises(ScientificProcessAlignmentV1Error, match="qualifiers"):
         align_scientific_assertion_to_process_v1(
-            definition=_definition(),
+            evaluation=_base_evaluation(),
             assertion_ref=_assertion_ref(),
             policy=_policy(
                 required_qualifiers_json='{"medium":"water"}'
@@ -631,7 +662,7 @@ def test_alignment_exact_qualifiers_reject_unreviewed_extra_context() -> None:
         match="exactly match reviewed policy",
     ):
         align_scientific_assertion_to_process_v1(
-            definition=_definition(),
+            evaluation=_base_evaluation(),
             assertion_ref=_assertion_ref(),
             policy=_policy(
                 required_qualifiers_json='{"medium":"water"}'
@@ -648,7 +679,7 @@ def test_alignment_subset_qualifiers_require_exact_declared_values() -> None:
         )
     )
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(
             required_qualifiers_json='{"medium":"water"}',
@@ -684,7 +715,7 @@ def test_policy_rejects_epistemic_strength_reinterpretation(
 def test_positive_evaluation_rejects_pending_alignment_unknown() -> None:
     assertions, syntheses = _repos()
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(),
         assertions=assertions,
@@ -700,7 +731,7 @@ def test_positive_evaluation_rejects_pending_alignment_unknown() -> None:
 def test_attach_preserves_unrelated_alignment_unknown() -> None:
     assertions, syntheses = _repos(syntheses=(_synthesis(),))
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(),
         assertions=assertions,
@@ -725,7 +756,7 @@ def test_attach_preserves_unrelated_alignment_unknown() -> None:
 def test_positive_evaluation_allows_unrelated_alignment_unknown() -> None:
     assertions, syntheses = _repos()
     support = align_scientific_assertion_to_process_v1(
-        definition=_definition(),
+        evaluation=_base_evaluation(),
         assertion_ref=_assertion_ref(),
         policy=_policy(),
         assertions=assertions,
@@ -738,4 +769,307 @@ def test_positive_evaluation_allows_unrelated_alignment_unknown() -> None:
         scientific_supports=(support,),
     )
     assert evaluation.unknowns == (UNRELATED_ALIGNMENT_UNKNOWN,)
+
+def _nitrogen_scope(
+    source_component_id: str,
+    target_component_id: str,
+) -> ProcessScientificEvaluationScopeV1:
+    return ProcessScientificEvaluationScopeV1(
+        process_id=NITROGEN_TRANSFORMATION_EXTENT_V1.process_id,
+        process_version=NITROGEN_TRANSFORMATION_EXTENT_V1.version,
+        role="mechanism",
+        required_parameter_bindings=(
+            ProcessScientificParameterBindingV1(
+                json_pointer="/source_component_id",
+                expected_value_json=canonical_json_text(source_component_id),
+            ),
+            ProcessScientificParameterBindingV1(
+                json_pointer="/target_component_id",
+                expected_value_json=canonical_json_text(target_component_id),
+            ),
+        ),
+    )
+
+
+def _nitrogen_evaluation(
+    source_component_id: str,
+    target_component_id: str,
+    *,
+    evaluation_id: str,
+    zone_id: str = "water",
+    extent: str = "1",
+    extent_basis_reference: str = "observation-nitrogen",
+) -> ProcessEvaluationV1:
+    return ProcessEvaluationV1(
+        evaluation_id=evaluation_id,
+        definition=NITROGEN_TRANSFORMATION_EXTENT_V1,
+        profile_id="profile-nitrogen-scope",
+        input_state_sha256="3" * 64,
+        output_state_sha256="4" * 64,
+        parameters_json=canonical_json_text(
+            {
+                "zone_id": zone_id,
+                "source_component_id": source_component_id,
+                "target_component_id": target_component_id,
+                "extent": {
+                    "value": {"type": "decimal", "value": extent},
+                    "unit": "mg N",
+                },
+                "extent_basis": {
+                    "kind": "observation",
+                    "reference_id": extent_basis_reference,
+                },
+            }
+        ),
+        support_status="support_missing",
+        parameter_bases=(
+            QuantityBasisV1(kind="observation", reference_id=extent_basis_reference),
+        ),
+        scientific_assertion_refs=(_assertion_ref(),),
+        deltas=(
+            ProcessDeltaV1(
+                variable_id="material_inventory", zone_id=zone_id,
+                material_component_id=source_component_id,
+                before_decimal=10, change_decimal=-1, after_decimal=9, unit="mg N",
+            ),
+            ProcessDeltaV1(
+                variable_id="material_inventory", zone_id=zone_id,
+                material_component_id=target_component_id,
+                before_decimal=1, change_decimal=1, after_decimal=2, unit="mg N",
+            ),
+        ),
+        unknowns=(STALE_ALIGNMENT_UNKNOWN,),
+    )
+
+
+def _nitrogen_policy(scope: ProcessScientificEvaluationScopeV1) -> ProcessScientificAlignmentPolicyV1:
+    return ProcessScientificAlignmentPolicyV1(
+        name="fixture-nitrogen-scope-policy", version="1",
+        process_id=NITROGEN_TRANSFORMATION_EXTENT_V1.process_id,
+        process_version=NITROGEN_TRANSFORMATION_EXTENT_V1.version,
+        role="mechanism", allowed_predicates=("fixture_direct_mechanism",),
+        alignment_class="direct_mechanism_support",
+        epistemic_class="explicit_causal_result",
+        evaluation_scope=scope,
+        required_participants=(
+            ProcessScientificParticipantRequirementV1(
+                role="source", entity_id="entity-source", entity_revision=1
+            ),
+            ProcessScientificParticipantRequirementV1(
+                role="target", entity_id="entity-target", entity_revision=1
+            ),
+        ),
+    )
+
+
+def _nitrogen_support(
+    evaluation: ProcessEvaluationV1,
+    scope: ProcessScientificEvaluationScopeV1,
+):
+    assertions, syntheses = _repos()
+    return align_scientific_assertion_to_process_v1(
+        evaluation=evaluation,
+        assertion_ref=_assertion_ref(),
+        policy=_nitrogen_policy(scope),
+        assertions=assertions,
+        syntheses=syntheses,
+    )
+
+
+def test_evaluation_scope_prevents_cross_transformation_support_reuse() -> None:
+    oxidation_scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    assimilation_scope = _nitrogen_scope(
+        "dissolved_inorganic_nitrogen", "biological_nitrogen"
+    )
+    assert oxidation_scope.canonical_sha256 == (
+        "f673fb12a5234af0bc2857660624555c9b5340255047aca71333c91877f6de2b"
+    )
+    assert assimilation_scope.canonical_sha256 == (
+        "00d4df977ea146ed1208bec93d73ea20b76c26b5276458bb6ef748a3f905484b"
+    )
+    oxidation = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-oxidation",
+    )
+    assimilation = _nitrogen_evaluation(
+        "dissolved_inorganic_nitrogen", "biological_nitrogen",
+        evaluation_id="evaluation-assimilation",
+    )
+    oxidation_support = _nitrogen_support(oxidation, oxidation_scope)
+    assimilation_support = _nitrogen_support(assimilation, assimilation_scope)
+    assert attach_scientific_supports_v1(
+        oxidation, (oxidation_support,)
+    ).support_status == "scientific_alignment_reviewed"
+    assert attach_scientific_supports_v1(
+        assimilation, (assimilation_support,)
+    ).support_status == "scientific_alignment_reviewed"
+    with pytest.raises(ScientificProcessAlignmentV1Error, match="evaluation scope"):
+        attach_scientific_supports_v1(assimilation, (oxidation_support,))
+    with pytest.raises(ScientificProcessAlignmentV1Error, match="evaluation scope"):
+        attach_scientific_supports_v1(oxidation, (assimilation_support,))
+
+
+@pytest.mark.parametrize(
+    ("source_component_id", "target_component_id"),
+    [
+        ("dissolved_inorganic_nitrogen", "oxidized_inorganic_nitrogen"),
+        ("reduced_inorganic_nitrogen", "biological_nitrogen"),
+    ],
+)
+def test_evaluation_scope_rejects_single_endpoint_mismatch(
+    source_component_id: str,
+    target_component_id: str,
+) -> None:
+    scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    evaluation = _nitrogen_evaluation(
+        source_component_id, target_component_id,
+        evaluation_id="evaluation-endpoint-mismatch",
+    )
+    with pytest.raises(ValueError, match="does not match"):
+        scope.require_match(
+            process_id=evaluation.definition.process_id,
+            process_version=evaluation.definition.version,
+            role="mechanism",
+            parameters=evaluation.parameters_payload,
+        )
+
+
+def test_evaluation_scope_rejects_missing_bound_parameter() -> None:
+    scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    evaluation = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-missing-parameter",
+    )
+    parameters = evaluation.parameters_payload
+    del parameters["target_component_id"]
+    with pytest.raises(ValueError, match="is missing"):
+        scope.require_match(
+            process_id=evaluation.definition.process_id,
+            process_version=evaluation.definition.version,
+            role="mechanism",
+            parameters=parameters,
+        )
+
+
+def test_same_reviewed_pair_allows_execution_parameter_changes() -> None:
+    scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    first = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-execution-first", zone_id="water-a", extent="1",
+        extent_basis_reference="observation-a",
+    )
+    support = _nitrogen_support(first, scope)
+    second = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-execution-second", zone_id="water-b", extent="3",
+        extent_basis_reference="observation-b",
+    )
+    assert attach_scientific_supports_v1(
+        second, (support,)
+    ).support_status == "scientific_alignment_reviewed"
+
+
+def test_positive_evaluation_direct_construction_rejects_scope_bypass() -> None:
+    scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    oxidation = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-bypass-source",
+    )
+    support = _nitrogen_support(oxidation, scope)
+    assimilation = _nitrogen_evaluation(
+        "dissolved_inorganic_nitrogen", "biological_nitrogen",
+        evaluation_id="evaluation-bypass-target",
+    )
+    with pytest.raises(ValueError, match="evaluation scope mismatch"):
+        replace(
+            assimilation,
+            support_status="scientific_alignment_reviewed",
+            scientific_supports=(support,),
+            unknowns=(),
+        )
+
+
+def test_support_rejects_evaluation_scope_sha_mismatch() -> None:
+    scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    evaluation = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-scope-sha",
+    )
+    support = _nitrogen_support(evaluation, scope)
+    with pytest.raises(ValueError, match="must match evaluation_scope"):
+        replace(support, evaluation_scope_sha256="f" * 64)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("process_id", "other-process", "process_id mismatch"),
+        ("process_version", "2", "process_version mismatch"),
+        ("role", "other-role", "role mismatch"),
+    ],
+)
+def test_evaluation_scope_rejects_process_identity_mismatch(
+    field: str,
+    value: str,
+    message: str,
+) -> None:
+    scope = _nitrogen_scope(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen"
+    )
+    kwargs = {
+        "process_id": NITROGEN_TRANSFORMATION_EXTENT_V1.process_id,
+        "process_version": NITROGEN_TRANSFORMATION_EXTENT_V1.version,
+        "role": "mechanism",
+    }
+    kwargs[field] = value
+    evaluation = _nitrogen_evaluation(
+        "reduced_inorganic_nitrogen", "oxidized_inorganic_nitrogen",
+        evaluation_id="evaluation-process-identity",
+    )
+    with pytest.raises(ValueError, match=message):
+        scope.require_match(
+            process_id=kwargs["process_id"],
+            process_version=kwargs["process_version"],
+            role=kwargs["role"],
+            parameters=evaluation.parameters_payload,
+        )
+
+
+def test_parameter_binding_rejects_malformed_json_pointer() -> None:
+    with pytest.raises(ValueError, match="absolute JSON Pointer"):
+        ProcessScientificParameterBindingV1(
+            json_pointer="source_component_id",
+            expected_value_json='"reduced_inorganic_nitrogen"',
+        )
+    with pytest.raises(ValueError, match="invalid escape"):
+        ProcessScientificParameterBindingV1(
+            json_pointer="/source~2component",
+            expected_value_json='"reduced_inorganic_nitrogen"',
+        )
+
+
+def test_evaluation_scope_rejects_duplicate_json_pointer() -> None:
+    binding = ProcessScientificParameterBindingV1(
+        json_pointer="/source_component_id",
+        expected_value_json='"reduced_inorganic_nitrogen"',
+    )
+    with pytest.raises(ValueError, match="must be unique"):
+        ProcessScientificEvaluationScopeV1(
+            process_id=NITROGEN_TRANSFORMATION_EXTENT_V1.process_id,
+            process_version=NITROGEN_TRANSFORMATION_EXTENT_V1.version,
+            role="mechanism",
+            required_parameter_bindings=(binding, binding),
+        )
 

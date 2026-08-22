@@ -15,8 +15,8 @@ from ecobiome.knowledge_persistence.serialization import (
     canonical_sha256,
 )
 from ecobiome.simulation.process_v1 import (
-    ProcessDefinitionV1,
     ProcessEvaluationV1,
+    ProcessScientificEvaluationScopeV1,
     ProcessScientificSupportV1,
     ScientificAssertionRefV1,
 )
@@ -130,6 +130,7 @@ class ProcessScientificAlignmentPolicyV1:
     allowed_predicates: tuple[str, ...]
     alignment_class: str
     epistemic_class: str
+    evaluation_scope: ProcessScientificEvaluationScopeV1
     required_participants: tuple[
         ProcessScientificParticipantRequirementV1, ...
     ] = ()
@@ -154,6 +155,22 @@ class ProcessScientificAlignmentPolicyV1:
                 self,
                 field_name,
                 _nonempty(str(getattr(self, field_name)), field_name),
+            )
+        if not isinstance(self.evaluation_scope, ProcessScientificEvaluationScopeV1):
+            raise ScientificProcessAlignmentV1Error(
+                "evaluation_scope must be ProcessScientificEvaluationScopeV1"
+            )
+        if self.evaluation_scope.process_id != self.process_id:
+            raise ScientificProcessAlignmentV1Error(
+                "evaluation_scope process_id must match policy"
+            )
+        if self.evaluation_scope.process_version != self.process_version:
+            raise ScientificProcessAlignmentV1Error(
+                "evaluation_scope process_version must match policy"
+            )
+        if self.evaluation_scope.role != self.role:
+            raise ScientificProcessAlignmentV1Error(
+                "evaluation_scope role must match policy"
             )
         if self.alignment_class not in _ALIGNMENT_CLASSES:
             raise ScientificProcessAlignmentV1Error(
@@ -245,6 +262,7 @@ class ProcessScientificAlignmentPolicyV1:
             "allowed_predicates": list(self.allowed_predicates),
             "alignment_class": self.alignment_class,
             "epistemic_class": self.epistemic_class,
+            "evaluation_scope": self.evaluation_scope.canonical_payload(),
             "required_participants": [
                 item.canonical_payload()
                 for item in self.required_participants
@@ -452,7 +470,7 @@ def _ordered_distinct(values: tuple[str, ...]) -> tuple[str, ...]:
 
 def align_scientific_assertion_to_process_v1(
     *,
-    definition: ProcessDefinitionV1,
+    evaluation: ProcessEvaluationV1,
     assertion_ref: ScientificAssertionRefV1,
     policy: ProcessScientificAlignmentPolicyV1,
     assertions: ScientificAssertionRepository,
@@ -460,6 +478,7 @@ def align_scientific_assertion_to_process_v1(
 ) -> ProcessScientificSupportV1:
     """Verify exact V6 identity/review semantics and return reviewed N4 support."""
 
+    definition = evaluation.definition
     if policy.process_id != definition.process_id:
         raise ScientificProcessAlignmentV1Error("policy process_id mismatch")
     if policy.process_version != definition.version:
@@ -468,6 +487,17 @@ def align_scientific_assertion_to_process_v1(
         raise ScientificProcessAlignmentV1Error(
             "policy role is not declared by the process definition"
         )
+    try:
+        policy.evaluation_scope.require_match(
+            process_id=definition.process_id,
+            process_version=definition.version,
+            role=policy.role,
+            parameters=evaluation.parameters_payload,
+        )
+    except ValueError as exc:
+        raise ScientificProcessAlignmentV1Error(
+            "evaluation is outside reviewed scientific support scope"
+        ) from exc
 
     root = assertions.get_assertion(assertion_ref.assertion_id)
     if root is None:
@@ -584,6 +614,8 @@ def align_scientific_assertion_to_process_v1(
         alignment_policy_name=policy.name,
         alignment_policy_version=policy.version,
         alignment_policy_sha256=policy.canonical_sha256,
+        evaluation_scope=policy.evaluation_scope,
+        evaluation_scope_sha256=policy.evaluation_scope.canonical_sha256,
         evidence_state=evidence_state,
         warnings=warnings,
         uncertainties=uncertainties,
@@ -618,6 +650,18 @@ def attach_scientific_supports_v1(
         raise ScientificProcessAlignmentV1Error(
             f"scientific support is missing required roles: {sorted(missing)!r}"
         )
+    for support in supports:
+        try:
+            support.evaluation_scope.require_match(
+                process_id=evaluation.definition.process_id,
+                process_version=evaluation.definition.version,
+                role=support.role,
+                parameters=evaluation.parameters_payload,
+            )
+        except ValueError as exc:
+            raise ScientificProcessAlignmentV1Error(
+                "reviewed scientific support does not match evaluation scope"
+            ) from exc
 
     support_refs = tuple(
         sorted(

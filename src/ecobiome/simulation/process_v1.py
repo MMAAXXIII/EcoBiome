@@ -76,6 +76,150 @@ class ScientificAssertionRefV1:
         }
 
 
+def _decode_json_pointer_token(token: str) -> str:
+    if re.search(r"~(?![01])", token):
+        raise ValueError("JSON Pointer contains an invalid escape")
+    return token.replace("~1", "/").replace("~0", "~")
+
+
+def _resolve_json_pointer(payload: object, pointer: str) -> object:
+    current = payload
+    for raw_token in pointer.split("/")[1:]:
+        token = _decode_json_pointer_token(raw_token)
+        if isinstance(current, dict):
+            if token not in current:
+                raise ValueError(
+                    f"evaluation parameter JSON Pointer is missing: {pointer!r}"
+                )
+            current = current[token]
+            continue
+        if isinstance(current, list):
+            if not re.fullmatch(r"0|[1-9]\d*", token):
+                raise ValueError(
+                    f"evaluation parameter JSON Pointer has invalid array index: {pointer!r}"
+                )
+            index = int(token)
+            if index >= len(current):
+                raise ValueError(
+                    f"evaluation parameter JSON Pointer is missing: {pointer!r}"
+                )
+            current = current[index]
+            continue
+        raise ValueError(
+            f"evaluation parameter JSON Pointer cannot traverse scalar: {pointer!r}"
+        )
+    return current
+
+
+@dataclass(frozen=True, slots=True)
+class ProcessScientificParameterBindingV1:
+    json_pointer: str
+    expected_value_json: str
+
+    def __post_init__(self) -> None:
+        pointer = self.json_pointer.strip()
+        if not pointer or not pointer.startswith("/"):
+            raise ValueError(
+                "json_pointer must be a non-empty absolute JSON Pointer"
+            )
+        for token in pointer.split("/")[1:]:
+            _decode_json_pointer_token(token)
+        object.__setattr__(self, "json_pointer", pointer)
+        try:
+            expected_value = json.loads(self.expected_value_json)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "expected_value_json must contain valid canonicalizable JSON"
+            ) from exc
+        object.__setattr__(
+            self,
+            "expected_value_json",
+            canonical_json_text(expected_value),
+        )
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "json_pointer": self.json_pointer,
+            "expected_value": json.loads(self.expected_value_json),
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class ProcessScientificEvaluationScopeV1:
+    process_id: str
+    process_version: str
+    role: str
+    required_parameter_bindings: tuple[
+        ProcessScientificParameterBindingV1, ...
+    ]
+    parameter_match_mode: str = "contains_exact_required"
+
+    def __post_init__(self) -> None:
+        for field_name in ("process_id", "process_version", "role"):
+            object.__setattr__(
+                self,
+                field_name,
+                _nonempty(str(getattr(self, field_name)), field_name),
+            )
+        if self.parameter_match_mode != "contains_exact_required":
+            raise ValueError(
+                "parameter_match_mode must be 'contains_exact_required' in V1"
+            )
+        bindings = tuple(self.required_parameter_bindings)
+        if not bindings:
+            raise ValueError("required_parameter_bindings must not be empty")
+        if not all(isinstance(item, ProcessScientificParameterBindingV1) for item in bindings):
+            raise TypeError(
+                "required_parameter_bindings must contain ProcessScientificParameterBindingV1 values"
+            )
+        pointers = [item.json_pointer for item in bindings]
+        if len(set(pointers)) != len(pointers):
+            raise ValueError("required_parameter_bindings JSON Pointers must be unique")
+        object.__setattr__(
+            self,
+            "required_parameter_bindings",
+            tuple(sorted(bindings, key=lambda item: item.json_pointer)),
+        )
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "schema_version": "ecobiome-process-scientific-evaluation-scope-v1",
+            "process_id": self.process_id,
+            "process_version": self.process_version,
+            "role": self.role,
+            "parameter_match_mode": self.parameter_match_mode,
+            "required_parameter_bindings": [
+                item.canonical_payload() for item in self.required_parameter_bindings
+            ],
+        }
+
+    @property
+    def canonical_sha256(self) -> str:
+        return canonical_payload_sha256(self.canonical_payload())
+
+    def require_match(
+        self,
+        *,
+        process_id: str,
+        process_version: str,
+        role: str,
+        parameters: dict[str, object],
+    ) -> None:
+        if process_id != self.process_id:
+            raise ValueError("evaluation scope process_id mismatch")
+        if process_version != self.process_version:
+            raise ValueError("evaluation scope process_version mismatch")
+        if role != self.role:
+            raise ValueError("evaluation scope role mismatch")
+        for binding in self.required_parameter_bindings:
+            observed = _resolve_json_pointer(parameters, binding.json_pointer)
+            if canonical_json_text(observed) != binding.expected_value_json:
+                raise ValueError(
+                    "evaluation parameter does not match reviewed scientific "
+                    f"scope at {binding.json_pointer!r}"
+                )
+
+
 @dataclass(frozen=True, slots=True)
 class ProcessScientificSupportV1:
     role: str
@@ -85,6 +229,8 @@ class ProcessScientificSupportV1:
     alignment_policy_name: str
     alignment_policy_version: str
     alignment_policy_sha256: str
+    evaluation_scope: ProcessScientificEvaluationScopeV1
+    evaluation_scope_sha256: str
     evidence_state: str | None = None
     warnings: tuple[str, ...] = ()
     uncertainties: tuple[str, ...] = ()
@@ -119,6 +265,16 @@ class ProcessScientificSupportV1:
                 "alignment_policy_sha256 must be lowercase SHA-256"
             )
         object.__setattr__(self, "alignment_policy_sha256", digest)
+        if not isinstance(self.evaluation_scope, ProcessScientificEvaluationScopeV1):
+            raise TypeError("evaluation_scope must be ProcessScientificEvaluationScopeV1")
+        if self.evaluation_scope.role != self.role:
+            raise ValueError("evaluation_scope role must equal support role")
+        scope_digest = self.evaluation_scope_sha256.strip()
+        if not _SHA256_RE.fullmatch(scope_digest):
+            raise ValueError("evaluation_scope_sha256 must be lowercase SHA-256")
+        if scope_digest != self.evaluation_scope.canonical_sha256:
+            raise ValueError("evaluation_scope_sha256 must match evaluation_scope")
+        object.__setattr__(self, "evaluation_scope_sha256", scope_digest)
         if self.evidence_state is not None:
             object.__setattr__(
                 self,
@@ -141,6 +297,8 @@ class ProcessScientificSupportV1:
             "alignment_policy_name": self.alignment_policy_name,
             "alignment_policy_version": self.alignment_policy_version,
             "alignment_policy_sha256": self.alignment_policy_sha256,
+            "evaluation_scope": self.evaluation_scope.canonical_payload(),
+            "evaluation_scope_sha256": self.evaluation_scope_sha256,
             "evidence_state": self.evidence_state,
             "warnings": list(self.warnings),
             "uncertainties": list(self.uncertainties),
@@ -288,6 +446,18 @@ class ProcessEvaluationV1:
                 raise ValueError(
                     "scientific_alignment_reviewed requires scientific_supports"
                 )
+            for support in self.scientific_supports:
+                try:
+                    support.evaluation_scope.require_match(
+                        process_id=self.definition.process_id,
+                        process_version=self.definition.version,
+                        role=support.role,
+                        parameters=self.parameters_payload,
+                    )
+                except ValueError as exc:
+                    raise ValueError(
+                        "scientific_supports evaluation scope mismatch"
+                    ) from exc
             stale_alignment_unknowns = tuple(
                 item
                 for item in self.unknowns
