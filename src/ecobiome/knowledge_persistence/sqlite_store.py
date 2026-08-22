@@ -812,12 +812,28 @@ class SQLiteScientificAssertionRepository:
         _validate_assertion_claim_link_row(row)
         return _insert_immutable(self._conn, row)
 
+    def get_assertion(self, assertion_id: str) -> ScientificAssertionsRow | None:
+        return _fetch(self._conn, ScientificAssertionsRow, (assertion_id,))
+
     def get_assertion_revision(self,assertion_id:str,revision:int)->ScientificAssertionRevisionsRow|None:
         return _fetch(self._conn,ScientificAssertionRevisionsRow,(assertion_id,revision))
     def find_by_canonical_payload_sha256(self,sha256:str)->tuple[ScientificAssertionRevisionsRow,...]:
         row_type=ScientificAssertionRevisionsRow; table,columns,_=_TABLE_SPECS[row_type]
         quoted=", ".join(f'"{name}"' for name in columns)
         rows=self._conn.execute(f'SELECT {quoted} FROM "{table}" WHERE canonical_payload_sha256=? ORDER BY assertion_id,revision',(sha256,)).fetchall()
+        return tuple(row_type(*row) for row in rows)
+
+    def list_assertion_claim_links(
+        self, assertion_id: str, revision: int
+    ) -> tuple[AssertionClaimLinksRow, ...]:
+        row_type = AssertionClaimLinksRow
+        table, columns, _ = _TABLE_SPECS[row_type]
+        quoted = ", ".join(f'"{name}"' for name in columns)
+        rows = self._conn.execute(
+            f'SELECT {quoted} FROM "{table}" '
+            "WHERE assertion_id=? AND assertion_revision=? ORDER BY id",
+            (assertion_id, revision),
+        ).fetchall()
         return tuple(row_type(*row) for row in rows)
 
 class SQLiteScientificAssessmentRepository:

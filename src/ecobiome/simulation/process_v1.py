@@ -20,9 +20,14 @@ _SUPPORT_STATUSES = frozenset(
     {
         "deterministic_identity",
         "scenario_hypothesis",
+        "scientific_alignment_reviewed",
         "support_missing",
     }
 )
+_SCIENTIFIC_SUPPORT_EPISTEMIC_BY_ALIGNMENT = {
+    "direct_mechanism_support": frozenset({"explicit_causal_result"}),
+    "interpretive_mechanism_support": frozenset({"interpretive_support"}),
+}
 
 
 def _nonempty(value: str, field_name: str) -> str:
@@ -30,6 +35,16 @@ def _nonempty(value: str, field_name: str) -> str:
     if not normalized:
         raise ValueError(f"{field_name} must be non-empty")
     return normalized
+
+
+_SCIENTIFIC_ALIGNMENT_NOT_REVIEWED_UNKNOWN = (
+    "scientific assertion refs supplied but process-to-assertion alignment "
+    "is not reviewed in N4 V1"
+)
+
+
+def _is_stale_scientific_alignment_unknown(value: str) -> bool:
+    return value.strip() == _SCIENTIFIC_ALIGNMENT_NOT_REVIEWED_UNKNOWN
 
 
 @dataclass(frozen=True, slots=True)
@@ -58,6 +73,77 @@ class ScientificAssertionRefV1:
             "assertion_id": self.assertion_id,
             "assertion_revision": self.assertion_revision,
             "canonical_payload_sha256": self.canonical_payload_sha256,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class ProcessScientificSupportV1:
+    role: str
+    assertion_ref: ScientificAssertionRefV1
+    alignment_class: str
+    epistemic_class: str
+    alignment_policy_name: str
+    alignment_policy_version: str
+    alignment_policy_sha256: str
+    evidence_state: str | None = None
+    warnings: tuple[str, ...] = ()
+    uncertainties: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        for field_name in (
+            "role",
+            "alignment_class",
+            "epistemic_class",
+            "alignment_policy_name",
+            "alignment_policy_version",
+        ):
+            object.__setattr__(
+                self,
+                field_name,
+                _nonempty(str(getattr(self, field_name)), field_name),
+            )
+        if self.alignment_class not in _SCIENTIFIC_SUPPORT_EPISTEMIC_BY_ALIGNMENT:
+            raise ValueError(
+                f"unsupported alignment_class: {self.alignment_class!r}"
+            )
+        allowed_epistemic = _SCIENTIFIC_SUPPORT_EPISTEMIC_BY_ALIGNMENT[
+            self.alignment_class
+        ]
+        if self.epistemic_class not in allowed_epistemic:
+            raise ValueError(
+                "alignment_class cannot increase or reinterpret epistemic strength"
+            )
+        digest = self.alignment_policy_sha256.strip()
+        if not _SHA256_RE.fullmatch(digest):
+            raise ValueError(
+                "alignment_policy_sha256 must be lowercase SHA-256"
+            )
+        object.__setattr__(self, "alignment_policy_sha256", digest)
+        if self.evidence_state is not None:
+            object.__setattr__(
+                self,
+                "evidence_state",
+                _nonempty(self.evidence_state, "evidence_state"),
+            )
+        for field_name in ("warnings", "uncertainties"):
+            values = tuple(
+                _nonempty(item, field_name)
+                for item in getattr(self, field_name)
+            )
+            object.__setattr__(self, field_name, values)
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "role": self.role,
+            "assertion_ref": self.assertion_ref.canonical_payload(),
+            "alignment_class": self.alignment_class,
+            "epistemic_class": self.epistemic_class,
+            "alignment_policy_name": self.alignment_policy_name,
+            "alignment_policy_version": self.alignment_policy_version,
+            "alignment_policy_sha256": self.alignment_policy_sha256,
+            "evidence_state": self.evidence_state,
+            "warnings": list(self.warnings),
+            "uncertainties": list(self.uncertainties),
         }
 
 
@@ -159,6 +245,7 @@ class ProcessEvaluationV1:
     parameter_bases: tuple[QuantityBasisV1, ...]
     scientific_assertion_refs: tuple[ScientificAssertionRefV1, ...]
     deltas: tuple[ProcessDeltaV1, ...]
+    scientific_supports: tuple[ProcessScientificSupportV1, ...] = ()
     assumptions: tuple[str, ...] = ()
     warnings: tuple[str, ...] = ()
     unknowns: tuple[str, ...] = ()
@@ -196,6 +283,56 @@ class ProcessEvaluationV1:
         for field_name in ("assumptions", "warnings", "unknowns"):
             values = tuple(_nonempty(item, field_name) for item in getattr(self, field_name))
             object.__setattr__(self, field_name, values)
+        if self.support_status == "scientific_alignment_reviewed":
+            if not self.scientific_supports:
+                raise ValueError(
+                    "scientific_alignment_reviewed requires scientific_supports"
+                )
+            stale_alignment_unknowns = tuple(
+                item
+                for item in self.unknowns
+                if _is_stale_scientific_alignment_unknown(item)
+            )
+            if stale_alignment_unknowns:
+                raise ValueError(
+                    "scientific_alignment_reviewed forbids pending/not-reviewed "
+                    "alignment unknowns"
+                )
+            support_keys = [
+                (
+                    item.role,
+                    item.assertion_ref.assertion_id,
+                    item.assertion_ref.assertion_revision,
+                    item.assertion_ref.canonical_payload_sha256,
+                    item.alignment_class,
+                    item.epistemic_class,
+                    item.alignment_policy_sha256,
+                )
+                for item in self.scientific_supports
+            ]
+            if len(set(support_keys)) != len(support_keys):
+                raise ValueError("scientific_supports must be unique")
+            support_roles = {item.role for item in self.scientific_supports}
+            missing_roles = (
+                set(self.definition.required_scientific_assertion_roles)
+                - support_roles
+            )
+            if missing_roles:
+                raise ValueError(
+                    "scientific_supports do not cover required roles: "
+                    f"{sorted(missing_roles)!r}"
+                )
+            support_refs = {
+                item.assertion_ref for item in self.scientific_supports
+            }
+            if support_refs != set(self.scientific_assertion_refs):
+                raise ValueError(
+                    "scientific_supports must match scientific_assertion_refs"
+                )
+        elif self.scientific_supports:
+            raise ValueError(
+                "scientific_supports require scientific_alignment_reviewed"
+            )
 
     def canonical_payload(self) -> dict[str, object]:
         return {
@@ -217,6 +354,23 @@ class ProcessEvaluationV1:
                     key=lambda item: (item.assertion_id, item.assertion_revision),
                 )
             ],
+            **(
+                {
+                    "scientific_supports": [
+                        item.canonical_payload()
+                        for item in sorted(
+                            self.scientific_supports,
+                            key=lambda item: (
+                                item.role,
+                                item.assertion_ref.assertion_id,
+                                item.assertion_ref.assertion_revision,
+                            ),
+                        )
+                    ]
+                }
+                if self.scientific_supports
+                else {}
+            ),
             "deltas": [
                 item.canonical_payload()
                 for item in sorted(
