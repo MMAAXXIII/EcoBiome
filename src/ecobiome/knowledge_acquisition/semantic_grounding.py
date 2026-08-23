@@ -166,6 +166,20 @@ OPAQUE_OPEN_TEXT_ROLES_V1_2 = frozenset(
     OPAQUE_OPEN_TEXT_ROLES_V1_1 | OPAQUE_OPEN_TEXT_ROLES_V1_2_ADDITIONS
 )
 
+# V1.3 adds the four human-adopted G7A directional-nitrogen roles without
+# mutating the frozen V1.1 policy identity or the V1.2 role set.
+OPAQUE_OPEN_TEXT_ROLES_V1_3_ADDITIONS = frozenset(
+    {
+        "process_agent",
+        "source_material",
+        "target_material",
+        "target_nitrogen_pool",
+    }
+)
+OPAQUE_OPEN_TEXT_ROLES_V1_3 = frozenset(
+    OPAQUE_OPEN_TEXT_ROLES_V1_2 | OPAQUE_OPEN_TEXT_ROLES_V1_3_ADDITIONS
+)
+
 TEMPERATURE_POSITIVE_PATTERNS = [
     r"\btemperature\b",
     r"\btemperatures\b",
@@ -746,6 +760,149 @@ def audit_arguments(
                 }
             )
         elif role in OPAQUE_OPEN_TEXT_ROLES_V1_2:
+            record = (
+                opaque_text_resolution(role, value, source_text)
+                if isinstance(value, str)
+                else {
+                    "role": role,
+                    "state": "scalar_type_violation",
+                    "scientifically_scoreable": False,
+                }
+            )
+        else:
+            record = {
+                "role": role,
+                "state": "unknown_role",
+                "scientifically_scoreable": False,
+            }
+        records[role] = record
+
+    state_counts: dict[str, int] = {}
+    for record in records.values():
+        state = str(record["state"])
+        state_counts[state] = state_counts.get(state, 0) + 1
+
+    blocking_states = {
+        "ambiguous",
+        "domain_mismatch",
+        "scalar_type_violation",
+        "ungrounded",
+        "ungrounded_pair",
+        "unknown_role",
+        "unsupported_literal",
+        "unsupported_unit",
+    }
+    unresolved_states = {
+        "domain_unknown",
+        "domain_valid_unresolved",
+        "grounded_opaque_unresolved",
+    }
+
+    return {
+        "records": records,
+        "state_counts": dict(sorted(state_counts.items())),
+        "blocking": any(
+            str(record["state"]) in blocking_states
+            for record in records.values()
+        ),
+        "unresolved": any(
+            str(record["state"]) in unresolved_states
+            for record in records.values()
+        ),
+        "all_scientifically_scoreable": all(
+            bool(record.get("scientifically_scoreable"))
+            for record in records.values()
+        )
+        if records
+        else True,
+    }
+
+
+def audit_arguments_v1_3(
+    arguments: dict[str, Any],
+    source_text: str,
+) -> dict[str, Any]:
+    """Audit arguments with V1.3 role coverage and V1.1 numeric semantics."""
+    records: dict[str, dict[str, Any]] = {}
+
+    # Joint value+unit first; it must not be assembled from unrelated mentions.
+    if "value" in arguments and "unit" in arguments:
+        value = arguments["value"]
+        unit = arguments["unit"]
+        if (
+            isinstance(value, (int, float))
+            and not isinstance(value, bool)
+            and isinstance(unit, str)
+        ):
+            pair = resolve_value_unit_pair(value, unit, source_text)
+        else:
+            pair = {
+                "state": "scalar_type_violation",
+                "scientifically_scoreable": False,
+            }
+        pair_state = str(pair["state"])
+        if pair_state == "resolved":
+            records["value"] = {
+                "role": "value",
+                "state": "resolved",
+                "canonical_value": pair["canonical_value"],
+                "scientifically_scoreable": True,
+                "joint_value_unit_pair": pair,
+            }
+            records["unit"] = {
+                "role": "unit",
+                "state": "resolved",
+                "canonical_value": pair["canonical_unit"],
+                "scientifically_scoreable": True,
+                "joint_value_unit_pair": pair,
+            }
+        else:
+            records["value"] = {
+                "role": "value",
+                "state": pair_state,
+                "scientifically_scoreable": False,
+                "joint_value_unit_pair": pair,
+            }
+            records["unit"] = {
+                "role": "unit",
+                "state": pair_state,
+                "scientifically_scoreable": False,
+                "joint_value_unit_pair": pair,
+            }
+
+    for role, value in arguments.items():
+        if role in records:
+            continue
+        if role in NUMERIC_ROLES:
+            if not isinstance(value, (int, float)) or isinstance(value, bool):
+                record = {
+                    "role": role,
+                    "state": "scalar_type_violation",
+                    "scientifically_scoreable": False,
+                }
+            else:
+                record = numeric_role_grounding(role, value, source_text)
+        elif role == "unit":
+            record = (
+                unit_role_resolution(value, source_text)
+                if isinstance(value, str)
+                else {
+                    "role": role,
+                    "state": "scalar_type_violation",
+                    "scientifically_scoreable": False,
+                }
+            )
+        elif role == "temperature_scope":
+            record = (
+                temperature_scope_domain_check(value, source_text)
+                if isinstance(value, str)
+                else {
+                    "role": role,
+                    "state": "scalar_type_violation",
+                    "scientifically_scoreable": False,
+                }
+            )
+        elif role in OPAQUE_OPEN_TEXT_ROLES_V1_3:
             record = (
                 opaque_text_resolution(role, value, source_text)
                 if isinstance(value, str)
