@@ -10,7 +10,21 @@ from ecobiome.ui import local_api
 
 class _FakeExplanation:
     def render_text(self) -> str:
-        return "Explication scientifique revue."
+        return "Explication technique revue."
+
+
+class _FakeHumanExplanation:
+    canonical_sha256 = "1" * 64
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "schema_version": "ecobiome-human-readable-nitrogen-explanation-v1",
+            "title": "Pourquoi ?",
+            "introduction": "Introduction.",
+            "abstraction_note": "Ne pas additionner les vues.",
+            "model_limit": "Pas de RateModel.",
+            "processes": [],
+        }
 
 
 class _FakeDemonstration:
@@ -37,10 +51,15 @@ def test_resolve_nitrogen_foundation_default(monkeypatch: Any) -> None:
     assert "scientific-foundation-v6" in str(path)
 
 
-def test_resolve_nitrogen_foundation_override(monkeypatch: Any, tmp_path: Path) -> None:
+def test_resolve_nitrogen_foundation_override(
+    monkeypatch: Any,
+    tmp_path: Path,
+) -> None:
     target = tmp_path / "foundation.sqlite3"
     monkeypatch.setenv(local_api.NITROGEN_SCIENTIFIC_FOUNDATION_ENV, str(target))
-    assert local_api.resolve_nitrogen_scientific_foundation_path() == target.resolve()
+    assert local_api.resolve_nitrogen_scientific_foundation_path() == (
+        target.resolve()
+    )
 
 
 def test_nitrogen_demo_api_payload(monkeypatch: Any) -> None:
@@ -49,14 +68,26 @@ def test_nitrogen_demo_api_payload(monkeypatch: Any) -> None:
         "build_frozen_g7a_nitrogen_vertical_demonstration_v1",
         lambda _path: _FakeDemonstration(),
     )
+    monkeypatch.setattr(
+        local_api,
+        "build_human_readable_nitrogen_explanation_v1",
+        lambda _artifact: _FakeHumanExplanation(),
+    )
     payload = local_api._nitrogen_demo_payload(Path("unused.sqlite3"))
     assert payload["status"] == "reviewed_scenario"
     assert payload["artifact_sha256"] == "0" * 64
     assert payload["non_predictive"] is True
-    assert payload["explanation"] == "Explication scientifique revue."
+    assert payload["technical_explanation"] == "Explication technique revue."
+    assert payload["explanation"] == "Explication technique revue."
+    human = payload["human_explanation"]
+    assert isinstance(human, dict)
+    assert human["canonical_sha256"] == "1" * 64
+    assert human["title"] == "Pourquoi ?"
 
 
-def test_nitrogen_demo_payload_rejects_predictive_boundary(monkeypatch: Any) -> None:
+def test_nitrogen_demo_payload_rejects_predictive_boundary(
+    monkeypatch: Any,
+) -> None:
     class _PredictiveFake(_FakeDemonstration):
         def canonical_payload(self) -> dict[str, object]:
             payload = super().canonical_payload()

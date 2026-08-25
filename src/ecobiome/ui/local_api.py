@@ -13,6 +13,9 @@ from urllib.parse import parse_qs, urlparse
 from uuid import UUID
 
 from ecobiome.dashboard import build_project_dashboard
+from ecobiome.reasoning.human_readable_nitrogen_explanation_v1 import (
+    build_human_readable_nitrogen_explanation_v1,
+)
 from ecobiome.reasoning.nitrogen_vertical_runtime_v1 import (
     SCIENTIFIC_FOUNDATION_V6_SHA256,
     build_frozen_g7a_nitrogen_vertical_demonstration_v1,
@@ -53,12 +56,19 @@ def _nitrogen_demo_payload(database_path: Path | None = None) -> dict[str, Any]:
         raise RuntimeError(
             "nitrogen UI requires the frozen non-predictive model boundary"
         )
+    human_explanation = build_human_readable_nitrogen_explanation_v1(artifact)
+    technical_explanation = demonstration.auditable_explanation.render_text()
     return {
         "status": "reviewed_scenario",
         "artifact_sha256": demonstration.canonical_sha256,
         "scientific_foundation_sha256": SCIENTIFIC_FOUNDATION_V6_SHA256,
         "non_predictive": True,
-        "explanation": demonstration.auditable_explanation.render_text(),
+        "human_explanation": {
+            "canonical_sha256": human_explanation.canonical_sha256,
+            **human_explanation.canonical_payload(),
+        },
+        "technical_explanation": technical_explanation,
+        "explanation": technical_explanation,
         "artifact": artifact,
     }
 
