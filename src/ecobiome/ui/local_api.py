@@ -13,12 +13,54 @@ from urllib.parse import parse_qs, urlparse
 from uuid import UUID
 
 from ecobiome.dashboard import build_project_dashboard
+from ecobiome.reasoning.nitrogen_vertical_runtime_v1 import (
+    SCIENTIFIC_FOUNDATION_V6_SHA256,
+    build_frozen_g7a_nitrogen_vertical_demonstration_v1,
+)
 from ecobiome.workspace import ProjectManifest, ProjectType, ProjectWorkspace
 
 DEFAULT_API_HOST = "127.0.0.1"
 DEFAULT_API_PORT = 8000
 WORKSPACE_ENV = "ECOBIOME_WORKSPACE"
 DEMO_DATA_ENV = "ECOBIOME_DEMO_DATA"
+NITROGEN_SCIENTIFIC_FOUNDATION_ENV = "ECOBIOME_SCIENTIFIC_FOUNDATION_V6"
+
+
+def resolve_nitrogen_scientific_foundation_path() -> Path:
+    override = os.environ.get(NITROGEN_SCIENTIFIC_FOUNDATION_ENV)
+    if override:
+        return Path(override).expanduser().resolve()
+    return (
+        Path.home()
+        / "Documents"
+        / "EcoBiome-data"
+        / "scientific-foundation-v6"
+        / "scientific-foundation-v6.sqlite3"
+    ).resolve()
+
+
+def _nitrogen_demo_payload(database_path: Path | None = None) -> dict[str, Any]:
+    path = database_path or resolve_nitrogen_scientific_foundation_path()
+    demonstration = build_frozen_g7a_nitrogen_vertical_demonstration_v1(path)
+    artifact = demonstration.canonical_payload()
+    boundary = artifact.get("model_boundary")
+    if not isinstance(boundary, dict) or boundary != {
+        "extent_is_explicit_input": True,
+        "kinetic_or_rate_model_present": False,
+        "dt_or_elapsed_time_prediction_present": False,
+        "forecast_claim": False,
+    }:
+        raise RuntimeError(
+            "nitrogen UI requires the frozen non-predictive model boundary"
+        )
+    return {
+        "status": "reviewed_scenario",
+        "artifact_sha256": demonstration.canonical_sha256,
+        "scientific_foundation_sha256": SCIENTIFIC_FOUNDATION_V6_SHA256,
+        "non_predictive": True,
+        "explanation": demonstration.auditable_explanation.render_text(),
+        "artifact": artifact,
+    }
 
 def resolve_workspace_path() -> Path:
     override = os.environ.get(WORKSPACE_ENV)
@@ -402,7 +444,7 @@ class EcoBiomeApiHandler(BaseHTTPRequestHandler):
         except KeyError:
             self._send_json({"error": "not_found"}, HTTPStatus.NOT_FOUND)
             return
-        except (OSError, ValueError) as error:
+        except (OSError, ValueError, RuntimeError) as error:
             self._send_json({"error": str(error)}, HTTPStatus.BAD_REQUEST)
             return
 
@@ -428,6 +470,8 @@ class EcoBiomeApiHandler(BaseHTTPRequestHandler):
             }
         if path == "/api/dashboard":
             return _demo_dashboard() if demo else _real_dashboard(workspace)
+        if path == "/api/nitrogen-demo":
+            return _nitrogen_demo_payload()
         if path == "/api/water-bodies":
             return _demo_water_bodies() if demo else _real_water_bodies(workspace)
         if path == "/api/measurements":

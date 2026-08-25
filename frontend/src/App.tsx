@@ -6,6 +6,7 @@ import { WaterBodiesView } from '@/views/WaterBodiesView';
 import { DiagnosticsView } from '@/views/DiagnosticsView';
 import { JournalView } from '@/views/JournalView';
 import { MediaView } from '@/views/MediaView';
+import { NitrogenView } from '@/views/NitrogenView';
 import type { ViewKey } from '@/lib/nav';
 import type { WaterBody } from '@/lib/types';
 
@@ -50,6 +51,7 @@ export default function App() {
           {activeView === 'diagnostics' && <DiagnosticsView />}
           {activeView === 'journal' && <JournalView />}
           {activeView === 'media' && <MediaView />}
+          {activeView === 'nitrogen' && <NitrogenView />}
         </main>
       </div>
     </div>
