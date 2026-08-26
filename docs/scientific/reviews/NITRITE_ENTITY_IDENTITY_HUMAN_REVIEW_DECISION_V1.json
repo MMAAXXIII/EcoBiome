@@ -1,0 +1,64 @@
+{
+  "decision_payload": {
+    "acceptance_checks": {
+      "canonical_label_verified": true,
+      "chemical_species_kind_verified": true,
+      "exact_mapping_verified": true,
+      "formula_verified": true,
+      "non_organism_exclusive_boundary_verified": true,
+      "pubchem_cid_verified": true,
+      "real_v6_write_not_authorized_verified": true
+    },
+    "accepted_identity": {
+      "canonical_label": "nitrite",
+      "entity_id": "entity-pubchem-cid-946",
+      "entity_kind": "chemical_species",
+      "formula": "NO2-",
+      "identifier": {
+        "authority_namespace": "PubChem Compound",
+        "external_id": "946",
+        "scheme": "pubchem_cid"
+      },
+      "mapping_status": "exact"
+    },
+    "candidate_ref": {
+      "candidate_file_sha256": "43a6fc60c47f098be8fe198b850c4ff1d9b202b621ce0d7e26caebeefdf64202",
+      "candidate_id": "candidate-g7a-nitrite-entity-identity-v1",
+      "candidate_payload_sha256": "4fe7808c45aecafbe6ecd09d4590aff6d5b0d965b5a795502020ed49220e129f"
+    },
+    "decision": "accept",
+    "decision_effects": {
+      "identity_accepted": true,
+      "mechanism_assertion_real_write_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "real_v6_write_performed": false,
+      "shadow_reviewed_confirmed_seed_authorized": true
+    },
+    "decision_id": "decision-g7a-nitrite-entity-identity-v1",
+    "decision_source": {
+      "conversation_role": "human_user",
+      "kind": "explicit_user_message",
+      "literal": "accept"
+    },
+    "reviewed_at": "2026-08-26T02:20:24+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "scientific_boundaries": {
+      "kinetic_form_reviewed": false,
+      "kinetic_parameter_reviewed": false,
+      "numeric_rate_model_authorized": false,
+      "process_agent_inherited_from_template": false,
+      "qualifier_semantic_type": "nitrogen_oxidation",
+      "reactive_source_entity": "entity-pubchem-cid-222",
+      "reactive_source_label": "ammonia",
+      "target_entity": "entity-pubchem-cid-946",
+      "target_label": "nitrite"
+    },
+    "status": "accepted"
+  },
+  "decision_payload_sha256": "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+  "schema_version": "ecobiome-scientific-entity-identity-human-review-decision-v1"
+}

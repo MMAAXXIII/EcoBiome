@@ -1,0 +1,203 @@
+{
+  "dry_run_payload": {
+    "gate": "ECOBIOME_G7A_RATE_2F_B_NITRITE_ENTITY_SHADOW_SEED_AND_MECHANISM_ASSERTION_DRY_RUN_LOCAL",
+    "human_review": {
+      "mechanism_alignment_decision": "accept",
+      "mechanism_alignment_decision_sha256": "aec4200eff9a7ef672b788479a516623285a2e5174e9fc0b00972fc40f9f952e",
+      "nitrite_identity_decision": "accept",
+      "nitrite_identity_decision_sha256": "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca"
+    },
+    "next_gate": "RATE-2G_MECHANISM_PRIMARY_EVIDENCE_INGESTION_DESIGN",
+    "real_database": {
+      "sha256_after": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "sha256_before": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "unchanged": true,
+      "write_authorized": false,
+      "written": false
+    },
+    "remaining_real_persistence_blockers": [
+      "Real Scientific Foundation V6 write is not authorized.",
+      "The two RATE-2B Nature mechanism sources/claims are not yet materialized and reviewed in the V6 evidence graph.",
+      "ProcessScientificSupportV1 remains unmaterialized.",
+      "Alignment-policy identity must be frozen before support attachment."
+    ],
+    "schema_version": "ecobiome-nitrite-entity-and-mechanism-assertion-shadow-dry-run-v1",
+    "scientific_boundaries": {
+      "assertion_claim_links_created": false,
+      "mechanism_primary_sources_present_in_real_v6": false,
+      "numeric_rate_model_authorized": false,
+      "process_agent_included": false,
+      "qualifier_semantic_type": "nitrogen_oxidation",
+      "source_entity": "entity-pubchem-cid-222",
+      "target_entity": "entity-pubchem-cid-946"
+    },
+    "shadow_database": {
+      "changed": true,
+      "final_sha256": "d483b74c42aa16e1b60430393672bcffdfaaf97d5522c1d53a5fdd5191321089",
+      "initial_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "result": {
+        "after": {
+          "assertion_claim_links": 2,
+          "knowledge_sources": 10,
+          "scientific_assertion_revisions": 3,
+          "scientific_assertions": 3,
+          "scientific_entities": 7,
+          "scientific_entity_identifiers": 7,
+          "scientific_entity_revisions": 7
+        },
+        "before": {
+          "assertion_claim_links": 2,
+          "knowledge_sources": 9,
+          "scientific_assertion_revisions": 2,
+          "scientific_assertions": 2,
+          "scientific_entities": 6,
+          "scientific_entity_identifiers": 6,
+          "scientific_entity_revisions": 6
+        },
+        "created_at": "2026-08-26T01:09:17.008396+00:00",
+        "deltas": {
+          "assertion_claim_links": 0,
+          "knowledge_sources": 1,
+          "scientific_assertion_revisions": 1,
+          "scientific_assertions": 1,
+          "scientific_entities": 1,
+          "scientific_entity_identifiers": 1,
+          "scientific_entity_revisions": 1
+        },
+        "foreign_key_violations": [],
+        "inserted_flags": {
+          "assertion": true,
+          "assertion_revision": true,
+          "authority_source": true,
+          "entity": true,
+          "entity_revision": true,
+          "identifier": true
+        },
+        "persisted_assertion": {
+          "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "assertion_kind": "process",
+          "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+          "normalized_text": "nitrogen_oxidized_from_to(source_material=entity_ref(\"entity-pubchem-cid-222\",1), target_material=entity_ref(\"entity-pubchem-cid-946\",1))",
+          "participants_json": "[{\"entity\":{\"entity_id\":\"entity-pubchem-cid-222\",\"entity_revision\":1,\"type\":\"entity_ref\"},\"role\":\"source_material\"},{\"entity\":{\"entity_id\":\"entity-pubchem-cid-946\",\"entity_revision\":1,\"type\":\"entity_ref\"},\"role\":\"target_material\"}]",
+          "predicate": "nitrogen_oxidized_from_to",
+          "qualifiers_json": "{\"semantic_type\":\"nitrogen_oxidation\"}",
+          "revision": 1,
+          "schema_version": "scientific-assertion-v1.1",
+          "value_json": "{\"kind\":\"none\"}"
+        },
+        "persisted_nitrite_entity": {
+          "canonical_label": "nitrite",
+          "canonical_payload_json": "{\"canonical_label\":\"nitrite\",\"entity_kind\":\"chemical_species\",\"formula\":\"NO2-\",\"primary_identifier\":{\"authority_namespace\":\"PubChem Compound\",\"external_id\":\"946\",\"scheme\":\"pubchem_cid\"},\"schema_version\":\"entity-v1\"}",
+          "canonical_payload_sha256": "ce73afe85bb2a7a2800ab043d6244573d0a4656ee0a8895870b9959a5f70a31e",
+          "entity_kind": "chemical_species",
+          "id": "entity-pubchem-cid-946",
+          "review_status": "reviewed_confirmed",
+          "revision": 1,
+          "schema_version": "entity-v1"
+        },
+        "persisted_nitrite_identifier": {
+          "authority_namespace": "PubChem Compound",
+          "authority_source_id": "authority-source-pubchem-cid-946",
+          "entity_id": "entity-pubchem-cid-946",
+          "external_id": "946",
+          "id": "entity-identifier-pubchem-cid-946",
+          "mapping_review_status": "reviewed_confirmed",
+          "mapping_status": "exact",
+          "scheme": "pubchem_cid"
+        },
+        "quick_check": [
+          "ok"
+        ]
+      },
+      "write_completed": true
+    },
+    "shadow_plan": {
+      "assertion": {
+        "assertion_kind": "process",
+        "canonical_payload": {
+          "assertion_kind": "process",
+          "participants": [
+            {
+              "entity": {
+                "entity_id": "entity-pubchem-cid-222",
+                "entity_revision": 1,
+                "type": "entity_ref"
+              },
+              "role": "source_material"
+            },
+            {
+              "entity": {
+                "entity_id": "entity-pubchem-cid-946",
+                "entity_revision": 1,
+                "type": "entity_ref"
+              },
+              "role": "target_material"
+            }
+          ],
+          "predicate": "nitrogen_oxidized_from_to",
+          "qualifiers": {
+            "semantic_type": "nitrogen_oxidation"
+          },
+          "schema_version": "scientific-assertion-v1.1",
+          "value": {
+            "kind": "none"
+          }
+        },
+        "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+        "id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+        "normalized_text": "nitrogen_oxidized_from_to(source_material=entity_ref(\"entity-pubchem-cid-222\",1), target_material=entity_ref(\"entity-pubchem-cid-946\",1))",
+        "participants_json": "[{\"entity\":{\"entity_id\":\"entity-pubchem-cid-222\",\"entity_revision\":1,\"type\":\"entity_ref\"},\"role\":\"source_material\"},{\"entity\":{\"entity_id\":\"entity-pubchem-cid-946\",\"entity_revision\":1,\"type\":\"entity_ref\"},\"role\":\"target_material\"}]",
+        "predicate": "nitrogen_oxidized_from_to",
+        "process_agent_included": false,
+        "qualifiers_json": "{\"semantic_type\":\"nitrogen_oxidation\"}",
+        "revision": 1,
+        "schema_version": "scientific-assertion-v1.1",
+        "value_json": "{\"kind\":\"none\"}"
+      },
+      "authority_source": {
+        "author": "PubChem",
+        "canonical_locator": "https://pubchem.ncbi.nlm.nih.gov/compound/946",
+        "description": "",
+        "id": "authority-source-pubchem-cid-946",
+        "language": "en",
+        "logical_identity_sha256": "5bf59d8b7e6afecbe00bb15ffcd087009d538edabfa0b0cb935f990869352bb9",
+        "source_metadata_json": "{\"authority\":\"PubChem\",\"authority_external_id\":\"946\",\"authority_namespace\":\"PubChem Compound\",\"expected_canonical_label\":\"nitrite\",\"formula\":\"NO2-\",\"human_review_decision_sha256\":\"dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca\",\"verification_gate\":\"ECOBIOME_G7A_RATE_2F_B_NITRITE_ENTITY_SHADOW_SEED_AND_MECHANISM_ASSERTION_DRY_RUN_LOCAL\",\"verified_at\":\"2026-08-26T00:20:24+00:00\"}",
+        "source_type": "authority_record",
+        "title": "PubChem Compound CID 946 — Nitrite"
+      },
+      "entity": {
+        "canonical_label": "nitrite",
+        "canonical_payload_json": "{\"canonical_label\":\"nitrite\",\"entity_kind\":\"chemical_species\",\"formula\":\"NO2-\",\"primary_identifier\":{\"authority_namespace\":\"PubChem Compound\",\"external_id\":\"946\",\"scheme\":\"pubchem_cid\"},\"schema_version\":\"entity-v1\"}",
+        "canonical_payload_sha256": "ce73afe85bb2a7a2800ab043d6244573d0a4656ee0a8895870b9959a5f70a31e",
+        "entity_kind": "chemical_species",
+        "id": "entity-pubchem-cid-946",
+        "review_status": "reviewed_confirmed",
+        "revision": 1,
+        "revision_schema_version": "entity-v1"
+      },
+      "identifier": {
+        "authority_namespace": "PubChem Compound",
+        "authority_source_id": "authority-source-pubchem-cid-946",
+        "authority_version": "verified-2026-08-23",
+        "entity_id": "entity-pubchem-cid-946",
+        "external_id": "946",
+        "id": "entity-identifier-pubchem-cid-946",
+        "mapping_review_status": "reviewed_confirmed",
+        "mapping_status": "exact",
+        "scheme": "pubchem_cid",
+        "valid_from": null,
+        "valid_to": null
+      },
+      "review_bindings": {
+        "evaluation_scope_sha256": "72cc77fa3ccec09b16b99f00fa999be94df637e72490d2832e985486cd54a7de",
+        "mechanism_alignment_decision_sha256": "aec4200eff9a7ef672b788479a516623285a2e5174e9fc0b00972fc40f9f952e",
+        "mechanism_candidate_sha256": "0b7f444bf34becee4967e42b91b87758aeb1780befac57a74b6b325d7522f15d",
+        "nitrite_identity_decision_sha256": "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+        "process_definition_sha256": "fb34a9f83decc88d1b66ed1d1c806c769c851d5604bd9201b5a8c66bbfc4b2e5",
+        "semantic_bridge_sha256": "cbed8df87f5493284c72351705c1236970d6cd9fecbbf10baa422149e11c7572"
+      }
+    },
+    "status": "shadow_write_pass"
+  },
+  "dry_run_payload_sha256": "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+}
