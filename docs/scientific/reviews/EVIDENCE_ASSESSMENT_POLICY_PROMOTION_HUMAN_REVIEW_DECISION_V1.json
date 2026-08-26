@@ -1,0 +1,36 @@
+{
+  "decision_payload": {
+    "decision": "revise",
+    "decision_id": "decision-g7a-rate2r-evidence-assessment-policy-promotion-v1",
+    "decision_source": {
+      "accepted_recommendation": "policy promotion: revise; retain ecobiome-evidence-assessment-1; freeze per-link independence_status to unresolved in V1; keep dependent/partially_independent/independent in a separate pairwise policy",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "effects": {
+      "all_non_independence_scientific_rules_accepted": true,
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "pairwise_independence_policy_separated": true,
+      "per_link_independence_status_v1": "unresolved",
+      "stable_name_accepted": true
+    },
+    "replacement_policy": {
+      "canonical_payload_sha256": "ff95c9aa278772d7bf58a17dcd93fe386795dc6320f42a6f911873cc1128e59b",
+      "policy_version_string": "ecobiome-evidence-assessment-1",
+      "real_v6_write_authorized": false,
+      "shadow_materialization_authorized": true
+    },
+    "reviewed_at": "2026-08-26T19:53:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2q_policy_promotion_sha256": "508e273824f6e0b58765b6034c8e1a993c93d57ed8359a72a482d7e559a42ad1"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "1a438a4b9146cf6c5ef6167a0c1c4d0b574950affc2a822c598929861b609cdf",
+  "schema_version": "ecobiome-policy-promotion-human-review-decision-v1"
+}

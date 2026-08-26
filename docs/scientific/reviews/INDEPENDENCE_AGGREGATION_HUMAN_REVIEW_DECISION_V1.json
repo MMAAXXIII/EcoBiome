@@ -1,0 +1,44 @@
+{
+  "decision_payload": {
+    "accepted_policy": {
+      "fractional_counting_forbidden": true,
+      "knowledge_synthesis_blocked_when_exact_integer_unavailable": true,
+      "name": "ecobiome-independent-origin-aggregation",
+      "partially_independent_projection": null,
+      "rounding_forbidden": true,
+      "unresolved_projection": null,
+      "version": "1-reviewed"
+    },
+    "current_vertical_effect": {
+      "independent_support_origin_count": null,
+      "knowledge_synthesis_materializable": false,
+      "pairwise_status": "partially_independent",
+      "support_link_count": 2
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2r-independence-aggregation-v1",
+    "decision_source": {
+      "accepted_recommendation": "aggregation design: accept; partially_independent/unresolved has no integer projection and blocks KnowledgeSynthesis",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "effects": {
+      "aggregation_policy_reviewed": true,
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "schema_migration_authorized": false
+    },
+    "reviewed_at": "2026-08-26T19:53:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2q_independence_aggregation_sha256": "f44bc14c91ace946836a0b11d5480244664133ab95449910a15498dfb0c2c75f"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "e48fa7b41b3efae5cbff7e1fff438553f9a478e8ded6f60933d6b321f74a64e8",
+  "schema_version": "ecobiome-independence-aggregation-human-review-decision-v1"
+}
