@@ -1,0 +1,171 @@
+{
+  "plan_payload": {
+    "accepted_review_chain": {
+      "mechanism_alignment_decision_sha256": "aec4200eff9a7ef672b788479a516623285a2e5174e9fc0b00972fc40f9f952e",
+      "nitrite_identity_decision_sha256": "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+      "rate_2f_b_dry_run_payload_sha256": "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+    },
+    "assertion_link_policy": {
+      "create_before_claim_review": false,
+      "reason": "EcoBiome's assertion-claim validator rejects unresolved support links; link materialization must occur only after explicit review.",
+      "scope_alignment": "unresolved_until_review",
+      "semantic_alignment": "unresolved_until_review",
+      "stance_candidate": "supports",
+      "support_mode": "unresolved_until_review"
+    },
+    "claim_review_policy": {
+      "allowed_decisions": [
+        "accept",
+        "correct",
+        "reject"
+      ],
+      "automatic_acceptance": false,
+      "claim_effective_text_sha256_required": true,
+      "claim_text_must_be_traceable_to_exact_evidence_span": true,
+      "evidence_span_must_be_inside_reviewed_segment": true
+    },
+    "copyright_and_storage": {
+      "full_text_in_git_repo": false,
+      "license_must_be_assessed_before_materialization": true,
+      "raw_or_full_representation_only_in_external_cas": true,
+      "repo_may_store": [
+        "source metadata",
+        "cryptographic hashes",
+        "short anchors",
+        "review decisions",
+        "non-verbatim claim paraphrases"
+      ]
+    },
+    "deferred_until_human_claim_review": [
+      "assertion_claim_links",
+      "evidence_assessments",
+      "knowledge_syntheses",
+      "ProcessScientificSupportV1"
+    ],
+    "kinetic_boundary": {
+      "kinetic_form_reviewed": false,
+      "kinetic_parameter_reviewed": false,
+      "numeric_rate_model_authorized": false
+    },
+    "next_gate": "RATE-2H_PRIMARY_EVIDENCE_SHADOW_ACQUISITION_AND_CLAIM_PACKAGE",
+    "plan_id": "plan-g7a-ammonia-to-nitrite-primary-evidence-ingestion-v1",
+    "real_v6_boundary": {
+      "shadow_ingestion_authorized_by_this_design": false,
+      "write_authorized": false,
+      "write_performed": false
+    },
+    "required_persistence_graph": [
+      "knowledge_sources",
+      "acquisition_jobs",
+      "retrievals",
+      "raw_artifacts",
+      "representations",
+      "segments",
+      "source_evidence",
+      "source_claims",
+      "claim_evidence_links",
+      "source_assessments",
+      "claim_review_events"
+    ],
+    "source_independence": {
+      "automatic_independent_origin_count": false,
+      "reason": "The two primary Nature papers are distinct studies but share authors Mads Albertsen and Per H. Nielsen; independence must not be inferred from distinct DOI values alone.",
+      "status": "requires_review"
+    },
+    "sources": [
+      {
+        "canonical_locator": "https://doi.org/10.1038/nature16459",
+        "claim_candidate": {
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "claim_kind": "mechanism",
+          "claim_layer": "source_statement",
+          "claim_text": "Nitrification includes an ammonia/ammonium oxidation step that produces nitrite before nitrite is oxidized to nitrate.",
+          "initial_review_status": "pending_human_review",
+          "semantic_type": "nitrogen_oxidation"
+        },
+        "doi": "10.1038/nature16459",
+        "evidence_selector": {
+          "evidence_text_sha256_required": true,
+          "exact_offsets_required_at_ingestion": true,
+          "preferred_section": "Summary / opening mechanism statement",
+          "short_anchor": "Nitrification is a two-step process",
+          "store_source_excerpt_in_repo": false
+        },
+        "journal": "Nature",
+        "license_policy": {
+          "basis": "PMC-hosted Nature author manuscript; use/copy/data-mining for academic research is subject to Nature/PMC conditions of use.",
+          "redistribute_full_text": false,
+          "retain_license_evidence_locator": true,
+          "status": "restricted_academic_research_terms"
+        },
+        "pages": "555-559",
+        "pmcid": "PMC4878690",
+        "pmid": "26610025",
+        "proposed_source_id": "source-doi-10-1038-nature16459",
+        "retrieval": {
+          "materialization_target": "external_content_addressed_store_only",
+          "preferred_locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4878690/",
+          "repo_full_text_forbidden": true,
+          "repository": "PubMed Central",
+          "representation_kind": "author_manuscript_html"
+        },
+        "source_key": "van-kessel-2015-nature16459",
+        "source_type": "peer_reviewed_article",
+        "title": "Complete nitrification by a single microorganism",
+        "volume": "528",
+        "year": 2015
+      },
+      {
+        "canonical_locator": "https://doi.org/10.1038/nature16461",
+        "claim_candidate": {
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "claim_kind": "mechanism",
+          "claim_layer": "source_statement",
+          "claim_text": "Nitrification proceeds through ammonia oxidation involving nitrite before the subsequent nitrate state.",
+          "initial_review_status": "pending_human_review",
+          "semantic_type": "nitrogen_oxidation"
+        },
+        "doi": "10.1038/nature16461",
+        "evidence_selector": {
+          "evidence_text_sha256_required": true,
+          "exact_offsets_required_at_ingestion": true,
+          "preferred_section": "Abstract / opening mechanism statement",
+          "short_anchor": "oxidation of ammonia via nitrite to nitrate",
+          "store_source_excerpt_in_repo": false
+        },
+        "journal": "Nature",
+        "license_policy": {
+          "basis": "PMC-hosted Nature author manuscript; use/copy/data-mining for academic research is subject to Nature/PMC conditions of use.",
+          "redistribute_full_text": false,
+          "retain_license_evidence_locator": true,
+          "status": "restricted_academic_research_terms"
+        },
+        "pages": "504-509",
+        "pmcid": "PMC5152751",
+        "pmid": "26610024",
+        "proposed_source_id": "source-doi-10-1038-nature16461",
+        "retrieval": {
+          "materialization_target": "external_content_addressed_store_only",
+          "preferred_locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5152751/",
+          "repo_full_text_forbidden": true,
+          "repository": "PubMed Central",
+          "representation_kind": "author_manuscript_html"
+        },
+        "source_key": "daims-2015-nature16461",
+        "source_type": "peer_reviewed_article",
+        "title": "Complete nitrification by Nitrospira bacteria",
+        "volume": "528",
+        "year": 2015
+      }
+    ],
+    "status": "design_ready",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "persistence_state": "shadow_only_not_real_v6",
+      "revision": 1
+    }
+  },
+  "plan_payload_sha256": "0e34424f7164e7ffa4f66a69f05415965cf1856e2bce05dacde5ae9538199aba",
+  "schema_version": "ecobiome-primary-evidence-ingestion-design-v1"
+}
