@@ -1,0 +1,52 @@
+{
+  "cas_contract_payload": {
+    "implementation_binding": {
+      "artifact_key_format": "sha256:<64-lowercase-hex>",
+      "implementation": "FilesystemContentAddressedArtifactStore",
+      "path_convention": "sha256/<aa>/<bb>/<digest>.blob",
+      "put_get_verify_smoke": "PASS",
+      "smoke_digest": "a3d77910ca8a55d0e5f92977166c45dd3bce090ed69b35babc855bb46850530b",
+      "source_file_sha256": "c19c2032477d761a61468512d0a52ac532ffec65c45709fe678ac95c97002921",
+      "source_relative_path": "src/ecobiome/knowledge_persistence/artifact_store.py"
+    },
+    "preflight_rules": {
+      "all_required_artifacts_must_exist_in_canonical_root": true,
+      "alternate_verified_copy_does_not_equal_canonical_readiness": true,
+      "live_network_refetch_is_not_cas_readiness": true,
+      "missing_artifact_blocks_snapshot_promotion": true,
+      "regular_file_required": true,
+      "sha256_must_match_key": true,
+      "symlink_forbidden": true
+    },
+    "proposed_durable_root": {
+      "absolute_machine_path_in_canonical_identity": false,
+      "create_only_content_addressing": true,
+      "logical_path": "EcoBiome-data/scientific-artifact-cas"
+    },
+    "required_artifacts": [
+      {
+        "artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "doi": "10.1038/nature16459",
+        "pmcid": "PMC4878690",
+        "role": "primary_source_xml",
+        "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+      },
+      {
+        "artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "doi": "10.1038/nature16461",
+        "pmcid": "PMC5152751",
+        "role": "primary_source_xml",
+        "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+      }
+    ],
+    "schema_version": "ecobiome-scientific-artifact-cas-preflight-v1",
+    "status": "pending_human_review",
+    "write_boundary": {
+      "this_contract_authorizes_cas_copy": false,
+      "this_contract_authorizes_cas_creation": false,
+      "this_contract_authorizes_network_acquisition": false,
+      "this_contract_authorizes_snapshot_creation": false
+    }
+  },
+  "cas_contract_payload_sha256": "1319bcaf8cb599c5888b82a37dbd941bc483de1370fa802e9e69a1737241b1ac"
+}
