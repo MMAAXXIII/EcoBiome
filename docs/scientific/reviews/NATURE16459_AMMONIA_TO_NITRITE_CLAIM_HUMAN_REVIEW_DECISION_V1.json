@@ -1,0 +1,58 @@
+{
+  "decision_payload": {
+    "claim_ref": {
+      "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+      "original_claim_text": "Nitrification includes an ammonia/ammonium oxidation step that produces nitrite before nitrite is oxidized to nitrate.",
+      "original_claim_text_sha256": "ebb50944c44736ce716182f61e0fdcb76a45bbad6f0dfd97317cd2f3d4453289",
+      "source_doi": "10.1038/nature16459",
+      "source_pmcid": "PMC4878690"
+    },
+    "claim_review_event_projection": {
+      "corrected_text": "Nitrification includes oxidation of ammonia to nitrite, followed by oxidation of nitrite to nitrate.",
+      "corrected_text_sha256": "445533b6d4ebff5e36ad68c246268ae3ed9c93d1f6ed0284eb516de3b0a210e9",
+      "decision": "correct",
+      "notes": "Human-approved correction preserving the first-step ammonia-to-nitrite mechanism while removing ammonia/ammonium conflation.",
+      "review_metadata": {
+        "claim_review_package_sha256": "69a8d89758a650ce4eaa33dbf812a7ad769a94852498068a1312e535ed94fa70",
+        "gate": "RATE-2I",
+        "source": "explicit_human_review"
+      },
+      "reviewer": "human_user_current_conversation"
+    },
+    "correction": {
+      "corrected_text": "Nitrification includes oxidation of ammonia to nitrite, followed by oxidation of nitrite to nitrate.",
+      "corrected_text_sha256": "445533b6d4ebff5e36ad68c246268ae3ed9c93d1f6ed0284eb516de3b0a210e9",
+      "reason": "Use ammonia as the reactive species wording and avoid conflating NH3 with the aggregate/ammonium reservoir semantics established by the reviewed TAN-to-reactive-species bridge."
+    },
+    "decision": "correct",
+    "decision_effects": {
+      "assertion_claim_link_attachable_now": false,
+      "claim_effective_text_is_corrected_text": true,
+      "claim_human_review_completed": true,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false
+    },
+    "decision_id": "decision-g7a-nature16459-ammonia-to-nitrite-claim-v1",
+    "decision_source": {
+      "conversation_role": "human_user",
+      "kind": "explicit_user_message",
+      "literal": "claim 1: correct"
+    },
+    "evidence_ref": {
+      "evidence_text_sha256": "ac8ba171582a37a611c119702345a1cd9cf1645977234c82900a4b0baf12ff1f",
+      "segment_char_end": 218,
+      "segment_char_start": 0,
+      "segment_text_sha256": "490054e9ad8a5e2f590f27feb252c97d37507d75a0361bffa6127e2844326776",
+      "selected_short_anchor": "Nitrification is a two-step process",
+      "verbatim_evidence_not_copied_to_repo": true
+    },
+    "reviewed_at": "2026-08-26T03:10:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "3a6a3fc9c2d588c323692cf58ee30a7b628ded4f04507151fdbead3f5d954193",
+  "schema_version": "ecobiome-source-claim-human-review-decision-v1"
+}
