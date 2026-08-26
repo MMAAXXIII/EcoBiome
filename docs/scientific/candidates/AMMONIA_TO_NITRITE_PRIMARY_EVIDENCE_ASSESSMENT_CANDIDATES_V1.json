@@ -1,0 +1,491 @@
+{
+  "candidate_package": {
+    "boundaries": {
+      "evidence_assessments_inserted": false,
+      "independence_decision_completed": false,
+      "independent_support_origin_count": null,
+      "knowledge_synthesis_inserted": false,
+      "numeric_rate_model_authorized": false,
+      "process_scientific_support_materialized": false,
+      "real_v6_write": false,
+      "source_lineage_edges_inserted": false
+    },
+    "evidence_assessment_candidates": [
+      {
+        "candidate_row": {
+          "assertion_claim_link_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+          "assessor": "rate-2n-automation-pre-human-review",
+          "created_at": "candidate-not-persisted",
+          "endpoint_or_response_json": {
+            "nitrite_intermediate_directly_accumulated_in_main_aerobic_batch": false,
+            "observations": [
+              "15N tracing supports production of labelled nitrite during aerobic ammonium oxidation.",
+              "Batch incubations show ammonium oxidation to nitrate and selective inhibition of ammonia oxidation by ATU.",
+              "AMO labelling and FISH-MAR localize ammonia-oxidizing capacity and ammonia-dependent carbon fixation to Nitrospira-containing biomass."
+            ],
+            "target_response": "ammonia_or_ammonium_oxidation_to_nitrite"
+          },
+          "evidence_directness": "direct_functional_support_with_intermediate_inference",
+          "id": "evidence-assessment-candidate-rate2n-nature16459-v1",
+          "independence_status": "unresolved",
+          "limitations_json": {
+            "generalization_limits": "specific enrichment/community and experimental conditions",
+            "intermediate_support_uses_isotope_and_mechanistic_inference": true,
+            "nitrite_intermediate_in_main_aerobic_batch_below_detection": true,
+            "not_axenic": true,
+            "source_scope_broader_than_target_assertion": true,
+            "support_mode_author_interpretation": true
+          },
+          "methodological_dimensions_json": {
+            "analysis_pipeline": "differential-coverage metagenomic binning plus physiological and single-cell assays",
+            "controls_or_comparators": [
+              "ATU ammonia-oxidation inhibition",
+              "no-substrate control",
+              "dead control in FISH-MAR"
+            ],
+            "experimental_unit": "enrichment reactor biomass and replicated batch incubations",
+            "measurement_methods": [
+              "15N isotope tracing",
+              "ammonium/nitrite/nitrate chemistry",
+              "metagenomics",
+              "FISH",
+              "AMO FTCP labelling",
+              "FISH-MAR"
+            ],
+            "replication": "main conversion plots use three biological experiments; FISH/FTCP/FISH-MAR include independent and technical replication as reported",
+            "sample_origin": "RAS biofilter biomass"
+          },
+          "policy_version": "ecobiome-evidence-assessment-1-candidate",
+          "statistical_result_json": {
+            "kind": "replicated_descriptive_measurements",
+            "main_target_inferential_test": null,
+            "summary": "Means/standard deviations and replicated conversion-rate measurements; no inferential test is required for the specific ammonia-to-nitrite support candidate."
+          },
+          "study_design": "experimental_enrichment_culture_multimodal",
+          "study_scope_json": {
+            "environment_or_matrix": "biomass originating from a recirculating aquaculture system biofilter",
+            "experimental_system": "low-substrate hypoxic sequencing-batch enrichment plus aerobic physiological batch assays",
+            "organism_or_community": "enrichment containing two comammox Nitrospira species with anammox Brocadia and other community members",
+            "source_broader_than_assertion": true,
+            "target_process_scope": "ammonia oxidation within comammox",
+            "temperature_context": "enrichment reactor 23±1 C; batch assays at room temperature"
+          },
+          "supersedes_assessment_id": null
+        },
+        "evidence_bindings": {
+          "analytical_methods": {
+            "anchor_sha256": "7aad7102113824b8d201b83ded404972f2e01ac69654ba7ebb19fd40b33871da",
+            "paragraph_char_count": 649,
+            "paragraph_index": 22,
+            "paragraph_sha256": "a8b00b7eed2156649474ac873024b520bd66369c9dee622e43655e3e944166d1",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "batch_methods": {
+            "anchor_sha256": "cf925c21dc8aa3501c5be7f5f9bd6137095a4e7ff3694b55cc51236b8e531999",
+            "paragraph_char_count": 1355,
+            "paragraph_index": 6,
+            "paragraph_sha256": "c7b38a6b533ad236f6fa51901beaabe95bca6a6ed2f01e9e6f7bf7fe6e29402c",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "fish_mar": {
+            "anchor_sha256": "008ee69a0a955df3f97958078c712cd17d8297100a2e6a6156557e086ae8eefb",
+            "paragraph_char_count": 833,
+            "paragraph_index": 7,
+            "paragraph_sha256": "d9c51aa5d8298a967452d10791553d95dd88bab480bef2566cd2fa2e44dcfe76",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "functional_intermediate": {
+            "anchor_sha256": "4e3c6a3d5bbb466d6007d23a24cc9f19dda0effdb417f2e3f9febcdee9e214c6",
+            "paragraph_char_count": 1370,
+            "paragraph_index": 5,
+            "paragraph_sha256": "4847d5302f1ca94e0bfaa723d6a7796e15d39dfa1a66459e1602d7b1dc821819",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "sample_origin": {
+            "anchor_sha256": "687dca932e4ae4056892bb5e8b7d9d05626fe1b930d3242d7c70dc8abfdd40a7",
+            "paragraph_char_count": 1717,
+            "paragraph_index": 12,
+            "paragraph_sha256": "496fb146ff6a489e77221a0641f355a99dcb5ef6cb89e2e6aef06119444269ea",
+            "verbatim_paragraph_not_persisted": true
+          }
+        },
+        "human_review": {
+          "allowed_decisions": [
+            "accept",
+            "revise",
+            "reject"
+          ],
+          "status": "pending_human_review"
+        },
+        "persisted": false,
+        "reviewed_assertion_claim_link": {
+          "link_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+          "scope_alignment": "source_broader",
+          "semantic_alignment": "exact",
+          "stance": "supports",
+          "support_mode": "author_interpretation"
+        },
+        "source": {
+          "doi": "10.1038/nature16459",
+          "pmcid": "PMC4878690",
+          "pmid": "26610025",
+          "title": "Complete nitrification by a single microorganism"
+        }
+      },
+      {
+        "candidate_row": {
+          "assertion_claim_link_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+          "assessor": "rate-2n-automation-pre-human-review",
+          "created_at": "candidate-not-persisted",
+          "endpoint_or_response_json": {
+            "nitrite_intermediate_directly_accumulated": true,
+            "observations": [
+              "Near-stoichiometric ammonium oxidation to nitrate shows transient nitrite accumulation.",
+              "Growth on ammonium is tracked by qPCR targeting the single-copy amoA gene.",
+              "Metaproteomics detects expression of key ammonia- and nitrite-oxidation proteins during ammonium incubation.",
+              "The isolated non-Nitrospira betaproteobacterium shows no nitrifying activity in control experiments."
+            ],
+            "target_response": "ammonia_or_ammonium_oxidation_to_nitrite"
+          },
+          "evidence_directness": "direct_functional_support",
+          "id": "evidence-assessment-candidate-rate2n-nature16461-v1",
+          "independence_status": "unresolved",
+          "limitations_json": {
+            "companion_population_controlled_separately": true,
+            "generalization_limits": "moderately thermophilic enrichment and mineral-medium conditions",
+            "not_axenic_main_enrichment": true,
+            "source_scope_broader_than_target_assertion": true,
+            "support_mode_author_interpretation": true
+          },
+          "methodological_dimensions_json": {
+            "analysis_pipeline": "serial enrichment, metagenomic reconstruction, physiological assays, qPCR and metaproteomics",
+            "controls_or_comparators": [
+              "dead biomass controls",
+              "abiotic controls",
+              "isolated betaproteobacterium nitrification controls"
+            ],
+            "experimental_unit": "ENR4/ENR6 enrichment biomass and replicated bottle incubations",
+            "measurement_methods": [
+              "ammonium/nitrite/nitrate chemistry",
+              "qPCR",
+              "metagenomics",
+              "metaproteomics",
+              "FISH"
+            ],
+            "replication": "three or four biological replicates depending on condition as reported in Figure 2; paired t-test used for indicated growth comparisons",
+            "sample_origin": "thermophilic pipe biofilm"
+          },
+          "policy_version": "ecobiome-evidence-assessment-1-candidate",
+          "statistical_result_json": {
+            "ancillary_statistics": "paired t-tests are reported for selected qPCR growth comparisons, while chemical conversion endpoints are presented as replicated means with standard deviations",
+            "kind": "replicated_descriptive_plus_ancillary_inference",
+            "main_target_inferential_test": null
+          },
+          "study_design": "experimental_enrichment_culture_multimodal",
+          "study_scope_json": {
+            "environment_or_matrix": "source biofilm from hot water raised from a deep oil exploration well in Aushiger, North Caucasus",
+            "experimental_system": "thermophilic enrichment cultures ENR4/ENR6 and mineral-medium physiological incubations",
+            "organism_or_community": "highly enriched Candidatus Nitrospira inopinata with a betaproteobacterial companion population",
+            "source_broader_than_assertion": true,
+            "target_process_scope": "ammonia oxidation within comammox",
+            "temperature_context": "source water 56 C; enrichment/physiology primarily 46 C"
+          },
+          "supersedes_assessment_id": null
+        },
+        "evidence_bindings": {
+          "control_organism": {
+            "anchor_sha256": "e0c4b6173b6f668dacccf148a1bd8c732f090279b76aca5a54f72347e17de610",
+            "paragraph_char_count": 1576,
+            "paragraph_index": 20,
+            "paragraph_sha256": "be9371937d2009124e5dc5057853405c43c221714f0d3ce51f4f95f11e66d98e",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "functional_intermediate": {
+            "anchor_sha256": "a154687ee2feab2f8ef2ce79efecf73d6775efafb763a2e96c3eed41e5f52399",
+            "paragraph_char_count": 2005,
+            "paragraph_index": 6,
+            "paragraph_sha256": "534b1c2581ed001dab54730c9a69aeb64f4be34c05d09c886e7bb741a9731f38",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "metaproteome": {
+            "anchor_sha256": "2ba6c51e828f706d64330ae8137e0db06ea52af622ef49c42fbc6e2e50504685",
+            "paragraph_char_count": 2005,
+            "paragraph_index": 6,
+            "paragraph_sha256": "534b1c2581ed001dab54730c9a69aeb64f4be34c05d09c886e7bb741a9731f38",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "physiological_methods": {
+            "anchor_sha256": "4b30dc343eb82b91faa601970da77a7ad70840f3a3f9756304858fabff489cbd",
+            "paragraph_char_count": 3912,
+            "paragraph_index": 18,
+            "paragraph_sha256": "ca4dcde50cbab306e0d7329b3fc7a7d719aadb199a5f7ad02e945d401901e3fb",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "sample_origin": {
+            "anchor_sha256": "00e44b8c6050c04ac5bdfe768d65b2306722521317396d40e1e021dc1e8fb040",
+            "paragraph_char_count": 3035,
+            "paragraph_index": 16,
+            "paragraph_sha256": "8ce3f3f2c462728d39f89a8de3d2eef0444d147964a68c1c462ee583f8b3aaea",
+            "verbatim_paragraph_not_persisted": true
+          }
+        },
+        "human_review": {
+          "allowed_decisions": [
+            "accept",
+            "revise",
+            "reject"
+          ],
+          "status": "pending_human_review"
+        },
+        "persisted": false,
+        "reviewed_assertion_claim_link": {
+          "link_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+          "scope_alignment": "source_broader",
+          "semantic_alignment": "compatible_partial",
+          "stance": "supports",
+          "support_mode": "author_interpretation"
+        },
+        "source": {
+          "doi": "10.1038/nature16461",
+          "pmcid": "PMC5152751",
+          "pmid": "26610024",
+          "title": "Complete nitrification by Nitrospira bacteria"
+        }
+      }
+    ],
+    "gate": "ECOBIOME_G7A_RATE_2N_PRIMARY_SOURCE_EVIDENCE_ASSESSMENT_CANDIDATE_EXTRACTION_LOCAL",
+    "next_gate": "RATE-2O_EVIDENCE_ASSESSMENT_AND_INDEPENDENCE_HUMAN_REVIEW",
+    "pairwise_independence_candidate": {
+      "dimensions": {
+        "analysis_pipeline_overlap": {
+          "basis": "Both use metagenomic reconstruction/binning and share Aalborg coauthors, but combine these analyses with distinct biological enrichments and physiological assays.",
+          "state": "partial_methodological_overlap"
+        },
+        "author_overlap": {
+          "shared_authors": [
+            "Mads Albertsen",
+            "Per H. Nielsen"
+          ],
+          "state": "overlap_detected"
+        },
+        "cross_citation_or_declared_coordination": {
+          "basis": "The van Kessel article discusses the concurrently described Ca. N. inopinata from Daims et al.; this demonstrates scientific awareness but not shared experimental origin.",
+          "state": "cross_reference_present"
+        },
+        "dataset_overlap": {
+          "basis": "Each paper reports its own enrichment-derived metagenomic data; no shared primary dataset is declared in the inspected methods.",
+          "state": "no_overlap_identified_from_primary_methods"
+        },
+        "direct_source_lineage": {
+          "basis": "No statement in the inspected primary methods establishes that one study's experimental samples or datasets derive from the other.",
+          "state": "not_identified"
+        },
+        "experimental_system_overlap": {
+          "basis": "Hypoxic aquaculture SBR enrichment near 23 C versus thermophilic serial enrichment near 46 C.",
+          "state": "distinct"
+        },
+        "institution_or_lab_overlap": {
+          "basis": "Both papers include Aalborg University Center for Microbial Communities contributors, while the primary experimental teams/laboratories differ.",
+          "state": "partial_overlap"
+        },
+        "sample_or_specimen_overlap": {
+          "basis": "RAS biofilter biomass versus thermophilic pipe biofilm from Aushiger.",
+          "state": "distinct"
+        },
+        "shared_funding_or_project_context_when_relevant": {
+          "state": "not_assessed_at_rate_2n"
+        }
+      },
+      "human_review": {
+        "allowed_decisions": [
+          "accept",
+          "revise",
+          "reject"
+        ],
+        "status": "pending_human_review"
+      },
+      "independent_support_origin_count": null,
+      "persisted": false,
+      "proposed_status": "partially_independent",
+      "rationale": "The biological samples, enrichment systems and principal physiological experiments are distinct, while authorship and some metagenomic analytical context overlap. This supports a candidate classification of partially_independent rather than automatically independent or dependent.",
+      "schema_version": "ecobiome-pairwise-evidence-origin-independence-candidate-v1",
+      "source_pair": [
+        {
+          "doi": "10.1038/nature16459",
+          "pmcid": "PMC4878690",
+          "pmid": "26610025",
+          "title": "Complete nitrification by a single microorganism"
+        },
+        {
+          "doi": "10.1038/nature16461",
+          "pmcid": "PMC5152751",
+          "pmid": "26610024",
+          "title": "Complete nitrification by Nitrospira bacteria"
+        }
+      ]
+    },
+    "rate_2m_plan_payload_sha256": "835663847237dce5da6b928ff98e862536f3901ea1b06fbe6621b8f832546e90",
+    "schema_version": "ecobiome-primary-evidence-assessment-candidate-package-v1",
+    "source_extractions": {
+      "nature16459": {
+        "authors": [
+          "Boran Kartal",
+          "Daan R. Speth",
+          "Huub J.M. Op den Camp",
+          "Maartje A.H.J. van Kessel",
+          "Mads Albertsen",
+          "Mike S.M. Jetten",
+          "Per H. Nielsen",
+          "Sebastian Lücker"
+        ],
+        "evidence_anchor_bindings": {
+          "analytical_methods": {
+            "anchor_sha256": "7aad7102113824b8d201b83ded404972f2e01ac69654ba7ebb19fd40b33871da",
+            "paragraph_char_count": 649,
+            "paragraph_index": 22,
+            "paragraph_sha256": "a8b00b7eed2156649474ac873024b520bd66369c9dee622e43655e3e944166d1",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "batch_methods": {
+            "anchor_sha256": "cf925c21dc8aa3501c5be7f5f9bd6137095a4e7ff3694b55cc51236b8e531999",
+            "paragraph_char_count": 1355,
+            "paragraph_index": 6,
+            "paragraph_sha256": "c7b38a6b533ad236f6fa51901beaabe95bca6a6ed2f01e9e6f7bf7fe6e29402c",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "fish_mar": {
+            "anchor_sha256": "008ee69a0a955df3f97958078c712cd17d8297100a2e6a6156557e086ae8eefb",
+            "paragraph_char_count": 833,
+            "paragraph_index": 7,
+            "paragraph_sha256": "d9c51aa5d8298a967452d10791553d95dd88bab480bef2566cd2fa2e44dcfe76",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "functional_intermediate": {
+            "anchor_sha256": "4e3c6a3d5bbb466d6007d23a24cc9f19dda0effdb417f2e3f9febcdee9e214c6",
+            "paragraph_char_count": 1370,
+            "paragraph_index": 5,
+            "paragraph_sha256": "4847d5302f1ca94e0bfaa723d6a7796e15d39dfa1a66459e1602d7b1dc821819",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "sample_origin": {
+            "anchor_sha256": "687dca932e4ae4056892bb5e8b7d9d05626fe1b930d3242d7c70dc8abfdd40a7",
+            "paragraph_char_count": 1717,
+            "paragraph_index": 12,
+            "paragraph_sha256": "496fb146ff6a489e77221a0641f355a99dcb5ef6cb89e2e6aef06119444269ea",
+            "verbatim_paragraph_not_persisted": true
+          }
+        },
+        "full_text_persisted": false,
+        "retrieval": {
+          "attempts": [
+            {
+              "elapsed_seconds": 0.315,
+              "method": "europe_pmc_fulltext_xml",
+              "resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+              "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+              "size_bytes": 153875,
+              "status": "success"
+            }
+          ],
+          "full_text_not_persisted": true,
+          "method": "europe_pmc_fulltext_xml",
+          "raw_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML"
+        },
+        "source": {
+          "doi": "10.1038/nature16459",
+          "pmcid": "PMC4878690",
+          "pmid": "26610025",
+          "title": "Complete nitrification by a single microorganism"
+        }
+      },
+      "nature16461": {
+        "authors": [
+          "Alexandr Bulaev",
+          "Bernd Bendinger",
+          "Craig Herbold",
+          "Elena V. Lebedeva",
+          "Holger Daims",
+          "Julia Vierheilig",
+          "Mads Albertsen",
+          "Martin von Bergen",
+          "Marton Palatinszky",
+          "Michael Wagner",
+          "Nico Jehmlich",
+          "Per H. Nielsen",
+          "Petra Pjevac",
+          "Ping Han",
+          "Rasmus H. Kirkegaard",
+          "Thomas Rattei"
+        ],
+        "evidence_anchor_bindings": {
+          "control_organism": {
+            "anchor_sha256": "e0c4b6173b6f668dacccf148a1bd8c732f090279b76aca5a54f72347e17de610",
+            "paragraph_char_count": 1576,
+            "paragraph_index": 20,
+            "paragraph_sha256": "be9371937d2009124e5dc5057853405c43c221714f0d3ce51f4f95f11e66d98e",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "functional_intermediate": {
+            "anchor_sha256": "a154687ee2feab2f8ef2ce79efecf73d6775efafb763a2e96c3eed41e5f52399",
+            "paragraph_char_count": 2005,
+            "paragraph_index": 6,
+            "paragraph_sha256": "534b1c2581ed001dab54730c9a69aeb64f4be34c05d09c886e7bb741a9731f38",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "metaproteome": {
+            "anchor_sha256": "2ba6c51e828f706d64330ae8137e0db06ea52af622ef49c42fbc6e2e50504685",
+            "paragraph_char_count": 2005,
+            "paragraph_index": 6,
+            "paragraph_sha256": "534b1c2581ed001dab54730c9a69aeb64f4be34c05d09c886e7bb741a9731f38",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "physiological_methods": {
+            "anchor_sha256": "4b30dc343eb82b91faa601970da77a7ad70840f3a3f9756304858fabff489cbd",
+            "paragraph_char_count": 3912,
+            "paragraph_index": 18,
+            "paragraph_sha256": "ca4dcde50cbab306e0d7329b3fc7a7d719aadb199a5f7ad02e945d401901e3fb",
+            "verbatim_paragraph_not_persisted": true
+          },
+          "sample_origin": {
+            "anchor_sha256": "00e44b8c6050c04ac5bdfe768d65b2306722521317396d40e1e021dc1e8fb040",
+            "paragraph_char_count": 3035,
+            "paragraph_index": 16,
+            "paragraph_sha256": "8ce3f3f2c462728d39f89a8de3d2eef0444d147964a68c1c462ee583f8b3aaea",
+            "verbatim_paragraph_not_persisted": true
+          }
+        },
+        "full_text_persisted": false,
+        "retrieval": {
+          "attempts": [
+            {
+              "elapsed_seconds": 0.355,
+              "method": "europe_pmc_fulltext_xml",
+              "resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+              "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+              "size_bytes": 194672,
+              "status": "success"
+            }
+          ],
+          "full_text_not_persisted": true,
+          "method": "europe_pmc_fulltext_xml",
+          "raw_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML"
+        },
+        "source": {
+          "doi": "10.1038/nature16461",
+          "pmcid": "PMC5152751",
+          "pmid": "26610024",
+          "title": "Complete nitrification by Nitrospira bacteria"
+        }
+      }
+    },
+    "status": "pending_human_review",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "revision": 1
+    }
+  },
+  "candidate_package_sha256": "50f86f92a0a0d11dec238679d96c7c72444c7af7e39306981592b639b98abcd0"
+}
