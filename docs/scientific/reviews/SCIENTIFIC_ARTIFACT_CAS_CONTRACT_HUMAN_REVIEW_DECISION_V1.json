@@ -1,0 +1,45 @@
+{
+  "decision_payload": {
+    "accepted_effects": {
+      "all_required_artifacts_must_verify_before_promotion": true,
+      "alternate_verified_copy_is_not_canonical_readiness": true,
+      "artifact_key_format": "sha256:<64-lowercase-hex>",
+      "canonical_logical_root": "EcoBiome-data/scientific-artifact-cas",
+      "durable_cas_write_authorized": false,
+      "live_network_refetch_is_not_cas_readiness": true,
+      "missing_artifact_blocks_snapshot_promotion": true,
+      "network_acquisition_authorized": false,
+      "path_convention": "sha256/<aa>/<bb>/<digest>.blob",
+      "required_raw_artifacts": [
+        {
+          "doi": "10.1038/nature16459",
+          "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+        },
+        {
+          "doi": "10.1038/nature16461",
+          "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+        }
+      ],
+      "snapshot_creation_authorized": false,
+      "symlink_forbidden": true
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2w-scientific-artifact-cas-contract-v1",
+    "decision_source": {
+      "accepted_recommendation": "CAS contract = accept; canonical durable CAS uses repository FilesystemContentAddressedArtifactStore semantics; both exact raw XML SHA-256 artifacts are mandatory; missing/mismatched artifacts block promotion; live network refetch does not itself establish CAS readiness",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "reviewed_at": "2026-08-26T22:03:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2v_cas_contract_payload_sha256": "1319bcaf8cb599c5888b82a37dbd941bc483de1370fa802e9e69a1737241b1ac"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "487b6efbbcf9c79ad4ec55a332f90eb598d1343c635a42dfb31d3fd0b7e06acd",
+  "schema_version": "ecobiome-scientific-artifact-cas-contract-human-review-decision-v1"
+}

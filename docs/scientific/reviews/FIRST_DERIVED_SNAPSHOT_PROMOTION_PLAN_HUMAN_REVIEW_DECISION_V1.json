@@ -1,0 +1,36 @@
+{
+  "decision_payload": {
+    "accepted_effects": {
+      "active_pointer_update_authorized": false,
+      "data_state_version_separate_from_schema_version": true,
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "parent_kind": "legacy_root",
+      "parent_manifest_sha256": null,
+      "real_v6_write_authorized": false,
+      "reviewed_replay_required": true,
+      "schema_migration": false,
+      "schema_version": 6,
+      "snapshot_creation_authorized": false,
+      "transactional_staging_required": true
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2w-first-derived-snapshot-promotion-plan-v1",
+    "decision_source": {
+      "accepted_recommendation": "promotion plan = accept; preserve immutable legacy-root parent, Schema V6 data-only derived snapshot semantics, transactional staged replay, exact reviewed input bindings, validation gates, and all existing authorization boundaries",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "reviewed_at": "2026-08-26T22:03:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2v_promotion_plan_payload_sha256": "e7ed080b299b9da325ad056d31155a860fb9a03c64bc72420d2d113aa324cb7a"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "8f0ee6980f1bdd4a14659f0ce47aa3df9395898305837c7f688eb0c75fecf986",
+  "schema_version": "ecobiome-first-derived-snapshot-promotion-plan-human-review-decision-v1"
+}
