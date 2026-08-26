@@ -1,0 +1,1125 @@
+{
+  "replay_manifest_payload": {
+    "boundaries": {
+      "active_pointer_updated": false,
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "process_scientific_support_materialized": false,
+      "real_v6_mutated": false,
+      "source_lineage_edges_created": false
+    },
+    "derived_cas_artifacts": [
+      {
+        "artifact_key": "sha256:b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+        "content_sha256": "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+        "currently_present_in_canonical_cas": false,
+        "derivation": "normalized_jats_text_v1",
+        "size_bytes": 40521,
+        "source_raw_artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "source_raw_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+      },
+      {
+        "artifact_key": "sha256:055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+        "content_sha256": "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+        "currently_present_in_canonical_cas": false,
+        "derivation": "normalized_jats_text_v1",
+        "size_bytes": 73210,
+        "source_raw_artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "source_raw_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+      }
+    ],
+    "derived_cas_write_requires_separate_authorization": true,
+    "expected_table_delta": {
+      "acquisition_jobs": 2,
+      "assertion_claim_links": 2,
+      "claim_evidence_links": 2,
+      "claim_review_events": 2,
+      "evidence_assessments": 2,
+      "knowledge_sources": 3,
+      "knowledge_syntheses": 0,
+      "raw_artifacts": 2,
+      "representations": 2,
+      "retrievals": 2,
+      "scientific_assertion_revisions": 1,
+      "scientific_assertions": 1,
+      "scientific_entities": 1,
+      "scientific_entity_identifiers": 1,
+      "scientific_entity_revisions": 1,
+      "segments": 2,
+      "source_assessments": 2,
+      "source_claims": 2,
+      "source_evidence": 2,
+      "source_lineage_edges": 0
+    },
+    "non_persisted_review_state": {
+      "independent_support_origin_count": null,
+      "pairwise_independence_decision_sha256": "322403f8a55f1557326fdd2c5e8a71c47aff9d8b0faa2d3b45893ed7b4b4db34",
+      "pairwise_independence_status": "partially_independent"
+    },
+    "operational_field_stabilization": {
+      "assertion_link_created_at": "Bound to human reviewed_at.",
+      "evidence_assessment_created_at": "Bound to human evidence-assessment reviewed_at.",
+      "rate2h_acquisition_diagnostics": "Replaced volatile elapsed-time diagnostics with deterministic reviewed replay provenance; scientific content identities are unchanged.",
+      "rate2h_acquisition_timestamps": "Bound to recorded RATE-2H ACQUIRE transcript seconds, not reconstructed sub-second shadow materialization timestamps."
+    },
+    "parent_database_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+    "parent_kind": "legacy_root",
+    "parent_manifest_sha256": null,
+    "promotion_plan_sha256": "e7ed080b299b9da325ad056d31155a860fb9a03c64bc72420d2d113aa324cb7a",
+    "replay_dependency_order": [
+      "knowledge_sources",
+      "scientific_entities",
+      "scientific_entity_revisions",
+      "scientific_entity_identifiers",
+      "scientific_assertions",
+      "scientific_assertion_revisions",
+      "acquisition_jobs",
+      "retrievals",
+      "raw_artifacts",
+      "representations",
+      "segments",
+      "source_evidence",
+      "source_claims",
+      "claim_evidence_links",
+      "claim_review_events",
+      "source_assessments",
+      "assertion_claim_links",
+      "evidence_assessments"
+    ],
+    "replay_manifest_correction": {
+      "previous_expected_knowledge_sources_delta": 2,
+      "reason": "Nitrite ScientificEntityIdentifier.authority_source_id binds authority-source-pubchem-cid-946, which is absent from frozen V6 and must be promoted for foreign-key-complete dependency closure.",
+      "revised_expected_knowledge_sources_delta": 3
+    },
+    "reviewed_input_identities": {
+      "decision_payload_sha256s": [
+        "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+        "3a6a3fc9c2d588c323692cf58ee30a7b628ded4f04507151fdbead3f5d954193",
+        "482574cb105c21993933dabf519002d22cee71207d434fc1caec503e0fa5dcfb",
+        "e2698ff08ab0f68bd493009f9a874a3ec3ba0106270b36f8e7b680a9ff34be70",
+        "a9a9bd007d9afe399bd1beef05d87467935e64d11f265c520b65f26742040583",
+        "5987f2b7cd5855084271610e90739b7e220a12fc85350b5893d43f0a410b219d",
+        "bf3f28e41a21666e504f4e4473402f2d37ff6a0ff9c53de4abd2350eb806ebbe",
+        "322403f8a55f1557326fdd2c5e8a71c47aff9d8b0faa2d3b45893ed7b4b4db34",
+        "c204071ea181d6387350841ff9ea8955b908396a44a8463decb9039988da4398",
+        "cc960686dab49d96fa50cc0df6808a2646fcd86cf0bcd777448e1ac58ece608e"
+      ],
+      "policy_payload_sha256s": [
+        "ff95c9aa278772d7bf58a17dcd93fe386795dc6320f42a6f911873cc1128e59b"
+      ],
+      "scientific_assertion_payload_sha256s": [
+        "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96"
+      ],
+      "scientific_entity_payload_sha256s": [
+        "ce73afe85bb2a7a2800ab043d6244573d0a4656ee0a8895870b9959a5f70a31e"
+      ],
+      "source_artifact_sha256s": [
+        "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+      ]
+    },
+    "row_count": 32,
+    "rows": [
+      {
+        "canonical_row_payload_sha256": "8bf1ca2744264e7b2f29c04a8c57e95f298809e4f8b17d1516995d2ae791cdb6",
+        "dependency_row_ids": [],
+        "identity_where": {
+          "id": "authority-source-pubchem-cid-946"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+          "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+        ],
+        "row_id": "authority-source-pubchem-cid-946",
+        "row_payload_redacted": {
+          "author": "PubChem",
+          "canonical_locator": "https://pubchem.ncbi.nlm.nih.gov/compound/946",
+          "created_at": "2026-08-26T01:09:17.008396+00:00",
+          "description": "",
+          "id": "authority-source-pubchem-cid-946",
+          "imported_at": "2026-08-26T01:09:17.008396+00:00",
+          "language": "en",
+          "logical_identity_sha256": "5bf59d8b7e6afecbe00bb15ffcd087009d538edabfa0b0cb935f990869352bb9",
+          "source_metadata_json": "{\"authority\":\"PubChem\",\"authority_external_id\":\"946\",\"authority_namespace\":\"PubChem Compound\",\"expected_canonical_label\":\"nitrite\",\"formula\":\"NO2-\",\"human_review_decision_sha256\":\"dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca\",\"verification_gate\":\"ECOBIOME_G7A_RATE_2F_B_NITRITE_ENTITY_SHADOW_SEED_AND_MECHANISM_ASSERTION_DRY_RUN_LOCAL\",\"verified_at\":\"2026-08-26T00:20:24+00:00\"}",
+          "source_type": "authority_record",
+          "title": "PubChem Compound CID 946 — Nitrite"
+        },
+        "table": "knowledge_sources"
+      },
+      {
+        "canonical_row_payload_sha256": "f30be3f8e51cce0271ad8681c588ab6a7860ac211ef6f1e2eb8257da51e97e93",
+        "dependency_row_ids": [
+          "authority-source-pubchem-cid-946"
+        ],
+        "identity_where": {
+          "id": "entity-pubchem-cid-946"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+          "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+        ],
+        "row_id": "entity-pubchem-cid-946",
+        "row_payload_redacted": {
+          "created_at": "2026-08-26T01:09:17.008396+00:00",
+          "entity_kind": "chemical_species",
+          "id": "entity-pubchem-cid-946",
+          "retired_at": null
+        },
+        "table": "scientific_entities"
+      },
+      {
+        "canonical_row_payload_sha256": "eacfafb9ff199c84a943af9e515ac1de11714806d96bbc00da6996d4597732cd",
+        "dependency_row_ids": [
+          "entity-pubchem-cid-946"
+        ],
+        "identity_where": {
+          "entity_id": "entity-pubchem-cid-946",
+          "revision": 1
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+          "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+        ],
+        "row_id": "entity-pubchem-cid-946@1",
+        "row_payload_redacted": {
+          "canonical_label": "nitrite",
+          "canonical_payload_json": "{\"canonical_label\":\"nitrite\",\"entity_kind\":\"chemical_species\",\"formula\":\"NO2-\",\"primary_identifier\":{\"authority_namespace\":\"PubChem Compound\",\"external_id\":\"946\",\"scheme\":\"pubchem_cid\"},\"schema_version\":\"entity-v1\"}",
+          "canonical_payload_sha256": "ce73afe85bb2a7a2800ab043d6244573d0a4656ee0a8895870b9959a5f70a31e",
+          "created_at": "2026-08-26T01:09:17.008396+00:00",
+          "entity_id": "entity-pubchem-cid-946",
+          "review_status": "reviewed_confirmed",
+          "revision": 1,
+          "schema_version": "entity-v1"
+        },
+        "table": "scientific_entity_revisions"
+      },
+      {
+        "canonical_row_payload_sha256": "7d407e00fb0f6f5515807862750cf62607bc13c5e9f995f8a7b0b8a6520f69ff",
+        "dependency_row_ids": [
+          "entity-pubchem-cid-946",
+          "authority-source-pubchem-cid-946"
+        ],
+        "identity_where": {
+          "id": "entity-identifier-pubchem-cid-946"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+          "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+        ],
+        "row_id": "entity-identifier-pubchem-cid-946",
+        "row_payload_redacted": {
+          "authority_namespace": "PubChem Compound",
+          "authority_source_id": "authority-source-pubchem-cid-946",
+          "authority_version": "verified-2026-08-23",
+          "created_at": "2026-08-26T01:09:17.008396+00:00",
+          "entity_id": "entity-pubchem-cid-946",
+          "external_id": "946",
+          "id": "entity-identifier-pubchem-cid-946",
+          "mapping_review_status": "reviewed_confirmed",
+          "mapping_status": "exact",
+          "scheme": "pubchem_cid",
+          "valid_from": null,
+          "valid_to": null
+        },
+        "table": "scientific_entity_identifiers"
+      },
+      {
+        "canonical_row_payload_sha256": "3d095c55ee57bf0ac308e4c115bbb0fb1bee059565f5700961dec9f16114fb27",
+        "dependency_row_ids": [
+          "entity-pubchem-cid-946"
+        ],
+        "identity_where": {
+          "id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+          "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+        ],
+        "row_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+        "row_payload_redacted": {
+          "created_at": "2026-08-26T01:09:17.008396+00:00",
+          "id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "retired_at": null
+        },
+        "table": "scientific_assertions"
+      },
+      {
+        "canonical_row_payload_sha256": "e2685a8e7455bc56b158126f3ef0f837c4e4f602ce965d909c8cb1eee3038a24",
+        "dependency_row_ids": [
+          "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "entity-pubchem-cid-946"
+        ],
+        "identity_where": {
+          "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "revision": 1
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "dbfe7412571fd289e960e9b1b46db837973fc707473b6caa42ef9ff5405f1eca",
+          "63c8a446020a951d850801827af93919037c788c259bbb0ec0056bcd360ecb2e"
+        ],
+        "row_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1@1",
+        "row_payload_redacted": {
+          "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "assertion_kind": "process",
+          "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+          "created_at": "2026-08-26T01:09:17.008396+00:00",
+          "normalized_text": "nitrogen_oxidized_from_to(source_material=entity_ref(\"entity-pubchem-cid-222\",1), target_material=entity_ref(\"entity-pubchem-cid-946\",1))",
+          "participants_json": "[{\"entity\":{\"entity_id\":\"entity-pubchem-cid-222\",\"entity_revision\":1,\"type\":\"entity_ref\"},\"role\":\"source_material\"},{\"entity\":{\"entity_id\":\"entity-pubchem-cid-946\",\"entity_revision\":1,\"type\":\"entity_ref\"},\"role\":\"target_material\"}]",
+          "predicate": "nitrogen_oxidized_from_to",
+          "qualifiers_json": "{\"semantic_type\":\"nitrogen_oxidation\"}",
+          "revision": 1,
+          "schema_version": "scientific-assertion-v1.1",
+          "value_json": "{\"kind\":\"none\"}"
+        },
+        "table": "scientific_assertion_revisions"
+      },
+      {
+        "canonical_row_payload_sha256": "7fc953bad662bdeb2ae8a688c74f6fbe323c0e8c3daed4808c303f3e3e92d7fa",
+        "dependency_row_ids": [],
+        "identity_where": {
+          "id": "source-doi-10-1038-nature16459"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "source-doi-10-1038-nature16459",
+        "row_payload_redacted": {
+          "author": null,
+          "canonical_locator": "https://doi.org/10.1038/nature16459",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "description": "Primary mechanism evidence candidate for RATE-2H.",
+          "id": "source-doi-10-1038-nature16459",
+          "imported_at": "2026-08-26T01:37:03+00:00",
+          "language": "en",
+          "logical_identity_sha256": "b4aa2553c38ea3355e761bd62c0481543d7c3630fb641a20215a9277e7853c3a",
+          "source_metadata_json": "{\"doi\":\"10.1038/nature16459\",\"journal\":\"Nature\",\"pmcid\":\"PMC4878690\",\"pmid\":\"26610025\",\"publication_year\":2015,\"rate_2g_plan_sha256\":\"0e34424f7164e7ffa4f66a69f05415965cf1856e2bce05dacde5ae9538199aba\",\"retrieval_repository\":\"Europe PMC or NCBI PMC, resolved by deterministic fallback\"}",
+          "source_type": "peer_reviewed_article",
+          "title": "Complete nitrification by a single microorganism"
+        },
+        "table": "knowledge_sources"
+      },
+      {
+        "canonical_row_payload_sha256": "93b3a454052e12285b890c2518e4f9da81b3190533c4db459abbde524e61bfad",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16459"
+        ],
+        "identity_where": {
+          "id": "acquisition-rate2h-nature16459-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "acquisition-rate2h-nature16459-v1",
+        "row_payload_redacted": {
+          "adapter_name": "rate2h-pmc-xml-fallback",
+          "adapter_version": "1",
+          "completed_at": "2026-08-26T01:37:03+00:00",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "diagnostics_json": "[{\"method\":\"europe_pmc_fulltext_xml\",\"rate_2h_result_sha256\":\"e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b\",\"rate_2z_r4_execution_payload_sha256\":\"b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478\",\"requested_url\":\"https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML\",\"resolved_url\":\"https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML\",\"sha256\":\"fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112\",\"size_bytes\":153875,\"status\":\"historically_verified_replay_source\"}]",
+          "id": "acquisition-rate2h-nature16459-v1",
+          "maximum_input_bytes": 8000000,
+          "outcome": "succeeded",
+          "preferred_languages_json": "[\"en\"]",
+          "request_json": "{\"fallbacks\":[\"europe_pmc_fulltext_xml\",\"ncbi_pmc_efetch_xml\"],\"pmcid\":\"PMC4878690\"}",
+          "requested_language": "en",
+          "requested_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+          "source_id": "source-doi-10-1038-nature16459",
+          "started_at": "2026-08-26T01:37:03+00:00"
+        },
+        "table": "acquisition_jobs"
+      },
+      {
+        "canonical_row_payload_sha256": "7f0df10f079cbd6a92cec602e6d8613809eeaa6054ae86770ef28351936a73ab",
+        "dependency_row_ids": [
+          "acquisition-rate2h-nature16459-v1"
+        ],
+        "identity_where": {
+          "id": "retrieval-rate2h-nature16459-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "retrieval-rate2h-nature16459-v1",
+        "row_payload_redacted": {
+          "acquisition_job_id": "acquisition-rate2h-nature16459-v1",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "id": "retrieval-rate2h-nature16459-v1",
+          "requested_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+          "resolved_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+          "retrieval_index": 0,
+          "retrieval_method": "europe_pmc_fulltext_xml",
+          "retrieved_at": "2026-08-26T01:37:03+00:00",
+          "transport_metadata_json": "{\"content_type\":\"application/xml\",\"sha256\":\"fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112\",\"size_bytes\":153875}",
+          "transport_status": "200"
+        },
+        "table": "retrievals"
+      },
+      {
+        "canonical_row_payload_sha256": "f022e9f0fce059128cac493994e97700f95fd579a8d2548fe693a1e0c2ddc320",
+        "dependency_row_ids": [
+          "retrieval-rate2h-nature16459-v1"
+        ],
+        "identity_where": {
+          "id": "raw-rate2h-nature16459-xml-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "raw-rate2h-nature16459-xml-v1",
+        "row_payload_redacted": {
+          "artifact_store_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "content_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "id": "raw-rate2h-nature16459-xml-v1",
+          "immutable": 1,
+          "license_evidence_locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4878690/",
+          "license_id": "nature-author-manuscript-academic-research-terms",
+          "materialization_policy": "external_cas_only",
+          "media_type": "application/xml",
+          "payload_role": "source_full_text_xml",
+          "retrieval_id": "retrieval-rate2h-nature16459-v1",
+          "size_bytes": 153875
+        },
+        "table": "raw_artifacts"
+      },
+      {
+        "canonical_row_payload_sha256": "c4c60edca210c8171e0c68fb0c79345af14b627b80fb21276ecc416ff5c3a0f8",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16459",
+          "raw-rate2h-nature16459-xml-v1"
+        ],
+        "identity_where": {
+          "id": "representation-rate2h-nature16459-text-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "representation-rate2h-nature16459-text-v1",
+        "row_payload_redacted": {
+          "artifact_store_key": "sha256:b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+          "content_sha256": "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "id": "representation-rate2h-nature16459-text-v1",
+          "language": "en",
+          "logical_key": "nature16459:normalized-jats-text:v1",
+          "materialization_status": "external_cas",
+          "media_type": "text/plain",
+          "metadata_json": "{\"normalization\":\"ElementTree p.itertext + whitespace collapse\",\"paragraph_count\":58,\"source_xml_sha256\":\"fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112\"}",
+          "origin_raw_artifact_id": "raw-rate2h-nature16459-xml-v1",
+          "representation_kind": "normalized_jats_text",
+          "source_id": "source-doi-10-1038-nature16459"
+        },
+        "table": "representations"
+      },
+      {
+        "canonical_row_payload_sha256": "15f26efb0920e783832c1f009477c2e27849eafdfbac21a9d97725668a4db86f",
+        "dependency_row_ids": [
+          "representation-rate2h-nature16459-text-v1"
+        ],
+        "identity_where": {
+          "id": "segment-rate2h-nature16459-evidence-paragraph-v1"
+        },
+        "protected_fields": {
+          "text_inline": {
+            "anchor_candidates": [
+              "Nitrification is a two-step process",
+              "first oxidized to nitrite"
+            ],
+            "expected_paragraph_index": 0,
+            "expected_raw_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+            "expected_representation_sha256": "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+            "expected_segment_text_sha256": "490054e9ad8a5e2f590f27feb252c97d37507d75a0361bffa6127e2844326776",
+            "raw_artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+            "resolver": "rate2h_jats_segment_text_v1"
+          }
+        },
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "segment-rate2h-nature16459-evidence-paragraph-v1",
+        "row_payload_redacted": {
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "end_seconds_decimal": null,
+          "frame_end": null,
+          "frame_start": null,
+          "id": "segment-rate2h-nature16459-evidence-paragraph-v1",
+          "materialization_status": "inline_evidence_window",
+          "metadata_json": "{\"human_review_pending\":true,\"paragraph_index_in_normalized_representation\":0,\"selected_anchor\":\"Nitrification is a two-step process\"}",
+          "page_number": null,
+          "representation_char_end": 1705,
+          "representation_char_start": 0,
+          "representation_id": "representation-rate2h-nature16459-text-v1",
+          "review_status": null,
+          "segment_index": 0,
+          "start_seconds_decimal": null,
+          "text_inline": null,
+          "text_sha256": "490054e9ad8a5e2f590f27feb252c97d37507d75a0361bffa6127e2844326776"
+        },
+        "table": "segments"
+      },
+      {
+        "canonical_row_payload_sha256": "439b5905764168e4fe9ecf20d709b3c1d9c3c4e8fdac94905516c642c60bfdca",
+        "dependency_row_ids": [
+          "segment-rate2h-nature16459-evidence-paragraph-v1"
+        ],
+        "identity_where": {
+          "id": "evidence-rate2h-nature16459-mechanism-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "evidence-rate2h-nature16459-mechanism-v1",
+        "row_payload_redacted": {
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "end_seconds_decimal": null,
+          "evidence_metadata_json": "{\"anchor\":\"Nitrification is a two-step process\",\"review_state\":\"pending_human_review\",\"word_count\":30}",
+          "evidence_text_sha256": "ac8ba171582a37a611c119702345a1cd9cf1645977234c82900a4b0baf12ff1f",
+          "frame_end": null,
+          "frame_start": null,
+          "id": "evidence-rate2h-nature16459-mechanism-v1",
+          "page_number": null,
+          "segment_char_end": 218,
+          "segment_char_start": 0,
+          "segment_id": "segment-rate2h-nature16459-evidence-paragraph-v1",
+          "start_seconds_decimal": null
+        },
+        "table": "source_evidence"
+      },
+      {
+        "canonical_row_payload_sha256": "002c6e7a0b7495316c192b499f5be44b9be61171cac26294b803dc2774afa5a2",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16459",
+          "representation-rate2h-nature16459-text-v1"
+        ],
+        "identity_where": {
+          "id": "claim-g7a-nature16459-ammonia-to-nitrite-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+        "row_payload_redacted": {
+          "claim_kind": "mechanism",
+          "claim_layer": "atomic",
+          "claim_text": "Nitrification includes an ammonia/ammonium oxidation step that produces nitrite before nitrite is oxidized to nitrate.",
+          "claim_text_sha256": "ebb50944c44736ce716182f61e0fdcb76a45bbad6f0dfd97317cd2f3d4453289",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "extraction_confidence_decimal": null,
+          "id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "initial_review_status": "pending_human_review",
+          "notes": "Paraphrased atomic mechanism claim. Exact evidence span is persisted separately and remains pending human review.",
+          "parent_claim_id": null,
+          "qualifiers_json": "{\"doi\":\"10.1038/nature16459\",\"human_review_pending\":true,\"physical_schema_v6_claim_layer\":\"atomic\",\"rate_2g_conceptual_layer\":\"source_statement\"}",
+          "representation_id": "representation-rate2h-nature16459-text-v1",
+          "semantic_type": "nitrogen_oxidation",
+          "source_claim_effective_text_sha256": "ebb50944c44736ce716182f61e0fdcb76a45bbad6f0dfd97317cd2f3d4453289",
+          "source_id": "source-doi-10-1038-nature16459"
+        },
+        "table": "source_claims"
+      },
+      {
+        "canonical_row_payload_sha256": "5ef8167d5a55805b297d95310473ddb06e4dbe5bd49de36dad9effadb3e9d1e9",
+        "dependency_row_ids": [
+          "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "evidence-rate2h-nature16459-mechanism-v1"
+        ],
+        "identity_where": {
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "evidence_id": "evidence-rate2h-nature16459-mechanism-v1",
+          "evidence_order": 0
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1|evidence-rate2h-nature16459-mechanism-v1|0",
+        "row_payload_redacted": {
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "evidence_id": "evidence-rate2h-nature16459-mechanism-v1",
+          "evidence_order": 0,
+          "link_role": "supports_source_claim"
+        },
+        "table": "claim_evidence_links"
+      },
+      {
+        "canonical_row_payload_sha256": "f16d98b22453b01de4966240796dbbcc92ffb0e3eef32fe1fc32623885f82ee7",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16459"
+        ],
+        "identity_where": {
+          "id": "source-assessment-rate2h-nature16459-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "source-assessment-rate2h-nature16459-v1",
+        "row_payload_redacted": {
+          "assessment_notes_json": "{\"full_text_repo_storage\":false,\"independence_assessed\":false,\"scientific_claim_review_completed\":false}",
+          "assessor": "rate-2h-automation-pre-human-claim-review",
+          "created_at": "2026-08-26T01:37:03+00:00",
+          "id": "source-assessment-rate2h-nature16459-v1",
+          "institutional_or_publisher_context_json": "{\"doi\":\"10.1038/nature16459\",\"journal\":\"Nature\",\"pmcid\":\"PMC4878690\",\"pmid\":\"26610025\"}",
+          "license_status": "restricted_academic_research_terms",
+          "peer_review_status": "peer_reviewed",
+          "policy_version": "rate-2h-source-assessment-v1",
+          "publication_status": "published",
+          "retraction_status": "not_detected_by_rate2h_metadata_check",
+          "source_class": "primary_research_article",
+          "source_id": "source-doi-10-1038-nature16459",
+          "supersedes_assessment_id": null
+        },
+        "table": "source_assessments"
+      },
+      {
+        "canonical_row_payload_sha256": "e1c74a57584fed6471954cbf5b5fde2eb5b1a69972c19a47141200dd7372f5e9",
+        "dependency_row_ids": [
+          "claim-g7a-nature16459-ammonia-to-nitrite-v1"
+        ],
+        "identity_where": {
+          "id": "claim-review-rate2i-nature16459-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "3a6a3fc9c2d588c323692cf58ee30a7b628ded4f04507151fdbead3f5d954193",
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b"
+        ],
+        "row_id": "claim-review-rate2i-nature16459-v1",
+        "row_payload_redacted": {
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "corrected_text": "Nitrification includes oxidation of ammonia to nitrite, followed by oxidation of nitrite to nitrate.",
+          "corrected_text_sha256": "445533b6d4ebff5e36ad68c246268ae3ed9c93d1f6ed0284eb516de3b0a210e9",
+          "decision": "correct",
+          "id": "claim-review-rate2i-nature16459-v1",
+          "notes": "Human-approved correction preserving the first-step ammonia-to-nitrite mechanism while removing ammonia/ammonium conflation.",
+          "review_metadata_json": "{\"claim_review_package_sha256\":\"69a8d89758a650ce4eaa33dbf812a7ad769a94852498068a1312e535ed94fa70\",\"gate\":\"RATE-2I\",\"source\":\"explicit_human_review\"}",
+          "reviewed_at": "2026-08-26T03:10:00+02:00",
+          "reviewer": "human_user_current_conversation"
+        },
+        "table": "claim_review_events"
+      },
+      {
+        "canonical_row_payload_sha256": "8497951db830d7cd602942f40c9bd7b4b58979b3b8ba6bde44425366fed767a0",
+        "dependency_row_ids": [],
+        "identity_where": {
+          "id": "source-doi-10-1038-nature16461"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "source-doi-10-1038-nature16461",
+        "row_payload_redacted": {
+          "author": null,
+          "canonical_locator": "https://doi.org/10.1038/nature16461",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "description": "Primary mechanism evidence candidate for RATE-2H.",
+          "id": "source-doi-10-1038-nature16461",
+          "imported_at": "2026-08-26T01:37:04+00:00",
+          "language": "en",
+          "logical_identity_sha256": "33e13e459df252e214b72a31da7a08533134eee55c91124771638f8593ab98d2",
+          "source_metadata_json": "{\"doi\":\"10.1038/nature16461\",\"journal\":\"Nature\",\"pmcid\":\"PMC5152751\",\"pmid\":\"26610024\",\"publication_year\":2015,\"rate_2g_plan_sha256\":\"0e34424f7164e7ffa4f66a69f05415965cf1856e2bce05dacde5ae9538199aba\",\"retrieval_repository\":\"Europe PMC or NCBI PMC, resolved by deterministic fallback\"}",
+          "source_type": "peer_reviewed_article",
+          "title": "Complete nitrification by Nitrospira bacteria"
+        },
+        "table": "knowledge_sources"
+      },
+      {
+        "canonical_row_payload_sha256": "40ce52151d884ce4ae659501da74aaf100e42ffdc20ffbb432f168018726a538",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16461"
+        ],
+        "identity_where": {
+          "id": "acquisition-rate2h-nature16461-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "acquisition-rate2h-nature16461-v1",
+        "row_payload_redacted": {
+          "adapter_name": "rate2h-pmc-xml-fallback",
+          "adapter_version": "1",
+          "completed_at": "2026-08-26T01:37:04+00:00",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "diagnostics_json": "[{\"method\":\"europe_pmc_fulltext_xml\",\"rate_2h_result_sha256\":\"e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b\",\"rate_2z_r4_execution_payload_sha256\":\"b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478\",\"requested_url\":\"https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML\",\"resolved_url\":\"https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML\",\"sha256\":\"0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941\",\"size_bytes\":194672,\"status\":\"historically_verified_replay_source\"}]",
+          "id": "acquisition-rate2h-nature16461-v1",
+          "maximum_input_bytes": 8000000,
+          "outcome": "succeeded",
+          "preferred_languages_json": "[\"en\"]",
+          "request_json": "{\"fallbacks\":[\"europe_pmc_fulltext_xml\",\"ncbi_pmc_efetch_xml\"],\"pmcid\":\"PMC5152751\"}",
+          "requested_language": "en",
+          "requested_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+          "source_id": "source-doi-10-1038-nature16461",
+          "started_at": "2026-08-26T01:37:04+00:00"
+        },
+        "table": "acquisition_jobs"
+      },
+      {
+        "canonical_row_payload_sha256": "cea3c55c3de74e6932deebc4514ef9c1d810fb63450a651f6a95de12fd9946d2",
+        "dependency_row_ids": [
+          "acquisition-rate2h-nature16461-v1"
+        ],
+        "identity_where": {
+          "id": "retrieval-rate2h-nature16461-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "retrieval-rate2h-nature16461-v1",
+        "row_payload_redacted": {
+          "acquisition_job_id": "acquisition-rate2h-nature16461-v1",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "id": "retrieval-rate2h-nature16461-v1",
+          "requested_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+          "resolved_locator": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+          "retrieval_index": 0,
+          "retrieval_method": "europe_pmc_fulltext_xml",
+          "retrieved_at": "2026-08-26T01:37:04+00:00",
+          "transport_metadata_json": "{\"content_type\":\"application/xml\",\"sha256\":\"0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941\",\"size_bytes\":194672}",
+          "transport_status": "200"
+        },
+        "table": "retrievals"
+      },
+      {
+        "canonical_row_payload_sha256": "bbbae3e3f4afdbc31c464713d8e836f0145e50bdc24ac8857bec938b2510ec16",
+        "dependency_row_ids": [
+          "retrieval-rate2h-nature16461-v1"
+        ],
+        "identity_where": {
+          "id": "raw-rate2h-nature16461-xml-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "raw-rate2h-nature16461-xml-v1",
+        "row_payload_redacted": {
+          "artifact_store_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "content_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "id": "raw-rate2h-nature16461-xml-v1",
+          "immutable": 1,
+          "license_evidence_locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5152751/",
+          "license_id": "nature-author-manuscript-academic-research-terms",
+          "materialization_policy": "external_cas_only",
+          "media_type": "application/xml",
+          "payload_role": "source_full_text_xml",
+          "retrieval_id": "retrieval-rate2h-nature16461-v1",
+          "size_bytes": 194672
+        },
+        "table": "raw_artifacts"
+      },
+      {
+        "canonical_row_payload_sha256": "10563b25f205a0bdacf556df17ed79ddbad6d17148eed4fbf78f696d44ab082b",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16461",
+          "raw-rate2h-nature16461-xml-v1"
+        ],
+        "identity_where": {
+          "id": "representation-rate2h-nature16461-text-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "representation-rate2h-nature16461-text-v1",
+        "row_payload_redacted": {
+          "artifact_store_key": "sha256:055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+          "content_sha256": "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "id": "representation-rate2h-nature16461-text-v1",
+          "language": "en",
+          "logical_key": "nature16461:normalized-jats-text:v1",
+          "materialization_status": "external_cas",
+          "media_type": "text/plain",
+          "metadata_json": "{\"normalization\":\"ElementTree p.itertext + whitespace collapse\",\"paragraph_count\":52,\"source_xml_sha256\":\"0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941\"}",
+          "origin_raw_artifact_id": "raw-rate2h-nature16461-xml-v1",
+          "representation_kind": "normalized_jats_text",
+          "source_id": "source-doi-10-1038-nature16461"
+        },
+        "table": "representations"
+      },
+      {
+        "canonical_row_payload_sha256": "79f76a578f1ccb290ad2671dd17709307c749c3ce30ad290e2c5590a1db75d23",
+        "dependency_row_ids": [
+          "representation-rate2h-nature16461-text-v1"
+        ],
+        "identity_where": {
+          "id": "segment-rate2h-nature16461-evidence-paragraph-v1"
+        },
+        "protected_fields": {
+          "text_inline": {
+            "anchor_candidates": [
+              "oxidation of ammonia via nitrite to nitrate",
+              "Nitrification"
+            ],
+            "expected_paragraph_index": 0,
+            "expected_raw_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+            "expected_representation_sha256": "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+            "expected_segment_text_sha256": "15b70a36935fda799ea0bd6662e39b823b722bcb56e7e3616e4e938be873b871",
+            "raw_artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+            "resolver": "rate2h_jats_segment_text_v1"
+          }
+        },
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "segment-rate2h-nature16461-evidence-paragraph-v1",
+        "row_payload_redacted": {
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "end_seconds_decimal": null,
+          "frame_end": null,
+          "frame_start": null,
+          "id": "segment-rate2h-nature16461-evidence-paragraph-v1",
+          "materialization_status": "inline_evidence_window",
+          "metadata_json": "{\"human_review_pending\":true,\"paragraph_index_in_normalized_representation\":0,\"selected_anchor\":\"oxidation of ammonia via nitrite to nitrate\"}",
+          "page_number": null,
+          "representation_char_end": 1153,
+          "representation_char_start": 0,
+          "representation_id": "representation-rate2h-nature16461-text-v1",
+          "review_status": null,
+          "segment_index": 0,
+          "start_seconds_decimal": null,
+          "text_inline": null,
+          "text_sha256": "15b70a36935fda799ea0bd6662e39b823b722bcb56e7e3616e4e938be873b871"
+        },
+        "table": "segments"
+      },
+      {
+        "canonical_row_payload_sha256": "7747cf715fface828024d1c278c6e7bb771e1ed40b51154e0d9482ec6cda2ed4",
+        "dependency_row_ids": [
+          "segment-rate2h-nature16461-evidence-paragraph-v1"
+        ],
+        "identity_where": {
+          "id": "evidence-rate2h-nature16461-mechanism-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "evidence-rate2h-nature16461-mechanism-v1",
+        "row_payload_redacted": {
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "end_seconds_decimal": null,
+          "evidence_metadata_json": "{\"anchor\":\"oxidation of ammonia via nitrite to nitrate\",\"review_state\":\"pending_human_review\",\"word_count\":26}",
+          "evidence_text_sha256": "6dd08e05dd4c8f400651fe422c5a162625da0eb52cc25315611d181bdf041b9b",
+          "frame_end": null,
+          "frame_start": null,
+          "id": "evidence-rate2h-nature16461-mechanism-v1",
+          "page_number": null,
+          "segment_char_end": 199,
+          "segment_char_start": 0,
+          "segment_id": "segment-rate2h-nature16461-evidence-paragraph-v1",
+          "start_seconds_decimal": null
+        },
+        "table": "source_evidence"
+      },
+      {
+        "canonical_row_payload_sha256": "82b7e78515462221e8df55ed53255da6b61a7c5a7142c657dc013678557793a1",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16461",
+          "representation-rate2h-nature16461-text-v1"
+        ],
+        "identity_where": {
+          "id": "claim-g7a-nature16461-ammonia-to-nitrite-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+        "row_payload_redacted": {
+          "claim_kind": "mechanism",
+          "claim_layer": "atomic",
+          "claim_text": "Nitrification proceeds through ammonia oxidation involving nitrite before the subsequent nitrate state.",
+          "claim_text_sha256": "7461bcc9d3facfb73adb18e579919cc03313bd52367e0e166a0f7fbae5320ac3",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "extraction_confidence_decimal": null,
+          "id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "initial_review_status": "pending_human_review",
+          "notes": "Paraphrased atomic mechanism claim. Exact evidence span is persisted separately and remains pending human review.",
+          "parent_claim_id": null,
+          "qualifiers_json": "{\"doi\":\"10.1038/nature16461\",\"human_review_pending\":true,\"physical_schema_v6_claim_layer\":\"atomic\",\"rate_2g_conceptual_layer\":\"source_statement\"}",
+          "representation_id": "representation-rate2h-nature16461-text-v1",
+          "semantic_type": "nitrogen_oxidation",
+          "source_claim_effective_text_sha256": "7461bcc9d3facfb73adb18e579919cc03313bd52367e0e166a0f7fbae5320ac3",
+          "source_id": "source-doi-10-1038-nature16461"
+        },
+        "table": "source_claims"
+      },
+      {
+        "canonical_row_payload_sha256": "497214a049d92d36b1d956657eae77461ff9ed4de33335c0e17a94b516ef14d7",
+        "dependency_row_ids": [
+          "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "evidence-rate2h-nature16461-mechanism-v1"
+        ],
+        "identity_where": {
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "evidence_id": "evidence-rate2h-nature16461-mechanism-v1",
+          "evidence_order": 0
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1|evidence-rate2h-nature16461-mechanism-v1|0",
+        "row_payload_redacted": {
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "evidence_id": "evidence-rate2h-nature16461-mechanism-v1",
+          "evidence_order": 0,
+          "link_role": "supports_source_claim"
+        },
+        "table": "claim_evidence_links"
+      },
+      {
+        "canonical_row_payload_sha256": "df2d19ff7b3c8602522d1dc28b439dbf74d95e023c3d155d780f4b0f7b3120be",
+        "dependency_row_ids": [
+          "source-doi-10-1038-nature16461"
+        ],
+        "identity_where": {
+          "id": "source-assessment-rate2h-nature16461-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b",
+          "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+        ],
+        "row_id": "source-assessment-rate2h-nature16461-v1",
+        "row_payload_redacted": {
+          "assessment_notes_json": "{\"full_text_repo_storage\":false,\"independence_assessed\":false,\"scientific_claim_review_completed\":false}",
+          "assessor": "rate-2h-automation-pre-human-claim-review",
+          "created_at": "2026-08-26T01:37:04+00:00",
+          "id": "source-assessment-rate2h-nature16461-v1",
+          "institutional_or_publisher_context_json": "{\"doi\":\"10.1038/nature16461\",\"journal\":\"Nature\",\"pmcid\":\"PMC5152751\",\"pmid\":\"26610024\"}",
+          "license_status": "restricted_academic_research_terms",
+          "peer_review_status": "peer_reviewed",
+          "policy_version": "rate-2h-source-assessment-v1",
+          "publication_status": "published",
+          "retraction_status": "not_detected_by_rate2h_metadata_check",
+          "source_class": "primary_research_article",
+          "source_id": "source-doi-10-1038-nature16461",
+          "supersedes_assessment_id": null
+        },
+        "table": "source_assessments"
+      },
+      {
+        "canonical_row_payload_sha256": "e45a15de4079b3302b621edaebbc103c7032722b0377ff907ba83cbaae882dd7",
+        "dependency_row_ids": [
+          "claim-g7a-nature16461-ammonia-to-nitrite-v1"
+        ],
+        "identity_where": {
+          "id": "claim-review-rate2i-nature16461-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "482574cb105c21993933dabf519002d22cee71207d434fc1caec503e0fa5dcfb",
+          "e4827356c9c2504714876af5c2c44e0b8b6632f1cda81116d21fe0e980777c0b"
+        ],
+        "row_id": "claim-review-rate2i-nature16461-v1",
+        "row_payload_redacted": {
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "corrected_text": null,
+          "corrected_text_sha256": null,
+          "decision": "accept",
+          "id": "claim-review-rate2i-nature16461-v1",
+          "notes": "Human acceptance of the paraphrased mechanism claim as supported by the bound evidence span.",
+          "review_metadata_json": "{\"claim_review_package_sha256\":\"69a8d89758a650ce4eaa33dbf812a7ad769a94852498068a1312e535ed94fa70\",\"gate\":\"RATE-2I\",\"source\":\"explicit_human_review\"}",
+          "reviewed_at": "2026-08-26T03:10:00+02:00",
+          "reviewer": "human_user_current_conversation"
+        },
+        "table": "claim_review_events"
+      },
+      {
+        "canonical_row_payload_sha256": "106eae82225f61c12edaa316b3c348d99e42af13eba97ab255895649717bff80",
+        "dependency_row_ids": [
+          "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "claim-g7a-nature16459-ammonia-to-nitrite-v1"
+        ],
+        "identity_where": {
+          "id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "e2698ff08ab0f68bd493009f9a874a3ec3ba0106270b36f8e7b680a9ff34be70",
+          "9d8cc7d944d354e439bc608cca00944f1bc6b8532cc57e4e676e1a392a8593ec"
+        ],
+        "row_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+        "row_payload_redacted": {
+          "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "assertion_revision": 1,
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "created_at": "2026-08-26T05:27:00+02:00",
+          "id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+          "review_status": "reviewed_confirmed",
+          "reviewed_at": "2026-08-26T05:27:00+02:00",
+          "reviewed_by": "human_user_current_conversation",
+          "scope_alignment": "source_broader",
+          "semantic_alignment": "exact",
+          "stance": "supports",
+          "support_mode": "author_interpretation"
+        },
+        "table": "assertion_claim_links"
+      },
+      {
+        "canonical_row_payload_sha256": "17cbee9ccc4818ed45f2b72138758f686c698b5b24d9e748ec897a3257784731",
+        "dependency_row_ids": [
+          "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "claim-g7a-nature16461-ammonia-to-nitrite-v1"
+        ],
+        "identity_where": {
+          "id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "a9a9bd007d9afe399bd1beef05d87467935e64d11f265c520b65f26742040583",
+          "9d8cc7d944d354e439bc608cca00944f1bc6b8532cc57e4e676e1a392a8593ec"
+        ],
+        "row_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+        "row_payload_redacted": {
+          "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "assertion_revision": 1,
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "created_at": "2026-08-26T05:27:00+02:00",
+          "id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+          "review_status": "reviewed_confirmed",
+          "reviewed_at": "2026-08-26T05:27:00+02:00",
+          "reviewed_by": "human_user_current_conversation",
+          "scope_alignment": "source_broader",
+          "semantic_alignment": "compatible_partial",
+          "stance": "supports",
+          "support_mode": "author_interpretation"
+        },
+        "table": "assertion_claim_links"
+      },
+      {
+        "canonical_row_payload_sha256": "8e958bf94407745b57158385a44587f32811f49e2345ca16a1ee6d2d69999a2d",
+        "dependency_row_ids": [
+          "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1"
+        ],
+        "identity_where": {
+          "id": "evidence-assessment-candidate-rate2n-nature16459-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "5987f2b7cd5855084271610e90739b7e220a12fc85350b5893d43f0a410b219d",
+          "ff95c9aa278772d7bf58a17dcd93fe386795dc6320f42a6f911873cc1128e59b",
+          "b32312fdcb51e1408cb9a8ce6a1d3dc31735335f11fe5e72bd5605d73220da7d"
+        ],
+        "row_id": "evidence-assessment-candidate-rate2n-nature16459-v1",
+        "row_payload_redacted": {
+          "assertion_claim_link_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+          "assessor": "human_user_current_conversation",
+          "created_at": "2026-08-26T18:42:00+02:00",
+          "endpoint_or_response_json": "{\"nitrite_intermediate_directly_accumulated_in_main_aerobic_batch\":false,\"observations\":[\"15N tracing supports production of labelled nitrite during aerobic ammonium oxidation.\",\"Batch incubations show ammonium oxidation to nitrate and selective inhibition of ammonia oxidation by ATU.\",\"AMO labelling and FISH-MAR localize ammonia-oxidizing capacity and ammonia-dependent carbon fixation to Nitrospira-containing biomass.\"],\"target_response\":\"ammonia_or_ammonium_oxidation_to_nitrite\"}",
+          "evidence_directness": "direct_functional_support_with_intermediate_inference",
+          "id": "evidence-assessment-candidate-rate2n-nature16459-v1",
+          "independence_status": "unresolved",
+          "limitations_json": "{\"generalization_limits\":\"specific enrichment/community and experimental conditions\",\"intermediate_support_uses_isotope_and_mechanistic_inference\":true,\"nitrite_intermediate_in_main_aerobic_batch_below_detection\":true,\"not_axenic\":true,\"source_scope_broader_than_target_assertion\":true,\"support_mode_author_interpretation\":true}",
+          "methodological_dimensions_json": "{\"analysis_pipeline\":\"differential-coverage metagenomic binning plus physiological and single-cell assays\",\"controls_or_comparators\":[\"ATU ammonia-oxidation inhibition\",\"no-substrate control\",\"dead control in FISH-MAR\"],\"experimental_unit\":\"enrichment reactor biomass and replicated batch incubations\",\"measurement_methods\":[\"15N isotope tracing\",\"ammonium/nitrite/nitrate chemistry\",\"metagenomics\",\"FISH\",\"AMO FTCP labelling\",\"FISH-MAR\"],\"replication\":\"main conversion plots use three biological experiments; FISH/FTCP/FISH-MAR include independent and technical replication as reported\",\"sample_origin\":\"RAS biofilter biomass\"}",
+          "policy_version": "ecobiome-evidence-assessment-1",
+          "statistical_result_json": "{\"kind\":\"replicated_descriptive_measurements\",\"main_target_inferential_test\":null,\"summary\":\"Means/standard deviations and replicated conversion-rate measurements; no inferential test is required for the specific ammonia-to-nitrite support candidate.\"}",
+          "study_design": "experimental_enrichment_culture_multimodal",
+          "study_scope_json": "{\"environment_or_matrix\":\"biomass originating from a recirculating aquaculture system biofilter\",\"experimental_system\":\"low-substrate hypoxic sequencing-batch enrichment plus aerobic physiological batch assays\",\"organism_or_community\":\"enrichment containing two comammox Nitrospira species with anammox Brocadia and other community members\",\"source_broader_than_assertion\":true,\"target_process_scope\":\"ammonia oxidation within comammox\",\"temperature_context\":\"enrichment reactor 23±1 C; batch assays at room temperature\"}",
+          "supersedes_assessment_id": null
+        },
+        "table": "evidence_assessments"
+      },
+      {
+        "canonical_row_payload_sha256": "e8a1d165d391278cbe54418ea44bca06c88b3198fc0e3fcca945f9c8cb547e9e",
+        "dependency_row_ids": [
+          "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1"
+        ],
+        "identity_where": {
+          "id": "evidence-assessment-candidate-rate2n-nature16461-v1"
+        },
+        "protected_fields": {},
+        "provenance_bindings": [
+          "bf3f28e41a21666e504f4e4473402f2d37ff6a0ff9c53de4abd2350eb806ebbe",
+          "ff95c9aa278772d7bf58a17dcd93fe386795dc6320f42a6f911873cc1128e59b",
+          "b32312fdcb51e1408cb9a8ce6a1d3dc31735335f11fe5e72bd5605d73220da7d"
+        ],
+        "row_id": "evidence-assessment-candidate-rate2n-nature16461-v1",
+        "row_payload_redacted": {
+          "assertion_claim_link_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+          "assessor": "human_user_current_conversation",
+          "created_at": "2026-08-26T18:42:00+02:00",
+          "endpoint_or_response_json": "{\"nitrite_intermediate_directly_accumulated\":true,\"observations\":[\"Near-stoichiometric ammonium oxidation to nitrate shows transient nitrite accumulation.\",\"Growth on ammonium is tracked by qPCR targeting the single-copy amoA gene.\",\"Metaproteomics detects expression of key ammonia- and nitrite-oxidation proteins during ammonium incubation.\",\"The isolated non-Nitrospira betaproteobacterium shows no nitrifying activity in control experiments.\"],\"target_response\":\"ammonia_or_ammonium_oxidation_to_nitrite\"}",
+          "evidence_directness": "direct_functional_support",
+          "id": "evidence-assessment-candidate-rate2n-nature16461-v1",
+          "independence_status": "unresolved",
+          "limitations_json": "{\"companion_population_controlled_separately\":true,\"generalization_limits\":\"moderately thermophilic enrichment and mineral-medium conditions\",\"not_axenic_main_enrichment\":true,\"source_scope_broader_than_target_assertion\":true,\"support_mode_author_interpretation\":true}",
+          "methodological_dimensions_json": "{\"analysis_pipeline\":\"serial enrichment, metagenomic reconstruction, physiological assays, qPCR and metaproteomics\",\"controls_or_comparators\":[\"dead biomass controls\",\"abiotic controls\",\"isolated betaproteobacterium nitrification controls\"],\"experimental_unit\":\"ENR4/ENR6 enrichment biomass and replicated bottle incubations\",\"measurement_methods\":[\"ammonium/nitrite/nitrate chemistry\",\"qPCR\",\"metagenomics\",\"metaproteomics\",\"FISH\"],\"replication\":\"three or four biological replicates depending on condition as reported in Figure 2; paired t-test used for indicated growth comparisons\",\"sample_origin\":\"thermophilic pipe biofilm\"}",
+          "policy_version": "ecobiome-evidence-assessment-1",
+          "statistical_result_json": "{\"ancillary_statistics\":\"paired t-tests are reported for selected qPCR growth comparisons, while chemical conversion endpoints are presented as replicated means with standard deviations\",\"kind\":\"replicated_descriptive_plus_ancillary_inference\",\"main_target_inferential_test\":null}",
+          "study_design": "experimental_enrichment_culture_multimodal",
+          "study_scope_json": "{\"environment_or_matrix\":\"source biofilm from hot water raised from a deep oil exploration well in Aushiger, North Caucasus\",\"experimental_system\":\"thermophilic enrichment cultures ENR4/ENR6 and mineral-medium physiological incubations\",\"organism_or_community\":\"highly enriched Candidatus Nitrospira inopinata with a betaproteobacterial companion population\",\"source_broader_than_assertion\":true,\"target_process_scope\":\"ammonia oxidation within comammox\",\"temperature_context\":\"source water 56 C; enrichment/physiology primarily 46 C\"}",
+          "supersedes_assessment_id": null
+        },
+        "table": "evidence_assessments"
+      }
+    ],
+    "schema_design_sha256": "e0c732320b8bf901de3fd285ffcc41b74db8f1e0a227df89e0428e893e4f9181",
+    "schema_version": "ecobiome-first-derived-snapshot-replay-manifest-v1",
+    "schema_version_physical": 6,
+    "scientific_input_repo_head": "f46e50b5e28fb2515e573c0589b6a17d106f22b6",
+    "snapshot_manifest_contract_sha256": "67b73c0a1cc4d514c146b7d09a042720721a4c1e68074f0c7e7680bd08fa7b74",
+    "status": "candidate_pending_human_review"
+  },
+  "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a"
+}
