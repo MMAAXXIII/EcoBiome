@@ -1,0 +1,89 @@
+{
+  "materialization_payload": {
+    "boundaries": {
+      "evidence_assessments_created": false,
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "process_scientific_support_materialized": false,
+      "remote_write": false,
+      "source_independence_assessed": false
+    },
+    "gate": "ECOBIOME_G7A_RATE_2L_REVIEWED_ASSERTION_LINK_SHADOW_MATERIALIZATION_LOCAL",
+    "materialization": {
+      "assertion_claim_link_delta": 2,
+      "evidence_assessment_delta": 0,
+      "foreign_key_violations": [],
+      "knowledge_synthesis_delta": 0,
+      "persisted_links": [
+        {
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+          "review_status": "reviewed_confirmed",
+          "reviewed_at": "2026-08-26T05:27:00+02:00",
+          "reviewed_by": "human_user_current_conversation",
+          "scope_alignment": "source_broader",
+          "semantic_alignment": "exact",
+          "stance": "supports",
+          "support_mode": "author_interpretation"
+        },
+        {
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+          "review_status": "reviewed_confirmed",
+          "reviewed_at": "2026-08-26T05:27:00+02:00",
+          "reviewed_by": "human_user_current_conversation",
+          "scope_alignment": "source_broader",
+          "semantic_alignment": "compatible_partial",
+          "stance": "supports",
+          "support_mode": "author_interpretation"
+        }
+      ],
+      "quick_check": [
+        "ok"
+      ],
+      "source_independence_assessed": false
+    },
+    "next_gate": "RATE-2M_EVIDENCE_ASSESSMENT_AND_INDEPENDENCE_DESIGN",
+    "nitrite_entity": {
+      "canonical_payload_sha256": "ce73afe85bb2a7a2800ab043d6244573d0a4656ee0a8895870b9959a5f70a31e",
+      "entity_id": "entity-pubchem-cid-946",
+      "review_status": "reviewed_confirmed"
+    },
+    "rate_2h_exact_replay_hashes": {
+      "nature16459": {
+        "claim_text_sha256": "ebb50944c44736ce716182f61e0fdcb76a45bbad6f0dfd97317cd2f3d4453289",
+        "evidence_text_sha256": "ac8ba171582a37a611c119702345a1cd9cf1645977234c82900a4b0baf12ff1f",
+        "raw_content_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "representation_sha256": "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+        "segment_text_sha256": "490054e9ad8a5e2f590f27feb252c97d37507d75a0361bffa6127e2844326776"
+      },
+      "nature16461": {
+        "claim_text_sha256": "7461bcc9d3facfb73adb18e579919cc03313bd52367e0e166a0f7fbae5320ac3",
+        "evidence_text_sha256": "6dd08e05dd4c8f400651fe422c5a162625da0eb52cc25315611d181bdf041b9b",
+        "raw_content_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "representation_sha256": "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+        "segment_text_sha256": "15b70a36935fda799ea0bd6662e39b823b722bcb56e7e3616e4e938be873b871"
+      }
+    },
+    "rate_2i_claim_review_event_delta": 2,
+    "rate_2k_decisions": {
+      "link_1": "e2698ff08ab0f68bd493009f9a874a3ec3ba0106270b36f8e7b680a9ff34be70",
+      "link_2": "a9a9bd007d9afe399bd1beef05d87467935e64d11f265c520b65f26742040583"
+    },
+    "real_v6": {
+      "sha256_after": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "sha256_before": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "unchanged": true,
+      "write_authorized": false,
+      "written": false
+    },
+    "schema_version": "ecobiome-reviewed-assertion-link-shadow-materialization-v1",
+    "status": "shadow_materialization_pass",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "revision": 1
+    }
+  },
+  "materialization_payload_sha256": "9d8cc7d944d354e439bc608cca00944f1bc6b8532cc57e4e676e1a392a8593ec"
+}
