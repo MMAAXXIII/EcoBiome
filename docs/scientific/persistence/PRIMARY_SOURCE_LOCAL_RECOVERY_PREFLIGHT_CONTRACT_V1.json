@@ -1,0 +1,49 @@
+{
+  "recovery_preflight_contract_payload": {
+    "authorization": {
+      "durable_CAS_write_authorized": false,
+      "local_file_copy_authorized": false,
+      "network_acquisition_authorized": false,
+      "snapshot_creation_authorized": false,
+      "zip_extraction_to_CAS_authorized": false
+    },
+    "cas_admission_policy": {
+      "artifact_key_after_admission": "sha256:<digest>",
+      "canonical_logical_root": "EcoBiome-data/scientific-artifact-cas",
+      "existing_corrupt_target_must_fail": true,
+      "implementation": "FilesystemContentAddressedArtifactStore.put(bytes)",
+      "post_put_verify_required": true,
+      "write_is_create_only_or_verified_idempotent": true
+    },
+    "local_recovery_policy": {
+      "candidate_bytes_must_be_reverified_before_CAS_put": true,
+      "exact_complete_byte_sha256_match_required": true,
+      "filename_or_metadata_match_insufficient": true,
+      "preferred_before_network_acquisition": true,
+      "symlink_source_forbidden": true,
+      "zip_entry_exact_match_is_admissible_candidate": true
+    },
+    "network_fallback_policy": {
+      "allowed_only_after_separate_human_authorization": true,
+      "candidate_must_match_preexisting_reviewed_sha256": true,
+      "hash_mismatch_must_never_be_admitted": true,
+      "network_response_is_candidate_bytes_only": true,
+      "publisher_or_repository_metadata_does_not_override_hash": true
+    },
+    "required_sources": [
+      {
+        "doi": "10.1038/nature16459",
+        "pmcid": "PMC4878690",
+        "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+      },
+      {
+        "doi": "10.1038/nature16461",
+        "pmcid": "PMC5152751",
+        "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+      }
+    ],
+    "schema_version": "ecobiome-primary-source-local-recovery-preflight-v1",
+    "status": "design_candidate"
+  },
+  "recovery_preflight_contract_payload_sha256": "32ba23f44abc1e6a6942c7c34b140e07ba7ff247d93007f7327c1cf788156bbd"
+}

@@ -1,0 +1,79 @@
+{
+  "materialization_plan_payload": {
+    "audit_requirements": {
+      "record_CAS_key_after_admission": true,
+      "record_candidate_origin": true,
+      "record_candidate_sha256_before_admission": true,
+      "record_candidate_size_bytes": true,
+      "record_no_real_v6_write": true,
+      "record_no_snapshot_creation": true,
+      "record_post_put_verify_result": true
+    },
+    "authorization": {
+      "this_plan_authorizes_active_pointer_update": false,
+      "this_plan_authorizes_local_CAS_materialization": false,
+      "this_plan_authorizes_network_acquisition": false,
+      "this_plan_authorizes_real_v6_write": false,
+      "this_plan_authorizes_snapshot_creation": false
+    },
+    "basis": {
+      "local_recovery_contract_sha256": "32ba23f44abc1e6a6942c7c34b140e07ba7ff247d93007f7327c1cf788156bbd",
+      "rate_2w_CAS_contract_decision_sha256": "487b6efbbcf9c79ad4ec55a332f90eb598d1343c635a42dfb31d3fd0b7e06acd",
+      "rate_2w_promotion_plan_decision_sha256": "8f0ee6980f1bdd4a14659f0ce47aa3df9395898305837c7f688eb0c75fecf986",
+      "rate_2w_review_package_sha256": "6ecff9702dc5c66ef5dfe840ec4c3501b29de7193f01964ef684d4ab4d061d9d"
+    },
+    "failure_semantics": {
+      "candidate_hash_mismatch": "materialization blocked",
+      "existing_CAS_corruption": "materialization blocked",
+      "missing_local_source": "does not fail design; routes to human-reviewed network fallback",
+      "network_unavailable": "materialization blocked",
+      "partial_source_set": "snapshot promotion remains blocked"
+    },
+    "materialization_precedence": [
+      "reuse exact locally recovered bytes when available",
+      "otherwise perform separately-authorized network acquisition to obtain candidate bytes",
+      "verify candidate complete-byte SHA-256",
+      "reject candidate on any mismatch",
+      "admit exact bytes through FilesystemContentAddressedArtifactStore.put",
+      "verify returned key, SHA-256, size and CAS get/verify",
+      "run canonical CAS readiness preflight for both artifacts"
+    ],
+    "network_acquisition_design": {
+      "candidate_identifiers": [
+        {
+          "doi": "10.1038/nature16459",
+          "pmcid": "PMC4878690"
+        },
+        {
+          "doi": "10.1038/nature16461",
+          "pmcid": "PMC5152751"
+        }
+      ],
+      "http_success_is_not_scientific_success": true,
+      "no_content_identity_inferred_from_url": true,
+      "only_frozen_sha256_can_authorize_admission": true,
+      "preferred_repository_class": "public archival full-text repository for the reviewed PMCID",
+      "status": "fallback_only_not_authorized"
+    },
+    "next_gate": "RATE-2Y_PRIMARY_SOURCE_CAS_MATERIALIZATION_HUMAN_REVIEW",
+    "required_artifacts": [
+      {
+        "doi": "10.1038/nature16459",
+        "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "key": "nature16459",
+        "pmcid": "PMC4878690",
+        "target_artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+      },
+      {
+        "doi": "10.1038/nature16461",
+        "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "key": "nature16461",
+        "pmcid": "PMC5152751",
+        "target_artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+      }
+    ],
+    "schema_version": "ecobiome-primary-source-cas-materialization-plan-v1",
+    "status": "pending_human_review"
+  },
+  "materialization_plan_payload_sha256": "929799c55b5efd4c185cf9455e0515e087347d2ebd73ad6437734af478916c81"
+}
