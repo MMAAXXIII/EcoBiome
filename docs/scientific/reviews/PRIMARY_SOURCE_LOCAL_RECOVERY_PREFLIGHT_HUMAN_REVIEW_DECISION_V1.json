@@ -1,0 +1,31 @@
+{
+  "decision_payload": {
+    "accepted_observation": {
+      "all_required_sources_recoverable_locally": false,
+      "local_recovery_result_file_sha256": "d2cadcf9924fdf41b251c1f08bcd60773c6cfc6a98ed855e09d2a48d43d78fdf",
+      "nature16459_exact_local_match_count": 0,
+      "nature16461_exact_local_match_count": 0,
+      "network_acquisition_needed_if_materializing_now": true,
+      "rate_2x_bundle_name": "A_JOINDRE_CHATGPT_ECOBIOME_G7A_RATE_2X_PRIMARY_SOURCE_CAS_MATERIALIZATION_PLAN_AND_LOCAL_RECOVERY_PREFLIGHT_LOCAL_20260826-224106_PASS.zip",
+      "rate_2x_bundle_sha256": "aded2f2d3a7c14a47e8024c093200e960e268f4954b7352974a2c6bdf39188c2"
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2y-primary-source-local-recovery-contract-v1",
+    "decision_source": {
+      "accepted_recommendation": "local recovery contract = accept; exact-hash local recovery candidates are admissible only after re-verification, while filename/metadata matches remain insufficient",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "reviewed_at": "2026-08-26T22:48:01+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2x_recovery_preflight_contract_payload_sha256": "32ba23f44abc1e6a6942c7c34b140e07ba7ff247d93007f7327c1cf788156bbd"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "c35397c486c3915321a89c3e4c8e77b915ae21647bc0192851a76773483ead6d",
+  "schema_version": "ecobiome-primary-source-local-recovery-preflight-human-review-decision-v1"
+}

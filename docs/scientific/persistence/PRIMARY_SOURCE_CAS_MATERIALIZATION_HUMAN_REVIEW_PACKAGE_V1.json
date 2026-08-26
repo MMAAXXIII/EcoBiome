@@ -1,0 +1,34 @@
+{
+  "review_package_payload": {
+    "execution_authorization": {
+      "authorization_payload_sha256": "f95193d6f37085b86623c28f732d7003fc64b5bc4f07c619313f7913a0a4fcb3",
+      "durable_cas_write_authorized_conditionally": true,
+      "network_acquisition_authorized": true,
+      "scope": "RATE-2Z_PRIMARY_SOURCE_CAS_MATERIALIZATION_EXECUTION_ONLY"
+    },
+    "local_recovery_contract": {
+      "decision": "accept",
+      "decision_payload_sha256": "c35397c486c3915321a89c3e4c8e77b915ae21647bc0192851a76773483ead6d",
+      "source_payload_sha256": "32ba23f44abc1e6a6942c7c34b140e07ba7ff247d93007f7327c1cf788156bbd"
+    },
+    "materialization_plan": {
+      "decision": "accept",
+      "decision_payload_sha256": "aa1a8b35d0da3b009b09f5c977c7db71f45e3b75f9fe53cd9797d297acefa63c",
+      "source_payload_sha256": "929799c55b5efd4c185cf9455e0515e087347d2ebd73ad6437734af478916c81"
+    },
+    "next_gate": "RATE-2Z_PRIMARY_SOURCE_CAS_MATERIALIZATION_EXECUTION",
+    "rate_2x_observation": {
+      "all_required_sources_recoverable_locally": false,
+      "bundle_sha256": "aded2f2d3a7c14a47e8024c093200e960e268f4954b7352974a2c6bdf39188c2",
+      "network_acquisition_needed": true,
+      "recovery_result_file_sha256": "d2cadcf9924fdf41b251c1f08bcd60773c6cfc6a98ed855e09d2a48d43d78fdf"
+    },
+    "reviewed_at": "2026-08-26T22:48:01+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-primary-source-cas-materialization-human-review-package-v1",
+    "snapshot_creation_authorized": false,
+    "status": "human_review_completed"
+  },
+  "review_package_payload_sha256": "e024fed918d25bd7ea9d4827e37f54ead68d5657b081c7a6bea6b07795b66561",
+  "schema_version": "ecobiome-primary-source-cas-materialization-human-review-package-v1"
+}

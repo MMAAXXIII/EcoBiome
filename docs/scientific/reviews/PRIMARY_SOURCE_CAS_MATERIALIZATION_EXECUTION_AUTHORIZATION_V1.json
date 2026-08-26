@@ -1,0 +1,66 @@
+{
+  "authorization_payload": {
+    "authorization_id": "authorization-g7a-rate2z-primary-source-cas-materialization-v1",
+    "authorization_scope": "RATE-2Z_PRIMARY_SOURCE_CAS_MATERIALIZATION_EXECUTION_ONLY",
+    "authorized_artifacts": [
+      {
+        "doi": "10.1038/nature16459",
+        "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "pmcid": "PMC4878690",
+        "target_artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+      },
+      {
+        "doi": "10.1038/nature16461",
+        "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "pmcid": "PMC5152751",
+        "target_artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+      }
+    ],
+    "decision_source": {
+      "accepted_recommendation": "network acquisition = authorize; durable CAS write = authorize conditionally; authorization is limited to two reviewed primary-source artifacts and their already-frozen SHA-256 identities",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "durable_cas_write": {
+      "authorized": true,
+      "canonical_logical_root": "EcoBiome-data/scientific-artifact-cas",
+      "conditional": true,
+      "existing_corrupt_target": "fail closed; do not overwrite",
+      "implementation": "FilesystemContentAddressedArtifactStore.put(bytes)",
+      "on_mismatch": "reject candidate; perform no CAS admission for that candidate",
+      "postconditions": [
+        "returned key equals target_artifact_key",
+        "returned sha256 equals expected_sha256",
+        "FilesystemContentAddressedArtifactStore.verify(target_artifact_key) passes",
+        "retrieved complete-byte SHA-256 equals expected_sha256"
+      ],
+      "precondition": "candidate complete-byte SHA-256 equals expected_sha256"
+    },
+    "network_acquisition": {
+      "authorized": true,
+      "candidate_bytes_are_not_admitted_by_metadata": true,
+      "doi_or_pmcid_match_is_not_admission": true,
+      "http_success_is_not_admission": true,
+      "normalization_or_reserialization_before_hash_forbidden": true,
+      "purpose": "obtain candidate complete source bytes only",
+      "source_scope": "official public archival full-text sources for the reviewed PMCID/DOI identities"
+    },
+    "non_authorized_effects": {
+      "active_pointer_update": false,
+      "knowledge_synthesis": false,
+      "numeric_rate_model": false,
+      "real_v6_write": false,
+      "remote_git_write": false,
+      "schema_migration": false,
+      "snapshot_creation": false
+    },
+    "reviewed_at": "2026-08-26T22:48:01+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "status": "human_authorized"
+  },
+  "authorization_payload_sha256": "f95193d6f37085b86623c28f732d7003fc64b5bc4f07c619313f7913a0a4fcb3",
+  "schema_version": "ecobiome-primary-source-cas-materialization-execution-authorization-v1"
+}
