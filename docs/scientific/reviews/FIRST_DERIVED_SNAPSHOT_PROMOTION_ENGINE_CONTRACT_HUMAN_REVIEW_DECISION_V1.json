@@ -1,0 +1,50 @@
+{
+  "decision_payload": {
+    "decision": "revise",
+    "decision_id": "decision-g7a-rate3b-first-derived-snapshot-promotion-engine-contract-v1",
+    "decision_source": {
+      "accepted_recommendation": "promotion-engine contract = revise",
+      "kind": "explicit_user_acceptance_of_recommendation",
+      "literal": "accept"
+    },
+    "execution_authorization": {
+      "active_pointer_update_authorized": false,
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "remote_git_write_authorized": false,
+      "schema_migration_authorized": false,
+      "snapshot_creation_authorized": false,
+      "staging_database_creation_authorized": false
+    },
+    "mandatory_revisions": [
+      {
+        "requirement": "Add FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1 containing every promoted row with table, row_id, canonical row payload SHA-256, provenance/review SHA-256 bindings and deterministic dependency information. Table deltas remain secondary checks only.",
+        "revision_id": "exhaustive_replay_manifest"
+      },
+      {
+        "requirement": "Separate scientific_input_repo_head, promotion_contract_repo_head, and promotion_engine_repo_head/code_identity_sha256. The final manifest must bind the exact implementation actually executed, not only the pre-design scientific input head.",
+        "revision_id": "separate_git_and_engine_identities"
+      },
+      {
+        "requirement": "Publish into an execution-scoped temporary directory, write DB and manifest, fsync files and directory, verify the complete pair, then atomically rename to the final content-addressed directory. A partial or inconsistent final directory is fatal and must never be silently completed or overwritten.",
+        "revision_id": "atomic_complete_publication"
+      },
+      {
+        "requirement": "After replay, re-read every promoted row and recompute its canonical row SHA-256 against FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1. Exact table counts remain an additional invariant, never a substitute for row identity verification.",
+        "revision_id": "row_by_row_post_replay_identity_validation"
+      }
+    ],
+    "reviewed_at": "2026-08-27T00:25:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_3a_promotion_engine_contract_payload_sha256": "21917d539e76222e50a1af3fdf9a013b1ea3de13dc9b34419b45ea55ea8128ac"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "cc960686dab49d96fa50cc0df6808a2646fcd86cf0bcd777448e1ac58ece608e",
+  "schema_version": "ecobiome-first-derived-snapshot-promotion-engine-contract-human-review-decision-v1"
+}

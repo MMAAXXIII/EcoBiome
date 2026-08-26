@@ -1,0 +1,52 @@
+{
+  "decision_payload": {
+    "decision": "revise",
+    "decision_id": "decision-g7a-rate3b-first-derived-snapshot-execution-plan-v1",
+    "decision_source": {
+      "accepted_recommendation": "execution plan = revise",
+      "kind": "explicit_user_acceptance_of_recommendation",
+      "literal": "accept"
+    },
+    "mandatory_revisions": [
+      {
+        "requirement": "Add FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1 containing every promoted row with table, row_id, canonical row payload SHA-256, provenance/review SHA-256 bindings and deterministic dependency information. Table deltas remain secondary checks only.",
+        "revision_id": "exhaustive_replay_manifest"
+      },
+      {
+        "requirement": "Separate scientific_input_repo_head, promotion_contract_repo_head, and promotion_engine_repo_head/code_identity_sha256. The final manifest must bind the exact implementation actually executed, not only the pre-design scientific input head.",
+        "revision_id": "separate_git_and_engine_identities"
+      },
+      {
+        "requirement": "Publish into an execution-scoped temporary directory, write DB and manifest, fsync files and directory, verify the complete pair, then atomically rename to the final content-addressed directory. A partial or inconsistent final directory is fatal and must never be silently completed or overwritten.",
+        "revision_id": "atomic_complete_publication"
+      },
+      {
+        "requirement": "After replay, re-read every promoted row and recompute its canonical row SHA-256 against FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1. Exact table counts remain an additional invariant, never a substitute for row identity verification.",
+        "revision_id": "row_by_row_post_replay_identity_validation"
+      }
+    ],
+    "preserved_contract": {
+      "active_pointer_update_authorized": false,
+      "cas_exact_identity_required": true,
+      "knowledge_syntheses_delta": 0,
+      "numeric_rate_model_authorized": false,
+      "parent_kind": "legacy_root",
+      "real_v6_write_authorized": false,
+      "schema_migration": false,
+      "schema_version": 6,
+      "single_transactional_scientific_replay": true,
+      "source_lineage_edges_delta": 0
+    },
+    "reviewed_at": "2026-08-27T00:25:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_3a_execution_plan_payload_sha256": "e538a2627336969b86aeeed0d0dabf2773fe71be1135dec7b09b5eb4d464d052"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "c204071ea181d6387350841ff9ea8955b908396a44a8463decb9039988da4398",
+  "schema_version": "ecobiome-first-derived-snapshot-execution-plan-human-review-decision-v1"
+}
