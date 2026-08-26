@@ -1,0 +1,29 @@
+{
+  "identity_binding_payload": {
+    "candidate_commit_parent": "f46e50b5e28fb2515e573c0589b6a17d106f22b6",
+    "candidate_commit_tree": "e8ded5434204d83c4e569276003e6547f092b3db",
+    "candidate_file_sha256s": {
+      "docs/scientific/FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_AND_PROMOTION_ENGINE_CANDIDATE_V1.md": "37f3cfce0e7e96e43da55b6021db65a352a6b216740f41b67a04684e02e0f4bb",
+      "docs/scientific/persistence/FIRST_DERIVED_SNAPSHOT_EXECUTION_PLAN_V1_REVISED.json": "30d66e0725cf9adf5204325a0e6ffae28f064221d33683bc54dc34d588c35520",
+      "docs/scientific/persistence/FIRST_DERIVED_SNAPSHOT_PROMOTION_ENGINE_CONTRACT_V1_REVISED.json": "fff27ff95ec9b14296cd1f03e20cfdd4190b652ea14459e2a2445a60801187d7",
+      "docs/scientific/persistence/FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1.json": "7b824e3b1bb4ab827177f59df1b52b0d9fb550a51161652c6fa19222908efed4",
+      "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py": "b875e9732cf57e23b8eec296793900c029cd7ce1b23ad320ddd12b31c71b1be1",
+      "tests/test_snapshot_promotion_v1.py": "93ac18ed428e1ffb6a42e336d9a9e56c6e2a2feff57ce16de3f9de06fd7f441b"
+    },
+    "derived_representation_cas_write_authorized": false,
+    "execution_plan_payload_sha256": "db36828ab04b423e2ab39efaf59dd3cb45fe0f9a2446b298721c074e8c920997",
+    "next_gate": "RATE-3D_REPLAY_MANIFEST_AND_PROMOTION_ENGINE_HUMAN_REVIEW",
+    "promotion_contract_repo_head": "ef07b7c7263488a4361795f5e95a70d8f83749d7",
+    "promotion_engine_code_identity_sha256": "b875e9732cf57e23b8eec296793900c029cd7ce1b23ad320ddd12b31c71b1be1",
+    "promotion_engine_contract_payload_sha256": "9718cddf87622e0d1350279d37cbd28e12b19afd7e0c7a717c9816e5c2a7c788",
+    "promotion_engine_git_blob_sha1": "351306093c415a6c68a75a27dc26d8826489b723",
+    "promotion_engine_repo_head": "ef07b7c7263488a4361795f5e95a70d8f83749d7",
+    "rate_3b_revision_boundary_sha256": "7e45dad9ee2e3f6601e6fc4d55052e5de52e9175514d06ac6c9241366066f2b2",
+    "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+    "schema_version": "ecobiome-first-derived-snapshot-promotion-candidate-identity-binding-v1",
+    "scientific_input_repo_head": "f46e50b5e28fb2515e573c0589b6a17d106f22b6",
+    "snapshot_creation_authorized": false,
+    "status": "candidate_identity_bound"
+  },
+  "identity_binding_payload_sha256": "6b8cfe1e3673c3b6f7b0ba52d961574a638a21c48390ae5b4967d6c143eb2696"
+}
