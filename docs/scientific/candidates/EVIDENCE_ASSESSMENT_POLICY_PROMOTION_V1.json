@@ -1,0 +1,69 @@
+{
+  "promotion_payload": {
+    "basis": {
+      "accepted_assessment_count": 2,
+      "rate_2p_materialization_payload_sha256": "0f992cec2aa0f6d84dd1739da5d231e1b8436edeeff5c58dff7d9cb0dd5c27a4",
+      "shadow_materialization_proven": true
+    },
+    "persistence": {
+      "knowledge_synthesis_authorized": false,
+      "process_scientific_support_materialization_authorized": false,
+      "real_v6_write_authorized": false,
+      "stable_policy_adopted_now": false
+    },
+    "policy": {
+      "name": "ecobiome-evidence-assessment",
+      "proposed_policy_version_string": "ecobiome-evidence-assessment-1",
+      "proposed_stable_version": "1",
+      "source_candidate_version": "1-candidate"
+    },
+    "promotion_projection": {
+      "candidate_policy_version": "ecobiome-evidence-assessment-1-candidate",
+      "new_human_review_required_before_stable_materialization": true,
+      "only_policy_version_identity_changes": true,
+      "scientific_field_changes_allowed": false,
+      "stable_policy_version": "ecobiome-evidence-assessment-1"
+    },
+    "schema_version": "ecobiome-evidence-assessment-policy-promotion-candidate-v1",
+    "semantic_rules": {
+      "evidence_directness": {
+        "current_reviewed_values": [
+          "direct_functional_support",
+          "direct_functional_support_with_intermediate_inference"
+        ],
+        "no_automatic_upgrade_from_author_interpretation": true,
+        "policy_controlled": true
+      },
+      "independence_status": {
+        "controlled_vocabulary": [
+          "unresolved",
+          "dependent",
+          "partially_independent",
+          "independent"
+        ],
+        "current_per_link_value": "unresolved",
+        "pairwise_relation_not_auto_copied_to_per_link": true
+      },
+      "json_fields": {
+        "canonical_json_object_required": true,
+        "fields": [
+          "endpoint_or_response_json",
+          "study_scope_json",
+          "methodological_dimensions_json",
+          "statistical_result_json",
+          "limitations_json"
+        ]
+      },
+      "study_design": {
+        "free_text_without_definition_forbidden": true,
+        "policy_controlled": true
+      },
+      "supersession": {
+        "append_only": true,
+        "supersedes_assessment_id_used_for_reassessment": true
+      }
+    },
+    "status": "pending_human_review"
+  },
+  "promotion_payload_sha256": "508e273824f6e0b58765b6034c8e1a993c93d57ed8359a72a482d7e559a42ad1"
+}
