@@ -1,0 +1,693 @@
+{
+  "plan_payload": {
+    "assessment_policy": {
+      "append_only_supersession": true,
+      "one_assessment_per_reviewed_assertion_claim_link": true,
+      "policy_name": "ecobiome-evidence-assessment",
+      "policy_version": "1-candidate",
+      "required_dimensions": {
+        "endpoint_or_response_json": {
+          "required": true,
+          "state_at_rate_2m": "unresolved"
+        },
+        "evidence_directness": {
+          "instruction": "Assess how directly the cited evidence establishes the target assertion. Do not upgrade author_interpretation to direct measurement without source-level proof.",
+          "state_at_rate_2m": "unresolved"
+        },
+        "limitations_json": {
+          "must_include": [
+            "source_scope_broader_than_target_assertion",
+            "support_mode_author_interpretation"
+          ],
+          "state_at_rate_2m": "required"
+        },
+        "methodological_dimensions_json": {
+          "must_record": [
+            "sample_origin",
+            "experimental_unit",
+            "measurement_methods",
+            "controls_or_comparators",
+            "replication",
+            "analysis_pipeline"
+          ],
+          "state_at_rate_2m": "unresolved"
+        },
+        "statistical_result_json": {
+          "instruction": "Use kind=not_applicable only after confirming that no inferential/statistical result is relevant to the specific support claim; missing review is not N/A.",
+          "state_at_rate_2m": "unresolved"
+        },
+        "study_design": {
+          "instruction": "Classify from source methods/results, not from article title, journal prestige, or support link label.",
+          "state_at_rate_2m": "unresolved"
+        },
+        "study_scope_json": {
+          "must_record": [
+            "organism_or_community",
+            "environment_or_matrix",
+            "experimental_system",
+            "target_process_scope",
+            "source_broader_than_assertion"
+          ],
+          "state_at_rate_2m": "unresolved"
+        }
+      }
+    },
+    "forbidden_at_rate_2m": {
+      "evidence_assessment_insert": true,
+      "knowledge_synthesis_insert": true,
+      "numeric_rate_model": true,
+      "process_scientific_support_materialization": true,
+      "real_v6_write": true,
+      "remote_write": true,
+      "source_lineage_edge_insert": true
+    },
+    "gate": "ECOBIOME_G7A_RATE_2M_EVIDENCE_ASSESSMENT_AND_INDEPENDENCE_DESIGN_LOCAL_R2",
+    "human_review_boundary": {
+      "assessment_candidates_attachable_now": false,
+      "independence_decision_completed": false,
+      "next_human_review_required": true
+    },
+    "independence_policy": {
+      "candidate_vocabulary": [
+        "unresolved",
+        "dependent",
+        "partially_independent",
+        "independent"
+      ],
+      "independent_support_origin_count": null,
+      "initial_status_for_both_links": "unresolved",
+      "known_rate_2m_fact": {
+        "effect": "automatic independent_support_origin_count=2 remains forbidden",
+        "shared_authors": [
+          "Mads Albertsen",
+          "Per H. Nielsen"
+        ]
+      },
+      "physical_db_enum_detected": false,
+      "policy_name": "ecobiome-evidence-origin-independence",
+      "policy_version": "1-candidate",
+      "required_pairwise_dimensions": [
+        "author_overlap",
+        "institution_or_lab_overlap",
+        "sample_or_specimen_overlap",
+        "dataset_overlap",
+        "experimental_system_overlap",
+        "analysis_pipeline_overlap",
+        "direct_source_lineage",
+        "cross_citation_or_declared_coordination",
+        "shared_funding_or_project_context_when_relevant"
+      ],
+      "rules": [
+        {
+          "id": "distinct_identifier_not_sufficient",
+          "rule": "Distinct DOI/PMCID records do not by themselves prove independent scientific support."
+        },
+        {
+          "id": "author_overlap_not_sufficient_for_dependence",
+          "rule": "Shared authorship blocks automatic independence but does not by itself prove that the evidence origins are dependent."
+        },
+        {
+          "id": "direct_lineage_is_dependency_evidence",
+          "rule": "Explicit source lineage, reuse of the same experimental dataset/sample set, or direct derivative analysis is positive evidence of dependence."
+        },
+        {
+          "id": "independence_requires_origin_separation",
+          "rule": "Independent status requires affirmative evidence that the relevant support arises from distinct underlying samples/data and sufficiently separate experimental or analytical origins."
+        },
+        {
+          "id": "unknown_remains_unresolved",
+          "rule": "Missing metadata cannot be converted into independence."
+        }
+      ]
+    },
+    "next_gate": "RATE-2N_PRIMARY_SOURCE_EVIDENCE_ASSESSMENT_CANDIDATE_EXTRACTION",
+    "physical_contract": {
+      "dataclass_fields": {
+        "AssertionClaimLinksRow": [
+          "id",
+          "assertion_id",
+          "assertion_revision",
+          "claim_id",
+          "stance",
+          "support_mode",
+          "scope_alignment",
+          "semantic_alignment",
+          "review_status",
+          "reviewed_by",
+          "reviewed_at",
+          "created_at"
+        ],
+        "EvidenceAssessmentsRow": [
+          "id",
+          "assertion_claim_link_id",
+          "policy_version",
+          "study_design",
+          "evidence_directness",
+          "endpoint_or_response_json",
+          "study_scope_json",
+          "methodological_dimensions_json",
+          "statistical_result_json",
+          "independence_status",
+          "limitations_json",
+          "assessor",
+          "created_at",
+          "supersedes_assessment_id"
+        ],
+        "KnowledgeSynthesesRow": [
+          "id",
+          "assertion_id",
+          "assertion_revision",
+          "synthesis_revision",
+          "policy_version",
+          "evidence_state",
+          "support_link_count",
+          "contradict_link_count",
+          "independent_support_origin_count",
+          "independent_contradict_origin_count",
+          "source_class_distribution_json",
+          "methodological_diversity_json",
+          "scope_summary_json",
+          "uncertainties_json",
+          "conflicts_json",
+          "review_status",
+          "reviewed_by",
+          "created_at"
+        ],
+        "SourceLineageEdgesRow": [
+          "id",
+          "parent_source_id",
+          "child_source_id",
+          "relation",
+          "basis_claim_id",
+          "basis_evidence_json",
+          "review_status",
+          "created_at"
+        ]
+      },
+      "physical_schema": {
+        "ddl": {
+          "assertion_claim_links": {
+            "has_independence_status_check": false,
+            "sha256": "b70c8d0007e31c53c37023fe7b7e240fc9cc3bf98eacf74be3b9d9da41b642e1"
+          },
+          "evidence_assessments": {
+            "has_independence_status_check": false,
+            "sha256": "4d255eb548b4f7710911ecf91f7d4b0f5266b6022495b816d1577a327c5611e4"
+          },
+          "knowledge_syntheses": {
+            "has_independence_status_check": false,
+            "sha256": "40275b8570c861dfd71a54dd6cd1c4cadd68d6a2692a9aeae2d8ffd8c5659af4"
+          },
+          "source_lineage_edges": {
+            "has_independence_status_check": false,
+            "sha256": "525d014d0bbda1090023f15f573ff8177078ba29c151e83b12fbb6afc8a611b5"
+          }
+        },
+        "table_info": {
+          "assertion_claim_links": [
+            {
+              "cid": 0,
+              "default": null,
+              "name": "id",
+              "notnull": false,
+              "pk": 1,
+              "type": "TEXT"
+            },
+            {
+              "cid": 1,
+              "default": null,
+              "name": "assertion_id",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 2,
+              "default": null,
+              "name": "assertion_revision",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 3,
+              "default": null,
+              "name": "claim_id",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 4,
+              "default": null,
+              "name": "stance",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 5,
+              "default": null,
+              "name": "support_mode",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 6,
+              "default": null,
+              "name": "scope_alignment",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 7,
+              "default": null,
+              "name": "semantic_alignment",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 8,
+              "default": null,
+              "name": "review_status",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 9,
+              "default": null,
+              "name": "reviewed_by",
+              "notnull": false,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 10,
+              "default": null,
+              "name": "reviewed_at",
+              "notnull": false,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 11,
+              "default": null,
+              "name": "created_at",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            }
+          ],
+          "evidence_assessments": [
+            {
+              "cid": 0,
+              "default": null,
+              "name": "id",
+              "notnull": false,
+              "pk": 1,
+              "type": "TEXT"
+            },
+            {
+              "cid": 1,
+              "default": null,
+              "name": "assertion_claim_link_id",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 2,
+              "default": null,
+              "name": "policy_version",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 3,
+              "default": null,
+              "name": "study_design",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 4,
+              "default": null,
+              "name": "evidence_directness",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 5,
+              "default": "'{}'",
+              "name": "endpoint_or_response_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 6,
+              "default": "'{}'",
+              "name": "study_scope_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 7,
+              "default": "'{}'",
+              "name": "methodological_dimensions_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 8,
+              "default": "'{}'",
+              "name": "statistical_result_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 9,
+              "default": null,
+              "name": "independence_status",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 10,
+              "default": "'{}'",
+              "name": "limitations_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 11,
+              "default": null,
+              "name": "assessor",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 12,
+              "default": null,
+              "name": "created_at",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 13,
+              "default": null,
+              "name": "supersedes_assessment_id",
+              "notnull": false,
+              "pk": 0,
+              "type": "TEXT"
+            }
+          ],
+          "knowledge_syntheses": [
+            {
+              "cid": 0,
+              "default": null,
+              "name": "id",
+              "notnull": false,
+              "pk": 1,
+              "type": "TEXT"
+            },
+            {
+              "cid": 1,
+              "default": null,
+              "name": "assertion_id",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 2,
+              "default": null,
+              "name": "assertion_revision",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 3,
+              "default": null,
+              "name": "synthesis_revision",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 4,
+              "default": null,
+              "name": "policy_version",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 5,
+              "default": null,
+              "name": "evidence_state",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 6,
+              "default": null,
+              "name": "support_link_count",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 7,
+              "default": null,
+              "name": "contradict_link_count",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 8,
+              "default": null,
+              "name": "independent_support_origin_count",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 9,
+              "default": null,
+              "name": "independent_contradict_origin_count",
+              "notnull": true,
+              "pk": 0,
+              "type": "INTEGER"
+            },
+            {
+              "cid": 10,
+              "default": "'{}'",
+              "name": "source_class_distribution_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 11,
+              "default": "'{}'",
+              "name": "methodological_diversity_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 12,
+              "default": "'{}'",
+              "name": "scope_summary_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 13,
+              "default": "'{}'",
+              "name": "uncertainties_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 14,
+              "default": "'{}'",
+              "name": "conflicts_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 15,
+              "default": null,
+              "name": "review_status",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 16,
+              "default": null,
+              "name": "reviewed_by",
+              "notnull": false,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 17,
+              "default": null,
+              "name": "created_at",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            }
+          ],
+          "source_lineage_edges": [
+            {
+              "cid": 0,
+              "default": null,
+              "name": "id",
+              "notnull": false,
+              "pk": 1,
+              "type": "TEXT"
+            },
+            {
+              "cid": 1,
+              "default": null,
+              "name": "parent_source_id",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 2,
+              "default": null,
+              "name": "child_source_id",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 3,
+              "default": null,
+              "name": "relation",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 4,
+              "default": null,
+              "name": "basis_claim_id",
+              "notnull": false,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 5,
+              "default": "'{}'",
+              "name": "basis_evidence_json",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 6,
+              "default": null,
+              "name": "review_status",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            },
+            {
+              "cid": 7,
+              "default": null,
+              "name": "created_at",
+              "notnull": true,
+              "pk": 0,
+              "type": "TEXT"
+            }
+          ]
+        }
+      }
+    },
+    "rate_2l_materialization_payload_sha256": "9d8cc7d944d354e439bc608cca00944f1bc6b8532cc57e4e676e1a392a8593ec",
+    "real_v6_pre": {
+      "counts": {
+        "assertion_claim_links": 2,
+        "evidence_assessments": 0,
+        "knowledge_syntheses": 0,
+        "source_lineage_edges": 0
+      },
+      "sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "write_authorized": false
+    },
+    "reviewed_links": [
+      {
+        "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+        "doi": "10.1038/nature16459",
+        "link_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+        "pmcid": "PMC4878690",
+        "scope_alignment": "source_broader",
+        "semantic_alignment": "exact",
+        "stance": "supports",
+        "support_mode": "author_interpretation"
+      },
+      {
+        "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+        "doi": "10.1038/nature16461",
+        "link_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+        "pmcid": "PMC5152751",
+        "scope_alignment": "source_broader",
+        "semantic_alignment": "compatible_partial",
+        "stance": "supports",
+        "support_mode": "author_interpretation"
+      }
+    ],
+    "schema_version": "ecobiome-evidence-assessment-and-independence-plan-v1",
+    "source_lineage_policy": {
+      "basis_claim_required_when_lineage_assertion_depends_on_claim": true,
+      "basis_evidence_json_required_for_auditable_relation_basis": true,
+      "do_not_encode_authorship_overlap_as_source_lineage": true,
+      "physical_fields": [
+        "id",
+        "parent_source_id",
+        "child_source_id",
+        "relation",
+        "basis_claim_id",
+        "basis_evidence_json",
+        "review_status",
+        "created_at"
+      ],
+      "review_status_must_remain_explicit": true,
+      "use_source_lineage_edges_only_for_explicit_provenance": true
+    },
+    "status": "design_candidate",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "revision": 1
+    }
+  },
+  "plan_payload_sha256": "835663847237dce5da6b928ff98e862536f3901ea1b06fbe6621b8f832546e90"
+}
