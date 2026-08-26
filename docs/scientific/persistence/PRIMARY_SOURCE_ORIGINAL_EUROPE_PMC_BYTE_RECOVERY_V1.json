@@ -1,0 +1,157 @@
+{
+  "execution_payload": {
+    "active_pointer_updated": false,
+    "authorization_sha256": "f95193d6f37085b86623c28f732d7003fc64b5bc4f07c619313f7913a0a4fcb3",
+    "cas_admissions": [
+      {
+        "action": "written_exact_original_europe_pmc_bytes",
+        "artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "key": "nature16459",
+        "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "size_bytes": 153875
+      },
+      {
+        "action": "written_exact_original_europe_pmc_bytes",
+        "artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "key": "nature16461",
+        "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "size_bytes": 194672
+      }
+    ],
+    "cas_write_count": 2,
+    "final_cas_ready": true,
+    "knowledge_synthesis_created": false,
+    "network_requests": 2,
+    "numeric_rate_model_created": false,
+    "original_provenance": {
+      "bindings": [
+        {
+          "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "key": "nature16459",
+          "pmcid": "PMC4878690",
+          "resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML"
+        },
+        {
+          "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "key": "nature16461",
+          "pmcid": "PMC5152751",
+          "resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML"
+        }
+      ],
+      "source_file": "docs/scientific/persistence/AMMONIA_TO_NITRITE_PRIMARY_EVIDENCE_SHADOW_ACQUISITION_RESULT_V1.json",
+      "source_file_sha256": "d862fb4246bca620db0fc16e2d0d4b115164e02fc55e99e3f9a7611bb7f1e7ee",
+      "tree": "3363deac81a0461a3d1b80491894091c2359b38d"
+    },
+    "real_v6_written": false,
+    "recovery_sources": [
+      {
+        "attempts": [
+          {
+            "candidate_kind": "raw_http_response_body",
+            "content_length": null,
+            "content_type": "application/xml",
+            "elapsed_seconds": 0.332,
+            "error": null,
+            "etag": null,
+            "exact_match": true,
+            "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+            "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+            "last_modified": null,
+            "observed_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+            "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+            "size_bytes": 153875,
+            "status": 200
+          },
+          {
+            "candidate_kind": "outer_ascii_whitespace_trim_contiguous_slice",
+            "error": null,
+            "exact_match": false,
+            "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+            "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+            "observed_sha256": "b1435a7ed21898d92a41a6d72927077cce7191c54e496ca6634f94eb11b28e56",
+            "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+            "size_bytes": 153874
+          },
+          {
+            "candidate_kind": "literal_article_element_contiguous_slice",
+            "error": null,
+            "exact_match": false,
+            "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+            "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+            "observed_sha256": "5bd7bfa181b05e1b8b193069a6ffc58cdec1fb2d613b3b39c88718b46a9d9cda",
+            "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+            "size_bytes": 153712
+          }
+        ],
+        "doi": "10.1038/nature16459",
+        "exact_candidate_found": true,
+        "expected_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+        "key": "nature16459",
+        "original_resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML",
+        "pmcid": "PMC4878690",
+        "selected_candidate": {
+          "method": "original_europe_pmc_raw_response",
+          "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "size_bytes": 153875,
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4878690/fullTextXML"
+        }
+      },
+      {
+        "attempts": [
+          {
+            "candidate_kind": "raw_http_response_body",
+            "content_length": null,
+            "content_type": "application/xml",
+            "elapsed_seconds": 0.673,
+            "error": null,
+            "etag": null,
+            "exact_match": true,
+            "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+            "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+            "last_modified": null,
+            "observed_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+            "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+            "size_bytes": 194672,
+            "status": 200
+          },
+          {
+            "candidate_kind": "outer_ascii_whitespace_trim_contiguous_slice",
+            "error": null,
+            "exact_match": false,
+            "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+            "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+            "observed_sha256": "fe5b87254910b779abb159794fdb193824cb4cc1f1c3c272f996243f8bb0ec93",
+            "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+            "size_bytes": 194671
+          },
+          {
+            "candidate_kind": "literal_article_element_contiguous_slice",
+            "error": null,
+            "exact_match": false,
+            "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+            "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+            "observed_sha256": "b57702b3ec8626f1e64cc84506cbc3dd16dc89abe1576cc44150cf4657c23200",
+            "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+            "size_bytes": 194509
+          }
+        ],
+        "doi": "10.1038/nature16461",
+        "exact_candidate_found": true,
+        "expected_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+        "key": "nature16461",
+        "original_resolved_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML",
+        "pmcid": "PMC5152751",
+        "selected_candidate": {
+          "method": "original_europe_pmc_raw_response",
+          "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "size_bytes": 194672,
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5152751/fullTextXML"
+        }
+      }
+    ],
+    "schema_version": "ecobiome-primary-source-original-europe-pmc-byte-recovery-v1",
+    "scientific_snapshot_created": false,
+    "status": "completed"
+  },
+  "execution_payload_sha256": "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478"
+}
