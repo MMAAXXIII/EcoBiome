@@ -1,0 +1,53 @@
+{
+  "decision_payload": {
+    "accepted_candidate_link": {
+      "id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+      "review_status": "pending_human_review",
+      "reviewed_at": null,
+      "reviewed_by": null,
+      "scope_alignment": "source_broader",
+      "semantic_alignment": "compatible_partial",
+      "stance": "supports",
+      "support_mode": "author_interpretation"
+    },
+    "candidate_package_ref": {
+      "candidate_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+      "candidate_package_sha256": "a1a9677f4a20956b184833147b0a3ea11b79de4d97ae5d96c742bb0cd6857d50"
+    },
+    "claim_ref": {
+      "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+      "claim_review_decision_sha256": "482574cb105c21993933dabf519002d22cee71207d434fc1caec503e0fa5dcfb",
+      "effective_claim_sha256": "7461bcc9d3facfb73adb18e579919cc03313bd52367e0e166a0f7fbae5320ac3"
+    },
+    "decision": "accept",
+    "decision_effects": {
+      "assertion_claim_link_materialized": false,
+      "effective_link_accepted_for_shadow_materialization": true,
+      "link_classification_human_review_completed": true,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "source_independence_assessed": false
+    },
+    "decision_id": "decision-g7a-nature16461-assertion-claim-link-v1",
+    "decision_source": {
+      "accepted_recommendation": "link 2: accept",
+      "conversation_role": "human_user",
+      "kind": "explicit_user_assent_to_recommendation",
+      "literal": "ok"
+    },
+    "rationale": "The accepted claim supports ammonia oxidation involving nitrite in a broader nitrification sequence. Keeping semantic_alignment=compatible_partial is intentionally conservative.",
+    "reviewed_at": "2026-08-26T05:27:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "status": "human_review_completed",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "revision": 1
+    }
+  },
+  "decision_payload_sha256": "a9a9bd007d9afe399bd1beef05d87467935e64d11f265c520b65f26742040583",
+  "schema_version": "ecobiome-assertion-claim-link-human-review-decision-v1"
+}
