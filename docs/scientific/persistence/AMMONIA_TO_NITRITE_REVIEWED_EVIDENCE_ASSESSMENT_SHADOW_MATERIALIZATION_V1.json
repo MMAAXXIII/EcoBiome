@@ -1,0 +1,220 @@
+{
+  "materialization_payload": {
+    "boundaries": {
+      "assessment_policy_version_promoted": false,
+      "candidate_policy_version": "ecobiome-evidence-assessment-1-candidate",
+      "independent_support_origin_count": null,
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "pairwise_status": "partially_independent",
+      "pairwise_status_persisted_per_link": false,
+      "per_link_independence_status": "unresolved",
+      "process_scientific_support_materialized": false,
+      "remote_write": false,
+      "source_lineage_edges_created": false
+    },
+    "gate": "ECOBIOME_G7A_RATE_2P_REVIEWED_EVIDENCE_ASSESSMENT_SHADOW_MATERIALIZATION_LOCAL",
+    "independence_projection_contract": {
+      "canonical_sha256": "87df15ce0cd0201414fd39e9940af66249a67c48ef41ab19fdbf25b60ca1ce86",
+      "contract": {
+        "aggregation": {
+          "independent_support_origin_count": null,
+          "integer_count_projection_authorized": false,
+          "reason": "The accepted partially_independent relation has no reviewed mapping to the integer independent_support_origin_count."
+        },
+        "persistence": {
+          "knowledge_synthesis_authorized": false,
+          "process_scientific_support_materialization_authorized": false,
+          "real_v6_write_authorized": false,
+          "shadow_evidence_assessment_materialization_authorized": true
+        },
+        "projection": {
+          "copy_pairwise_status_to_per_link_independence_status": false,
+          "per_link_independence_status": "unresolved",
+          "property_kind": "pairwise_relation_between_evidence_origins",
+          "reason": "A pairwise relation is not an intrinsic property of either individual assertion-claim link. V6 EvidenceAssessmentsRow stores one independence_status per link and exposes no pairwise evidence-origin relation field."
+        },
+        "reviewed_pairwise_input": {
+          "decision_payload_sha256": "322403f8a55f1557326fdd2c5e8a71c47aff9d8b0faa2d3b45893ed7b4b4db34",
+          "independent_support_origin_count": null,
+          "status": "partially_independent"
+        },
+        "schema_version": "ecobiome-evidence-origin-independence-projection-contract-v1",
+        "scope": {
+          "assessment_candidate_ids": [
+            "evidence-assessment-candidate-rate2n-nature16459-v1",
+            "evidence-assessment-candidate-rate2n-nature16461-v1"
+          ],
+          "target_assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+          "target_assertion_revision": 1
+        },
+        "source_lineage": {
+          "create_source_lineage_edge": false,
+          "reason": "Partial independence and shared authorship are not source derivation/provenance edges."
+        }
+      }
+    },
+    "next_gate": "RATE-2Q_EVIDENCE_ASSESSMENT_POLICY_PROMOTION_AND_INDEPENDENCE_AGGREGATION_DESIGN",
+    "rate_2n": {
+      "candidate_package_sha256": "50f86f92a0a0d11dec238679d96c7c72444c7af7e39306981592b639b98abcd0",
+      "candidate_row_sha256": [
+        "2ade26957df6a624c80a5a62896b31f2a4671ace007ce642a0194e603635a3fa",
+        "438a785bfc6a0654eceb190f68075b54a3cbc48d955314b842102ee007beb1bd"
+      ]
+    },
+    "rate_2o_review_decisions": {
+      "assessment_1": "5987f2b7cd5855084271610e90739b7e220a12fc85350b5893d43f0a410b219d",
+      "assessment_2": "bf3f28e41a21666e504f4e4473402f2d37ff6a0ff9c53de4abd2350eb806ebbe",
+      "pairwise_independence": "322403f8a55f1557326fdd2c5e8a71c47aff9d8b0faa2d3b45893ed7b4b4db34"
+    },
+    "real_v6": {
+      "sha256_after": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "sha256_before": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "unchanged": true,
+      "write_authorized": false,
+      "written": false
+    },
+    "schema_version": "ecobiome-reviewed-evidence-assessment-shadow-materialization-v1",
+    "shadow_materialization": {
+      "evidence_assessment_delta": 2,
+      "foreign_key_violations": [],
+      "independent_support_origin_count": null,
+      "knowledge_synthesis_delta": 0,
+      "pairwise_status": "partially_independent",
+      "pairwise_status_persisted_per_link": false,
+      "per_link_independence_status": "unresolved",
+      "persisted_assessment_snapshots": [
+        {
+          "assertion_claim_link_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+          "assessor": "human_user_current_conversation",
+          "created_at_policy": "materialization_time",
+          "endpoint_or_response": {
+            "nitrite_intermediate_directly_accumulated_in_main_aerobic_batch": false,
+            "observations": [
+              "15N tracing supports production of labelled nitrite during aerobic ammonium oxidation.",
+              "Batch incubations show ammonium oxidation to nitrate and selective inhibition of ammonia oxidation by ATU.",
+              "AMO labelling and FISH-MAR localize ammonia-oxidizing capacity and ammonia-dependent carbon fixation to Nitrospira-containing biomass."
+            ],
+            "target_response": "ammonia_or_ammonium_oxidation_to_nitrite"
+          },
+          "evidence_directness": "direct_functional_support_with_intermediate_inference",
+          "id": "evidence-assessment-candidate-rate2n-nature16459-v1",
+          "independence_status": "unresolved",
+          "limitations": {
+            "generalization_limits": "specific enrichment/community and experimental conditions",
+            "intermediate_support_uses_isotope_and_mechanistic_inference": true,
+            "nitrite_intermediate_in_main_aerobic_batch_below_detection": true,
+            "not_axenic": true,
+            "source_scope_broader_than_target_assertion": true,
+            "support_mode_author_interpretation": true
+          },
+          "methodological_dimensions": {
+            "analysis_pipeline": "differential-coverage metagenomic binning plus physiological and single-cell assays",
+            "controls_or_comparators": [
+              "ATU ammonia-oxidation inhibition",
+              "no-substrate control",
+              "dead control in FISH-MAR"
+            ],
+            "experimental_unit": "enrichment reactor biomass and replicated batch incubations",
+            "measurement_methods": [
+              "15N isotope tracing",
+              "ammonium/nitrite/nitrate chemistry",
+              "metagenomics",
+              "FISH",
+              "AMO FTCP labelling",
+              "FISH-MAR"
+            ],
+            "replication": "main conversion plots use three biological experiments; FISH/FTCP/FISH-MAR include independent and technical replication as reported",
+            "sample_origin": "RAS biofilter biomass"
+          },
+          "policy_version": "ecobiome-evidence-assessment-1-candidate",
+          "statistical_result": {
+            "kind": "replicated_descriptive_measurements",
+            "main_target_inferential_test": null,
+            "summary": "Means/standard deviations and replicated conversion-rate measurements; no inferential test is required for the specific ammonia-to-nitrite support candidate."
+          },
+          "study_design": "experimental_enrichment_culture_multimodal",
+          "study_scope": {
+            "environment_or_matrix": "biomass originating from a recirculating aquaculture system biofilter",
+            "experimental_system": "low-substrate hypoxic sequencing-batch enrichment plus aerobic physiological batch assays",
+            "organism_or_community": "enrichment containing two comammox Nitrospira species with anammox Brocadia and other community members",
+            "source_broader_than_assertion": true,
+            "target_process_scope": "ammonia oxidation within comammox",
+            "temperature_context": "enrichment reactor 23±1 C; batch assays at room temperature"
+          },
+          "supersedes_assessment_id": null
+        },
+        {
+          "assertion_claim_link_id": "assertion-link-candidate-g7a-nature16461-ammonia-to-nitrite-v1",
+          "assessor": "human_user_current_conversation",
+          "created_at_policy": "materialization_time",
+          "endpoint_or_response": {
+            "nitrite_intermediate_directly_accumulated": true,
+            "observations": [
+              "Near-stoichiometric ammonium oxidation to nitrate shows transient nitrite accumulation.",
+              "Growth on ammonium is tracked by qPCR targeting the single-copy amoA gene.",
+              "Metaproteomics detects expression of key ammonia- and nitrite-oxidation proteins during ammonium incubation.",
+              "The isolated non-Nitrospira betaproteobacterium shows no nitrifying activity in control experiments."
+            ],
+            "target_response": "ammonia_or_ammonium_oxidation_to_nitrite"
+          },
+          "evidence_directness": "direct_functional_support",
+          "id": "evidence-assessment-candidate-rate2n-nature16461-v1",
+          "independence_status": "unresolved",
+          "limitations": {
+            "companion_population_controlled_separately": true,
+            "generalization_limits": "moderately thermophilic enrichment and mineral-medium conditions",
+            "not_axenic_main_enrichment": true,
+            "source_scope_broader_than_target_assertion": true,
+            "support_mode_author_interpretation": true
+          },
+          "methodological_dimensions": {
+            "analysis_pipeline": "serial enrichment, metagenomic reconstruction, physiological assays, qPCR and metaproteomics",
+            "controls_or_comparators": [
+              "dead biomass controls",
+              "abiotic controls",
+              "isolated betaproteobacterium nitrification controls"
+            ],
+            "experimental_unit": "ENR4/ENR6 enrichment biomass and replicated bottle incubations",
+            "measurement_methods": [
+              "ammonium/nitrite/nitrate chemistry",
+              "qPCR",
+              "metagenomics",
+              "metaproteomics",
+              "FISH"
+            ],
+            "replication": "three or four biological replicates depending on condition as reported in Figure 2; paired t-test used for indicated growth comparisons",
+            "sample_origin": "thermophilic pipe biofilm"
+          },
+          "policy_version": "ecobiome-evidence-assessment-1-candidate",
+          "statistical_result": {
+            "ancillary_statistics": "paired t-tests are reported for selected qPCR growth comparisons, while chemical conversion endpoints are presented as replicated means with standard deviations",
+            "kind": "replicated_descriptive_plus_ancillary_inference",
+            "main_target_inferential_test": null
+          },
+          "study_design": "experimental_enrichment_culture_multimodal",
+          "study_scope": {
+            "environment_or_matrix": "source biofilm from hot water raised from a deep oil exploration well in Aushiger, North Caucasus",
+            "experimental_system": "thermophilic enrichment cultures ENR4/ENR6 and mineral-medium physiological incubations",
+            "organism_or_community": "highly enriched Candidatus Nitrospira inopinata with a betaproteobacterial companion population",
+            "source_broader_than_assertion": true,
+            "target_process_scope": "ammonia oxidation within comammox",
+            "temperature_context": "source water 56 C; enrichment/physiology primarily 46 C"
+          },
+          "supersedes_assessment_id": null
+        }
+      ],
+      "quick_check": [
+        "ok"
+      ],
+      "source_lineage_edge_delta": 0
+    },
+    "status": "shadow_materialization_pass",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "revision": 1
+    }
+  },
+  "materialization_payload_sha256": "0f992cec2aa0f6d84dd1739da5d231e1b8436edeeff5c58dff7d9cb0dd5c27a4"
+}
