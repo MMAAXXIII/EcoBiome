@@ -1,0 +1,130 @@
+{
+  "manifest_contract_payload": {
+    "active_pointer": {
+      "activation_requires_separate_authorization": true,
+      "atomic_replace_required": true,
+      "contains_only": [
+        "database_sha256",
+        "manifest_sha256",
+        "logical_snapshot_path"
+      ],
+      "recommended_logical_path": "EcoBiome-data/scientific-foundation-active.json",
+      "scientific_content": false,
+      "update_only_after_snapshot_validation": true
+    },
+    "authorization_boundaries": {
+      "contract_review_authorizes_active_pointer_change": false,
+      "contract_review_authorizes_numeric_rate_model": false,
+      "contract_review_authorizes_real_v6_write": false,
+      "contract_review_authorizes_schema_migration": false,
+      "contract_review_authorizes_snapshot_creation": false
+    },
+    "identity": {
+      "absolute_machine_paths_excluded_from_canonical_identity": true,
+      "manifest_identity_basis": "canonical_manifest_payload_sha256",
+      "schema_version_is_not_data_snapshot_version": true,
+      "snapshot_identity_basis": "database_sha256"
+    },
+    "lineage_rules": {
+      "derived_snapshot": {
+        "parent_database_sha256_required": true,
+        "parent_manifest_sha256_required": true
+      },
+      "invented_parent_manifest_forbidden": true,
+      "legacy_root": {
+        "parent_database_sha256_required": true,
+        "parent_manifest_sha256": null,
+        "parent_manifest_sha256_must_be_null": true,
+        "reason": "The frozen V6 reference predates the derived-snapshot manifest series and therefore has no canonical parent manifest."
+      },
+      "parent_kind_vocabulary": [
+        "legacy_root",
+        "derived_snapshot"
+      ]
+    },
+    "reproducibility_semantics": {
+      "byte_for_byte_cross_runtime_replay_required": false,
+      "logical_scientific_replay_exact_required": true,
+      "published_snapshot_immutable_after_creation": true,
+      "runtime_identity_recorded_to_explain_materialization": true
+    },
+    "required_fields": {
+      "boundaries": [
+        "real_v6_mutated",
+        "knowledge_synthesis_created",
+        "numeric_rate_model_authorized"
+      ],
+      "lineage": [
+        "parent_kind",
+        "parent_database_sha256",
+        "parent_manifest_sha256",
+        "promotion_plan_sha256",
+        "source_repo_head"
+      ],
+      "reviewed_inputs": [
+        "decision_payload_sha256s",
+        "policy_payload_sha256s",
+        "scientific_entity_payload_sha256s",
+        "scientific_assertion_payload_sha256s",
+        "source_artifact_sha256s"
+      ],
+      "runtime_and_persistence_identity": [
+        "sqlite_version",
+        "python_version",
+        "persistence_schema_design_sha256",
+        "promotion_engine_identity"
+      ],
+      "snapshot": [
+        "database_sha256",
+        "database_size_bytes",
+        "schema_version",
+        "schema_design_sha256",
+        "immutable",
+        "created_at",
+        "purpose"
+      ],
+      "validation": [
+        "quick_check",
+        "foreign_key_violation_count",
+        "regression_gate_summary",
+        "table_counts"
+      ]
+    },
+    "runtime_identity_rules": {
+      "persistence_schema_design_sha256": {
+        "purpose": "Bind the snapshot to the exact physical persistence schema design.",
+        "required": true
+      },
+      "promotion_engine_identity": {
+        "minimum_fields": [
+          "name",
+          "version_or_gate",
+          "source_repo_head",
+          "code_identity_sha256"
+        ],
+        "purpose": "Identify the promotion implementation without claiming byte-for-byte cross-runtime reproducibility.",
+        "required": true
+      },
+      "python_version": {
+        "purpose": "Record the Python runtime executing the persistence promotion.",
+        "required": true
+      },
+      "sqlite_version": {
+        "purpose": "Record the SQLite engine used to materialize and validate the immutable snapshot.",
+        "required": true
+      }
+    },
+    "schema_version": "ecobiome-scientific-foundation-snapshot-manifest-v1-reviewed",
+    "status": "human_reviewed_candidate",
+    "storage": {
+      "content_addressed_create_only": true,
+      "database_filename": "scientific-foundation.sqlite3",
+      "git_tracks_database_bytes": false,
+      "git_tracks_primary_source_fulltext": false,
+      "manifest_filename": "snapshot-manifest.json",
+      "recommended_logical_root": "EcoBiome-data/scientific-foundation-snapshots",
+      "snapshot_directory_key": "<database_sha256>"
+    }
+  },
+  "manifest_contract_payload_sha256": "67b73c0a1cc4d514c146b7d09a042720721a4c1e68074f0c7e7680bd08fa7b74"
+}

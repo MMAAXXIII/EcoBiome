@@ -1,0 +1,28 @@
+{
+  "review_package_payload": {
+    "boundary": {
+      "decision": "accept",
+      "decision_payload_sha256": "796d7f2e2130efada77a914a7fd85f243b38788e06c0e283b479d0909981f990",
+      "source_payload_sha256": "7cc40c48504639d13b9f1b20596a55796b73f93a75e10ff581b5a078b57e808a"
+    },
+    "effective_persistence_contract": {
+      "activation_authorized": false,
+      "architecture": "immutable_derived_snapshot_series",
+      "legacy_root_supported": true,
+      "manifest_contract_sha256": "67b73c0a1cc4d514c146b7d09a042720721a4c1e68074f0c7e7680bd08fa7b74",
+      "runtime_identity_required": true,
+      "snapshot_creation_authorized": false
+    },
+    "manifest_contract": {
+      "decision": "revise",
+      "decision_payload_sha256": "17ed6f4d14f504f331c15a3b1b5c32bcdb3e649aa18da695756483a11bc2f0b5",
+      "replacement_payload_sha256": "67b73c0a1cc4d514c146b7d09a042720721a4c1e68074f0c7e7680bd08fa7b74",
+      "source_payload_sha256": "8675774056188fce62c7c29cf816238d155871bf69aaa79ee85e8b1567b2cf20"
+    },
+    "reviewed_at": "2026-08-26T21:32:44+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-scientific-foundation-persistence-boundary-review-package-v1",
+    "status": "human_review_completed"
+  },
+  "review_package_payload_sha256": "f6a29e569b5b73a9862b126a3805fc915d0dc77c6910c519d916c228e3ea3fff"
+}
