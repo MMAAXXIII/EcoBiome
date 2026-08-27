@@ -1,0 +1,25 @@
+{
+  "migration_candidate_identity_payload": {
+    "automatic_runtime_read_consumers": [
+      "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py",
+      "src/ecobiome/ui/local_api.py"
+    ],
+    "candidate_file_sha256s": {
+      "src/ecobiome/knowledge_persistence/active_foundation_runtime_config_v1.py": "188e1cd54ac1404b643a58e19d4b2b79c55da2605997efdcb638ab080024fea4",
+      "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py": "9aef6c425ee60cd09bc47a466ba3a4f370bfb16e7275832e6636e1a6b7e4d6e3",
+      "src/ecobiome/ui/local_api.py": "5cc139d81881098316b331769438e48adf9dd183da1a6ee1b7d4aab6269ca0cd",
+      "tests/test_active_foundation_runtime_config_v1.py": "8ead4f67f2ed6fa0d2fbf2372a29b1facb0aabfa6b0c572dda27c7de01be5f23",
+      "tests/test_nitrogen_vertical_active_foundation_runtime_v1.py": "2a88a77686bb28d5266614f97e4e370214167fc988032bbdadc0a2b90aa40bd3",
+      "tests/test_nitrogen_vertical_active_foundation_ui_v1.py": "921f3551cb41fe905e12396588f018e9369662cabf10fdc4364e165e994acddf"
+    },
+    "candidate_parent": "840a48c1c3348b1cd57e1cc7c83d66ad6dc7a62b",
+    "candidate_repo_head": "de218d61e613a698859f55c281977b685cba98fd",
+    "candidate_tree": "b5827b1a6a38754a82d052141ea9b2ffcf816bae",
+    "rate_3m_migration_plan_payload_sha256": "a580cc8d0ac8b95142c327b64abdc6d0336ba5295725b82413391f48d933ccab",
+    "rate_3n_human_review_decision_sha256": "c23a7a721ca671bf1ad8b9627671460496ec0f73626ed35129200b4d31fa9054",
+    "resolver_module_sha256": "58ee76d2a163ae844b8b8c89653e65a70be475acb1a8ed3bf61aa974b56cd2e9",
+    "schema_version": "ecobiome-active-scientific-foundation-consumer-migration-candidate-identity-v1",
+    "write_admin_consumer_migration_performed": false
+  },
+  "migration_candidate_identity_payload_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227"
+}

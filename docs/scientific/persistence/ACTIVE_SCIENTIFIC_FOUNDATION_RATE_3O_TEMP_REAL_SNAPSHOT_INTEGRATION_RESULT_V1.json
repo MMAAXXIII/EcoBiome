@@ -1,0 +1,29 @@
+{
+  "temporary_integration_result_payload": {
+    "candidate_repo_head": "de218d61e613a698859f55c281977b685cba98fd",
+    "consumer_migration_identity_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227",
+    "local_api_artifact_sha256": "ad5d501d71357c013475a5758b14f40f24719437e77014b7db2e7479f24971a9",
+    "local_api_scientific_foundation_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "nitrogen_auditable_explanation_sha256": "e281a56c83cc196e9b3014e724ee5d5189babd1e43aa7c9866fd5eaf976ae3f5",
+    "nitrogen_core_trace_sha256": "728028eae5602efa7f77d964d4fc34c9f3d50c68c6c8472c145fb7c9fda28c88",
+    "nitrogen_demonstration_canonical_sha256": "ad5d501d71357c013475a5758b14f40f24719437e77014b7db2e7479f24971a9",
+    "non_predictive_boundary": {
+      "dt_or_elapsed_time_prediction_present": false,
+      "extent_is_explicit_input": true,
+      "forecast_claim": false,
+      "kinetic_or_rate_model_present": false
+    },
+    "persistent_active_pointer_created": false,
+    "persistent_runtime_policy_published": false,
+    "persistent_scientific_state_mutated": false,
+    "real_snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "real_snapshot_manifest_file_sha256": "62258e18668423ba2c01d422c9e52fd8d38909f549476bb937482495ecaa8774",
+    "real_snapshot_manifest_payload_sha256": "7e0a50f571ea512ed8620c6e0fe1ae9cdc335e06ccbb9f978095dbd3a2479f20",
+    "resolver_resolution_mode": "active_snapshot",
+    "schema_version": "ecobiome-active-scientific-foundation-rate-3o-temp-real-snapshot-integration-result-v1",
+    "status": "pass",
+    "temporary_pointer_payload_sha256": "6fd856a06eb85ffe7405f31aa6657988a8886f069d056f9b4817e8acc08e2ffc",
+    "temporary_runtime_policy_payload_sha256": "74569b49f8feb93ba53996a98b04de57aeb0fae0c95e12425d940bb6b4551922"
+  },
+  "temporary_integration_result_payload_sha256": "5f5df09c04dd593fd33fa0e3d39d4394a5d626c7dfa2588fd2ba07a961a5b407"
+}
