@@ -1,0 +1,68 @@
+{
+  "consumer_migration_plan_payload": {
+    "automatic_read_consumer_targets": [
+      {
+        "current_file_sha256": "775c31e7e820de17783905e52295f6200d29e6c96165ec0e58057f5ddbac1d6a",
+        "future_behavior": "consume a ResolvedScientificFoundationV1 or resolver-produced immutable read identity; remove exact-V6-only assumption from automatic mode",
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py",
+        "write_access_after_migration": false
+      },
+      {
+        "current_file_sha256": "b557c04f7813df2a7c8517394392daa2c5b5f47b92e772274b3043ad9e046861",
+        "future_behavior": "default runtime read path resolves through the trusted active-foundation resolver; explicit operator override remains a separately classified mode",
+        "path": "src/ecobiome/ui/local_api.py",
+        "write_access_after_migration": false
+      }
+    ],
+    "explicit_read_override_review": {
+      "automatic_migration": false,
+      "current_file_sha256": "4c5136400d4586abd3920c1bb8da97c27b8e026c7627423e1dd8056268211151",
+      "future_behavior": "retain explicit database selection as an explicit read override; do not silently reinterpret it as a writable active target",
+      "path": "src/ecobiome/cli/nitrogen_demo.py"
+    },
+    "migration_sequence": [
+      "freeze trusted runtime-policy identity and active resolver candidate identity",
+      "migrate nitrogen_vertical_runtime_v1 read path to consume resolver-produced identity",
+      "migrate local_api default read resolution through the resolver while preserving explicit override semantics",
+      "run focused and full regression with pointer absent under pre-activation policy",
+      "run temporary synthetic active-pointer integration with no persistent pointer write",
+      "review resulting consumer-migration identity before any persistent activation authorization"
+    ],
+    "next_human_gate_required": true,
+    "persistent_active_pointer_write_authorized": false,
+    "review_repo_head": "aa275615ef916df33bdfde3fd18420fc8afaa2de",
+    "role_aware_consumer_audit_payload_sha256": "e675d2b6a2194cb59af93e00056173b48ba7af90f4ce190ba070ac380b83e494",
+    "runtime_consumer_migration_authorized_now": false,
+    "schema_version": "ecobiome-active-scientific-foundation-consumer-migration-plan-v1",
+    "status": "plan_only_no_runtime_migration_authorized",
+    "write_admin_infrastructure_exclusion": {
+      "paths": [
+        "src/ecobiome/knowledge_acquisition/collector_acquire.py",
+        "src/ecobiome/knowledge_acquisition/collector_cli.py",
+        "src/ecobiome/knowledge_acquisition/migration_v2.py",
+        "src/ecobiome/knowledge_acquisition/persistence.py",
+        "src/ecobiome/knowledge_acquisition/retention.py",
+        "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py",
+        "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py",
+        "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py",
+        "src/ecobiome/knowledge_persistence/__init__.py",
+        "src/ecobiome/knowledge_persistence/active_foundation_v1.py",
+        "src/ecobiome/knowledge_persistence/collector_compat.py",
+        "src/ecobiome/knowledge_persistence/config.py",
+        "src/ecobiome/knowledge_persistence/contracts.py",
+        "src/ecobiome/knowledge_persistence/errors.py",
+        "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py",
+        "src/ecobiome/knowledge_persistence/sqlite_schema.py",
+        "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      ],
+      "roles": [
+        "write_capable_acquisition",
+        "write_capable_review_administration",
+        "administrative_migration",
+        "persistence_infrastructure"
+      ],
+      "rule": "active immutable snapshot must never become an implicit writable persistence destination"
+    }
+  },
+  "consumer_migration_plan_payload_sha256": "a580cc8d0ac8b95142c327b64abdc6d0336ba5295725b82413391f48d933ccab"
+}

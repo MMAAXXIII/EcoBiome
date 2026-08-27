@@ -1,0 +1,48 @@
+{
+  "trust_policy_contract_payload": {
+    "activation": {
+      "next_human_gate_required": true,
+      "persistent_pointer_write_authorized": false,
+      "persistent_pointer_writer_present": false,
+      "runtime_consumer_migration_authorized": false
+    },
+    "consumer_migration": {
+      "migration_performed_in_rate_3m": false,
+      "migration_plan_payload_sha256": "a580cc8d0ac8b95142c327b64abdc6d0336ba5295725b82413391f48d933ccab",
+      "role_aware_audit_payload_sha256": "e675d2b6a2194cb59af93e00056173b48ba7af90f4ce190ba070ac380b83e494"
+    },
+    "path_hardening": {
+      "generic_windows_reparse_point_rejected": true,
+      "junction_rejected": true,
+      "symlink_rejected": true
+    },
+    "pointer_schema_version": "ecobiome-active-scientific-foundation-pointer-v1",
+    "post_activation_semantics": {
+      "activation_decision": "authorize_active_snapshot",
+      "implicit_legacy_rollback": false,
+      "missing_pointer": "fail_closed",
+      "pointer_required": true,
+      "present_pointer": "must_exactly_match_trusted_policy_and_snapshot"
+    },
+    "pre_activation_semantics": {
+      "activation_decision": "legacy_pre_activation",
+      "missing_pointer": "verified_legacy_fallback",
+      "pointer_required": false,
+      "present_pointer": "fail_closed"
+    },
+    "rate_3l_human_review_decision_sha256": "d41216db8cafd4256c67808de0cc75972e2f92b56f2b7a0507e331ae2e296648",
+    "runtime_policy_schema_version": "ecobiome-active-scientific-foundation-runtime-policy-v1",
+    "schema_version": "ecobiome-active-scientific-foundation-trust-policy-contract-v1",
+    "status": "candidate_pending_human_review",
+    "trust_model": {
+      "active_pointer_authorization_sha_equals_policy_sha": true,
+      "caller_supplies_expected_policy_sha256": true,
+      "pointer_is_trust_anchor": false,
+      "runtime_policy_binds_consumer_migration_identity": true,
+      "runtime_policy_binds_pointer_contract_sha256": true,
+      "runtime_policy_binds_resolver_code_sha256": true,
+      "trusted_runtime_policy_required": true
+    }
+  },
+  "trust_policy_contract_payload_sha256": "6005177695e1495e887a986e4db2686badd64655cbe06b5974720afc3db9885f"
+}
