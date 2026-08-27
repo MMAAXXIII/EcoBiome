@@ -1,0 +1,24 @@
+{
+  "identity_binding_payload": {
+    "accepted_snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "accepted_snapshot_manifest_file_sha256": "62258e18668423ba2c01d422c9e52fd8d38909f549476bb937482495ecaa8774",
+    "accepted_snapshot_manifest_payload_sha256": "7e0a50f571ea512ed8620c6e0fe1ae9cdc335e06ccbb9f978095dbd3a2479f20",
+    "candidate_parent": "c526deac04af5ad66256ec302cc76bf084b8148d",
+    "candidate_repo_head": "327f1e7cf319fadedd7a585964fbbc1621548848",
+    "candidate_tree": "07007fd58d75705141ce84c590b6247b9d4c75db",
+    "consumer_audit_payload_sha256": "56064e2de369bc6f2a5cb24b6188d2cf22ffe512cf1ecab587f71451229dc6d1",
+    "next_gate": "RATE-3L_ACTIVE_POINTER_RESOLVER_AND_CONSUMER_AUDIT_HUMAN_REVIEW",
+    "persistent_active_pointer_created": false,
+    "pointer_contract_payload_sha256": "0f97ae748e056db5ca2e88d3a0b0723c6bba7c96ed937a94165871fd5d6d67ad",
+    "rate_3j_human_review_decision_sha256": "291334022d275d3107aaf5c6ffba42db7b83e2e66def61f58e546d10d5cef28b",
+    "rate_3j_review_commit_repo_head": "c526deac04af5ad66256ec302cc76bf084b8148d",
+    "resolver_module_git_blob_sha1": "23b48b06da3afbc4a3b6bbeefbe0696ce9c63b73",
+    "resolver_module_path": "src/ecobiome/knowledge_persistence/active_foundation_v1.py",
+    "resolver_module_sha256": "66bb7173f0269d81bc3a2d16897eaaa22172f81d56e6fa0ef5824ac98724209c",
+    "resolver_tests_sha256": "cff01ede4fe6e5eb323234deda8975a0e5f15b97b9be20206c6e5655ed73a3c2",
+    "runtime_consumer_migration_performed": false,
+    "schema_version": "ecobiome-active-scientific-foundation-resolver-candidate-identity-binding-v1",
+    "status": "candidate_identity_bound"
+  },
+  "identity_binding_payload_sha256": "e4b45e7c577a953563d0459829109bb87ccb3c4a4f80d502830b6024a1f3b26e"
+}
