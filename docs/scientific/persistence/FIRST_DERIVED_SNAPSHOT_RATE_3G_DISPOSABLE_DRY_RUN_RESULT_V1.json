@@ -1,0 +1,86 @@
+{
+  "dry_run_result_payload": {
+    "effects": {
+      "active_pointer_updated": false,
+      "disposable_cas_write": true,
+      "disposable_snapshot_created": true,
+      "persistent_cas_read": true,
+      "persistent_cas_write": false,
+      "persistent_snapshot_created": false,
+      "real_v6_replay_source_read": true,
+      "real_v6_write": false,
+      "remote_write": false
+    },
+    "engine_code_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+    "exact_final_table_counts": {
+      "acquisition_jobs": 2,
+      "assertion_claim_links": 4,
+      "claim_evidence_links": 18,
+      "claim_review_events": 12,
+      "evidence_assessments": 2,
+      "knowledge_sources": 12,
+      "knowledge_syntheses": 0,
+      "raw_artifacts": 2,
+      "representations": 7,
+      "retrievals": 2,
+      "scientific_assertion_revisions": 3,
+      "scientific_assertions": 3,
+      "scientific_entities": 7,
+      "scientific_entity_identifiers": 7,
+      "scientific_entity_revisions": 7,
+      "segments": 7,
+      "source_assessments": 2,
+      "source_claims": 12,
+      "source_evidence": 7,
+      "source_lineage_edges": 0
+    },
+    "execution_authorization_payload_sha256": "905e56a76dff794933c3fade8a181d726e2d291a15301a08b324575b0ad1c96d",
+    "foreign_key_violation_count": 0,
+    "full_regression": {
+      "elapsed_seconds": 13.866,
+      "log_sha256": "f34298ebfcecbb0c93b76ac3c1fde429f2057bbbab2736c9a13366b604f60b56",
+      "returncode": 0,
+      "sqlite_verification": {
+        "foreign_key_violation_count": 0,
+        "quick_check": [
+          "ok"
+        ],
+        "user_version": 6
+      },
+      "status": "pass"
+    },
+    "identity_binding_payload_sha256": "35b882362bfea7359f2c495db59e36c28c8724474b64f441360b0b444a3ef391",
+    "knowledge_sources_delta": 3,
+    "next_gate": "RATE-3H_FIRST_PERSISTENT_SNAPSHOT_PUBLICATION_HUMAN_REVIEW",
+    "parent_v6_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+    "protected_row_count": 2,
+    "quick_check": [
+      "ok"
+    ],
+    "rate_3f_human_review_decision_sha256": "43d79a6d9f1c727b2cef0d554f6bde7c5bbd0a72947406bbeb302a8a6746a339",
+    "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+    "replay_row_count": 32,
+    "review_commit_repo_head": "86a013bf1e3ee14ba3f8153eb9028bd83caaad3d",
+    "review_commit_tree": "e306f7dba10cec0495fb7f3aa0d43e76ccb7787a",
+    "row_by_row_canonical_verification": "pass",
+    "schema_version": "ecobiome-first-derived-snapshot-rate-3g-disposable-dry-run-result-v1",
+    "status": "pass",
+    "temporary_cas_artifacts": {
+      "nature16459": {
+        "key": "sha256:b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+        "sha256": "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+        "size_bytes": 40521
+      },
+      "nature16461": {
+        "key": "sha256:055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+        "sha256": "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+        "size_bytes": 73210
+      }
+    },
+    "temporary_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "temporary_database_size_bytes": 643072,
+    "temporary_snapshot_manifest_file_sha256": "78481d7df8a778229d36cd12f572d66818b0064f83192c5e83c400f62a312d92",
+    "temporary_snapshot_manifest_payload_sha256": "65facc51845497d857cf04a62fed355290bc1cb635eee5db9f2c79cd9a382006"
+  },
+  "dry_run_result_payload_sha256": "5a34bc64a1e15387a8f1fdd3bebc72b9a6371af0231a82bf690fe1bf2b609233"
+}
