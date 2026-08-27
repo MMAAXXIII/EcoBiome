@@ -1,0 +1,18 @@
+{
+  "identity_binding_payload": {
+    "activation_contract_payload_sha256": "8ef9950627a533c195d27726d1790350f2a4838de210da05743c9038843b41fa",
+    "candidate_identity_payload_sha256": "79b3329b36aee1bf79c49c70ce40b1ef54b4d98ebba211de03fddf8048f238aa",
+    "candidate_repo_head": "aea1fa0e7d0be7ed99e021161430547a79444aef",
+    "candidate_tree": "14f7ec961b2020087544d458ee31d1446d8f5140",
+    "consumer_migration_identity_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227",
+    "dry_run_result_payload_sha256": "b22a78dbe7fa22f4f040a5e507ca7cd4d8b57565439e70398bd6c0b1572465de",
+    "next_gate": "RATE-3R_FIRST_PERSISTENT_ACTIVATION_CONTRACT_AND_DRY_RUN_HUMAN_REVIEW",
+    "persistent_active_pointer_created": false,
+    "persistent_runtime_policy_published": false,
+    "rate_3p_human_review_decision_sha256": "410c0f22fde44b3ada374150a7ff96aac528a2bd54eff5a0bd70f8d7db560ffd",
+    "review_repo_head": "12f41eca0bfc621c2ee8063708e41f4c1e01b20c",
+    "schema_version": "ecobiome-rate-3q-first-persistent-activation-contract-identity-binding-v1",
+    "snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9"
+  },
+  "identity_binding_payload_sha256": "01540533c27bce93c45852a57ffd5d7c15f9d2fc12e598bc2aea6afbc79a9f56"
+}

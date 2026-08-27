@@ -1,0 +1,340 @@
+{
+  "activation_contract_dry_run_result_payload": {
+    "activation_contract_payload_sha256": "8ef9950627a533c195d27726d1790350f2a4838de210da05743c9038843b41fa",
+    "candidate_identity_sha256": "79b3329b36aee1bf79c49c70ce40b1ef54b4d98ebba211de03fddf8048f238aa",
+    "failure_injection_results": {
+      "after_replace_before_verify": {
+        "injected": true,
+        "pointer_exists": true,
+        "resolved_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+        "result": "complete_pointer_recoverable"
+      },
+      "after_temp_write": {
+        "injected": true,
+        "pointer_exists": false,
+        "result": "fail_closed_absent"
+      },
+      "before_replace": {
+        "injected": true,
+        "pointer_exists": false,
+        "result": "fail_closed_absent"
+      }
+    },
+    "mech5a_core_trace_sha256": "728028eae5602efa7f77d964d4fc34c9f3d50c68c6c8472c145fb7c9fda28c88",
+    "mech5b_auditable_explanation_sha256": "e281a56c83cc196e9b3014e724ee5d5189babd1e43aa7c9866fd5eaf976ae3f5",
+    "persistent_active_pointer_created": false,
+    "persistent_runtime_policy_published": false,
+    "persistent_scientific_state_mutated": false,
+    "pointer_payload_sha256": "5a3973e0d0b9a0330c12ef127845fbac440eadf8372543c4e664bd432953fa39",
+    "publication_bytes_written": 773,
+    "publication_file_sha256": "1869e4ae229749d7bf996f1ed4a1e7a7fdb14cdccb8f189bba173f0b4388e45f",
+    "real_path_ancestry_audit": {
+      "cas_root": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-artifact-cas"
+        }
+      ],
+      "legacy_database": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-v6"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-v6\\scientific-foundation-v6.sqlite3"
+        }
+      ],
+      "persistent_pointer": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": false,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-active.json"
+        }
+      ],
+      "runtime_policy": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\AppData"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\AppData\\Local"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\AppData\\Local\\Temp"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\AppData\\Local\\Temp\\EcoBiome-G7A-RATE-3Q-20260827-132819"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\AppData\\Local\\Temp\\EcoBiome-G7A-RATE-3Q-20260827-132819\\DRY_RUN_TRUST_SOURCE"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\AppData\\Local\\Temp\\EcoBiome-G7A-RATE-3Q-20260827-132819\\DRY_RUN_TRUST_SOURCE\\active-runtime-policy.json"
+        }
+      ],
+      "snapshot_database": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots\\2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots\\2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9\\scientific-foundation.sqlite3"
+        }
+      ],
+      "snapshot_directory": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots\\2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9"
+        }
+      ],
+      "snapshot_manifest": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots\\2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots\\2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9\\snapshot-manifest.json"
+        }
+      ],
+      "snapshot_root": [
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data"
+        },
+        {
+          "exists": true,
+          "link_like": false,
+          "path": "C:\\Users\\oboco\\Documents\\EcoBiome-data\\scientific-foundation-snapshots"
+        }
+      ]
+    },
+    "resolved_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "resolved_mode": "active_snapshot",
+    "runtime_policy_payload_sha256": "3850d91d504b53e5227f9db09e2adba6cb0d1991f2519221dd8166dacb656246",
+    "schema_version": "ecobiome-rate-3q-first-persistent-activation-contract-dry-run-result-v1"
+  },
+  "activation_contract_dry_run_result_payload_sha256": "b22a78dbe7fa22f4f040a5e507ca7cd4d8b57565439e70398bd6c0b1572465de"
+}
