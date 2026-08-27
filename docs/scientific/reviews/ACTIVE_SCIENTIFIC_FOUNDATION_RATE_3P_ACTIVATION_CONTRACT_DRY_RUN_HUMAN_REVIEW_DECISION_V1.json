@@ -1,0 +1,44 @@
+{
+  "human_review_decision_payload": {
+    "accepted_rate_3o_identities": {
+      "consumer_migration_identity_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227",
+      "identity_binding_payload_sha256": "1b6d99d4bc4250604e03c6232fe32f7a70f648546f12253a7492b4437e0d085d",
+      "snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+      "snapshot_manifest_file_sha256": "62258e18668423ba2c01d422c9e52fd8d38909f549476bb937482495ecaa8774",
+      "snapshot_manifest_payload_sha256": "7e0a50f571ea512ed8620c6e0fe1ae9cdc335e06ccbb9f978095dbd3a2479f20",
+      "temporary_integration_result_payload_sha256": "5f5df09c04dd593fd33fa0e3d39d4394a5d626c7dfa2588fd2ba07a961a5b407"
+    },
+    "authorized_rate_3q_scope": {
+      "add_complete_ancestor_path_audit": true,
+      "bind_exact_consumer_migration_and_snapshot_identities": true,
+      "create_local_docs_tests_and_commits": true,
+      "design_atomic_pointer_publication": true,
+      "freeze_exact_deployment_trust_source_semantics": true,
+      "freeze_explicit_rollback_semantics": true,
+      "run_failure_injection_and_temp_only_dry_run": true
+    },
+    "decision": "accept_rate_3o_consumer_migration_and_real_snapshot_integration_and_authorize_rate_3q_first_persistent_activation_contract_and_dry_run_design_without_persistent_active_pointer_write",
+    "next_gate_after_pass": "RATE-3R_FIRST_PERSISTENT_ACTIVATION_CONTRACT_AND_DRY_RUN_HUMAN_REVIEW",
+    "rate_3o_bundle_sha256": "c6578d27db1748f986231df9fd465ed2820cd813179f3a1c2b0d724eab3ed708",
+    "rate_3o_final_repo_head": "28f57293d086d06d8b78014c37b458d1dfd4c579",
+    "reviewed_at": "2026-08-27T05:32:00+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-rate-3p-consumer-migration-real-snapshot-human-review-decision-v1",
+    "source_review_sha256": "8af7da14a06736fd7b6a430408488b72b41d33d4fae7b1cfdcdf76566d6e5d36",
+    "still_forbidden": {
+      "knowledge_synthesis": true,
+      "merge_or_rebase": true,
+      "numeric_rate_model": true,
+      "persistent_active_pointer_creation": true,
+      "persistent_cas_mutation": true,
+      "persistent_runtime_policy_publication": true,
+      "persistent_snapshot_mutation": true,
+      "pr_mutation": true,
+      "real_v6_write": true,
+      "remote_git_write": true,
+      "schema_migration": true,
+      "source_lineage_edge": true
+    }
+  },
+  "human_review_decision_payload_sha256": "410c0f22fde44b3ada374150a7ff96aac528a2bd54eff5a0bd70f8d7db560ffd"
+}
