@@ -9,6 +9,7 @@ from ecobiome.knowledge_persistence.active_foundation_activation_contract_v1 imp
     ActivationIdentitySetV1,
     ActivationPathSetV1,
     InjectedActivationFailure,
+    _move_no_clobber_durable_v1,
     audit_activation_paths_v1,
     audit_ancestor_chain_v1,
     build_pointer_from_runtime_policy_v1,
@@ -285,3 +286,36 @@ def test_contract_keeps_persistent_activation_forbidden() -> None:
     rollback = contract["rollback"]
     assert isinstance(rollback, dict)
     assert rollback["separate_human_review_required"] is True
+
+def test_no_clobber_publication_refuses_existing_target(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / ".candidate.tmp"
+    target = tmp_path / "scientific-foundation-active.json"
+    source.write_bytes(b"new-pointer")
+    target.write_bytes(b"existing-pointer")
+
+    with pytest.raises(
+        PersistenceConfigurationError,
+        match="target",
+    ):
+        _move_no_clobber_durable_v1(source, target)
+
+    assert target.read_bytes() == b"existing-pointer"
+    assert source.read_bytes() == b"new-pointer"
+
+
+def test_contract_requires_no_clobber_durable_publication() -> None:
+    contract = first_activation_contract_document_v1(
+        expected_identities=_identities()
+    )
+    publication = contract["pointer_publication"]
+    assert isinstance(publication, dict)
+    assert publication["overwrite_existing_active_pointer"] is False
+    assert (
+        publication["second_ancestry_audit_immediately_before_publish"]
+        is True
+    )
+    primitive = publication["atomic_no_clobber_publication"]
+    assert isinstance(primitive, str)
+    assert "no_replace" in primitive

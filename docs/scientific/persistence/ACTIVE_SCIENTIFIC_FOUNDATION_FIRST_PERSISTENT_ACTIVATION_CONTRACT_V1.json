@@ -41,13 +41,14 @@
       "reject_symlink_junction_reparse_point": true
     },
     "pointer_publication": {
-      "atomic_replace": "os.replace",
+      "atomic_no_clobber_publication": "MoveFileExW(MOVEFILE_WRITE_THROUGH,no_replace)",
       "first_activation_requires_target_absent": true,
-      "flush_and_fsync_before_replace": true,
+      "flush_and_fsync_before_publish": true,
       "overwrite_existing_active_pointer": false,
       "persistent_target": "~/Documents/EcoBiome-data/scientific-foundation-active.json",
-      "post_replace_exact_readback_required": true,
+      "post_publish_exact_readback_required": true,
       "same_directory_temporary_file": true,
+      "second_ancestry_audit_immediately_before_publish": true,
       "temporary_file_exclusive_create": true
     },
     "rollback": {
@@ -70,5 +71,5 @@
       "runtime_policy_path_env": "ECOBIOME_ACTIVE_SCIENTIFIC_FOUNDATION_RUNTIME_POLICY"
     }
   },
-  "activation_contract_payload_sha256": "8ef9950627a533c195d27726d1790350f2a4838de210da05743c9038843b41fa"
+  "activation_contract_payload_sha256": "6bf60e103634c2aa85cb7640ad5c325a9d1248457d2b25f48fc174e21b985f16"
 }

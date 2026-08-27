@@ -42,6 +42,9 @@ REAL_ACTIVE_POINTER = REAL_DATA_ROOT / "scientific-foundation-active.json"
 
 _FILE_ATTRIBUTE_REPARSE_POINT = 0x00000400
 _INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF
+_MOVEFILE_WRITE_THROUGH = 0x00000008
+_ERROR_FILE_EXISTS = 80
+_ERROR_ALREADY_EXISTS = 183
 
 FailurePoint = Literal[
     "after_temp_write",
@@ -452,6 +455,81 @@ def _assert_rate3q_dry_run_target(target_path: Path) -> Path:
     return target
 
 
+
+def _fsync_directory_posix_v1(directory: Path) -> None:
+    """Persist directory-entry updates on POSIX filesystems."""
+
+    if os.name == "nt":
+        return
+    descriptor = os.open(directory, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _move_no_clobber_durable_v1(source: Path, target: Path) -> None:
+    """Publish a fully written temp file without ever replacing a target.
+
+    Windows uses MoveFileExW with MOVEFILE_WRITE_THROUGH and deliberately
+    omits MOVEFILE_REPLACE_EXISTING.  POSIX uses an atomic hard-link create
+    (which fails if the target exists), fsyncs the directory, then removes
+    the temporary name and fsyncs the directory again.
+    """
+
+    if os.name == "nt":
+        windll_factory = getattr(ctypes, "WinDLL", None)
+        if windll_factory is None:
+            raise PersistenceConfigurationError(
+                "Win32 MoveFileExW API unavailable"
+            )
+        kernel32 = windll_factory("kernel32", use_last_error=True)
+        move_file_ex = kernel32.MoveFileExW
+        move_file_ex.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+        ]
+        move_file_ex.restype = ctypes.c_int
+
+        moved = int(
+            move_file_ex(
+                str(source),
+                str(target),
+                _MOVEFILE_WRITE_THROUGH,
+            )
+        )
+        if moved == 0:
+            get_last_error = getattr(ctypes, "get_last_error", None)
+            error_code = (
+                int(get_last_error())
+                if callable(get_last_error)
+                else 0
+            )
+            if error_code in {_ERROR_FILE_EXISTS, _ERROR_ALREADY_EXISTS}:
+                raise PersistenceConfigurationError(
+                    "First-activation target already exists; refusing "
+                    "to overwrite it"
+                )
+            raise PersistenceIntegrityError(
+                "MoveFileExW no-clobber durable publication failed: "
+                f"{error_code}"
+            )
+        return
+
+    try:
+        os.link(source, target)
+    except FileExistsError as exc:
+        raise PersistenceConfigurationError(
+            "First-activation target already exists; refusing "
+            "to overwrite it"
+        ) from exc
+
+    _fsync_directory_posix_v1(target.parent)
+    source.unlink()
+    _fsync_directory_posix_v1(target.parent)
+
+
 def publish_pointer_dry_run_v1(
     target_path: Path,
     pointer_document: Mapping[str, Any],
@@ -507,7 +585,8 @@ def publish_pointer_dry_run_v1(
         if failure_point == "before_replace":
             raise InjectedActivationFailure("before_replace")
 
-        os.replace(temporary, target)
+        audit_ancestor_chain_v1(target, allow_missing_leaf=True)
+        _move_no_clobber_durable_v1(temporary, target)
 
         if failure_point == "after_replace_before_verify":
             raise InjectedActivationFailure(
@@ -610,9 +689,14 @@ def first_activation_contract_document_v1(
             "first_activation_requires_target_absent": True,
             "same_directory_temporary_file": True,
             "temporary_file_exclusive_create": True,
-            "flush_and_fsync_before_replace": True,
-            "atomic_replace": "os.replace",
-            "post_replace_exact_readback_required": True,
+            "flush_and_fsync_before_publish": True,
+            "atomic_no_clobber_publication": (
+                "MoveFileExW(MOVEFILE_WRITE_THROUGH,no_replace)"
+                if os.name == "nt"
+                else "link_no_replace+directory_fsync"
+            ),
+            "second_ancestry_audit_immediately_before_publish": True,
+            "post_publish_exact_readback_required": True,
             "overwrite_existing_active_pointer": False,
         },
         "rollback": {
