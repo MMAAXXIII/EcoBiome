@@ -1,0 +1,43 @@
+{
+  "decision_payload": {
+    "accepted_rate_3m_identities": {
+      "consumer_migration_plan_payload_sha256": "a580cc8d0ac8b95142c327b64abdc6d0336ba5295725b82413391f48d933ccab",
+      "identity_binding_payload_sha256": "a1dd518069737b051e3031e9a466afc18741009675406c6ecf2beeb4e62054e3",
+      "resolver_module_sha256": "58ee76d2a163ae844b8b8c89653e65a70be475acb1a8ed3bf61aa974b56cd2e9",
+      "role_aware_consumer_audit_payload_sha256": "e675d2b6a2194cb59af93e00056173b48ba7af90f4ce190ba070ac380b83e494",
+      "trust_policy_contract_payload_sha256": "6005177695e1495e887a986e4db2686badd64655cbe06b5974720afc3db9885f"
+    },
+    "authorized_rate_3o_scope": {
+      "add_centralized_runtime_config_integration": true,
+      "add_or_update_consumer_tests": true,
+      "create_local_audit_docs_and_commits": true,
+      "modify_exact_two_runtime_read_consumers": true,
+      "run_synthetic_pre_post_activation_tests": true,
+      "run_temporary_real_snapshot_integration": true
+    },
+    "decision": "accept_rate_3m_trust_policy_and_migration_plan_and_authorize_rate_3o_temporary_consumer_migration_integration_without_persistent_active_pointer",
+    "next_gate_after_pass": "RATE-3P_CONSUMER_MIGRATION_AND_TEMP_REAL_SNAPSHOT_INTEGRATION_HUMAN_REVIEW",
+    "rate_3m_bundle_sha256": "1d99eb55f4762eb01f4fab1ebcf8658390fa8d21120c26354264d21c1359e857",
+    "rate_3m_final_repo_head": "368e01da6e668305cdfd9721afb08035baed7f1b",
+    "reviewed_at": "2026-08-27T04:39:00+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-rate-3n-trust-policy-migration-plan-human-review-decision-v1",
+    "source_review_sha256": "307b3e6cbc9ee50b020cdd69bfc05b767f079ae52bf9cca8224546d95e68d61e",
+    "still_forbidden": {
+      "knowledge_synthesis": true,
+      "merge_or_rebase": true,
+      "numeric_rate_model": true,
+      "persistent_active_pointer_creation": true,
+      "persistent_cas_mutation": true,
+      "persistent_runtime_policy_publication": true,
+      "persistent_snapshot_mutation": true,
+      "pr_mutation": true,
+      "real_v6_write": true,
+      "remote_git_write": true,
+      "schema_migration": true,
+      "source_lineage_edge": true,
+      "write_admin_consumer_migration": true
+    }
+  },
+  "decision_payload_sha256": "c23a7a721ca671bf1ad8b9627671460496ec0f73626ed35129200b4d31fa9054"
+}
