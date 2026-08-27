@@ -5,6 +5,9 @@ import hashlib
 import sqlite3
 from pathlib import Path
 
+from ecobiome.knowledge_persistence.active_foundation_v1 import (
+    ResolvedScientificFoundationV1,
+)
 from ecobiome.knowledge_persistence.sqlite_store import (
     SQLiteKnowledgeSynthesisRepository,
     SQLiteScientificAssertionRepository,
@@ -63,20 +66,21 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def validate_scientific_foundation_v6_read_only(
+def _validate_schema_v6_read_only(
     database_path: Path,
-) -> None:
-    """Fail closed unless the exact reviewed V6 snapshot is supplied."""
+    *,
+    expected_database_sha256: str,
+) -> Path:
     path = database_path.expanduser().resolve()
     if not path.is_file():
         raise NitrogenVerticalRuntimeV1Error(
             f"Scientific Foundation V6 database not found: {path}"
         )
     observed_sha = _sha256_file(path)
-    if observed_sha != SCIENTIFIC_FOUNDATION_V6_SHA256:
+    if observed_sha != expected_database_sha256:
         raise NitrogenVerticalRuntimeV1Error(
             "Scientific Foundation database SHA-256 does not match the "
-            "reviewed V6 snapshot"
+            "expected reviewed identity"
         )
 
     conn = sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)
@@ -117,15 +121,45 @@ def validate_scientific_foundation_v6_read_only(
         raise NitrogenVerticalRuntimeV1Error(
             "Scientific Foundation V6 design identity mismatch"
         )
+    return path
 
 
-def build_frozen_g7a_nitrogen_vertical_demonstration_v1(
+def validate_scientific_foundation_v6_read_only(
     database_path: Path,
-) -> NitrogenVerticalDemonstrationV1:
-    """Reproduce the reviewed 1 mg N + 1 mg N vertical against exact V6."""
-    path = database_path.expanduser().resolve()
-    validate_scientific_foundation_v6_read_only(path)
+) -> None:
+    """Fail closed unless the exact reviewed historical V6 root is supplied."""
+    _validate_schema_v6_read_only(
+        database_path,
+        expected_database_sha256=SCIENTIFIC_FOUNDATION_V6_SHA256,
+    )
 
+
+def validate_resolved_scientific_foundation_read_only(
+    resolved: ResolvedScientificFoundationV1,
+) -> Path:
+    """Reverify a resolver-produced immutable Scientific Foundation identity."""
+    if resolved.schema_version != 6:
+        raise NitrogenVerticalRuntimeV1Error(
+            "Resolved Scientific Foundation must remain schema V6"
+        )
+    if (
+        resolved.schema_design_sha256
+        != SCIENTIFIC_FOUNDATION_V6_DESIGN_SHA256
+    ):
+        raise NitrogenVerticalRuntimeV1Error(
+            "Resolved Scientific Foundation design identity mismatch"
+        )
+    return _validate_schema_v6_read_only(
+        resolved.database_path,
+        expected_database_sha256=resolved.database_sha256,
+    )
+
+def _build_g7a_nitrogen_vertical_demonstration_v1(
+    path: Path,
+    *,
+    scientific_foundation_snapshot: ScientificFoundationSnapshotRefV1,
+    require_frozen_demonstration_identity: bool,
+) -> NitrogenVerticalDemonstrationV1:
     observation_basis = QuantityBasisV1(
         kind="observation",
         reference_id="g7a-mech5a-initial-nitrogen-observation",
@@ -261,14 +295,49 @@ def build_frozen_g7a_nitrogen_vertical_demonstration_v1(
         ending_state=end,
         evaluations=evaluations,
         auditable_explanation=auditable,
+        scientific_foundation_snapshot=scientific_foundation_snapshot,
+    )
+    if (
+        require_frozen_demonstration_identity
+        and demonstration.canonical_sha256
+        != VERTICAL_1A_DEMONSTRATION_SHA256
+    ):
+        raise NitrogenVerticalRuntimeV1Error(
+            "VERTICAL-1A demonstration identity did not reproduce"
+        )
+    return demonstration
+
+
+def build_frozen_g7a_nitrogen_vertical_demonstration_v1(
+    database_path: Path,
+) -> NitrogenVerticalDemonstrationV1:
+    """Reproduce the reviewed demonstration against the historical V6 root."""
+    path = database_path.expanduser().resolve()
+    validate_scientific_foundation_v6_read_only(path)
+    return _build_g7a_nitrogen_vertical_demonstration_v1(
+        path,
         scientific_foundation_snapshot=ScientificFoundationSnapshotRefV1(
             schema_version=6,
             design_sha256=SCIENTIFIC_FOUNDATION_V6_DESIGN_SHA256,
             database_sha256=SCIENTIFIC_FOUNDATION_V6_SHA256,
         ),
+        require_frozen_demonstration_identity=True,
     )
-    if demonstration.canonical_sha256 != VERTICAL_1A_DEMONSTRATION_SHA256:
-        raise NitrogenVerticalRuntimeV1Error(
-            "VERTICAL-1A demonstration identity did not reproduce"
-        )
-    return demonstration
+
+
+def build_resolved_g7a_nitrogen_vertical_demonstration_v1(
+    resolved: ResolvedScientificFoundationV1,
+) -> NitrogenVerticalDemonstrationV1:
+    """Build the reviewed scenario against a resolver-verified read snapshot."""
+    path = validate_resolved_scientific_foundation_read_only(resolved)
+    return _build_g7a_nitrogen_vertical_demonstration_v1(
+        path,
+        scientific_foundation_snapshot=ScientificFoundationSnapshotRefV1(
+            schema_version=resolved.schema_version,
+            design_sha256=resolved.schema_design_sha256,
+            database_sha256=resolved.database_sha256,
+        ),
+        require_frozen_demonstration_identity=(
+            resolved.database_sha256 == SCIENTIFIC_FOUNDATION_V6_SHA256
+        ),
+    )
