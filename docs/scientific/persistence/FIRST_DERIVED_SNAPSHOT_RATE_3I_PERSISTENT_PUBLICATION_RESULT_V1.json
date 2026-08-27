@@ -1,0 +1,66 @@
+{
+  "publication_result_payload": {
+    "database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "database_size_bytes": 643072,
+    "effects": {
+      "active_pointer_updated": false,
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "persistent_cas_write": true,
+      "persistent_cas_write_count": 2,
+      "persistent_snapshot_created": true,
+      "real_v6_read": true,
+      "real_v6_write": false,
+      "remote_write": false,
+      "schema_migration": false,
+      "source_lineage_edge_created": false
+    },
+    "engine_code_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+    "execution_authorization_payload_sha256": "9e3de1152c57027afd914f77ccf921ac4b476620bf6ed09480f9f20f99fbcd61",
+    "foreign_key_violation_count": 0,
+    "identity_binding_payload_sha256": "35b882362bfea7359f2c495db59e36c28c8724474b64f441360b0b444a3ef391",
+    "next_gate": "RATE-3J_PERSISTENT_SNAPSHOT_POST_PUBLICATION_AUDIT_AND_ACTIVE_POINTER_HUMAN_REVIEW",
+    "persistent_cas_added_sha256s": [
+      "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08",
+      "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c"
+    ],
+    "persistent_snapshot_directory": "scientific-foundation-snapshots/2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "prepublication_expected_database_sha_guard": "pass",
+    "quick_check": [
+      "ok"
+    ],
+    "rate_3g_dry_run_result_payload_sha256": "5a34bc64a1e15387a8f1fdd3bebc72b9a6371af0231a82bf690fe1bf2b609233",
+    "rate_3h_human_review_decision_sha256": "845611a7f8ae45e601aae19aa777ea8840aeb6b50e485e032d3c7cbe0615e254",
+    "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+    "review_commit_repo_head": "3e1c3313f60dff6475f835e9bbfb0c58a1f9870f",
+    "review_commit_tree": "def174653d2320594ae085fd9c797c85e941c6b3",
+    "row_by_row_canonical_verification": "pass",
+    "schema_version": "ecobiome-first-derived-snapshot-rate-3i-persistent-publication-result-v1",
+    "snapshot_manifest_file_sha256": "62258e18668423ba2c01d422c9e52fd8d38909f549476bb937482495ecaa8774",
+    "snapshot_manifest_payload_sha256": "7e0a50f571ea512ed8620c6e0fe1ae9cdc335e06ccbb9f978095dbd3a2479f20",
+    "status": "pass",
+    "table_counts": {
+      "acquisition_jobs": 2,
+      "assertion_claim_links": 4,
+      "claim_evidence_links": 18,
+      "claim_review_events": 12,
+      "evidence_assessments": 2,
+      "knowledge_sources": 12,
+      "knowledge_syntheses": 0,
+      "raw_artifacts": 2,
+      "representations": 7,
+      "retrievals": 2,
+      "scientific_assertion_revisions": 3,
+      "scientific_assertions": 3,
+      "scientific_entities": 7,
+      "scientific_entity_identifiers": 7,
+      "scientific_entity_revisions": 7,
+      "segments": 7,
+      "source_assessments": 2,
+      "source_claims": 12,
+      "source_evidence": 7,
+      "source_lineage_edges": 0
+    }
+  },
+  "publication_result_payload_sha256": "64d05133a668faa015fb2b9a962f92bde7d9539365a523dff2a86b1c4287df15"
+}
