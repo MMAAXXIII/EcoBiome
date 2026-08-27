@@ -1,0 +1,16 @@
+{
+  "publication_hardening_candidate_identity_payload": {
+    "activation_contract_file_sha256": "587cd694f2c8237446b3a8aadcd30fde6c7b1cc0f666f0e35ef3b6701b855ab0",
+    "activation_contract_payload_sha256": "6bf60e103634c2aa85cb7640ad5c325a9d1248457d2b25f48fc174e21b985f16",
+    "activation_module_sha256": "967f89f9f44d4c177336d1f0a2c7f4e0592ca422db4828971ef87016994b1839",
+    "activation_tests_sha256": "1f3cad8b0b8a83e208859cd6cf558f33fdab18e3d90c55f1124af4ec180072ff",
+    "candidate_repo_head": "37fd64e8a4acbb9e4f72f6c069ba0f7ee8e524cc",
+    "candidate_tree": "6e783e5976e7cec97e5f18f90002893f984e2f2a",
+    "consumer_migration_identity_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227",
+    "persistent_activation_authorized": false,
+    "rate_3r_human_review_decision_sha256": "5237d59490f987de2097cf96d0e5e46d49ebabafa73cee66e0443cc57cab291b",
+    "schema_version": "ecobiome-rate-3s-publication-hardening-candidate-identity-v1",
+    "snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9"
+  },
+  "publication_hardening_candidate_identity_payload_sha256": "1ffe8537418d6367590a5f8c1028e2cf0e21fbc1bd5a2f2824d1c11d5ad9fc46"
+}
