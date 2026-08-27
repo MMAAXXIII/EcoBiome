@@ -1,0 +1,41 @@
+{
+  "decision_payload": {
+    "accepted_persistent_state": {
+      "parent_v6_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+      "snapshot_manifest_file_sha256": "62258e18668423ba2c01d422c9e52fd8d38909f549476bb937482495ecaa8774",
+      "snapshot_manifest_payload_sha256": "7e0a50f571ea512ed8620c6e0fe1ae9cdc335e06ccbb9f978095dbd3a2479f20"
+    },
+    "decision": "accept_rate_3i_first_persistent_derived_snapshot_and_hold_active_pointer_pending_resolver_and_consumer_audit",
+    "next_gate_after_pass": "RATE-3L_ACTIVE_POINTER_RESOLVER_AND_CONSUMER_AUDIT_HUMAN_REVIEW",
+    "rate_3i_bundle_sha256": "776e343b67366683016b143a8ae8f20bdae801dd3a913b48cfe11de14c1fefc6",
+    "rate_3i_final_repo_head": "c277a614e248afd7b8fb4b61f176ecffa4ad7637",
+    "rate_3i_publication_result_payload_sha256": "64d05133a668faa015fb2b9a962f92bde7d9539365a523dff2a86b1c4287df15",
+    "rate_3k_authorized_scope": {
+      "add_temporary_only_resolver_tests": true,
+      "audit_runtime_consumers": true,
+      "create_local_docs_and_commits": true,
+      "design_active_pointer_contract": true,
+      "implement_read_only_resolver_candidate": true
+    },
+    "reviewed_at": "2026-08-27T03:19:00+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-rate-3j-persistent-snapshot-and-activation-human-review-decision-v1",
+    "source_review_sha256": "39a5f3cad7247a9e88f2198126954895cd0355b7f3cbfb789bc1c99b5b5fbf41",
+    "still_forbidden": {
+      "knowledge_synthesis": true,
+      "merge_or_rebase": true,
+      "numeric_rate_model": true,
+      "persistent_active_pointer_creation": true,
+      "persistent_cas_mutation": true,
+      "persistent_snapshot_mutation": true,
+      "pr_mutation": true,
+      "real_v6_write": true,
+      "remote_git_write": true,
+      "runtime_consumer_migration": true,
+      "schema_migration": true,
+      "source_lineage_edge": true
+    }
+  },
+  "decision_payload_sha256": "291334022d275d3107aaf5c6ffba42db7b83e2e66def61f58e546d10d5cef28b"
+}
