@@ -1,0 +1,45 @@
+{
+  "execution_plan_payload": {
+    "basis": {
+      "promotion_engine_contract_payload_sha256": "64752827cfb0b4067f693ac9473d804269149a9d5ede7dc2324918b11c705ea4",
+      "rate_3d_human_review_decision_sha256": "b29915795b57f36c62a3a883d1599065bf0a8a3bccc4f03c3e6e5080723e2598",
+      "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a"
+    },
+    "future_real_execution_sequence": [
+      "verify frozen execution-authorization SHA",
+      "verify canonical authorization payload",
+      "verify canonical identity-binding payload",
+      "verify canonical replay-manifest payload",
+      "verify all bound Git/code identities",
+      "verify frozen parent V6",
+      "conditionally materialize exact derived CAS artifacts if authorized",
+      "create execution-scoped temporary publication directory",
+      "copy frozen parent into staging",
+      "BEGIN IMMEDIATE",
+      "replay reviewed rows",
+      "row-by-row canonical verification",
+      "quick_check + foreign_key_check + exact deltas",
+      "COMMIT",
+      "run full regression",
+      "close SQLite",
+      "compute database SHA",
+      "write snapshot manifest with authorization/binding/replay SHAs",
+      "fsync DB and manifest",
+      "platform-specific atomic durable directory publication",
+      "verify published pair hashes",
+      "reverify frozen parent"
+    ],
+    "next_gate": "RATE-3F_CORRECTED_PROMOTION_ENGINE_HUMAN_REVIEW_AND_REAL_DRY_RUN_BOUNDARY",
+    "rate_3e_scope": {
+      "add_execution_path_tests": true,
+      "correct_engine": true,
+      "persistent_CAS_write": false,
+      "persistent_snapshot_root_write": false,
+      "real_v6_copy_or_replay": false,
+      "synthetic_SQLite_end_to_end_only": true
+    },
+    "schema_version": "ecobiome-first-derived-snapshot-execution-plan-v2",
+    "status": "candidate_pending_human_review"
+  },
+  "execution_plan_payload_sha256": "7dc3633f480b4d5ad27410b946b9d7bfd4acdd2e8f446cc843f515eaced83291"
+}

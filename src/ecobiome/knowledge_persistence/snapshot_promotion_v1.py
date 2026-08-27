@@ -1,7 +1,7 @@
 """Candidate engine for immutable Scientific Foundation snapshot promotion.
 
 This module is intentionally inert unless called by a later, separately
-authorized gate. RATE-3C only freezes and tests this implementation.
+authorized gate. RATE-3E freezes and tests the corrected implementation.
 """
 
 from __future__ import annotations
@@ -22,8 +22,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .errors import ArtifactMissingError
+
 ENGINE_NAME = "ecobiome-first-derived-snapshot-promotion-engine"
-ENGINE_VERSION = "rate-3c-candidate-v1"
+ENGINE_VERSION = "rate-3e-candidate-v1"
 
 _IDENTIFIER_RE = re.compile(r"^[a-z_][a-z0-9_]*$")
 
@@ -34,15 +36,10 @@ class SnapshotPromotionError(RuntimeError):
 
 @dataclass(frozen=True)
 class PromotionAuthorization:
-    """Explicit authorization supplied by a later human-reviewed gate."""
+    """Canonical authorization document supplied by a later reviewed gate."""
 
-    authorization_payload_sha256: str
-    snapshot_creation_authorized: bool
-    derived_representation_cas_write_authorized: bool
-    scientific_input_repo_head: str
-    promotion_contract_repo_head: str
-    promotion_engine_repo_head: str
-    promotion_engine_code_identity_sha256: str
+    payload: Mapping[str, Any]
+    payload_sha256: str
 
 
 @dataclass(frozen=True)
@@ -130,19 +127,103 @@ def _engine_file_sha256() -> str:
     return sha256_file(Path(__file__).resolve())
 
 
-def verify_authorization(
-    authorization: PromotionAuthorization,
-    expected_code_sha256: str,
+def _verify_canonical_payload(
+    payload: Mapping[str, Any],
+    payload_sha256: str,
+    *,
+    label: str,
 ) -> None:
-    if not authorization.snapshot_creation_authorized:
-        raise SnapshotPromotionError("Snapshot creation is not authorized")
-    if (
-        authorization.promotion_engine_code_identity_sha256
-        != expected_code_sha256
+    if canonical_sha256(payload) != payload_sha256:
+        raise SnapshotPromotionError(f"{label} canonical SHA mismatch")
+
+
+def verify_execution_identity(
+    *,
+    authorization: PromotionAuthorization,
+    expected_authorization_payload_sha256: str,
+    identity_binding: Mapping[str, Any],
+    identity_binding_payload_sha256: str,
+    replay_manifest: Mapping[str, Any],
+    replay_manifest_payload_sha256: str,
+    expected_engine_code_sha256: str,
+) -> Mapping[str, Any]:
+    """Verify every reviewed execution identity before any external effect."""
+
+    if authorization.payload_sha256 != expected_authorization_payload_sha256:
+        raise SnapshotPromotionError("Execution authorization SHA is not reviewed")
+    _verify_canonical_payload(
+        authorization.payload,
+        authorization.payload_sha256,
+        label="Execution authorization",
+    )
+    _verify_canonical_payload(
+        identity_binding,
+        identity_binding_payload_sha256,
+        label="Identity binding",
+    )
+    _verify_canonical_payload(
+        replay_manifest,
+        replay_manifest_payload_sha256,
+        label="Replay manifest",
+    )
+
+    if identity_binding.get("schema_version") != (
+        "ecobiome-first-derived-snapshot-promotion-candidate-identity-binding-v2"
     ):
-        raise SnapshotPromotionError("Authorized engine code SHA mismatch")
-    if _engine_file_sha256() != expected_code_sha256:
+        raise SnapshotPromotionError("Unsupported identity-binding schema")
+
+    auth = authorization.payload
+    if auth.get("schema_version") != (
+        "ecobiome-first-derived-snapshot-execution-authorization-v1"
+    ):
+        raise SnapshotPromotionError("Unsupported execution authorization schema")
+    if auth.get("decision") != "authorize":
+        raise SnapshotPromotionError("Execution authorization decision is not authorize")
+    if auth.get("snapshot_creation_authorized") is not True:
+        raise SnapshotPromotionError("Snapshot creation is not authorized")
+
+    if auth.get("identity_binding_payload_sha256") != (
+        identity_binding_payload_sha256
+    ):
+        raise SnapshotPromotionError("Authorization identity-binding SHA mismatch")
+    if auth.get("replay_manifest_payload_sha256") != (
+        replay_manifest_payload_sha256
+    ):
+        raise SnapshotPromotionError("Authorization replay-manifest SHA mismatch")
+
+    binding_pairs = (
+        "scientific_input_repo_head",
+        "promotion_contract_repo_head",
+        "promotion_engine_repo_head",
+        "promotion_engine_code_identity_sha256",
+    )
+    for field in binding_pairs:
+        if auth.get(field) != identity_binding.get(field):
+            raise SnapshotPromotionError(
+                f"Authorization/binding identity mismatch: {field}"
+            )
+
+    if identity_binding.get("replay_manifest_payload_sha256") != (
+        replay_manifest_payload_sha256
+    ):
+        raise SnapshotPromotionError("Binding replay-manifest SHA mismatch")
+    if replay_manifest.get("scientific_input_repo_head") != (
+        identity_binding.get("scientific_input_repo_head")
+    ):
+        raise SnapshotPromotionError("Scientific-input repo identity mismatch")
+    if identity_binding.get("promotion_engine_code_identity_sha256") != (
+        expected_engine_code_sha256
+    ):
+        raise SnapshotPromotionError("Bound engine code SHA mismatch")
+    if _engine_file_sha256() != expected_engine_code_sha256:
         raise SnapshotPromotionError("Executing engine file SHA mismatch")
+
+    derived_write = auth.get("derived_representation_cas_write_authorized")
+    if not isinstance(derived_write, bool):
+        raise SnapshotPromotionError(
+            "Derived-representation CAS authorization must be boolean"
+        )
+    return auth
 
 
 def _resolve_protected_field(
@@ -345,7 +426,6 @@ def verify_manifest_rows(
                 f"Post-replay row SHA drift for {entry['row_id']}: "
                 f"{observed_sha} != {entry['canonical_row_payload_sha256']}"
             )
-        # Resolve once more to prove protected-source reconstruction is stable.
         resolve_manifest_row(entry, cas)
 
 
@@ -377,7 +457,7 @@ def ensure_derived_artifacts(
         try:
             verified = cas.verify(key)
             data = cas.get(key)
-        except FileNotFoundError:
+        except ArtifactMissingError:
             if not allow_write:
                 raise SnapshotPromotionError(
                     f"Derived CAS artifact missing and write unauthorized: {key}"
@@ -396,55 +476,61 @@ def ensure_derived_artifacts(
 
 
 def _fsync_file(path: Path) -> None:
-    with path.open("rb") as handle:
+    with path.open("rb+") as handle:
         os.fsync(handle.fileno())
 
 
-def _fsync_directory_windows(path: Path) -> None:
-    kernel32: Any = ctypes.windll.kernel32
-    create_file = kernel32.CreateFileW
-    create_file.argtypes = [
-        ctypes.c_wchar_p,
-        ctypes.c_uint32,
-        ctypes.c_uint32,
-        ctypes.c_void_p,
-        ctypes.c_uint32,
-        ctypes.c_uint32,
-        ctypes.c_void_p,
-    ]
-    create_file.restype = ctypes.c_void_p
-    handle = create_file(
-        str(path),
-        0x80000000,  # GENERIC_READ
-        0x00000007,  # FILE_SHARE_READ | WRITE | DELETE
-        None,
-        3,  # OPEN_EXISTING
-        0x02000000,  # FILE_FLAG_BACKUP_SEMANTICS
-        None,
-    )
-    invalid = ctypes.c_void_p(-1).value
-    if handle in (None, invalid):
-        raise SnapshotPromotionError(
-            f"CreateFileW failed for directory fsync: {path}"
-        )
-    try:
-        if not kernel32.FlushFileBuffers(handle):
-            raise SnapshotPromotionError(
-                f"FlushFileBuffers failed for directory: {path}"
-            )
-    finally:
-        kernel32.CloseHandle(handle)
-
-
-def _fsync_directory(path: Path) -> None:
-    if os.name == "nt":
-        _fsync_directory_windows(path)
-        return
+def _fsync_directory_posix(path: Path) -> None:
     descriptor = os.open(path, os.O_RDONLY)
     try:
         os.fsync(descriptor)
     finally:
         os.close(descriptor)
+
+
+def _move_directory_write_through_windows(
+    source: Path,
+    destination: Path,
+) -> None:
+    """Atomically rename a same-volume directory with Windows write-through."""
+
+    win_dll = getattr(ctypes, "WinDLL", None)
+    get_last_error = getattr(ctypes, "get_last_error", None)
+    if win_dll is None or get_last_error is None:
+        raise SnapshotPromotionError("Windows durability API is unavailable")
+
+    kernel32: Any = win_dll("kernel32", use_last_error=True)
+    move_file_ex = kernel32.MoveFileExW
+    move_file_ex.argtypes = [
+        ctypes.c_wchar_p,
+        ctypes.c_wchar_p,
+        ctypes.c_uint32,
+    ]
+    move_file_ex.restype = ctypes.c_int
+
+    movefile_write_through = 0x00000008
+    if not move_file_ex(
+        str(source),
+        str(destination),
+        movefile_write_through,
+    ):
+        error_code = int(get_last_error())
+        raise SnapshotPromotionError(
+            "MoveFileExW(MOVEFILE_WRITE_THROUGH) failed "
+            f"with GetLastError={error_code}"
+        )
+
+
+def _atomic_publish_directory(
+    source: Path,
+    destination: Path,
+) -> None:
+    if os.name == "nt":
+        _move_directory_write_through_windows(source, destination)
+        return
+    _fsync_directory_posix(source)
+    os.replace(source, destination)
+    _fsync_directory_posix(destination.parent)
 
 
 def _verify_sqlite_file(
@@ -487,7 +573,10 @@ def _verify_sqlite_file(
 def _build_snapshot_manifest_payload(
     *,
     replay_manifest: Mapping[str, Any],
-    authorization: PromotionAuthorization,
+    replay_manifest_payload_sha256: str,
+    authorization_payload_sha256: str,
+    identity_binding: Mapping[str, Any],
+    identity_binding_payload_sha256: str,
     database_sha256: str,
     database_size_bytes: int,
     table_counts: Mapping[str, int],
@@ -521,7 +610,7 @@ def _build_snapshot_manifest_payload(
             "promotion_plan_sha256": replay_manifest[
                 "promotion_plan_sha256"
             ],
-            "source_repo_head": authorization.scientific_input_repo_head,
+            "source_repo_head": identity_binding["scientific_input_repo_head"],
         },
         "reviewed_inputs": reviewed,
         "runtime_and_persistence_identity": {
@@ -531,10 +620,10 @@ def _build_snapshot_manifest_payload(
             "promotion_engine_identity": {
                 "name": ENGINE_NAME,
                 "version_or_gate": ENGINE_VERSION,
-                "source_repo_head": authorization.promotion_engine_repo_head,
-                "code_identity_sha256": (
-                    authorization.promotion_engine_code_identity_sha256
-                ),
+                "source_repo_head": identity_binding["promotion_engine_repo_head"],
+                "code_identity_sha256": identity_binding[
+                    "promotion_engine_code_identity_sha256"
+                ],
             },
         },
         "validation": {
@@ -542,9 +631,13 @@ def _build_snapshot_manifest_payload(
             "foreign_key_violation_count": 0,
             "regression_gate_summary": dict(regression_gate_summary),
             "table_counts": dict(table_counts),
-            "replay_manifest_payload_sha256": replay_manifest[
-                "replay_manifest_payload_sha256"
-            ],
+            "replay_manifest_payload_sha256": replay_manifest_payload_sha256,
+            "identity_binding_payload_sha256": (
+                identity_binding_payload_sha256
+            ),
+            "execution_authorization_payload_sha256": (
+                authorization_payload_sha256
+            ),
         },
         "boundaries": {
             "real_v6_mutated": False,
@@ -571,7 +664,6 @@ def _publish_atomic_complete_pair(
 
     _fsync_file(db)
     _fsync_file(manifest)
-    _fsync_directory(temporary_directory)
 
     if final_directory.exists():
         final_db = final_directory / "scientific-foundation.sqlite3"
@@ -590,8 +682,7 @@ def _publish_atomic_complete_pair(
         shutil.rmtree(temporary_directory)
         return
 
-    os.replace(temporary_directory, final_directory)
-    _fsync_directory(final_directory.parent)
+    _atomic_publish_directory(temporary_directory, final_directory)
 
 
 def promote_first_derived_snapshot(
@@ -599,15 +690,29 @@ def promote_first_derived_snapshot(
     parent_database: Path,
     snapshot_root: Path,
     replay_manifest: Mapping[str, Any],
+    replay_manifest_payload_sha256: str,
+    identity_binding: Mapping[str, Any],
+    identity_binding_payload_sha256: str,
     cas: Any,
     authorization: PromotionAuthorization,
+    expected_authorization_payload_sha256: str,
     expected_engine_code_sha256: str,
     regression_runner: Callable[[], Mapping[str, Any]],
     created_at: str,
 ) -> PromotionResult:
     """Execute the reviewed promotion after a later explicit authorization."""
 
-    verify_authorization(authorization, expected_engine_code_sha256)
+    auth_payload = verify_execution_identity(
+        authorization=authorization,
+        expected_authorization_payload_sha256=(
+            expected_authorization_payload_sha256
+        ),
+        identity_binding=identity_binding,
+        identity_binding_payload_sha256=identity_binding_payload_sha256,
+        replay_manifest=replay_manifest,
+        replay_manifest_payload_sha256=replay_manifest_payload_sha256,
+        expected_engine_code_sha256=expected_engine_code_sha256,
+    )
     validate_manifest_document(replay_manifest)
 
     expected_parent_sha = str(replay_manifest["parent_database_sha256"])
@@ -617,7 +722,9 @@ def promote_first_derived_snapshot(
     ensure_derived_artifacts(
         replay_manifest,
         cas,
-        allow_write=authorization.derived_representation_cas_write_authorized,
+        allow_write=bool(
+            auth_payload["derived_representation_cas_write_authorized"]
+        ),
     )
 
     snapshot_root.mkdir(parents=True, exist_ok=True)
@@ -710,7 +817,10 @@ def promote_first_derived_snapshot(
 
         manifest_payload = _build_snapshot_manifest_payload(
             replay_manifest=replay_manifest,
-            authorization=authorization,
+            replay_manifest_payload_sha256=replay_manifest_payload_sha256,
+            authorization_payload_sha256=authorization.payload_sha256,
+            identity_binding=identity_binding,
+            identity_binding_payload_sha256=identity_binding_payload_sha256,
             database_sha256=database_sha,
             database_size_bytes=database_size,
             table_counts=table_counts,
