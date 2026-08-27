@@ -1,0 +1,43 @@
+{
+  "decision_payload": {
+    "accepted_corrected_candidate": {
+      "execution_plan_payload_sha256": "7dc3633f480b4d5ad27410b946b9d7bfd4acdd2e8f446cc843f515eaced83291",
+      "identity_binding_payload_sha256": "35b882362bfea7359f2c495db59e36c28c8724474b64f441360b0b444a3ef391",
+      "knowledge_sources_delta": 3,
+      "promotion_engine_code_identity_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+      "promotion_engine_contract_payload_sha256": "64752827cfb0b4067f693ac9473d804269149a9d5ede7dc2324918b11c705ea4",
+      "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+      "replay_row_count": 32
+    },
+    "decision": "accept_corrected_promotion_engine_candidate_and_authorize_rate_3g_disposable_real_v6_dry_run",
+    "next_gate_after_pass": "RATE-3H_FIRST_PERSISTENT_SNAPSHOT_PUBLICATION_HUMAN_REVIEW",
+    "rate_3e_bundle_sha256": "15e85996a90d595f67fb8df1ec588bcbe188f1470073194654c4cb7fa62e8168",
+    "rate_3e_final_repo_head": "1fa655045a82c33586b2818e8327cbc9fbf18d63",
+    "rate_3g_authorized_effects": {
+      "copy_real_v6_into_disposable_execution": true,
+      "create_local_audit_docs_and_commits": true,
+      "delete_disposable_execution_artifacts_after_metadata_capture": true,
+      "execute_exact_reviewed_32_row_replay": true,
+      "read_persistent_raw_cas": true,
+      "read_real_v6": true,
+      "run_full_validation": true,
+      "write_disposable_cas": true,
+      "write_disposable_snapshot": true
+    },
+    "reviewed_at": "2026-08-27T02:24:47+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-first-derived-snapshot-rate-3f-human-review-decision-v1",
+    "source_review_sha256": "1f44d19841cfc32dad65c2197c07524696e291e8be8b9e4c06d091e841d6bbbe",
+    "still_forbidden": {
+      "active_pointer_update": true,
+      "knowledge_synthesis": true,
+      "numeric_rate_model": true,
+      "persistent_cas_write": true,
+      "persistent_snapshot_publication": true,
+      "real_v6_write": true,
+      "remote_git_write": true,
+      "schema_migration": true
+    }
+  },
+  "decision_payload_sha256": "43d79a6d9f1c727b2cef0d554f6bde7c5bbd0a72947406bbeb302a8a6746a339"
+}

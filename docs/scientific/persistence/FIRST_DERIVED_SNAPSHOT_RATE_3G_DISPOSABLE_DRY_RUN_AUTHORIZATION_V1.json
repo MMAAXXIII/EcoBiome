@@ -1,0 +1,30 @@
+{
+  "authorization_payload": {
+    "decision": "authorize",
+    "derived_representation_cas_write_authorized": true,
+    "execution_mode": "disposable_real_v6_dry_run",
+    "identity_binding_payload_sha256": "35b882362bfea7359f2c495db59e36c28c8724474b64f441360b0b444a3ef391",
+    "operational_scope": {
+      "active_pointer_update_authorized": false,
+      "cas_write_target": "execution_scoped_temp_cas_only",
+      "parent_database_policy": "frozen_v6_read_only",
+      "persistent_cas_policy": "read_only_exact_raw_sources_only",
+      "persistent_cas_write_authorized": false,
+      "persistent_snapshot_publication_authorized": false,
+      "real_v6_write_authorized": false,
+      "remote_git_write_authorized": false,
+      "snapshot_publish_target": "execution_scoped_temp_snapshot_root_only"
+    },
+    "promotion_contract_repo_head": "5903fad33bd5daae348cdbffc7ef0afff0a73c08",
+    "promotion_engine_code_identity_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+    "promotion_engine_repo_head": "5903fad33bd5daae348cdbffc7ef0afff0a73c08",
+    "rate_3f_human_review_decision_sha256": "43d79a6d9f1c727b2cef0d554f6bde7c5bbd0a72947406bbeb302a8a6746a339",
+    "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+    "reviewed_at": "2026-08-27T02:24:47+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-first-derived-snapshot-execution-authorization-v1",
+    "scientific_input_repo_head": "f46e50b5e28fb2515e573c0589b6a17d106f22b6",
+    "snapshot_creation_authorized": true
+  },
+  "authorization_payload_sha256": "905e56a76dff794933c3fade8a181d726e2d291a15301a08b324575b0ad1c96d"
+}
