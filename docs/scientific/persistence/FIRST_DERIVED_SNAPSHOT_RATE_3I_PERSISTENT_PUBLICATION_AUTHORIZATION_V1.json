@@ -1,0 +1,32 @@
+{
+  "authorization_payload": {
+    "decision": "authorize",
+    "derived_representation_cas_write_authorized": true,
+    "execution_mode": "first_persistent_derived_snapshot_publication",
+    "identity_binding_payload_sha256": "35b882362bfea7359f2c495db59e36c28c8724474b64f441360b0b444a3ef391",
+    "operational_scope": {
+      "active_pointer_update_authorized": false,
+      "expected_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+      "parent_database_policy": "frozen_v6_read_only",
+      "persistent_cas_allowed_sha256s": [
+        "b6381ea1cf12c5e3275d9dfdb71d3e7b5b1f437d385ab359a55497ed4ff7ad5c",
+        "055dbad29329b542f83a0d051aad92cbbde46d6fb5b9e97e089c181bb97e4b08"
+      ],
+      "persistent_cas_write_authorized": true,
+      "persistent_snapshot_publication_authorized": true,
+      "real_v6_write_authorized": false,
+      "remote_git_write_authorized": false
+    },
+    "promotion_contract_repo_head": "5903fad33bd5daae348cdbffc7ef0afff0a73c08",
+    "promotion_engine_code_identity_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+    "promotion_engine_repo_head": "5903fad33bd5daae348cdbffc7ef0afff0a73c08",
+    "rate_3h_human_review_decision_sha256": "845611a7f8ae45e601aae19aa777ea8840aeb6b50e485e032d3c7cbe0615e254",
+    "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+    "reviewed_at": "2026-08-27T02:37:29+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-first-derived-snapshot-execution-authorization-v1",
+    "scientific_input_repo_head": "f46e50b5e28fb2515e573c0589b6a17d106f22b6",
+    "snapshot_creation_authorized": true
+  },
+  "authorization_payload_sha256": "9e3de1152c57027afd914f77ccf921ac4b476620bf6ed09480f9f20f99fbcd61"
+}
