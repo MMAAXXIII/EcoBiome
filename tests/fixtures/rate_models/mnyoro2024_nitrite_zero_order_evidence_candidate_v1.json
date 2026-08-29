@@ -1,5 +1,5 @@
 {
-  "schema_version": "ecobiome-g7a-rate-5l-mnyoro2024-nitrite-evidence-v1",
+  "schema_version": "ecobiome-g7a-rate-5l-r1-mnyoro2024-nitrite-evidence-v1",
   "persistence": "dormant_evidence_only",
   "execution_authorized": false,
   "production_authorized": false,
@@ -29,22 +29,79 @@
     "doi": "10.1016/j.jwpe.2024.106549",
     "peer_reviewed": true,
     "exact_parameter_observed": false,
-    "notes": "Final Journal of Water Process Engineering publication; used for publication continuity only because RATE-5L has not independently verified the exact 139 value in the final article body."
+    "notes": "Final Journal of Water Process Engineering publication; used for publication continuity only because RATE-5L/R1 has not independently verified the exact 139 value in the final article body."
   },
   "evidence_context": {
-    "water_type": "freshwater",
-    "biofilter_mode": "fixed_bed_upflow",
-    "carrier_media": "15_mm_commercial_polypropylene_plastic_beads",
-    "water_velocity_m_h": "12",
-    "nitrite_zero_order_threshold": ">1.0 mg NO2-N/L",
-    "temperature_c": ["15.0", "16.8"],
-    "dissolved_oxygen_mg_l": ["9.2", "10.8"],
-    "ph": ["7.0", "7.4"],
-    "media_maturity_context": "colonized_after_six_week_startup_tested_during_weeks_7_8",
-    "alkalinity_reference_mg_l_as_caco3": {
-      "mean": "125",
-      "sd": "8.6",
-      "hard_guard": false
+    "schema_version": "ecobiome-mnyoro2024-nitrite-evidence-context-v1",
+    "assay_context": {
+      "water_type": "freshwater",
+      "biofilter_mode": "fixed_bed_upflow",
+      "carrier_media": "15_mm_commercial_polypropylene_plastic_beads",
+      "water_velocity_m_h": {
+        "type": "decimal",
+        "value": "12"
+      },
+      "nitrite_zero_order_threshold": {
+        "operator": ">",
+        "value": {
+          "type": "decimal",
+          "value": "1"
+        },
+        "unit": "mg NO2-N/L"
+      },
+      "media_maturity_context": "colonized_after_six_week_startup_tested_during_weeks_7_8",
+      "assay_environment_binding_status": "unresolved_exact_kinetic_assay_environment"
+    },
+    "experiment_1_reference_environment": {
+      "source_scope": "experiment_1_weeks_1_6_biweekly_RAS_measurements",
+      "temperature_c": {
+        "min": {
+          "type": "decimal",
+          "value": "15"
+        },
+        "max": {
+          "type": "decimal",
+          "value": "16.8"
+        },
+        "unit": "degC",
+        "hard_guard": false
+      },
+      "dissolved_oxygen_mg_l": {
+        "min": {
+          "type": "decimal",
+          "value": "9.2"
+        },
+        "max": {
+          "type": "decimal",
+          "value": "10.8"
+        },
+        "unit": "mg/L",
+        "hard_guard": false
+      },
+      "ph": {
+        "min": {
+          "type": "decimal",
+          "value": "7"
+        },
+        "max": {
+          "type": "decimal",
+          "value": "7.4"
+        },
+        "unit": "pH",
+        "hard_guard": false
+      },
+      "alkalinity_mg_l_as_caco3": {
+        "mean": {
+          "type": "decimal",
+          "value": "125"
+        },
+        "sd": {
+          "type": "decimal",
+          "value": "8.6"
+        },
+        "unit": "mg/L as CaCO3",
+        "hard_guard": false
+      }
     }
   }
 }
