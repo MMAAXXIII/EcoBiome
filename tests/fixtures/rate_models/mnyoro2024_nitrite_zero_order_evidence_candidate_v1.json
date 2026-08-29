@@ -1,0 +1,50 @@
+{
+  "schema_version": "ecobiome-g7a-rate-5l-mnyoro2024-nitrite-evidence-v1",
+  "persistence": "dormant_evidence_only",
+  "execution_authorized": false,
+  "production_authorized": false,
+  "process_id": "nitrite_oxidation_to_nitrate",
+  "candidate_parameter": {
+    "value": "139",
+    "unit": "g NO2-N/m3-media/d",
+    "basis": "media_volume",
+    "kinetic_order": "zero_order"
+  },
+  "epistemic_class": "associated_preprint_exact_with_peer_reviewed_final_continuity",
+  "exact_numeric_source": {
+    "role": "exact_numeric_parameter_source",
+    "source_kind": "associated_preprint",
+    "source_id": "ssrn-4911049",
+    "sha256": "2e9af660d0121c9ace5ec469716400458b4994062f7a3ce97a10589e008063e8",
+    "doi": null,
+    "peer_reviewed": false,
+    "exact_parameter_observed": true,
+    "notes": "SSRN associated preprint; exact nitrite zero-order constant is reported for 15 mm commercial polypropylene plastic beads."
+  },
+  "peer_reviewed_continuity_source": {
+    "role": "peer_reviewed_publication_continuity",
+    "source_kind": "peer_reviewed_final_publication",
+    "source_id": "10.1016/j.jwpe.2024.106549",
+    "sha256": null,
+    "doi": "10.1016/j.jwpe.2024.106549",
+    "peer_reviewed": true,
+    "exact_parameter_observed": false,
+    "notes": "Final Journal of Water Process Engineering publication; used for publication continuity only because RATE-5L has not independently verified the exact 139 value in the final article body."
+  },
+  "evidence_context": {
+    "water_type": "freshwater",
+    "biofilter_mode": "fixed_bed_upflow",
+    "carrier_media": "15_mm_commercial_polypropylene_plastic_beads",
+    "water_velocity_m_h": "12",
+    "nitrite_zero_order_threshold": ">1.0 mg NO2-N/L",
+    "temperature_c": ["15.0", "16.8"],
+    "dissolved_oxygen_mg_l": ["9.2", "10.8"],
+    "ph": ["7.0", "7.4"],
+    "media_maturity_context": "colonized_after_six_week_startup_tested_during_weeks_7_8",
+    "alkalinity_reference_mg_l_as_caco3": {
+      "mean": "125",
+      "sd": "8.6",
+      "hard_guard": false
+    }
+  }
+}
