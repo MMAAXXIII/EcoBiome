@@ -27,7 +27,7 @@ _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _PROCESS_ID = "nitrite_oxidation_to_nitrate"
 _EVIDENCE_CLASS = "associated_preprint_exact_with_peer_reviewed_final_continuity"
 
-_K0V_NO2_G_N_M3_MEDIA_D = Decimal("139")
+_K0V_NO2_G_N_M3_MEDIA_D = Decimal(139)
 _PARAMETER_UNIT = "g NO2-N/m3-media/d"
 _PARAMETER_BASIS = "media_volume"
 _KINETIC_ORDER = "zero_order"
@@ -45,7 +45,7 @@ _FINAL_DOI = "10.1016/j.jwpe.2024.106549"
 _REQUIRED_WATER_TYPE = "freshwater"
 _REQUIRED_BIOFILTER_MODE = "fixed_bed_upflow"
 _REQUIRED_CARRIER_MEDIA = "15_mm_commercial_polypropylene_plastic_beads"
-_REQUIRED_WATER_VELOCITY_M_H = Decimal("12")
+_REQUIRED_WATER_VELOCITY_M_H = Decimal(12)
 _REQUIRED_MEDIA_MATURITY_CONTEXT = (
     "colonized_after_six_week_startup_tested_during_weeks_7_8"
 )
@@ -58,7 +58,7 @@ _DO_MAX_MG_L = Decimal("10.8")
 _PH_MIN = Decimal("7.0")
 _PH_MAX = Decimal("7.4")
 
-_ALKALINITY_REFERENCE_MEAN_MG_L_CACO3 = Decimal("125")
+_ALKALINITY_REFERENCE_MEAN_MG_L_CACO3 = Decimal(125)
 _ALKALINITY_REFERENCE_SD_MG_L_CACO3 = Decimal("8.6")
 
 DecimalInput = str | int | Decimal
@@ -380,13 +380,19 @@ class Mnyoro2024NitriteApplicabilityV1:
 
 def _study_context_notes() -> tuple[str, ...]:
     return (
-        "temperature, dissolved-oxygen, and pH fences preserve the reported "
-        "study-level RAS envelope; they are not biological tolerance claims",
-        "experimental alkalinity reference mean=125 mg/L as CaCO3, SD=8.6; "
-        "RATE-5L deliberately defines no alkalinity hard guard",
-        "the exact 139 g NO2-N/m3-media/d parameter is preserved from the "
-        "associated non-peer-reviewed preprint; the peer-reviewed final "
-        "publication establishes continuity only",
+        (
+            "temperature, dissolved-oxygen, and pH fences preserve the reported "
+            "study-level RAS envelope; they are not biological tolerance claims"
+        ),
+        (
+            "experimental alkalinity reference mean=125 mg/L as CaCO3, SD=8.6; "
+            "RATE-5L deliberately defines no alkalinity hard guard"
+        ),
+        (
+            "the exact 139 g NO2-N/m3-media/d parameter is preserved from the "
+            "associated non-peer-reviewed preprint; the peer-reviewed final "
+            "publication establishes continuity only"
+        ),
     )
 
 
