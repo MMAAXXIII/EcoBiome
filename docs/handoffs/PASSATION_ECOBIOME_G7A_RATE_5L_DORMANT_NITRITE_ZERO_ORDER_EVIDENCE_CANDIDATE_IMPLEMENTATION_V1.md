@@ -5,7 +5,7 @@
 **Gate:** `RATE-5L_DORMANT_NITRITE_ZERO_ORDER_EVIDENCE_CANDIDATE_IMPLEMENTATION_V1`  
 **Base:** `main@a6931417bb02644157bac27a159a6dad4da060e1`  
 **Branch:** `agent/g7a-rate-5l-nitrite-zero-order-evidence-candidate-v1`  
-**Status:** `IMPLEMENTED_PENDING_CI_AND_HUMAN_REVIEW`
+**Status:** `PASS_IMPLEMENTED_CI_GREEN_PENDING_HUMAN_REVIEW`
 
 ## 1. Purpose
 
@@ -193,7 +193,7 @@ RATE-5L contains no:
 - runtime policy mutation;
 - production activation.
 
-## 9. Test matrix
+## 9. Validation and test matrix
 
 The dedicated test file covers:
 
@@ -214,12 +214,19 @@ The dedicated test file covers:
 - absence of imports from generic RateModel contracts.
 
 A temporary isolated harness using the repository canonical serialization
-behavior executed the dedicated test file before commit:
+behavior executed the dedicated test file before the GitHub CI run:
 
 `34 passed`
 
-This is **not** a substitute for repository CI. Full `ruff`, `mypy src`, and
-full `pytest` remain required on the pull request.
+GitHub Python CI subsequently validated the complete repository after the
+RATE-5L Ruff corrections:
+
+- Ruff: `All checks passed!`
+- mypy: `Success: no issues found in 262 source files`
+- pytest: `735 passed, 2 skipped`
+
+The companion Frontend CI also completed successfully. The RATE-5L repository
+head therefore has green Python and frontend CI before human review.
 
 ## 10. Control-plane statement
 
@@ -239,7 +246,7 @@ external pointer/policy files; local post-merge verification remains required.
 
 ## 11. Gate result
 
-Current state after source re-audit and implementation:
+Current state after source re-audit, implementation, and CI validation:
 
 ```text
 ECOBIOME_G7A_RATE_5L
@@ -248,7 +255,11 @@ DORMANT_NITRITE_ZERO_ORDER_EVIDENCE_CANDIDATE_IMPLEMENTATION_V1
 implementation = COMPLETE
 source_reaudit = PASS_WITH_CARRIER_IDENTITY_CORRECTION
 dedicated_isolated_tests = 34_PASS
-repository_CI = PENDING
+repository_ruff = PASS
+repository_mypy = PASS_262_SOURCE_FILES
+repository_pytest = 735_PASS_2_SKIPPED
+frontend_CI = PASS
+repository_CI = PASS
 human_review = PENDING
 merge_authorized = FALSE
 production_activation = FALSE
@@ -256,6 +267,5 @@ scientific_foundation_mutation = FALSE
 control_plane_mutation = FALSE
 ```
 
-RATE-5L can only be promoted to `PASS` after the exact four-file diff is
-confirmed and repository CI is green. Merge remains a separate explicit human
-decision.
+RATE-5L is `PASS_IMPLEMENTED_CI_GREEN_PENDING_HUMAN_REVIEW`. Merge remains a
+separate explicit human decision.
