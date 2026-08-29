@@ -1,14 +1,18 @@
 """Dormant evidence-only nitrite zero-order candidate from Mnyoro et al. 2024.
 
-RATE-5L deliberately does not implement a RateModelV1, RateParameterV1, or
-RateEvaluationV1.  The exact numeric nitrite zero-order constant is preserved
-from the associated SSRN preprint, while the peer-reviewed final publication
-is represented only as publication-continuity evidence because the exact
-numeric value has not been independently verified in the final article body.
+RATE-5L-R1 preserves the exact numeric nitrite zero-order constant from the
+associated SSRN preprint without promoting it to RateModelV1, RateParameterV1,
+or RateEvaluationV1.
+
+The exact environmental conditions of the closed-loop nitrite kinetic assay
+are not directly bound by the available artifact. Temperature, dissolved
+oxygen, pH, and alkalinity values reported for experiment 1 are therefore kept
+as identity-bearing documentary reference context only; they are not kinetic
+assay applicability guards.
 
 This module never evaluates a numerical ecosystem rate, integrates over time,
 mutates EcosystemStateV1, invokes MaterialBalance, or authorizes production
-use.  Its applicability assessment is an evidence-context fence only.
+use.
 """
 
 from __future__ import annotations
@@ -49,17 +53,21 @@ _REQUIRED_WATER_VELOCITY_M_H = Decimal(12)
 _REQUIRED_MEDIA_MATURITY_CONTEXT = (
     "colonized_after_six_week_startup_tested_during_weeks_7_8"
 )
-
 _NO2_ZERO_ORDER_THRESHOLD_MG_N_L = Decimal("1.0")
-_TEMPERATURE_MIN_C = Decimal("15.0")
-_TEMPERATURE_MAX_C = Decimal("16.8")
-_DO_MIN_MG_L = Decimal("9.2")
-_DO_MAX_MG_L = Decimal("10.8")
-_PH_MIN = Decimal("7.0")
-_PH_MAX = Decimal("7.4")
 
+_ASSAY_ENVIRONMENT_BINDING_STATUS = "unresolved_exact_kinetic_assay_environment"
+_EXPERIMENT_1_REFERENCE_SCOPE = "experiment_1_weeks_1_6_biweekly_RAS_measurements"
+_TEMPERATURE_REFERENCE_MIN_C = Decimal("15.0")
+_TEMPERATURE_REFERENCE_MAX_C = Decimal("16.8")
+_DO_REFERENCE_MIN_MG_L = Decimal("9.2")
+_DO_REFERENCE_MAX_MG_L = Decimal("10.8")
+_PH_REFERENCE_MIN = Decimal("7.0")
+_PH_REFERENCE_MAX = Decimal("7.4")
 _ALKALINITY_REFERENCE_MEAN_MG_L_CACO3 = Decimal(125)
 _ALKALINITY_REFERENCE_SD_MG_L_CACO3 = Decimal("8.6")
+
+_STATUS_MATCH_ENVIRONMENT_UNRESOLVED = "assay_context_match_environment_unresolved"
+_STATUS_OUTSIDE = "outside_evidence_context"
 
 DecimalInput = str | int | Decimal
 
@@ -95,6 +103,64 @@ def _decimal(value: DecimalInput, field_name: str) -> str:
 
 def _typed_decimal(value: DecimalInput) -> dict[str, str]:
     return {"type": "decimal", "value": normalize_decimal(value)}
+
+
+def _reference_range(
+    minimum: DecimalInput,
+    maximum: DecimalInput,
+    unit: str,
+) -> dict[str, object]:
+    return {
+        "min": _typed_decimal(minimum),
+        "max": _typed_decimal(maximum),
+        "unit": unit,
+        "hard_guard": False,
+    }
+
+
+def _evidence_context_payload() -> dict[str, object]:
+    """Canonical source-bound context for the dormant candidate identity."""
+
+    return {
+        "schema_version": "ecobiome-mnyoro2024-nitrite-evidence-context-v1",
+        "assay_context": {
+            "water_type": _REQUIRED_WATER_TYPE,
+            "biofilter_mode": _REQUIRED_BIOFILTER_MODE,
+            "carrier_media": _REQUIRED_CARRIER_MEDIA,
+            "water_velocity_m_h": _typed_decimal(_REQUIRED_WATER_VELOCITY_M_H),
+            "nitrite_zero_order_threshold": {
+                "operator": ">",
+                "value": _typed_decimal(_NO2_ZERO_ORDER_THRESHOLD_MG_N_L),
+                "unit": "mg NO2-N/L",
+            },
+            "media_maturity_context": _REQUIRED_MEDIA_MATURITY_CONTEXT,
+            "assay_environment_binding_status": _ASSAY_ENVIRONMENT_BINDING_STATUS,
+        },
+        "experiment_1_reference_environment": {
+            "source_scope": _EXPERIMENT_1_REFERENCE_SCOPE,
+            "temperature_c": _reference_range(
+                _TEMPERATURE_REFERENCE_MIN_C,
+                _TEMPERATURE_REFERENCE_MAX_C,
+                "degC",
+            ),
+            "dissolved_oxygen_mg_l": _reference_range(
+                _DO_REFERENCE_MIN_MG_L,
+                _DO_REFERENCE_MAX_MG_L,
+                "mg/L",
+            ),
+            "ph": _reference_range(
+                _PH_REFERENCE_MIN,
+                _PH_REFERENCE_MAX,
+                "pH",
+            ),
+            "alkalinity_mg_l_as_caco3": {
+                "mean": _typed_decimal(_ALKALINITY_REFERENCE_MEAN_MG_L_CACO3),
+                "sd": _typed_decimal(_ALKALINITY_REFERENCE_SD_MG_L_CACO3),
+                "unit": "mg/L as CaCO3",
+                "hard_guard": False,
+            },
+        },
+    }
 
 
 @dataclass(frozen=True, slots=True)
@@ -150,7 +216,7 @@ class Mnyoro2024NitriteEvidenceSourceV1:
 
 @dataclass(frozen=True, slots=True)
 class Mnyoro2024NitriteZeroOrderEvidenceBundleV1:
-    """Exact two-source evidence structure adopted for RATE-5L."""
+    """Exact two-source evidence structure adopted for RATE-5L/R1."""
 
     exact_numeric_parameter_source: Mnyoro2024NitriteEvidenceSourceV1
     peer_reviewed_publication_continuity: Mnyoro2024NitriteEvidenceSourceV1
@@ -240,7 +306,7 @@ class Mnyoro2024NitriteZeroOrderCandidateV1:
     def canonical_payload(self) -> dict[str, object]:
         return {
             "schema_version": (
-                "ecobiome-g7a-rate-5l-mnyoro2024-nitrite-evidence-candidate-v1"
+                "ecobiome-g7a-rate-5l-r1-mnyoro2024-nitrite-evidence-candidate-v1"
             ),
             "process_id": _PROCESS_ID,
             "candidate_parameter": {
@@ -251,12 +317,15 @@ class Mnyoro2024NitriteZeroOrderCandidateV1:
             },
             "evidence_class": _EVIDENCE_CLASS,
             "evidence": self.evidence.canonical_payload(),
+            "evidence_context": _evidence_context_payload(),
             "execution_authorized": False,
             "production_authorized": False,
             "assumptions": [
                 "dormant_evidence_only",
                 "exact_139_parameter_from_associated_non_peer_reviewed_preprint",
                 "peer_reviewed_final_publication_used_for_continuity_only",
+                "exact_kinetic_assay_environment_unresolved",
+                "experiment_1_environment_is_reference_only_not_assay_guard",
                 "no_RateScientificSupportV1_promotion",
                 "no_RateParameterV1_promotion",
                 "no_RateEvaluationV1",
@@ -276,16 +345,13 @@ class Mnyoro2024NitriteZeroOrderCandidateV1:
 
 @dataclass(frozen=True, slots=True)
 class Mnyoro2024NitriteContextV1:
-    """Evidence-context facts for conservative, non-executing applicability checks."""
+    """Assay-context facts supported by the available preprint."""
 
     water_type: str
     biofilter_mode: str
     carrier_media: str
     water_velocity_m_h: DecimalInput
     nitrite_n_mg_l: DecimalInput
-    temperature_c: DecimalInput
-    dissolved_oxygen_mg_l: DecimalInput
-    ph: DecimalInput
     media_maturity_context: str
 
     def __post_init__(self) -> None:
@@ -300,13 +366,7 @@ class Mnyoro2024NitriteContextV1:
                 field_name,
                 _nonempty(str(getattr(self, field_name)), field_name),
             )
-        for field_name in (
-            "water_velocity_m_h",
-            "nitrite_n_mg_l",
-            "temperature_c",
-            "dissolved_oxygen_mg_l",
-            "ph",
-        ):
+        for field_name in ("water_velocity_m_h", "nitrite_n_mg_l"):
             object.__setattr__(
                 self,
                 field_name,
@@ -317,8 +377,6 @@ class Mnyoro2024NitriteContextV1:
             raise ValueError("water_velocity_m_h must be positive")
         if Decimal(self.nitrite_n_mg_l) < 0:
             raise ValueError("nitrite_n_mg_l cannot be negative")
-        if Decimal(self.dissolved_oxygen_mg_l) < 0:
-            raise ValueError("dissolved_oxygen_mg_l cannot be negative")
 
     def canonical_payload(self) -> dict[str, object]:
         return {
@@ -328,9 +386,6 @@ class Mnyoro2024NitriteContextV1:
             "carrier_media": self.carrier_media,
             "water_velocity_m_h": _typed_decimal(self.water_velocity_m_h),
             "nitrite_n_mg_l": _typed_decimal(self.nitrite_n_mg_l),
-            "temperature_c": _typed_decimal(self.temperature_c),
-            "dissolved_oxygen_mg_l": _typed_decimal(self.dissolved_oxygen_mg_l),
-            "ph": _typed_decimal(self.ph),
             "media_maturity_context": self.media_maturity_context,
         }
 
@@ -341,7 +396,7 @@ class Mnyoro2024NitriteContextV1:
 
 @dataclass(frozen=True, slots=True)
 class Mnyoro2024NitriteApplicabilityV1:
-    """Evidence-context assessment, intentionally distinct from RateApplicabilityResultV1."""
+    """Fail-closed assay-context assessment with unresolved environment binding."""
 
     status: str
     blocking_reason_codes: tuple[str, ...] = ()
@@ -349,7 +404,7 @@ class Mnyoro2024NitriteApplicabilityV1:
 
     def __post_init__(self) -> None:
         status = _nonempty(self.status, "status").lower()
-        if status not in {"within_evidence_context", "outside_evidence_context"}:
+        if status not in {_STATUS_MATCH_ENVIRONMENT_UNRESOLVED, _STATUS_OUTSIDE}:
             raise ValueError(f"unsupported evidence-context status: {self.status!r}")
         object.__setattr__(self, "status", status)
 
@@ -357,10 +412,14 @@ class Mnyoro2024NitriteApplicabilityV1:
             _nonempty(item, "blocking_reason_codes")
             for item in self.blocking_reason_codes
         )
-        notes = tuple(_nonempty(item, "contextual_notes") for item in self.contextual_notes)
-        if status == "within_evidence_context" and reasons:
-            raise ValueError("within_evidence_context cannot have blocking reasons")
-        if status == "outside_evidence_context" and not reasons:
+        notes = tuple(
+            _nonempty(item, "contextual_notes") for item in self.contextual_notes
+        )
+        if status == _STATUS_MATCH_ENVIRONMENT_UNRESOLVED and reasons:
+            raise ValueError(
+                "assay_context_match_environment_unresolved cannot have blocking reasons"
+            )
+        if status == _STATUS_OUTSIDE and not reasons:
             raise ValueError("outside_evidence_context requires blocking reasons")
         object.__setattr__(self, "blocking_reason_codes", tuple(sorted(set(reasons))))
         object.__setattr__(self, "contextual_notes", notes)
@@ -381,12 +440,13 @@ class Mnyoro2024NitriteApplicabilityV1:
 def _study_context_notes() -> tuple[str, ...]:
     return (
         (
-            "temperature, dissolved-oxygen, and pH fences preserve the reported "
-            "study-level RAS envelope; they are not biological tolerance claims"
+            "exact temperature, dissolved oxygen, pH, and alkalinity of the "
+            "closed-loop nitrite kinetic assay are not directly bound by RATE-5L-R1"
         ),
         (
-            "experimental alkalinity reference mean=125 mg/L as CaCO3, SD=8.6; "
-            "RATE-5L deliberately defines no alkalinity hard guard"
+            "experiment 1 reference only: temperature 15.0-16.8 degC, dissolved "
+            "oxygen 9.2-10.8 mg/L, pH 7.0-7.4, alkalinity mean 125 mg/L as "
+            "CaCO3 with SD 8.6; none is a kinetic-assay hard guard"
         ),
         (
             "the exact 139 g NO2-N/m3-media/d parameter is preserved from the "
@@ -399,7 +459,7 @@ def _study_context_notes() -> tuple[str, ...]:
 def assess_mnyoro2024_nitrite_evidence_context_v1(
     context: Mnyoro2024NitriteContextV1,
 ) -> Mnyoro2024NitriteApplicabilityV1:
-    """Assess source-context compatibility without calculating any ecosystem rate."""
+    """Assess directly supported assay context without calculating a rate."""
 
     reasons: list[str] = []
 
@@ -420,19 +480,7 @@ def assess_mnyoro2024_nitrite_evidence_context_v1(
     if nitrite <= _NO2_ZERO_ORDER_THRESHOLD_MG_N_L:
         reasons.append("nitrite_not_above_zero_order_threshold")
 
-    temperature = Decimal(context.temperature_c)
-    if temperature < _TEMPERATURE_MIN_C or temperature > _TEMPERATURE_MAX_C:
-        reasons.append("temperature_outside_reported_study_envelope")
-
-    dissolved_oxygen = Decimal(context.dissolved_oxygen_mg_l)
-    if dissolved_oxygen < _DO_MIN_MG_L or dissolved_oxygen > _DO_MAX_MG_L:
-        reasons.append("dissolved_oxygen_outside_reported_study_envelope")
-
-    ph = Decimal(context.ph)
-    if ph < _PH_MIN or ph > _PH_MAX:
-        reasons.append("ph_outside_reported_study_envelope")
-
-    status = "outside_evidence_context" if reasons else "within_evidence_context"
+    status = _STATUS_OUTSIDE if reasons else _STATUS_MATCH_ENVIRONMENT_UNRESOLVED
     return Mnyoro2024NitriteApplicabilityV1(
         status=status,
         blocking_reason_codes=tuple(reasons),
