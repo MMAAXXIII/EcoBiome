@@ -1,0 +1,129 @@
+{
+  "active_scientific_foundation_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+  "persistence": "shadow_only_not_in_active_scientific_foundation",
+  "primary_source_sha256": "f64f5fb305cdaeedceb17decad97f913a131dd692279066326441f3f7e9c675f",
+  "schema_version": "ecobiome-g7a-rate-4f-shadow-support-package-v1",
+  "source_doi": "10.1016/j.aquaeng.2021.102160",
+  "supports": {
+    "applicability_domain": {
+      "assertion_payload": {
+        "claim": {
+          "claim": "exact-context conservative execution guard",
+          "decision": "ACCEPT_FOR_SHADOW_ONLY",
+          "portable_generalization": false,
+          "rate4e_design_sha256": "b17abf3e08eb97088a40a55ade37c544631d5cafbe89258b07d6815a182d3a3b",
+          "rate4e_guard_sha256": "eaed5a3ec24c8f31d460b1fde4ae820001e12b98e08b3f5d955efbefa24ab1d0"
+        },
+        "persistence": "shadow_only_not_in_active_scientific_foundation",
+        "reviewed_by": "human",
+        "role": "applicability_domain",
+        "schema_version": "ecobiome-shadow-rate-scientific-assertion-v1"
+      },
+      "assertion_payload_sha256": "b43befdd6645d8c9c2250e4536920e7fcba1dfd262e5c041b8583600c6592e0e",
+      "rate_scientific_support": {
+        "applicability_scope": "Mnyoro 2021 freshwater fixed-bed RK Bioelements Heavy; exact elevation-pore velocity 10.8 or 16.2 m/h; conservative RATE-4E guard",
+        "assertion_ref": {
+          "assertion_id": "shadow-rate4f-mnyoro2021-applicability-domain",
+          "assertion_revision": 1,
+          "canonical_payload_sha256": "b43befdd6645d8c9c2250e4536920e7fcba1dfd262e5c041b8583600c6592e0e"
+        },
+        "reviewed_by": "human-rate4f",
+        "role": "applicability_domain",
+        "support_id": "shadow-support-rate4f-applicability-domain",
+        "support_sha256": "68dcf3de707094ea0bde645e9da38bf8de6ccd01bdeab44be1cd842633d9d5dd"
+      },
+      "rate_scientific_support_sha256": "073d42bd620f04090714deecd2183ac40a41cd6028b4034299d47fd74c0bf703",
+      "support_evidence_payload": {
+        "assertion_id": "shadow-rate4f-mnyoro2021-applicability-domain",
+        "assertion_payload_sha256": "b43befdd6645d8c9c2250e4536920e7fcba1dfd262e5c041b8583600c6592e0e",
+        "persistence": "shadow_only",
+        "primary_source_sha256": "f64f5fb305cdaeedceb17decad97f913a131dd692279066326441f3f7e9c675f",
+        "rate4e_bundle_sha256": "39803ae247a68bdafb3b29a303823fc62d995d9256ba47792b4028b3cebd6460",
+        "rate4f_authorization_sha256": "8b3af2c9b3fa1a10e7139e774bc56c426bbbd3a89fec086951e19fbde41b1994",
+        "role": "applicability_domain",
+        "schema_version": "ecobiome-shadow-rate-support-evidence-v1"
+      },
+      "support_evidence_payload_sha256": "68dcf3de707094ea0bde645e9da38bf8de6ccd01bdeab44be1cd842633d9d5dd"
+    },
+    "kinetic_form": {
+      "assertion_payload": {
+        "claim": {
+          "claim": "surface_TAN_flux = k1 * TAN_concentration",
+          "decision": "ACCEPT",
+          "doi": "10.1016/j.aquaeng.2021.102160",
+          "rate4e_guard_sha256": "eaed5a3ec24c8f31d460b1fde4ae820001e12b98e08b3f5d955efbefa24ab1d0",
+          "source_sha256": "f64f5fb305cdaeedceb17decad97f913a131dd692279066326441f3f7e9c675f"
+        },
+        "persistence": "shadow_only_not_in_active_scientific_foundation",
+        "reviewed_by": "human",
+        "role": "kinetic_form",
+        "schema_version": "ecobiome-shadow-rate-scientific-assertion-v1"
+      },
+      "assertion_payload_sha256": "1b514aebf695b554f58517b7bb1d6bcd0f3087be65fb0af558c4d78451998ef2",
+      "rate_scientific_support": {
+        "applicability_scope": "Mnyoro 2021 freshwater fixed-bed RK Bioelements Heavy; exact elevation-pore velocity 10.8 or 16.2 m/h; conservative RATE-4E guard",
+        "assertion_ref": {
+          "assertion_id": "shadow-rate4f-mnyoro2021-kinetic-form",
+          "assertion_revision": 1,
+          "canonical_payload_sha256": "1b514aebf695b554f58517b7bb1d6bcd0f3087be65fb0af558c4d78451998ef2"
+        },
+        "reviewed_by": "human-rate4f",
+        "role": "kinetic_form",
+        "support_id": "shadow-support-rate4f-kinetic-form",
+        "support_sha256": "53fbeeb5ab805a4af705c3508d69e7798bdff937ce73a043d0a4f343376eca33"
+      },
+      "rate_scientific_support_sha256": "54880171583ae690b779dd9eb2657163875197c171e11a0bfd5e3d639bdab9c8",
+      "support_evidence_payload": {
+        "assertion_id": "shadow-rate4f-mnyoro2021-kinetic-form",
+        "assertion_payload_sha256": "1b514aebf695b554f58517b7bb1d6bcd0f3087be65fb0af558c4d78451998ef2",
+        "persistence": "shadow_only",
+        "primary_source_sha256": "f64f5fb305cdaeedceb17decad97f913a131dd692279066326441f3f7e9c675f",
+        "rate4e_bundle_sha256": "39803ae247a68bdafb3b29a303823fc62d995d9256ba47792b4028b3cebd6460",
+        "rate4f_authorization_sha256": "8b3af2c9b3fa1a10e7139e774bc56c426bbbd3a89fec086951e19fbde41b1994",
+        "role": "kinetic_form",
+        "schema_version": "ecobiome-shadow-rate-support-evidence-v1"
+      },
+      "support_evidence_payload_sha256": "53fbeeb5ab805a4af705c3508d69e7798bdff937ce73a043d0a4f343376eca33"
+    },
+    "kinetic_parameter": {
+      "assertion_payload": {
+        "claim": {
+          "claim": "k1 = 0.45 m/d",
+          "decision": "ACCEPT_WITH_EXPLICIT_SOURCE_CONFLICT_CORRECTION_TO_0.45_M_D",
+          "doi": "10.1016/j.aquaeng.2021.102160",
+          "source_conflict_preserved": true,
+          "source_sha256": "f64f5fb305cdaeedceb17decad97f913a131dd692279066326441f3f7e9c675f"
+        },
+        "persistence": "shadow_only_not_in_active_scientific_foundation",
+        "reviewed_by": "human",
+        "role": "kinetic_parameter",
+        "schema_version": "ecobiome-shadow-rate-scientific-assertion-v1"
+      },
+      "assertion_payload_sha256": "fb95927852359bd107fbd88f2c9b603ce5098089ab3844099918a11feb980532",
+      "rate_scientific_support": {
+        "applicability_scope": "Mnyoro 2021 freshwater fixed-bed RK Bioelements Heavy; exact elevation-pore velocity 10.8 or 16.2 m/h; conservative RATE-4E guard",
+        "assertion_ref": {
+          "assertion_id": "shadow-rate4f-mnyoro2021-kinetic-parameter",
+          "assertion_revision": 1,
+          "canonical_payload_sha256": "fb95927852359bd107fbd88f2c9b603ce5098089ab3844099918a11feb980532"
+        },
+        "reviewed_by": "human-rate4f",
+        "role": "kinetic_parameter",
+        "support_id": "shadow-support-rate4f-kinetic-parameter",
+        "support_sha256": "1e3a67d57d824864c874619cdca329f035794c6cfb44955eebe73f1c3ab6c64f"
+      },
+      "rate_scientific_support_sha256": "81002e1b2c1e12cc2088403d1cec52af33b632ebd87ca331081fcd3f04e6c611",
+      "support_evidence_payload": {
+        "assertion_id": "shadow-rate4f-mnyoro2021-kinetic-parameter",
+        "assertion_payload_sha256": "fb95927852359bd107fbd88f2c9b603ce5098089ab3844099918a11feb980532",
+        "persistence": "shadow_only",
+        "primary_source_sha256": "f64f5fb305cdaeedceb17decad97f913a131dd692279066326441f3f7e9c675f",
+        "rate4e_bundle_sha256": "39803ae247a68bdafb3b29a303823fc62d995d9256ba47792b4028b3cebd6460",
+        "rate4f_authorization_sha256": "8b3af2c9b3fa1a10e7139e774bc56c426bbbd3a89fec086951e19fbde41b1994",
+        "role": "kinetic_parameter",
+        "schema_version": "ecobiome-shadow-rate-support-evidence-v1"
+      },
+      "support_evidence_payload_sha256": "1e3a67d57d824864c874619cdca329f035794c6cfb44955eebe73f1c3ab6c64f"
+    }
+  }
+}
