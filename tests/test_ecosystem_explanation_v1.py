@@ -253,4 +253,3 @@ def test_legacy_explanation_payload_omits_empty_scientific_supports() -> None:
         "scientific_supports" not in step
         for step in payload["causal_steps"]
     )
-

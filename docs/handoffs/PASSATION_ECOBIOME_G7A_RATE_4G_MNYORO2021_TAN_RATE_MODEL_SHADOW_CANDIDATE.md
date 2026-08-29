@@ -81,4 +81,3 @@ bundle validated only role names. R5 additionally binds each
 
 A same-role replacement support with a different canonical identity must now
 fail closed before any numerical evaluation can be constructed.
-

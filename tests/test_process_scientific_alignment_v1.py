@@ -1072,4 +1072,3 @@ def test_evaluation_scope_rejects_duplicate_json_pointer() -> None:
             role="mechanism",
             required_parameter_bindings=(binding, binding),
         )
-
