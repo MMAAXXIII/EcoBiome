@@ -9,7 +9,9 @@ from pathlib import Path
 import pytest
 
 from ecobiome.knowledge_persistence.serialization import canonical_sha256
-from ecobiome.simulation import mnyoro2024_nitrite_zero_order_evidence_candidate_v1 as module
+from ecobiome.simulation import (
+    mnyoro2024_nitrite_zero_order_evidence_candidate_v1 as module,
+)
 from ecobiome.simulation.mnyoro2024_nitrite_zero_order_evidence_candidate_v1 import (
     Mnyoro2024NitriteContextV1,
     Mnyoro2024NitriteEvidenceSourceV1,
@@ -97,7 +99,7 @@ def test_candidate_numeric_parameter_is_not_caller_configurable() -> None:
         "evidence"
     ]
     candidate = _candidate()
-    assert candidate.parameter_decimal == Decimal("139")
+    assert candidate.parameter_decimal == Decimal(139)
     assert candidate.parameter_unit == "g NO2-N/m3-media/d"
     assert candidate.parameter_basis == "media_volume"
 
