@@ -1,0 +1,71 @@
+{
+  "decision_payload": {
+    "candidate_package_ref": {
+      "candidate_id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+      "candidate_package_sha256": "a1a9677f4a20956b184833147b0a3ea11b79de4d97ae5d96c742bb0cd6857d50"
+    },
+    "claim_ref": {
+      "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+      "claim_review_decision_sha256": "3a6a3fc9c2d588c323692cf58ee30a7b628ded4f04507151fdbead3f5d954193",
+      "effective_claim_sha256": "445533b6d4ebff5e36ad68c246268ae3ed9c93d1f6ed0284eb516de3b0a210e9"
+    },
+    "decision": "revise",
+    "decision_effects": {
+      "assertion_claim_link_materialized": false,
+      "effective_link_accepted_for_shadow_materialization": true,
+      "link_classification_human_review_completed": true,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "source_independence_assessed": false
+    },
+    "decision_id": "decision-g7a-nature16459-assertion-claim-link-v1",
+    "decision_source": {
+      "accepted_recommendation": "link 1: revise semantic_alignment=exact",
+      "conversation_role": "human_user",
+      "kind": "explicit_user_assent_to_recommendation",
+      "literal": "ok"
+    },
+    "original_candidate_link": {
+      "id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+      "review_status": "pending_human_review",
+      "reviewed_at": null,
+      "reviewed_by": null,
+      "scope_alignment": "source_broader",
+      "semantic_alignment": "compatible_partial",
+      "stance": "supports",
+      "support_mode": "author_interpretation"
+    },
+    "reviewed_at": "2026-08-26T05:27:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "revision": {
+      "changed_fields": {
+        "semantic_alignment": {
+          "from": "compatible_partial",
+          "to": "exact"
+        }
+      },
+      "effective_link": {
+        "id": "assertion-link-candidate-g7a-nature16459-ammonia-to-nitrite-v1",
+        "review_status": "pending_human_review",
+        "reviewed_at": null,
+        "reviewed_by": null,
+        "scope_alignment": "source_broader",
+        "semantic_alignment": "exact",
+        "stance": "supports",
+        "support_mode": "author_interpretation"
+      },
+      "rationale": "The human-corrected claim explicitly states oxidation of ammonia to nitrite. The additional nitrite-to-nitrate step is already represented by scope_alignment=source_broader, so the semantic alignment to the target ammonia-to-nitrite assertion is exact."
+    },
+    "status": "human_review_completed",
+    "target_assertion": {
+      "assertion_id": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "canonical_payload_sha256": "907c862992a0d11f50d8f4ccab3b123902e5330bc8066caa977b64b133fd7b96",
+      "revision": 1
+    }
+  },
+  "decision_payload_sha256": "e2698ff08ab0f68bd493009f9a874a3ec3ba0106270b36f8e7b680a9ff34be70",
+  "schema_version": "ecobiome-assertion-claim-link-human-review-decision-v1"
+}

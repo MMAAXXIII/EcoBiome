@@ -1,0 +1,64 @@
+{
+  "promotion_engine_contract_payload": {
+    "authorization": {
+      "active_pointer_update_authorized": false,
+      "derived_representation_cas_write_authorized": false,
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "remote_git_write_authorized": false,
+      "schema_migration_authorized": false,
+      "snapshot_creation_authorized": false
+    },
+    "basis": {
+      "rate_3b_revision_boundary_sha256": "7e45dad9ee2e3f6601e6fc4d55052e5de52e9175514d06ac6c9241366066f2b2",
+      "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a"
+    },
+    "derived_cas_materialization": {
+      "must_match_frozen_representation_sha256_before_put": true,
+      "normalized_jats_representation_artifacts": 2,
+      "requires_separate_execution_authorization": true,
+      "writes_before_scientific_transaction": true
+    },
+    "final_validation": {
+      "exact_table_delta_required": true,
+      "foreign_key_check_required": true,
+      "frozen_parent_sha_reverification_required": true,
+      "full_regression_required": true,
+      "published_snapshot_read_only_reverification_required": true,
+      "quick_check_required": true,
+      "row_by_row_canonical_identity_required": true
+    },
+    "identity_model": {
+      "promotion_contract_repo_head": "bound_post_commit_by_RATE_3C_identity_binding",
+      "promotion_engine_code_identity_sha256": "bound_post_commit_by_RATE_3C_identity_binding",
+      "promotion_engine_repo_head": "bound_post_commit_by_RATE_3C_identity_binding",
+      "scientific_input_repo_head": "f46e50b5e28fb2515e573c0589b6a17d106f22b6"
+    },
+    "publication": {
+      "atomic_directory_rename_required": true,
+      "complete_pair_verification_required": true,
+      "database_fsync_required": true,
+      "manifest_fsync_required": true,
+      "mismatching_final_directory_overwrite_forbidden": true,
+      "parent_directory_fsync_after_rename": true,
+      "partial_final_directory_is_fatal": true,
+      "temporary_complete_pair_required": true,
+      "temporary_directory_fsync_required": true
+    },
+    "replay_identity": {
+      "protected_fields_reconstructed_from_exact_CAS_source_bytes": true,
+      "protected_source_text_not_committed_to_git": true,
+      "row_by_row_canonical_sha256_required": true,
+      "table_counts_are_secondary_invariants": true
+    },
+    "schema_version": "ecobiome-first-derived-snapshot-promotion-engine-contract-v1-revised",
+    "status": "candidate_pending_human_review",
+    "transaction": {
+      "parent_database_never_opened_writable": true,
+      "rollback_on_any_identity_or_fk_failure": true,
+      "single_BEGIN_IMMEDIATE_for_all_scientific_rows": true
+    }
+  },
+  "promotion_engine_contract_payload_sha256": "9718cddf87622e0d1350279d37cbd28e12b19afd7e0c7a717c9816e5c2a7c788"
+}

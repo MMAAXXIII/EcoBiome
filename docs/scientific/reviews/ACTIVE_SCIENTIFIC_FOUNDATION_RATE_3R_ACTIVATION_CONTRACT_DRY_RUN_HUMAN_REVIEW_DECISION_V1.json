@@ -1,0 +1,47 @@
+{
+  "human_review_decision_payload": {
+    "authorized_rate_3s_scope": {
+      "add_no_clobber_regression": true,
+      "add_second_ancestry_audit_immediately_before_publish": true,
+      "create_local_docs_tests_and_commits": true,
+      "replace_os_replace_with_windows_no_clobber_write_through_move": true,
+      "rerun_targeted_and_full_quality_gates": true,
+      "retain_same_directory_exclusive_temp_and_file_fsync": true
+    },
+    "blocking_findings": [
+      {
+        "finding": "RATE-3Q checks target absence before publication but later uses os.replace, which can replace a destination that appears after the check.",
+        "id": "target_absence_toctou_overwrite",
+        "severity": "blocking"
+      },
+      {
+        "finding": "RATE-3Q fsyncs the temporary file but does not freeze a Windows write-through/no-clobber rename primitive for final pointer durability.",
+        "id": "post_rename_durability_not_frozen",
+        "severity": "blocking"
+      }
+    ],
+    "next_gate_after_pass": "RATE-3T_PUBLICATION_HARDENING_HUMAN_REVIEW",
+    "persistent_activation_authorized": false,
+    "rate_3q_bundle_sha256": "d15922a68b0119bc10dbe47c69339d190f63390aeab0fe6ec9127690232cfa9",
+    "rate_3q_contract_payload_sha256": "8ef9950627a533c195d27726d1790350f2a4838de210da05743c9038843b41fa",
+    "rate_3q_dry_run_result_payload_sha256": "b22a78dbe7fa22f4f040a5e507ca7cd4d8b57565439e70398bd6c0b1572465de",
+    "rate_3q_evidence_accepted": true,
+    "rate_3q_final_repo_head": "8866d6352065b5626ed7cc253021140c23ab9e0d",
+    "rate_3q_manifest_sha256": "26a98fae1142023724d1fd08ace8314d6340b732bf7e9a3612a52471c48eb6c7",
+    "rate_3s_r2_fail_bundle_sha256": "cd9725da9876a4ddb37052b383e1573a62772e0467065dca5e347b7722e17241",
+    "reviewed_at": "2026-08-27T13:52:40+02:00",
+    "reviewer": "human_user_explicit_rate3s_switch",
+    "schema_version": "ecobiome-rate-3r-activation-contract-dry-run-human-review-decision-v1",
+    "still_forbidden": {
+      "merge_or_rebase": true,
+      "persistent_active_pointer_creation": true,
+      "persistent_cas_mutation": true,
+      "persistent_runtime_policy_publication": true,
+      "persistent_snapshot_mutation": true,
+      "pr_mutation": true,
+      "real_v6_write": true,
+      "remote_git_write": true
+    }
+  },
+  "human_review_decision_payload_sha256": "5237d59490f987de2097cf96d0e5e46d49ebabafa73cee66e0443cc57cab291b"
+}

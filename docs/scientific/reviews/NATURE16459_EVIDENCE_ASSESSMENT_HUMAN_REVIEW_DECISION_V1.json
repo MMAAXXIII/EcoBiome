@@ -1,0 +1,41 @@
+{
+  "decision_payload": {
+    "candidate_package_ref": {
+      "candidate_id": "evidence-assessment-candidate-rate2n-nature16459-v1",
+      "candidate_package_sha256": "50f86f92a0a0d11dec238679d96c7c72444c7af7e39306981592b639b98abcd0",
+      "candidate_row_sha256": "2ade26957df6a624c80a5a62896b31f2a4671ace007ce642a0194e603635a3fa",
+      "candidate_sha256": "945a28649d0f283b8d163d61dae8c921156fe5b235df0e51f5c1a91aff3c0d33"
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2o-nature16459-evidence-assessment-v1",
+    "decision_source": {
+      "accepted_recommendation": "assessment 1: accept",
+      "conversation_role": "human_user",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "persistence_projection": {
+      "assessor_must_be_projected_to": "human_user_current_conversation",
+      "candidate_row_can_be_replayed_in_shadow_after_metadata_projection": true,
+      "created_at_must_be_materialization_time": true,
+      "real_v6_write_authorized": false,
+      "substantive_fields_must_remain_identical": true,
+      "supersedes_assessment_id": null
+    },
+    "reviewed_at": "2026-08-26T18:42:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "scientific_effects": {
+      "assessment_scientific_content_accepted": true,
+      "evidence_directness": "direct_functional_support_with_intermediate_inference",
+      "independence_status_remains": "unresolved",
+      "limitations_accepted": true,
+      "study_design": "experimental_enrichment_culture_multimodal"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "5987f2b7cd5855084271610e90739b7e220a12fc85350b5893d43f0a410b219d",
+  "schema_version": "ecobiome-evidence-assessment-human-review-decision-v1"
+}

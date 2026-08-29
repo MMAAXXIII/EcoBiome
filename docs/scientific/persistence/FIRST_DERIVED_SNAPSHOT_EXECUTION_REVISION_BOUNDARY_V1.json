@@ -1,0 +1,79 @@
+{
+  "revision_boundary_payload": {
+    "authorization": {
+      "active_pointer_update_authorized": false,
+      "real_v6_write_authorized": false,
+      "snapshot_creation_authorized": false,
+      "staging_database_creation_authorized": false
+    },
+    "basis": {
+      "execution_plan_decision_payload_sha256": "c204071ea181d6387350841ff9ea8955b908396a44a8463decb9039988da4398",
+      "promotion_engine_decision_payload_sha256": "cc960686dab49d96fa50cc0df6808a2646fcd86cf0bcd777448e1ac58ece608e",
+      "rate_3a_execution_plan_payload_sha256": "e538a2627336969b86aeeed0d0dabf2773fe71be1135dec7b09b5eb4d464d052",
+      "rate_3a_promotion_engine_contract_payload_sha256": "21917d539e76222e50a1af3fdf9a013b1ea3de13dc9b34419b45ea55ea8128ac"
+    },
+    "identity_model": {
+      "promotion_contract_repo_head": "must_bind_commit_containing_reviewed_revised_contracts",
+      "promotion_engine_code_identity_sha256": "required",
+      "promotion_engine_repo_head": "must_bind_commit_containing_exact_engine_candidate",
+      "scientific_input_repo_head": "must_bind_exact_scientific_input_commit"
+    },
+    "mandatory_revisions": [
+      {
+        "requirement": "Add FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1 containing every promoted row with table, row_id, canonical row payload SHA-256, provenance/review SHA-256 bindings and deterministic dependency information. Table deltas remain secondary checks only.",
+        "revision_id": "exhaustive_replay_manifest"
+      },
+      {
+        "requirement": "Separate scientific_input_repo_head, promotion_contract_repo_head, and promotion_engine_repo_head/code_identity_sha256. The final manifest must bind the exact implementation actually executed, not only the pre-design scientific input head.",
+        "revision_id": "separate_git_and_engine_identities"
+      },
+      {
+        "requirement": "Publish into an execution-scoped temporary directory, write DB and manifest, fsync files and directory, verify the complete pair, then atomically rename to the final content-addressed directory. A partial or inconsistent final directory is fatal and must never be silently completed or overwritten.",
+        "revision_id": "atomic_complete_publication"
+      },
+      {
+        "requirement": "After replay, re-read every promoted row and recompute its canonical row SHA-256 against FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1. Exact table counts remain an additional invariant, never a substitute for row identity verification.",
+        "revision_id": "row_by_row_post_replay_identity_validation"
+      }
+    ],
+    "next_gate": "RATE-3C_REPLAY_MANIFEST_AND_PROMOTION_ENGINE_CANDIDATE",
+    "post_replay_validation": {
+      "foreign_key_check_required": true,
+      "full_regression_required": true,
+      "quick_check_required": true,
+      "row_by_row_canonical_identity_required": true,
+      "table_delta_validation_required": true
+    },
+    "publication_model": {
+      "atomic_directory_rename_required": true,
+      "complete_pair_verification_required": true,
+      "database_fsync_required": true,
+      "manifest_fsync_required": true,
+      "overwrite_mismatching_final_directory_forbidden": true,
+      "partial_final_directory_is_fatal": true,
+      "temporary_complete_pair_required": true,
+      "temporary_directory_fsync_required": true
+    },
+    "required_next_artifacts": [
+      {
+        "artifact": "FIRST_DERIVED_SNAPSHOT_REPLAY_MANIFEST_V1",
+        "purpose": "exhaustive machine-readable row identity and provenance manifest"
+      },
+      {
+        "artifact": "FIRST_DERIVED_SNAPSHOT_EXECUTION_PLAN_V1_REVISED",
+        "purpose": "execution plan incorporating all mandatory RATE-3B revisions"
+      },
+      {
+        "artifact": "FIRST_DERIVED_SNAPSHOT_PROMOTION_ENGINE_CONTRACT_V1_REVISED",
+        "purpose": "promotion-engine contract incorporating all mandatory RATE-3B revisions"
+      },
+      {
+        "artifact": "promotion_engine_candidate_implementation",
+        "purpose": "reviewable source implementation with frozen code identity SHA-256"
+      }
+    ],
+    "schema_version": "ecobiome-first-derived-snapshot-execution-revision-boundary-v1",
+    "status": "human_reviewed_revision_boundary"
+  },
+  "revision_boundary_payload_sha256": "7e45dad9ee2e3f6601e6fc4d55052e5de52e9175514d06ac6c9241366066f2b2"
+}

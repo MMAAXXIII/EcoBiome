@@ -1,0 +1,18 @@
+{
+  "identity_binding_payload": {
+    "candidate_repo_head": "de218d61e613a698859f55c281977b685cba98fd",
+    "candidate_tree": "b5827b1a6a38754a82d052141ea9b2ffcf816bae",
+    "consumer_migration_identity_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227",
+    "next_gate": "RATE-3P_CONSUMER_MIGRATION_AND_TEMP_REAL_SNAPSHOT_INTEGRATION_HUMAN_REVIEW",
+    "persistent_active_pointer_created": false,
+    "persistent_runtime_policy_published": false,
+    "rate_3n_human_review_decision_sha256": "c23a7a721ca671bf1ad8b9627671460496ec0f73626ed35129200b4d31fa9054",
+    "real_snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "resolver_module_sha256": "58ee76d2a163ae844b8b8c89653e65a70be475acb1a8ed3bf61aa974b56cd2e9",
+    "review_commit_repo_head": "840a48c1c3348b1cd57e1cc7c83d66ad6dc7a62b",
+    "schema_version": "ecobiome-active-scientific-foundation-rate-3o-migration-integration-identity-binding-v1",
+    "temporary_integration_result_payload_sha256": "5f5df09c04dd593fd33fa0e3d39d4394a5d626c7dfa2588fd2ba07a961a5b407",
+    "write_admin_consumer_migration_performed": false
+  },
+  "identity_binding_payload_sha256": "1b6d99d4bc4250604e03c6232fe32f7a70f648546f12253a7492b4437e0d085d"
+}

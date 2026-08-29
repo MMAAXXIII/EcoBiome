@@ -1,0 +1,41 @@
+{
+  "decision_payload": {
+    "accepted_pairwise_classification": {
+      "independent_support_origin_count": null,
+      "source_lineage_edge_required": false,
+      "status": "partially_independent"
+    },
+    "candidate_package_ref": {
+      "candidate_package_sha256": "50f86f92a0a0d11dec238679d96c7c72444c7af7e39306981592b639b98abcd0",
+      "pairwise_independence_candidate_sha256": "a656edf850de0a4caa5deb23fec1e5dac4a108f66b4e3bd7366bfc84ff4904c9"
+    },
+    "decision": "accept",
+    "decision_effects": {
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "pairwise_independence_review_completed": true,
+      "process_scientific_support_materialization_authorized": false,
+      "real_v6_write_authorized": false
+    },
+    "decision_id": "decision-g7a-rate2o-pairwise-independence-v1",
+    "decision_source": {
+      "accepted_recommendation": "independence: accept partially_independent; independent_support_origin_count: keep null",
+      "conversation_role": "human_user",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "projection_boundary": {
+      "pairwise_status_is_not_automatically_copied_to_each_evidence_assessment": true,
+      "per_link_independence_status_remains": "unresolved",
+      "projection_policy_required_before_persistence": true
+    },
+    "reviewed_at": "2026-08-26T18:42:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "322403f8a55f1557326fdd2c5e8a71c47aff9d8b0faa2d3b45893ed7b4b4db34",
+  "schema_version": "ecobiome-pairwise-independence-human-review-decision-v1"
+}

@@ -1,0 +1,91 @@
+{
+  "claim_review_package": {
+    "claims": [
+      {
+        "claim": {
+          "claim_id": "claim-g7a-nature16459-ammonia-to-nitrite-v1",
+          "claim_kind": "mechanism",
+          "claim_layer": "atomic",
+          "claim_text": "Nitrification includes an ammonia/ammonium oxidation step that produces nitrite before nitrite is oxidized to nitrate.",
+          "claim_text_sha256": "ebb50944c44736ce716182f61e0fdcb76a45bbad6f0dfd97317cd2f3d4453289",
+          "semantic_type": "nitrogen_oxidation"
+        },
+        "evidence": {
+          "evidence_text_sha256": "ac8ba171582a37a611c119702345a1cd9cf1645977234c82900a4b0baf12ff1f",
+          "evidence_word_count": 30,
+          "segment_char_end": 218,
+          "segment_char_start": 0,
+          "segment_text_sha256": "490054e9ad8a5e2f590f27feb252c97d37507d75a0361bffa6127e2844326776",
+          "selected_short_anchor": "Nitrification is a two-step process",
+          "verbatim_evidence_not_copied_to_repo": true
+        },
+        "human_review": {
+          "allowed_decisions": [
+            "accept",
+            "correct",
+            "reject"
+          ],
+          "decision": "pending",
+          "notes": null,
+          "reviewed_at": null,
+          "reviewer": null
+        },
+        "source": {
+          "doi": "10.1038/nature16459",
+          "pmcid": "PMC4878690",
+          "pmid": "26610025",
+          "title": "Complete nitrification by a single microorganism"
+        }
+      },
+      {
+        "claim": {
+          "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+          "claim_kind": "mechanism",
+          "claim_layer": "atomic",
+          "claim_text": "Nitrification proceeds through ammonia oxidation involving nitrite before the subsequent nitrate state.",
+          "claim_text_sha256": "7461bcc9d3facfb73adb18e579919cc03313bd52367e0e166a0f7fbae5320ac3",
+          "semantic_type": "nitrogen_oxidation"
+        },
+        "evidence": {
+          "evidence_text_sha256": "6dd08e05dd4c8f400651fe422c5a162625da0eb52cc25315611d181bdf041b9b",
+          "evidence_word_count": 26,
+          "segment_char_end": 199,
+          "segment_char_start": 0,
+          "segment_text_sha256": "15b70a36935fda799ea0bd6662e39b823b722bcb56e7e3616e4e938be873b871",
+          "selected_short_anchor": "oxidation of ammonia via nitrite to nitrate",
+          "verbatim_evidence_not_copied_to_repo": true
+        },
+        "human_review": {
+          "allowed_decisions": [
+            "accept",
+            "correct",
+            "reject"
+          ],
+          "decision": "pending",
+          "notes": null,
+          "reviewed_at": null,
+          "reviewer": null
+        },
+        "source": {
+          "doi": "10.1038/nature16461",
+          "pmcid": "PMC5152751",
+          "pmid": "26610024",
+          "title": "Complete nitrification by Nitrospira bacteria"
+        }
+      }
+    ],
+    "joint_review_boundaries": {
+      "assertion_claim_links_attachable_now": false,
+      "distinct_doi_count": 2,
+      "independence_requires_separate_evidence_assessment": true,
+      "independent_origin_count": null,
+      "shared_authors_known": [
+        "Mads Albertsen",
+        "Per H. Nielsen"
+      ]
+    },
+    "schema_version": "ecobiome-primary-evidence-claim-review-package-v1",
+    "status": "pending_human_review"
+  },
+  "claim_review_package_sha256": "69a8d89758a650ce4eaa33dbf812a7ad769a94852498068a1312e535ed94fa70"
+}

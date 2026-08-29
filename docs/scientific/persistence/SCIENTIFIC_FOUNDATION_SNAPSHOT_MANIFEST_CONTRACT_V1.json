@@ -1,0 +1,69 @@
+{
+  "manifest_contract": {
+    "active_pointer": {
+      "activation_requires_separate_authorization": true,
+      "atomic_replace_required": true,
+      "contains_only": [
+        "database_sha256",
+        "manifest_sha256",
+        "logical_snapshot_path"
+      ],
+      "recommended_logical_path": "EcoBiome-data/scientific-foundation-active.json",
+      "scientific_content": false,
+      "update_only_after_snapshot_validation": true
+    },
+    "identity": {
+      "absolute_machine_paths_excluded_from_canonical_identity": true,
+      "manifest_identity_basis": "canonical_manifest_payload_sha256",
+      "schema_version_is_not_data_snapshot_version": true,
+      "snapshot_identity_basis": "database_sha256"
+    },
+    "required_fields": {
+      "boundaries": [
+        "real_v6_mutated",
+        "knowledge_synthesis_created",
+        "numeric_rate_model_authorized"
+      ],
+      "lineage": [
+        "parent_database_sha256",
+        "parent_manifest_sha256",
+        "promotion_plan_sha256",
+        "source_repo_head"
+      ],
+      "reviewed_inputs": [
+        "decision_payload_sha256s",
+        "policy_payload_sha256s",
+        "scientific_entity_payload_sha256s",
+        "scientific_assertion_payload_sha256s",
+        "source_artifact_sha256s"
+      ],
+      "snapshot": [
+        "database_sha256",
+        "database_size_bytes",
+        "schema_version",
+        "schema_design_sha256",
+        "immutable",
+        "created_at",
+        "purpose"
+      ],
+      "validation": [
+        "quick_check",
+        "foreign_key_violation_count",
+        "regression_gate_summary",
+        "table_counts"
+      ]
+    },
+    "schema_version": "ecobiome-scientific-foundation-snapshot-manifest-v1",
+    "status": "design_candidate",
+    "storage": {
+      "content_addressed_create_only": true,
+      "database_filename": "scientific-foundation.sqlite3",
+      "git_tracks_database_bytes": false,
+      "git_tracks_primary_source_fulltext": false,
+      "manifest_filename": "snapshot-manifest.json",
+      "recommended_logical_root": "EcoBiome-data/scientific-foundation-snapshots",
+      "snapshot_directory_key": "<database_sha256>"
+    }
+  },
+  "manifest_contract_sha256": "8675774056188fce62c7c29cf816238d155871bf69aaa79ee85e8b1567b2cf20"
+}

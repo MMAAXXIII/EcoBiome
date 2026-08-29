@@ -1,0 +1,2859 @@
+{
+  "consumer_audit_payload": {
+    "activation_blockers": [
+      "RATE-3K introduces the resolver candidate but performs no runtime consumer migration.",
+      "The persistent active pointer remains absent and is not authorized by RATE-3K.",
+      "Consumer classifications are a conservative static audit and require human review before migration."
+    ],
+    "activation_readiness": "hold",
+    "files_with_hits": {
+      "src/ecobiome/cli/nitrogen_demo.py": {
+        "classifications": [
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "4c5136400d4586abd3920c1bb8da97c27b8e026c7627423e1dd8056268211151",
+        "hit_count": 1
+      },
+      "src/ecobiome/knowledge_acquisition/collector_acquire.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate"
+        ],
+        "file_sha256": "96aba3ae84a8973352915c22a461b97e93c905ff5f7dcee86f6053a33ee1480c",
+        "hit_count": 2
+      },
+      "src/ecobiome/knowledge_acquisition/collector_cli.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate"
+        ],
+        "file_sha256": "6651a4f040e0f5b2782c0fc7111c4c5e546bce0c53a6c73febcb898ef919a4cc",
+        "hit_count": 2
+      },
+      "src/ecobiome/knowledge_acquisition/migration_v2.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "direct_sqlite_consumer_candidate"
+        ],
+        "file_sha256": "9489a4365f7e425ee74990f294aed49a1f64a9eeb0cc33ad242834f637fa3529",
+        "hit_count": 24
+      },
+      "src/ecobiome/knowledge_acquisition/persistence.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "direct_sqlite_consumer_candidate"
+        ],
+        "file_sha256": "c21ec7cf30661889637c3b5b287431d2bb9c823a3a95693d318171637d1a638a",
+        "hit_count": 12
+      },
+      "src/ecobiome/knowledge_acquisition/retention.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "direct_sqlite_consumer_candidate"
+        ],
+        "file_sha256": "91c30dd2947ca0f0c3614038f0bc5ec43d43a28773026e4d7d8db6e241c53fa2",
+        "hit_count": 3
+      },
+      "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "32bf1d8f3dbc7a7d64ebbf0a59a2d2349d6799f8e63a2e6bda0ad03b2f1f5063",
+        "hit_count": 6
+      },
+      "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "344f981feacc58e21f52dfdcc3569a41f904db6c8211ce2b2e2731ad62faaba3",
+        "hit_count": 6
+      },
+      "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py": {
+        "classifications": [
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "0515c6cc1e0521a7d69456719aa2f9b5742510f753a6d046963d9f4542ced8cb",
+        "hit_count": 5
+      },
+      "src/ecobiome/knowledge_persistence/__init__.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "bc754437c9b8ac20d6ee08955490ecf98a5e835f1cd81b254d908948a25e6a9b",
+        "hit_count": 4
+      },
+      "src/ecobiome/knowledge_persistence/collector_compat.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate"
+        ],
+        "file_sha256": "f111432022188e861d38355440868a112368ef0c27fb61d8838f250fad776c85",
+        "hit_count": 11
+      },
+      "src/ecobiome/knowledge_persistence/config.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate"
+        ],
+        "file_sha256": "a2e04571bc63a0a50edd1d2eb673fdbda6b3d45a957691437af6484bd1f0250b",
+        "hit_count": 4
+      },
+      "src/ecobiome/knowledge_persistence/contracts.py": {
+        "classifications": [
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "4a2946c996c31c4d780fff752c0ae3f4e6be30e1f507ee67ecf4a6bfc5184ed2",
+        "hit_count": 1
+      },
+      "src/ecobiome/knowledge_persistence/errors.py": {
+        "classifications": [
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "2deca20fdd3506963190c2f356b075a7edb44e1d0aaff2a77c6105a2b284e797",
+        "hit_count": 5
+      },
+      "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py": {
+        "classifications": [
+          "direct_sqlite_consumer_candidate",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+        "hit_count": 4
+      },
+      "src/ecobiome/knowledge_persistence/sqlite_schema.py": {
+        "classifications": [
+          "direct_sqlite_consumer_candidate"
+        ],
+        "file_sha256": "36c793b81b9e524e99a660c9b558c251c03cfd719b40d1549eb48b6139ba7a24",
+        "hit_count": 1
+      },
+      "src/ecobiome/knowledge_persistence/sqlite_store.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "direct_sqlite_consumer_candidate",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "0ef0d309732e3919222e0737fd30fa4634c7dec01500f422ed1da778221f0397",
+        "hit_count": 13
+      },
+      "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py": {
+        "classifications": [
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "cf593be6b591e5a45634bdce8624144a5dbb62d7afed339551f10772e3949b1e",
+        "hit_count": 11
+      },
+      "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "direct_sqlite_consumer_candidate",
+          "legacy_v6_fixed_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "775c31e7e820de17783905e52295f6200d29e6c96165ec0e58057f5ddbac1d6a",
+        "hit_count": 17
+      },
+      "src/ecobiome/ui/local_api.py": {
+        "classifications": [
+          "configurable_database_consumer_candidate",
+          "legacy_v6_fixed_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "file_sha256": "b557c04f7813df2a7c8517394392daa2c5b5f47b92e772274b3043ad9e046861",
+        "hit_count": 9
+      },
+      "tests/knowledge_persistence/test_alignment_read_api_v6.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "1253502d709bcbc1dc2310c13e6cb619ec1dae7d587f99afa833d31feca81577",
+        "hit_count": 6
+      },
+      "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "c50be92ac6ab1725672967272489073660b9064df358bb969c25306cff4bc3fe",
+        "hit_count": 8
+      },
+      "tests/knowledge_persistence/test_sqlite_schema.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "b030cf5f59862d5e621133f4f110adca5fd9d1b184781c91f7d561f6df6e636e",
+        "hit_count": 2
+      },
+      "tests/knowledge_persistence/test_sqlite_store.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "d2fd59b6004f724c3e57b54884f340055d9eb1490a295708ed29ed54af0ce4ea",
+        "hit_count": 35
+      },
+      "tests/test_collector_acquisition.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "ec36d1e4db9cc37de9bd437a8ea35f93e5ff95ec0b11853b7550029dcbd8a9fe",
+        "hit_count": 1
+      },
+      "tests/test_collector_claims.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "daaa18d1b0349e0c194f8796f2ab859093d76a2b0457ef8cb8aea153e321a0de",
+        "hit_count": 3
+      },
+      "tests/test_collector_packaged_runtime.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "960fa9746fa0e1e7614437e32e99922b448f2260cc9d38c46d3bb3ae4c6e4625",
+        "hit_count": 7
+      },
+      "tests/test_collector_persistence.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "97b2f7b8095c3cc1f804a7e7038f90393763de0b79371d08c74b0a550a453561",
+        "hit_count": 3
+      },
+      "tests/test_collector_semantic_claims.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "51363bce7cd1db6c024f87aa2725c512d3b5df3833a07bfc6a1f6c44a85ea35a",
+        "hit_count": 1
+      },
+      "tests/test_collector_semantic_extraction.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "4ded5a7cc548e60a236dd1b91ade0e16ba34b50b08eb797a5aada0ab463f787f",
+        "hit_count": 1
+      },
+      "tests/test_collector_semantic_openai.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "5d19c3dfe600d58876e56fcebadb6789721304237168d3f4e9e7934c5a224a53",
+        "hit_count": 1
+      },
+      "tests/test_collector_v2_migration.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "4a360554bd63e78aa82de5d2da2d1fc1b80ab3669e91b4b07c2e0ba84ffe7365",
+        "hit_count": 10
+      },
+      "tests/test_collector_v2_retention.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "499f19295c6c86d18e5f62f6950816a55ee694052670a9659b1ddc267ae157ca",
+        "hit_count": 2
+      },
+      "tests/test_collector_v2_schema.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "c10ad8baaaf5dc203949de3ba6ff3cb71c086ed633eeec6c4969a2f06fa222f5",
+        "hit_count": 2
+      },
+      "tests/test_collector_youtube.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "7ad2ac20088782f98aedc3314334760520f21b9620705bcca9d67b1a1e1f6003",
+        "hit_count": 1
+      },
+      "tests/test_nitrogen_vertical_demo_cli.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "643f05dc6b6b619804b81c3752b06efe53133f591a80f5bf4725c17ed61cac0b",
+        "hit_count": 4
+      },
+      "tests/test_nitrogen_vertical_demonstration_v1.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "41336869c3c8fd8880ae556457cf974e0a8ced947c8b73c9f5981a71c17458ad",
+        "hit_count": 6
+      },
+      "tests/test_nitrogen_vertical_ui_api.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "cc393462aebb7b1386512013034d86e43913f827f9fc9b930540636efb8f4926",
+        "hit_count": 6
+      },
+      "tests/test_process_scientific_alignment_explanation_v1.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "2c45ecd8619607b46b164e1d0c094277332d24839442a70753b6393a42c29bba",
+        "hit_count": 6
+      },
+      "tests/test_semantic_candidate_entity_resolution_cli_g5.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "679d3babbca95e8db6a84ffb3ad3d901d7875100eab5be7c93d1afcb7869a4c8",
+        "hit_count": 4
+      },
+      "tests/test_semantic_candidate_review_cli_g2.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "1f2e35591ff6d992648bb1b182238be496cfd3e90117bcb3c4b22f172c47e0f1",
+        "hit_count": 4
+      },
+      "tests/test_semantic_provider_retention_g4.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "6c436e4df935fd5ef8a219431438e7cc0661b163b524d38e1f7c8fbb6cefeedf",
+        "hit_count": 19
+      },
+      "tests/test_snapshot_promotion_v1.py": {
+        "classifications": [
+          "test_only"
+        ],
+        "file_sha256": "611fd906deb7f621a63c39b1b587422bb6183871958914105deb74bc85f27db0",
+        "hit_count": 2
+      }
+    },
+    "hits": [
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "args.scientific_foundation",
+        "line": 75,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/cli/nitrogen_demo.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "store.database_path.parent.mkdir(parents=True, exist_ok=True)",
+        "line": 82,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/collector_acquire.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "dir=store.database_path.parent,",
+        "line": 85,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/collector_acquire.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "\"database\": str(store.database_path),",
+        "line": 295,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/collector_cli.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "\"collector_database\": str(store.database_path),",
+        "line": 328,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/collector_cli.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def _connect(database_path: Path) -> sqlite3.Connection:",
+        "line": 64,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "connection = sqlite3.connect(database_path, timeout=30.0)",
+        "line": 65,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "source_connection = sqlite3.connect(source, timeout=30.0)",
+        "line": 99,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "destination_connection = sqlite3.connect(destination)",
+        "line": 100,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: Path,",
+        "line": 111,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_backup = backup_directory / database_path.name",
+        "line": 120,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "_backup_sqlite(database_path, database_backup)",
+        "line": 121,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "\"source\": str(database_path),",
+        "line": 133,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "with sqlite3.connect(database_backup) as connection:",
+        "line": 147,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: Path,",
+        "line": 202,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "source = sqlite3.connect(database_backup, timeout=30.0)",
+        "line": 211,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "destination = sqlite3.connect(database_path, timeout=30.0)",
+        "line": 212,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "verification = _connect(database_path)",
+        "line": 220,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: Path,",
+        "line": 240,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_backup = backup_directory / database_path.name",
+        "line": 245,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=database_path,",
+        "line": 251,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "target = Path(str(database_path) + suffix)",
+        "line": 258,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: str | Path,",
+        "line": 320,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "path = Path(database_path).expanduser().resolve()",
+        "line": 323,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: str | Path,",
+        "line": 883,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database = Path(database_path).expanduser().resolve()",
+        "line": 890,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=database,",
+        "line": 957,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=database,",
+        "line": 978,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=database,",
+        "line": 993,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/migration_v2.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def __init__(self, database_path: str | Path) -> None:",
+        "line": 177,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.database_path = Path(database_path).expanduser().resolve()",
+        "line": 178,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.document_directory = self.database_path.with_name(",
+        "line": 179,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "f\"{self.database_path.stem}.documents\"",
+        "line": 180,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.artifact_directory = self.database_path.with_name(",
+        "line": 182,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "f\"{self.database_path.stem}.artifacts\"",
+        "line": 183,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.backup_directory = self.database_path.with_name(",
+        "line": 185,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "f\"{self.database_path.stem}.backups\"",
+        "line": 186,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.database_path.parent.mkdir(parents=True, exist_ok=True)",
+        "line": 192,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "connection = sqlite3.connect(",
+        "line": 193,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.database_path,",
+        "line": 194,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=self.database_path,",
+        "line": 211,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/persistence.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: str | Path,",
+        "line": 174,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/retention.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database = Path(database_path).expanduser().resolve()",
+        "line": 180,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/retention.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 188,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/retention.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "PersistenceConfig,",
+        "line": 21,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 22,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "def _unit_of_work(args: argparse.Namespace) -> SQLiteScientificFoundationUnitOfWork:",
+        "line": 91,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 92,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=args.database,",
+        "line": 93,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "return SQLiteScientificFoundationUnitOfWork(",
+        "line": 99,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_entity_resolution_cli_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "PersistenceConfig,",
+        "line": 18,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 19,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "def _unit_of_work(args: argparse.Namespace) -> SQLiteScientificFoundationUnitOfWork:",
+        "line": 94,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 95,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=args.database,",
+        "line": 96,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "return SQLiteScientificFoundationUnitOfWork(",
+        "line": 102,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_candidate_review_cli_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "ScientificFoundationUnitOfWork,",
+        "line": 48,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "uow: ScientificFoundationUnitOfWork,",
+        "line": 218,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "uow: ScientificFoundationUnitOfWork,",
+        "line": 272,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "uow: ScientificFoundationUnitOfWork,",
+        "line": 616,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "uow: ScientificFoundationUnitOfWork,",
+        "line": 880,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_acquisition/semantic_provider_retention_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "from .config import PersistenceConfig",
+        "line": 3,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/__init__.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 40,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/__init__.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "\"PersistenceConfig\",",
+        "line": 55,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/__init__.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "\"SQLiteScientificFoundationUnitOfWork\",",
+        "line": 59,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/__init__.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "from .config import PersistenceConfig",
+        "line": 26,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def __init__(self, database_path: str | Path) -> None:",
+        "line": 156,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.database_path = Path(database_path).expanduser().resolve()",
+        "line": 157,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.artifact_directory = self.database_path.with_name(",
+        "line": 158,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "f\"{self.database_path.stem}.cas\"",
+        "line": 159,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self.backup_directory = self.database_path.with_name(",
+        "line": 163,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "f\"{self.database_path.stem}.backups\"",
+        "line": 164,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def _config(self) -> PersistenceConfig:",
+        "line": 182,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "return PersistenceConfig(",
+        "line": 183,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path=self.database_path,",
+        "line": 184,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "connection = sqlite3.connect(str(self.database_path), timeout=30.0)",
+        "line": 194,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/collector_compat.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "class PersistenceConfig:",
+        "line": 20,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/config.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: Path",
+        "line": 21,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/config.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def validated(self, repo_root: Path | None = None) -> PersistenceConfig:",
+        "line": 27,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/config.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "db=self.database_path.resolve()",
+        "line": 28,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/config.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class ScientificFoundationUnitOfWork(Protocol):",
+        "line": 653,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/contracts.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class ScientificFoundationPersistenceError(RuntimeError): pass",
+        "line": 2,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/errors.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class PersistenceConfigurationError(ScientificFoundationPersistenceError): pass",
+        "line": 3,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/errors.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class SchemaIdentityError(ScientificFoundationPersistenceError): pass",
+        "line": 4,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/errors.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class PersistenceIntegrityError(ScientificFoundationPersistenceError): pass",
+        "line": 5,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/errors.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class ArtifactStoreError(ScientificFoundationPersistenceError): pass",
+        "line": 6,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/errors.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "conn = sqlite3.connect(path.resolve().as_uri() + \"?mode=ro\", uri=True)",
+        "line": 542,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "WHERE schema_name='scientific_foundation'",
+        "line": 552,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "conn = sqlite3.connect(staging_db)",
+        "line": 742,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "check_conn = sqlite3.connect(",
+        "line": 804,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/snapshot_promotion_v1.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "COMPLETE_DDL = '-- EcoBiome Scientific Foundation V1.1\\n-- COMPLETE SQLITE RUNTIME DDL - OFF-REPO CANDIDATE V1.1\\n-- DO NOT USE AS A CANONICAL DATABASE MIGRATION.\\n--\\n-- Authorized disposable runtime connection policy for the NEXT gate:\\n-",
+        "line": 12,
+        "matched_patterns": [
+          "direct_sqlite_connect",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_schema.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "from .config import PersistenceConfig",
+        "line": 14,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "conn=sqlite3.connect(str(path),timeout=5.0,autocommit=True)",
+        "line": 166,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "\"FROM sf_schema_metadata WHERE schema_name='scientific_foundation'\"",
+        "line": 204,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "if metadata != (\"scientific_foundation\",SCHEMA_VERSION,RUNTIME_SCHEMA_DESIGN_SHA256):",
+        "line": 206,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "config: PersistenceConfig,",
+        "line": 219,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "config=config.validated(repo_root); path=config.database_path",
+        "line": 223,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "(\"scientific_foundation\",SCHEMA_VERSION,RUNTIME_SCHEMA_DESIGN_SHA256,datetime.now(UTC).isoformat(timespec=\"seconds\")),",
+        "line": 239,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def backup_database(config: PersistenceConfig, *, repo_root: Path, destination: Path) -> None:",
+        "line": 253,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "source=sqlite3.connect(str(config.database_path),autocommit=True)",
+        "line": 256,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "target=sqlite3.connect(str(destination),autocommit=True)",
+        "line": 257,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class SQLiteScientificFoundationUnitOfWork:",
+        "line": 1503,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def __init__(self,config:PersistenceConfig,*,repo_root:Path,artifact_store:RawArtifactStore)->None:",
+        "line": 1504,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "self._conn=_bootstrap_connection(self._config.database_path); validate_schema(self._conn)",
+        "line": 1510,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/knowledge_persistence/sqlite_store.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "class ScientificFoundationSnapshotRefV1:",
+        "line": 164,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "scientific_foundation_snapshot: ScientificFoundationSnapshotRefV1",
+        "line": 207,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "self.scientific_foundation_snapshot,",
+        "line": 216,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "ScientificFoundationSnapshotRefV1,",
+        "line": 217,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "\"scientific_foundation_snapshot must be \"",
+        "line": 220,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "\"ScientificFoundationSnapshotRefV1\"",
+        "line": 221,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "\"scientific_foundation_snapshot\": (",
+        "line": 396,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "self.scientific_foundation_snapshot.canonical_payload()",
+        "line": 397,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "f\"`{self.scientific_foundation_snapshot.database_sha256}`\"",
+        "line": 460,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "scientific_foundation_snapshot: ScientificFoundationSnapshotRefV1,",
+        "line": 531,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "scientific_foundation_snapshot=scientific_foundation_snapshot,",
+        "line": 541,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "ScientificFoundationSnapshotRefV1,",
+        "line": 17,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "SCIENTIFIC_FOUNDATION_V6_SHA256 = (",
+        "line": 37,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "SCIENTIFIC_FOUNDATION_V6_DESIGN_SHA256 = (",
+        "line": 40,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "def validate_scientific_foundation_v6_read_only(",
+        "line": 66,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: Path,",
+        "line": 67,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "path = database_path.expanduser().resolve()",
+        "line": 70,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "if observed_sha != SCIENTIFIC_FOUNDATION_V6_SHA256:",
+        "line": 76,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "conn = sqlite3.connect(path.as_uri() + \"?mode=ro\", uri=True)",
+        "line": 82,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "\"WHERE schema_name='scientific_foundation'\"",
+        "line": 93,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "SCIENTIFIC_FOUNDATION_V6_DESIGN_SHA256",
+        "line": 115,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "database_path: Path,",
+        "line": 123,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "path = database_path.expanduser().resolve()",
+        "line": 126,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "validate_scientific_foundation_v6_read_only(path)",
+        "line": 127,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "direct_sqlite_consumer_candidate",
+        "excerpt": "conn = sqlite3.connect(path.as_uri() + \"?mode=ro\", uri=True)",
+        "line": 207,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "scientific_foundation_snapshot=ScientificFoundationSnapshotRefV1(",
+        "line": 264,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "design_sha256=SCIENTIFIC_FOUNDATION_V6_DESIGN_SHA256,",
+        "line": 266,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "database_sha256=SCIENTIFIC_FOUNDATION_V6_SHA256,",
+        "line": 267,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "SCIENTIFIC_FOUNDATION_V6_SHA256,",
+        "line": 20,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "NITROGEN_SCIENTIFIC_FOUNDATION_ENV = \"ECOBIOME_SCIENTIFIC_FOUNDATION_V6\"",
+        "line": 29,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "def resolve_nitrogen_scientific_foundation_path() -> Path:",
+        "line": 32,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "scientific_foundation_reference",
+        "excerpt": "override = os.environ.get(NITROGEN_SCIENTIFIC_FOUNDATION_ENV)",
+        "line": 33,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "/ \"scientific-foundation-v6\"",
+        "line": 40,
+        "matched_patterns": [
+          "legacy_v6_path_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "/ \"scientific-foundation-v6.sqlite3\"",
+        "line": 41,
+        "matched_patterns": [
+          "legacy_v6_path_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "def _nitrogen_demo_payload(database_path: Path | None = None) -> dict[str, Any]:",
+        "line": 45,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "configurable_database_consumer_candidate",
+        "excerpt": "path = database_path or resolve_nitrogen_scientific_foundation_path()",
+        "line": 46,
+        "matched_patterns": [
+          "database_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "legacy_v6_fixed_path_reference",
+        "excerpt": "\"scientific_foundation_sha256\": SCIENTIFIC_FOUNDATION_V6_SHA256,",
+        "line": 64,
+        "matched_patterns": [
+          "legacy_v6_path_reference",
+          "scientific_foundation_reference"
+        ],
+        "path": "src/ecobiome/ui/local_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 7,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_alignment_read_api_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 11,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_alignment_read_api_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 25,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_alignment_read_api_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 32,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_alignment_read_api_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 118,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_alignment_read_api_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 130,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_alignment_read_api_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 21,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 22,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _config(tmp_path: Path) -> tuple[PersistenceConfig, Path]:",
+        "line": 101,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 104,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _seed(config: PersistenceConfig, repo: Path) -> dict[str, object]:",
+        "line": 117,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 124,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 353,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 387,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_semantic_candidate_entity_resolution_v6.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "from ecobiome.knowledge_persistence import PersistenceConfig",
+        "line": 4,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_schema.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 86,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_schema.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 12,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 16,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 41,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 48,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 96,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 104,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 170,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 186,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 199,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 212,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _seed_segment_for_review(config: PersistenceConfig) -> None:",
+        "line": 222,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 223,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _segment_snapshot(config: PersistenceConfig) -> tuple[str, str, str]:",
+        "line": 269,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 270,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow:",
+        "line": 282,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow, pytest.raises(PersistenceIntegrityError):",
+        "line": 293,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow, pytest.raises(PersistenceIntegrityError):",
+        "line": 301,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow:",
+        "line": 309,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow:",
+        "line": 320,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow, pytest.raises(PersistenceIntegrityError):",
+        "line": 329,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow, pytest.raises(PersistenceIntegrityError):",
+        "line": 336,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow:",
+        "line": 345,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow:",
+        "line": 359,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(config, repo_root=repo, artifact_store=artifacts) as uow:",
+        "line": 370,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _seed_claim_for_review(config: PersistenceConfig) -> None:",
+        "line": 378,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 379,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 441,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 447,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 457,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 480,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 501,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 533,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 548,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 585,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 594,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/knowledge_persistence/test_sqlite_store.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 53,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_acquisition.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 17,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_claims.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 26,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_claims.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 223,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_claims.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 15,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 23,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=tmp_path / \"data\" / \"collector.sqlite3\",",
+        "line": 24,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 35,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=repo_root / \"collector.sqlite3\",",
+        "line": 36,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 62,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "\"WHERE schema_name='scientific_foundation'\"",
+        "line": 65,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_collector_packaged_runtime.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(store.database_path) as connection:",
+        "line": 51,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_persistence.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "WHERE schema_name = 'scientific_foundation'",
+        "line": 62,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_collector_persistence.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(store.database_path) as connection:",
+        "line": 232,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_persistence.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database = store.database_path",
+        "line": 406,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_semantic_claims.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database = store.database_path",
+        "line": 321,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_semantic_extraction.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "str(store.database_path),",
+        "line": 401,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_semantic_openai.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 134,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 257,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=database,",
+        "line": 282,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 294,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=database,",
+        "line": 333,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=database,",
+        "line": 353,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 364,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "live_reader = sqlite3.connect(database)",
+        "line": 383,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=database,",
+        "line": 391,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "connection = sqlite3.connect(database)",
+        "line": 404,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_migration.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=store.database_path,",
+        "line": 66,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_v2_retention.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "database_path=store.database_path,",
+        "line": 94,
+        "matched_patterns": [
+          "database_path_reference"
+        ],
+        "path": "tests/test_collector_v2_retention.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(store.database_path) as connection:",
+        "line": 53,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_schema.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(store.database_path) as connection:",
+        "line": 149,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_v2_schema.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 232,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_collector_youtube.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "assert args.scientific_foundation == Path(\"foundation.sqlite3\")",
+        "line": 35,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demo_cli.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "scientific_foundation=Path(\"unused.sqlite3\"),",
+        "line": 51,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demo_cli.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "scientific_foundation=Path(\"unused.sqlite3\"),",
+        "line": 72,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demo_cli.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "observed[\"database\"] = args.scientific_foundation",
+        "line": 89,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demo_cli.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "ScientificFoundationSnapshotRefV1,",
+        "line": 18,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "snapshot = ScientificFoundationSnapshotRefV1(",
+        "line": 200,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "scientific_foundation_snapshot=snapshot,",
+        "line": 212,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "scientific_foundation_snapshot=snapshot,",
+        "line": 273,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "scientific_foundation_snapshot=snapshot,",
+        "line": 299,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "scientific_foundation_snapshot=snapshot,",
+        "line": 331,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_demonstration_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "monkeypatch.delenv(local_api.NITROGEN_SCIENTIFIC_FOUNDATION_ENV, raising=False)",
+        "line": 48,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_ui_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "path = local_api.resolve_nitrogen_scientific_foundation_path()",
+        "line": 49,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_ui_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "assert path.name == \"scientific-foundation-v6.sqlite3\"",
+        "line": 50,
+        "matched_patterns": [
+          "legacy_v6_path_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_ui_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "assert \"scientific-foundation-v6\" in str(path)",
+        "line": 51,
+        "matched_patterns": [
+          "legacy_v6_path_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_ui_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "monkeypatch.setenv(local_api.NITROGEN_SCIENTIFIC_FOUNDATION_ENV, str(target))",
+        "line": 59,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_ui_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "assert local_api.resolve_nitrogen_scientific_foundation_path() == (",
+        "line": 60,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_nitrogen_vertical_ui_api.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 10,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_process_scientific_alignment_explanation_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 14,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_process_scientific_alignment_explanation_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 56,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_process_scientific_alignment_explanation_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 63,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_process_scientific_alignment_explanation_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 207,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_process_scientific_alignment_explanation_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 292,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_process_scientific_alignment_explanation_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 18,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_candidate_entity_resolution_cli_g5.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig(database, artifacts),",
+        "line": 92,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_candidate_entity_resolution_cli_g5.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 109,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_candidate_entity_resolution_cli_g5.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 473,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_candidate_entity_resolution_cli_g5.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 15,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_candidate_review_cli_g2.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig(database, artifacts),",
+        "line": 88,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_candidate_review_cli_g2.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 101,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_candidate_review_cli_g2.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(database) as connection:",
+        "line": 348,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_candidate_review_cli_g2.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 35,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "SQLiteScientificFoundationUnitOfWork,",
+        "line": 40,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _scientific_foundation_fixture(",
+        "line": 127,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "PersistenceConfig,",
+        "line": 131,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config = PersistenceConfig(",
+        "line": 138,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 279,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _install_append_only_guards(config: PersistenceConfig) -> None:",
+        "line": 299,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 300,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "def _count(config: PersistenceConfig, table: str) -> int:",
+        "line": 401,
+        "matched_patterns": [
+          "persistence_config_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 402,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config, artifacts, repo = _scientific_foundation_fixture(",
+        "line": 414,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 421,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with sqlite3.connect(config.database_path) as connection:",
+        "line": 452,
+        "matched_patterns": [
+          "database_path_reference",
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 491,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config, artifacts, repo = _scientific_foundation_fixture(",
+        "line": 520,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 537,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 545,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "config, artifacts, repo = _scientific_foundation_fixture(",
+        "line": 569,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "with SQLiteScientificFoundationUnitOfWork(",
+        "line": 578,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_semantic_provider_retention_g4.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": "conn = sqlite3.connect(path)",
+        "line": 101,
+        "matched_patterns": [
+          "direct_sqlite_connect"
+        ],
+        "path": "tests/test_snapshot_promotion_v1.py"
+      },
+      {
+        "classification": "test_only",
+        "excerpt": ") VALUES ('scientific_foundation',6,?)",
+        "line": 117,
+        "matched_patterns": [
+          "scientific_foundation_reference"
+        ],
+        "path": "tests/test_snapshot_promotion_v1.py"
+      }
+    ],
+    "patterns": [
+      "active_pointer_reference",
+      "database_path_reference",
+      "direct_sqlite_connect",
+      "legacy_v6_path_reference",
+      "persistence_config_reference",
+      "scientific_foundation_reference",
+      "snapshot_root_reference"
+    ],
+    "runtime_summary": {
+      "active_pointer_or_resolver_runtime_files": [],
+      "legacy_v6_fixed_path_runtime_files": [
+        "src/ecobiome/reasoning/nitrogen_vertical_runtime_v1.py",
+        "src/ecobiome/ui/local_api.py"
+      ],
+      "runtime_files_with_hits": 20
+    },
+    "scan_basis_repo_head": "c526deac04af5ad66256ec302cc76bf084b8148d",
+    "scan_scope": [
+      "src/ecobiome/**/*.py",
+      "tests/**/*.py"
+    ],
+    "schema_version": "ecobiome-active-scientific-foundation-consumer-audit-v1",
+    "total_hit_count": 275,
+    "total_python_files_scanned": 344
+  },
+  "consumer_audit_payload_sha256": "56064e2de369bc6f2a5cb24b6188d2cf22ffe512cf1ecab587f71451229dc6d1"
+}

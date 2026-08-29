@@ -1,0 +1,25 @@
+{
+  "identity_binding_payload": {
+    "candidate_commit_parent": "4abbc3cc1dd29fe9559fb7c5c7572940734509a7",
+    "candidate_commit_tree": "8f5c90b79403791247d9dfa7569dabf340a604b3",
+    "derived_representation_cas_write_authorized": false,
+    "execution_plan_payload_sha256": "7dc3633f480b4d5ad27410b946b9d7bfd4acdd2e8f446cc843f515eaced83291",
+    "next_gate": "RATE-3F_CORRECTED_PROMOTION_ENGINE_HUMAN_REVIEW_AND_REAL_DRY_RUN_BOUNDARY",
+    "promotion_contract_repo_head": "5903fad33bd5daae348cdbffc7ef0afff0a73c08",
+    "promotion_engine_code_identity_sha256": "8831fdc239c01ee311ad5cfe39a48f6a92e0625fb7db14906d650e6a4054c3ee",
+    "promotion_engine_contract_payload_sha256": "64752827cfb0b4067f693ac9473d804269149a9d5ede7dc2324918b11c705ea4",
+    "promotion_engine_git_blob_sha1": "54ffc3d95cd4c3cdc979f24101a5d800c6513f61",
+    "promotion_engine_repo_head": "5903fad33bd5daae348cdbffc7ef0afff0a73c08",
+    "rate_3c_candidate_repo_head": "ef07b7c7263488a4361795f5e95a70d8f83749d7",
+    "rate_3c_identity_binding_payload_sha256": "6b8cfe1e3673c3b6f7b0ba52d961574a638a21c48390ae5b4967d6c143eb2696",
+    "rate_3d_human_review_decision_sha256": "b29915795b57f36c62a3a883d1599065bf0a8a3bccc4f03c3e6e5080723e2598",
+    "rate_3d_review_repo_head": "4abbc3cc1dd29fe9559fb7c5c7572940734509a7",
+    "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a",
+    "schema_version": "ecobiome-first-derived-snapshot-promotion-candidate-identity-binding-v2",
+    "scientific_input_repo_head": "f46e50b5e28fb2515e573c0589b6a17d106f22b6",
+    "scientific_staging_database_creation_authorized": false,
+    "snapshot_creation_authorized": false,
+    "status": "candidate_identity_bound"
+  },
+  "identity_binding_payload_sha256": "35b882362bfea7359f2c495db59e36c28c8724474b64f441360b0b444a3ef391"
+}

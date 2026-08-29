@@ -1,0 +1,79 @@
+{
+  "candidate_payload": {
+    "authority_source": {
+      "author": "PubChem",
+      "authority": "PubChem",
+      "authority_external_id": "946",
+      "authority_namespace": "PubChem Compound",
+      "canonical_locator": "https://pubchem.ncbi.nlm.nih.gov/compound/946",
+      "proposed_source_id": "authority-source-pubchem-cid-946",
+      "source_type": "authority_record",
+      "title": "PubChem Compound CID 946 — Nitrite"
+    },
+    "candidate_id": "candidate-g7a-nitrite-entity-identity-v1",
+    "entity": {
+      "canonical_label": "nitrite",
+      "entity_kind": "chemical_species",
+      "formula": "NO2-",
+      "primary_identifier": {
+        "authority_namespace": "PubChem Compound",
+        "external_id": "946",
+        "scheme": "pubchem_cid"
+      },
+      "proposed_entity_id": "entity-pubchem-cid-946",
+      "schema_version": "entity-v1"
+    },
+    "forbidden_inferences": [
+      "Do not mark the nitrite entity reviewed_confirmed before explicit human acceptance.",
+      "Do not inherit Candidatus Nitrospira inopinata as process_agent.",
+      "Do not identify ammonium as the accepted reactive NH3 substrate.",
+      "Do not write the real Scientific Foundation V6.",
+      "Do not create the mechanism assertion yet.",
+      "Do not create assertion-claim links.",
+      "Do not authorize a numeric RateModel."
+    ],
+    "human_review": {
+      "completed": false,
+      "decision": "pending",
+      "required_before_reviewed_confirmed": true
+    },
+    "mapping_candidate": {
+      "mapping_review_status": "pending_human_review",
+      "mapping_status": "exact",
+      "review_status": "pending_human_review"
+    },
+    "persistence_state": {
+      "authority_source_inserted": false,
+      "entity_inserted": false,
+      "entity_revision_inserted": false,
+      "identifier_inserted": false,
+      "real_v6_write_authorized": false,
+      "real_v6_written": false
+    },
+    "rate_2f_correction": {
+      "accepted_reactive_source_entity": "entity-pubchem-cid-222",
+      "accepted_reactive_source_label": "ammonia",
+      "copy_template_process_agent_to_new_assertion": false,
+      "frozen_template_has_three_participants": true,
+      "preserve_generic_semantic_qualifier": {
+        "semantic_type": "nitrogen_oxidation"
+      },
+      "reason": "RATE-2B explicitly avoids an organism-exclusive mechanism claim; the frozen one-step template's Candidatus Nitrospira inopinata process_agent must not be inherited automatically.",
+      "reuse_template_ammonium_entity_as_reactive_source": false,
+      "template_roles": [
+        "process_agent",
+        "source_material",
+        "target_material"
+      ]
+    },
+    "scientific_basis": {
+      "intended_role": "target chemical species for the accepted ammonia-to-nitrite mechanism assertion",
+      "molecular_formula": "NO2-",
+      "pubchem_cid": "946",
+      "pubchem_name": "nitrite"
+    },
+    "status": "candidate_ready_for_human_review"
+  },
+  "candidate_payload_sha256": "4fe7808c45aecafbe6ecd09d4590aff6d5b0d965b5a795502020ed49220e129f",
+  "schema_version": "ecobiome-scientific-entity-identity-candidate-v1"
+}

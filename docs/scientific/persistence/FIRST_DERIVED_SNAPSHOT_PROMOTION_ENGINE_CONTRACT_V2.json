@@ -1,0 +1,58 @@
+{
+  "promotion_engine_contract_payload": {
+    "authorization": {
+      "active_pointer_update_authorized": false,
+      "derived_representation_cas_write_authorized": false,
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "remote_git_write_authorized": false,
+      "schema_migration_authorized": false,
+      "scientific_staging_database_creation_authorized": false,
+      "snapshot_creation_authorized": false
+    },
+    "basis": {
+      "rate_3c_identity_binding_payload_sha256": "6b8cfe1e3673c3b6f7b0ba52d961574a638a21c48390ae5b4967d6c143eb2696",
+      "rate_3d_human_review_decision_sha256": "b29915795b57f36c62a3a883d1599065bf0a8a3bccc4f03c3e6e5080723e2598",
+      "replay_manifest_payload_sha256": "26f7a1f7b8cef2a6e7ad7e0f861a65fd12de89bace4270202447fe3b821e801a"
+    },
+    "derived_cas": {
+      "corruption_exception_must_propagate": "ArtifactCorruptionError",
+      "exact_derived_content_sha_required_before_and_after_put": true,
+      "materialization_requires_explicit_authorization": true,
+      "missing_exception": "ArtifactMissingError"
+    },
+    "execution_identity": {
+      "all_checks_before_CAS_or_filesystem_effects": true,
+      "authorization_and_binding_exact_repo_heads_must_match": true,
+      "authorization_canonical_sha_verified": true,
+      "authorization_must_bind_identity_binding_sha": true,
+      "authorization_must_bind_replay_manifest_sha": true,
+      "executing_engine_file_sha_must_match_binding": true,
+      "expected_authorization_payload_sha256_required": true,
+      "identity_binding_canonical_sha_verified": true,
+      "replay_manifest_canonical_sha_verified": true
+    },
+    "publication_durability": {
+      "files": "fsync DB and manifest through writable descriptors",
+      "inconsistent_existing_final_directory_is_fatal": true,
+      "partial_existing_final_directory_is_fatal": true,
+      "posix": "fsync temporary directory; atomic os.replace directory; fsync parent directory",
+      "windows": "same-volume MoveFileExW(directory, directory, MOVEFILE_WRITE_THROUGH) after DB/manifest fsync",
+      "windows_directory_FlushFileBuffers_claim": false
+    },
+    "schema_version": "ecobiome-first-derived-snapshot-promotion-engine-contract-v2",
+    "status": "candidate_pending_human_review",
+    "validation": {
+      "exact_table_delta": true,
+      "foreign_key_check": true,
+      "frozen_parent_sha_reverification": true,
+      "full_regression_before_publication": true,
+      "published_pair_hash_reverification": true,
+      "quick_check": true,
+      "row_by_row_canonical_validation": true,
+      "synthetic_end_to_end_test_required": true
+    }
+  },
+  "promotion_engine_contract_payload_sha256": "64752827cfb0b4067f693ac9473d804269149a9d5ede7dc2324918b11c705ea4"
+}

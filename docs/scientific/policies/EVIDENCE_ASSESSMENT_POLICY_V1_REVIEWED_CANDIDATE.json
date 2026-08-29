@@ -1,0 +1,78 @@
+{
+  "policy_payload": {
+    "boundaries": {
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "process_scientific_support_materialization_authorized": false,
+      "schema_migration_authorized": false,
+      "stable_policy_adopted_in_real_v6": false
+    },
+    "pairwise_independence_policy": {
+      "name": "ecobiome-evidence-origin-independence-relations",
+      "projection_to_independent_support_origin_count": "delegated_to_reviewed_aggregation_policy",
+      "projection_to_per_link_independence_status": "forbidden_in_v1",
+      "property_kind": "relation_between_two_evidence_origins",
+      "relation_states": [
+        "dependent",
+        "partially_independent",
+        "independent"
+      ],
+      "unresolved_review_state_supported": true,
+      "version": "1-reviewed-candidate"
+    },
+    "policy": {
+      "derived_from_candidate_version": "ecobiome-evidence-assessment-1-candidate",
+      "name": "ecobiome-evidence-assessment",
+      "policy_version_string": "ecobiome-evidence-assessment-1",
+      "version": "1"
+    },
+    "promotion_projection": {
+      "human_review_required_for_shadow_materialization": false,
+      "independence_semantics_revised": true,
+      "real_v6_write_authorized": false,
+      "scientific_assessment_fields_changed": false,
+      "shadow_materialization_authorized": true,
+      "source_policy_candidate_sha256": "508e273824f6e0b58765b6034c8e1a993c93d57ed8359a72a482d7e559a42ad1",
+      "stable_policy_version": "ecobiome-evidence-assessment-1"
+    },
+    "schema_version": "ecobiome-evidence-assessment-policy-v1-reviewed-candidate",
+    "scientific_rules": {
+      "evidence_directness": {
+        "no_automatic_upgrade_from_author_interpretation": true,
+        "policy_controlled": true,
+        "reviewed_values_in_current_vertical": [
+          "direct_functional_support",
+          "direct_functional_support_with_intermediate_inference"
+        ]
+      },
+      "json_fields": {
+        "canonical_json_object_required": true,
+        "fields": [
+          "endpoint_or_response_json",
+          "study_scope_json",
+          "methodological_dimensions_json",
+          "statistical_result_json",
+          "limitations_json"
+        ]
+      },
+      "per_link_independence_status": {
+        "field": "EvidenceAssessmentsRow.independence_status",
+        "pairwise_relation_not_auto_copied_to_per_link": true,
+        "reason": "EvidenceAssessmentsRow is scoped to one assertion-claim link and does not identify the comparison origin required to encode a pairwise independence relationship.",
+        "v1_allowed_values": [
+          "unresolved"
+        ]
+      },
+      "study_design": {
+        "free_text_without_definition_forbidden": true,
+        "policy_controlled": true
+      },
+      "supersession": {
+        "append_only": true,
+        "supersedes_assessment_id_used_for_reassessment": true
+      }
+    },
+    "status": "human_reviewed_candidate"
+  },
+  "policy_payload_sha256": "ff95c9aa278772d7bf58a17dcd93fe386795dc6320f42a6f911873cc1128e59b"
+}

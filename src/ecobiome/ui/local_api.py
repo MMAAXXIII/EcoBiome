@@ -13,12 +13,118 @@ from urllib.parse import parse_qs, urlparse
 from uuid import UUID
 
 from ecobiome.dashboard import build_project_dashboard
+from ecobiome.knowledge_persistence.active_foundation_runtime_config_v2 import (
+    resolve_default_scientific_foundation_v1,
+)
+from ecobiome.knowledge_persistence.active_foundation_v2 import (
+    ResolvedScientificFoundationV1,
+)
+from ecobiome.reasoning.human_readable_nitrogen_explanation_v1 import (
+    build_human_readable_nitrogen_explanation_v1,
+)
+from ecobiome.reasoning.nitrogen_vertical_runtime_v1 import (
+    SCIENTIFIC_FOUNDATION_V6_SHA256,
+    build_frozen_g7a_nitrogen_vertical_demonstration_v1,
+    build_resolved_g7a_nitrogen_vertical_demonstration_v1,
+)
 from ecobiome.workspace import ProjectManifest, ProjectType, ProjectWorkspace
 
 DEFAULT_API_HOST = "127.0.0.1"
 DEFAULT_API_PORT = 8000
 WORKSPACE_ENV = "ECOBIOME_WORKSPACE"
 DEMO_DATA_ENV = "ECOBIOME_DEMO_DATA"
+NITROGEN_SCIENTIFIC_FOUNDATION_ENV = "ECOBIOME_SCIENTIFIC_FOUNDATION_V6"
+
+
+def resolve_nitrogen_scientific_foundation_path() -> Path:
+    override = os.environ.get(NITROGEN_SCIENTIFIC_FOUNDATION_ENV)
+    if override:
+        return Path(override).expanduser().resolve()
+    return (
+        Path.home()
+        / "Documents"
+        / "EcoBiome-data"
+        / "scientific-foundation-v6"
+        / "scientific-foundation-v6.sqlite3"
+    ).resolve()
+
+
+def _render_nitrogen_demo_payload(
+    demonstration: Any,
+    *,
+    scientific_foundation_sha256: str,
+    resolution_mode: str,
+) -> dict[str, Any]:
+    artifact = demonstration.canonical_payload()
+    boundary = artifact.get("model_boundary")
+    if not isinstance(boundary, dict) or boundary != {
+        "extent_is_explicit_input": True,
+        "kinetic_or_rate_model_present": False,
+        "dt_or_elapsed_time_prediction_present": False,
+        "forecast_claim": False,
+    }:
+        raise RuntimeError(
+            "nitrogen UI requires the frozen non-predictive model boundary"
+        )
+    human_explanation = build_human_readable_nitrogen_explanation_v1(artifact)
+    technical_explanation = demonstration.auditable_explanation.render_text()
+    return {
+        "status": "reviewed_scenario",
+        "artifact_sha256": demonstration.canonical_sha256,
+        "scientific_foundation_sha256": scientific_foundation_sha256,
+        "scientific_foundation_resolution_mode": resolution_mode,
+        "non_predictive": True,
+        "human_explanation": {
+            "canonical_sha256": human_explanation.canonical_sha256,
+            **human_explanation.canonical_payload(),
+        },
+        "technical_explanation": technical_explanation,
+        "explanation": technical_explanation,
+        "artifact": artifact,
+    }
+
+
+def _nitrogen_demo_payload_from_resolved(
+    resolved: ResolvedScientificFoundationV1,
+) -> dict[str, Any]:
+    demonstration = build_resolved_g7a_nitrogen_vertical_demonstration_v1(
+        resolved
+    )
+    return _render_nitrogen_demo_payload(
+        demonstration,
+        scientific_foundation_sha256=resolved.database_sha256,
+        resolution_mode=resolved.resolution_mode,
+    )
+
+
+def _nitrogen_demo_payload(
+    database_path: Path | None = None,
+) -> dict[str, Any]:
+    if database_path is not None:
+        demonstration = build_frozen_g7a_nitrogen_vertical_demonstration_v1(
+            database_path
+        )
+        return _render_nitrogen_demo_payload(
+            demonstration,
+            scientific_foundation_sha256=SCIENTIFIC_FOUNDATION_V6_SHA256,
+            resolution_mode="explicit_legacy_override",
+        )
+
+    override = os.environ.get(NITROGEN_SCIENTIFIC_FOUNDATION_ENV)
+    if override:
+        path = resolve_nitrogen_scientific_foundation_path()
+        demonstration = build_frozen_g7a_nitrogen_vertical_demonstration_v1(
+            path
+        )
+        return _render_nitrogen_demo_payload(
+            demonstration,
+            scientific_foundation_sha256=SCIENTIFIC_FOUNDATION_V6_SHA256,
+            resolution_mode="explicit_legacy_override",
+        )
+
+    return _nitrogen_demo_payload_from_resolved(
+        resolve_default_scientific_foundation_v1()
+    )
 
 def resolve_workspace_path() -> Path:
     override = os.environ.get(WORKSPACE_ENV)
@@ -402,7 +508,7 @@ class EcoBiomeApiHandler(BaseHTTPRequestHandler):
         except KeyError:
             self._send_json({"error": "not_found"}, HTTPStatus.NOT_FOUND)
             return
-        except (OSError, ValueError) as error:
+        except (OSError, ValueError, RuntimeError) as error:
             self._send_json({"error": str(error)}, HTTPStatus.BAD_REQUEST)
             return
 
@@ -428,6 +534,8 @@ class EcoBiomeApiHandler(BaseHTTPRequestHandler):
             }
         if path == "/api/dashboard":
             return _demo_dashboard() if demo else _real_dashboard(workspace)
+        if path == "/api/nitrogen-demo":
+            return _nitrogen_demo_payload()
         if path == "/api/water-bodies":
             return _demo_water_bodies() if demo else _real_water_bodies(workspace)
         if path == "/api/measurements":

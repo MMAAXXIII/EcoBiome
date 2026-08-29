@@ -1,0 +1,75 @@
+{
+  "activation_contract_payload": {
+    "activation_target": {
+      "consumer_migration_identity_sha256": "42914fe3998911e33122c5bad7dd237e740da2b962f090fcb3e09ef1c3adc227",
+      "parent_database_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "pointer_contract_payload_sha256": "0f97ae748e056db5ca2e88d3a0b0723c6bba7c96ed937a94165871fd5d6d67ad",
+      "resolver_code_sha256": "58ee76d2a163ae844b8b8c89653e65a70be475acb1a8ed3bf61aa974b56cd2e9",
+      "snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+      "snapshot_manifest_file_sha256": "62258e18668423ba2c01d422c9e52fd8d38909f549476bb937482495ecaa8774",
+      "snapshot_manifest_payload_sha256": "7e0a50f571ea512ed8620c6e0fe1ae9cdc335e06ccbb9f978095dbd3a2479f20"
+    },
+    "authorization_boundary": {
+      "legacy_v6_write_authorized": false,
+      "persistent_active_pointer_write_authorized": false,
+      "persistent_cas_mutation_authorized": false,
+      "persistent_runtime_policy_publication_authorized": false,
+      "persistent_snapshot_mutation_authorized": false,
+      "remote_git_write_authorized": false
+    },
+    "failure_injection": {
+      "points": [
+        "after_temp_write",
+        "before_replace",
+        "after_replace_before_verify"
+      ],
+      "post_replace_failure_requires_complete_verifiable_pointer": true,
+      "pre_replace_failure_requires_pointer_absent": true
+    },
+    "path_security": {
+      "complete_ancestor_chain_audit_required": true,
+      "paths": [
+        "persistent_active_pointer",
+        "runtime_policy",
+        "legacy_v6_database",
+        "persistent_cas_root",
+        "persistent_snapshot_root",
+        "content_addressed_snapshot_directory",
+        "snapshot_database",
+        "snapshot_manifest"
+      ],
+      "reject_symlink_junction_reparse_point": true
+    },
+    "pointer_publication": {
+      "atomic_no_clobber_publication": "MoveFileExW(MOVEFILE_WRITE_THROUGH,no_replace)",
+      "first_activation_requires_target_absent": true,
+      "flush_and_fsync_before_publish": true,
+      "overwrite_existing_active_pointer": false,
+      "persistent_target": "~/Documents/EcoBiome-data/scientific-foundation-active.json",
+      "post_publish_exact_readback_required": true,
+      "same_directory_temporary_file": true,
+      "second_ancestry_audit_immediately_before_publish": true,
+      "temporary_file_exclusive_create": true
+    },
+    "rollback": {
+      "archive_pointer_atomically_before_legacy_restart": true,
+      "consumers_must_be_quiesced": true,
+      "fail_closed_transition_window_is_acceptable": true,
+      "protocol": "quiesced-reviewed-policy-atomic-pointer-archive-v1",
+      "reviewed_legacy_policy_and_independent_sha_required": true,
+      "scientific_snapshot_or_cas_mutation": false,
+      "separate_human_review_required": true,
+      "silent_pointer_delete_forbidden": true
+    },
+    "schema_version": "ecobiome-first-persistent-scientific-foundation-activation-contract-v1",
+    "status": "design_test_dry_run_only_not_activation_authority",
+    "trust_source": {
+      "both_required_post_activation": true,
+      "deployment_semantics": "reviewed policy path and independently trusted canonical policy SHA are provisioned as separate deployment inputs",
+      "expected_policy_sha_env": "ECOBIOME_ACTIVE_SCIENTIFIC_FOUNDATION_RUNTIME_POLICY_SHA256",
+      "expected_sha_must_not_be_derived_from_policy_file_at_runtime": true,
+      "runtime_policy_path_env": "ECOBIOME_ACTIVE_SCIENTIFIC_FOUNDATION_RUNTIME_POLICY"
+    }
+  },
+  "activation_contract_payload_sha256": "6bf60e103634c2aa85cb7640ad5c325a9d1248457d2b25f48fc174e21b985f16"
+}

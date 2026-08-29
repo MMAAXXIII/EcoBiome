@@ -1,0 +1,107 @@
+{
+  "candidate_payload": {
+    "bridge_kind": "reservoir_to_reactive_species_accounting",
+    "bridge_semantics": {
+      "acid_base_equilibrium_formula_included": false,
+      "acid_base_partition_required_for_nh3_fraction": true,
+      "equivalence_claimed": false,
+      "freshwater_applicability_statement_required": true,
+      "mass_accounting_interpretation": "A RATE-1F extent transferred from TAN-N to nitrite-N represents elemental nitrogen leaving the total ammonia reservoir through ammonia oxidation. It does not assert that the full TAN pool is instantaneously NH3 or directly accessible to AMO.",
+      "minimum_future_speciation_inputs": [
+        "pH",
+        "temperature"
+      ],
+      "tan_is_nh3_claimed": false,
+      "tan_is_nh4_claimed": false
+    },
+    "candidate_id": "candidate-g7a-tan-to-ammonia-mechanism-semantic-bridge-v1",
+    "forbidden_inferences": [
+      "Do not claim all TAN is NH3.",
+      "Do not claim NH4+ is directly the AMO substrate.",
+      "Do not compute NH3 fraction without an explicit reviewed speciation model.",
+      "Do not derive a rate from TAN solely from this bridge.",
+      "Do not convert this bridge into direct_mechanism_support.",
+      "Do not resolve the Mnyoro 0.45 unit conflict.",
+      "Do not write Scientific Foundation V6."
+    ],
+    "process_alignment_candidate": {
+      "alignment_class_candidate": "interpretive_mechanism_support",
+      "epistemic_class_candidate": "interpretive_support",
+      "process_id": "ammonia_oxidation_to_nitrite_extent_v1",
+      "process_version": "1",
+      "reason": "The literature directly supports ammonia oxidation to nitrite; mapping that reactive-species mechanism onto an aggregate TAN-N inventory is an explicit model interpretation rather than a chemical identity.",
+      "role": "mechanism",
+      "source_component_id": "total_ammonia_nitrogen",
+      "support_creation_status": "blocked_pending_human_bridge_review",
+      "target_component_id": "nitrite_nitrogen"
+    },
+    "promotion_state": {
+      "bridge_candidate_materialized": true,
+      "bridge_promoted": false,
+      "human_review_completed": false,
+      "numeric_rate_model_authorized": false,
+      "process_scientific_support_attachable": false,
+      "scientific_foundation_persisted": false
+    },
+    "rate_model_boundary": {
+      "empirical_tan_rate_model_may_bind_tan_if_evidence_explicitly_uses_tan": true,
+      "mnyoro_parameter_unit_conflict_resolved": false,
+      "nh3_rate_model_requires_speciation_or_direct_nh3_input": true,
+      "numeric_rate_model_authorized": false,
+      "tan_only_authorizes_mechanistic_rate": false,
+      "tan_only_implies_nh3_concentration": false
+    },
+    "review_requirements": [
+      "Confirm RATE-1D TAN-N identity and elemental-N basis.",
+      "Confirm RATE-2B mechanism candidate identity and source lineage.",
+      "Review Jung et al. substrate-semantics evidence.",
+      "Confirm that reservoir accounting is acceptable without claiming TAN equals NH3.",
+      "Confirm interpretive_mechanism_support / interpretive_support classification.",
+      "Record reviewer identity, decision, timestamp, and review artifact SHA."
+    ],
+    "scientific_mechanism_semantics": {
+      "claim": "Ammonia oxidation initiates nitrification and the ammonia monooxygenase substrate is ammonia rather than ammonium.",
+      "evidence": [
+        {
+          "authors_short": "Jung et al.",
+          "doi": "10.1038/s41396-021-01064-z",
+          "evidence_summary": "Kinetic measurements across pH support the hypothesis that ammonia, not ammonium, is the substrate for AMO in AOA and comammox, consistent with the established AOB substrate interpretation.",
+          "journal": "The ISME Journal",
+          "pages": "272-283",
+          "pmc": "PMC8692354",
+          "pmid": "34316016",
+          "published_online": 2021,
+          "source_id": "jung-2022-isme-ammonia-affinities",
+          "source_url": "https://doi.org/10.1038/s41396-021-01064-z",
+          "title": "Ammonia-oxidizing archaea possess a wide range of cellular ammonia affinities",
+          "volume": "16",
+          "year": 2022
+        },
+        {
+          "candidate_payload_sha256": "0b7f444bf34becee4967e42b91b87758aeb1780befac57a74b6b325d7522f15d",
+          "evidence_summary": "RATE-2B primary sources support the directional ammonia/ammonium-to-nitrite nitrification mechanism.",
+          "primary_dois": [
+            "10.1038/nature16459",
+            "10.1038/nature16461"
+          ],
+          "source_id": "rate-2b-two-nature-mechanism-sources",
+          "source_type": "internal_candidate_package_reference"
+        }
+      ],
+      "mechanism_candidate_id": "candidate-g7a-ammonia-to-nitrite-mechanism-v1",
+      "product_semantics": "nitrite_nitrogen",
+      "reactive_substrate_semantics": "ammonia_NH3"
+    },
+    "source_model_semantics": {
+      "component_id": "total_ammonia_nitrogen",
+      "identity": "TAN-N = NH3-N + NH4+-N",
+      "is_single_chemical_species": false,
+      "label": "TAN-N",
+      "quantity_role": "primary_predictive_material_inventory",
+      "unit": "mg N"
+    },
+    "status": "candidate_ready_for_human_review"
+  },
+  "candidate_payload_sha256": "cbed8df87f5493284c72351705c1236970d6cd9fecbbf10baa422149e11c7572",
+  "schema_version": "ecobiome-semantic-bridge-candidate-v1"
+}

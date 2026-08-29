@@ -1,0 +1,80 @@
+{
+  "aggregation_payload": {
+    "aggregation_policy": {
+      "fractional_counting_forbidden": true,
+      "name": "ecobiome-independent-origin-aggregation",
+      "partial_independence_to_one_forbidden": true,
+      "partial_independence_to_two_forbidden": true,
+      "principle": "Only an unambiguous discrete origin partition may be projected to an integer count.",
+      "proposed_version": "1",
+      "rounding_forbidden": true,
+      "rules": [
+        {
+          "case": "zero supporting origins",
+          "result": 0
+        },
+        {
+          "case": "one supporting origin",
+          "result": 1
+        },
+        {
+          "case": "multiple origins with all required pairwise relations reviewed independent",
+          "result": "number_of_origins"
+        },
+        {
+          "case": "dependent origins with explicit reviewed same-origin equivalence",
+          "result": "number_of_reviewed_origin_equivalence_classes"
+        },
+        {
+          "case": "any partially_independent or unresolved relation",
+          "effect": "knowledge_synthesis_blocked",
+          "result": null
+        }
+      ]
+    },
+    "current_decision": {
+      "independent_support_origin_count": null,
+      "knowledge_synthesis_materializable": false,
+      "pairwise_status": "partially_independent",
+      "reason": "The reviewed relationship is genuinely partial and V6 requires a non-null integer. Any 1/2 projection would erase reviewed information or invent precision."
+    },
+    "input_state": {
+      "current_exact_integer_count": null,
+      "per_link_independence_status": "unresolved",
+      "reviewed_pairwise_status": "partially_independent",
+      "support_link_count": 2
+    },
+    "persistence": {
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "schema_migration_authorized": false
+    },
+    "resolution_paths": [
+      {
+        "goal": "resolve the pairwise relation to independent or explicit same-origin dependence",
+        "path": "additional evidence review"
+      },
+      {
+        "goal": "represent pairwise/partial independence without collapsing it into an integer",
+        "path": "future schema extension",
+        "schema_change_authorized_now": false
+      }
+    ],
+    "schema_implication": {
+      "current_schema_can_preserve_partial_independence_only_outside_knowledge_syntheses": true,
+      "knowledge_synthesis_requires_integer": true,
+      "null_count_cannot_be_materialized": true
+    },
+    "schema_version": "ecobiome-independence-aggregation-design-candidate-v1",
+    "status": "pending_human_review",
+    "target_field": {
+      "field": "independent_support_origin_count",
+      "not_null": true,
+      "physical_sql_type": "INTEGER",
+      "row": "KnowledgeSynthesesRow",
+      "type": "int"
+    }
+  },
+  "aggregation_payload_sha256": "f44bc14c91ace946836a0b11d5480244664133ab95449910a15498dfb0c2c75f"
+}

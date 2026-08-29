@@ -1,0 +1,53 @@
+{
+  "decision_payload": {
+    "claim_ref": {
+      "claim_id": "claim-g7a-nature16461-ammonia-to-nitrite-v1",
+      "claim_text": "Nitrification proceeds through ammonia oxidation involving nitrite before the subsequent nitrate state.",
+      "claim_text_sha256": "7461bcc9d3facfb73adb18e579919cc03313bd52367e0e166a0f7fbae5320ac3",
+      "source_doi": "10.1038/nature16461",
+      "source_pmcid": "PMC5152751"
+    },
+    "claim_review_event_projection": {
+      "corrected_text": null,
+      "corrected_text_sha256": null,
+      "decision": "accept",
+      "notes": "Human acceptance of the paraphrased mechanism claim as supported by the bound evidence span.",
+      "review_metadata": {
+        "claim_review_package_sha256": "69a8d89758a650ce4eaa33dbf812a7ad769a94852498068a1312e535ed94fa70",
+        "gate": "RATE-2I",
+        "source": "explicit_human_review"
+      },
+      "reviewer": "human_user_current_conversation"
+    },
+    "decision": "accept",
+    "decision_effects": {
+      "assertion_claim_link_attachable_now": false,
+      "claim_effective_text_is_original_text": true,
+      "claim_human_review_completed": true,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false
+    },
+    "decision_id": "decision-g7a-nature16461-ammonia-to-nitrite-claim-v1",
+    "decision_source": {
+      "conversation_role": "human_user",
+      "kind": "explicit_user_message",
+      "literal": "claim 2: accept"
+    },
+    "evidence_ref": {
+      "evidence_text_sha256": "6dd08e05dd4c8f400651fe422c5a162625da0eb52cc25315611d181bdf041b9b",
+      "segment_char_end": 199,
+      "segment_char_start": 0,
+      "segment_text_sha256": "15b70a36935fda799ea0bd6662e39b823b722bcb56e7e3616e4e938be873b871",
+      "selected_short_anchor": "oxidation of ammonia via nitrite to nitrate",
+      "verbatim_evidence_not_copied_to_repo": true
+    },
+    "reviewed_at": "2026-08-26T03:10:00+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "482574cb105c21993933dabf519002d22cee71207d434fc1caec503e0fa5dcfb",
+  "schema_version": "ecobiome-source-claim-human-review-decision-v1"
+}

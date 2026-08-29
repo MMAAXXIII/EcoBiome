@@ -1,0 +1,132 @@
+{
+  "candidate_payload": {
+    "candidate_id": "candidate-g7a-ammonia-to-nitrite-mechanism-v1",
+    "forbidden_inferences": [
+      "No kinetic rate law.",
+      "No kinetic parameter.",
+      "No temperature, pH, dissolved-oxygen, or hydraulic response.",
+      "No claim that a single microbial guild exclusively performs the process.",
+      "No direct use of the existing one-step ammonium-to-nitrate assertion.",
+      "No Scientific Foundation V6 write."
+    ],
+    "process_alignment_candidate": {
+      "alignment_class_candidate": "direct_mechanism_support",
+      "epistemic_class_candidate": "explicit_causal_result",
+      "parameter_match_mode": "contains_exact_required",
+      "process_id": "ammonia_oxidation_to_nitrite_extent_v1",
+      "process_source_component": "total_ammonia_nitrogen",
+      "process_target_component": "nitrite_nitrogen",
+      "process_version": "1",
+      "required_parameter_bindings": [
+        {
+          "expected_value": "total_ammonia_nitrogen",
+          "json_pointer": "/source_component_id"
+        },
+        {
+          "expected_value": "nitrite_nitrogen",
+          "json_pointer": "/target_component_id"
+        }
+      ],
+      "role": "mechanism",
+      "support_creation_status": "blocked_pending_semantic_bridge_review"
+    },
+    "promotion_state": {
+      "assertion_candidate_materialized": true,
+      "human_review_completed": false,
+      "kinetic_form_supported_by_this_candidate": false,
+      "kinetic_parameter_supported_by_this_candidate": false,
+      "numeric_rate_model_authorized": false,
+      "process_scientific_support_attachable": false,
+      "scientific_foundation_persisted": false
+    },
+    "proposed_assertion": {
+      "assertion_id_candidate": "assertion-g7a-nitrogen-oxidation-ammonia-to-nitrite-v1",
+      "claim_text": "During aerobic nitrification, ammonia/ammonium nitrogen can be oxidized to nitrite nitrogen as the first oxidation step.",
+      "environmental_response_claimed": false,
+      "epistemic_class_candidate": "explicit_causal_result",
+      "kinetic_claimed": false,
+      "object_semantics": "nitrite_nitrogen",
+      "organism_exclusivity_claimed": false,
+      "predicate": "nitrogen_oxidized_from_to",
+      "subject_semantics": "ammonia_or_ammonium_nitrogen"
+    },
+    "review_requirements": [
+      "Verify exact source metadata and source lineage.",
+      "Review the proposed claim wording against both primary sources.",
+      "Verify subject/object scientific entity identities and elemental-N basis.",
+      "Review TAN-N to ammonia/ammonium semantic bridge separately.",
+      "Only after the semantic bridge is accepted may process alignment be reviewed.",
+      "Record reviewer identity, decision, timestamp, and review artifact SHA."
+    ],
+    "role": "mechanism",
+    "semantic_bridge": {
+      "issue": "The mechanism papers support ammonia/ammonium oxidation to nitrite, whereas the RATE-1F source component is the analytical TAN-N pool. A reviewed semantic bridge is required before process-specific scientific support can be marked reviewed.",
+      "name_only_alignment_forbidden": true,
+      "process_component_semantics": "total_ammonia_nitrogen",
+      "required": true,
+      "source_evidence_semantics": "ammonia_or_ammonium_nitrogen",
+      "target_semantics_match": true
+    },
+    "sources": [
+      {
+        "authors": [
+          "Maartje A. H. J. van Kessel",
+          "Daan R. Speth",
+          "Mads Albertsen",
+          "Per H. Nielsen",
+          "Huub J. M. Op den Camp",
+          "Boran Kartal",
+          "Mike S. M. Jetten",
+          "Sebastian Lücker"
+        ],
+        "doi": "10.1038/nature16459",
+        "evidence_role": "primary_mechanism_support",
+        "evidence_summary": "The paper describes nitrification as a two-step process in which ammonia is first oxidized to nitrite and then nitrite is oxidized to nitrate; it also experimentally demonstrates complete ammonium oxidation via nitrite in Nitrospira.",
+        "journal": "Nature",
+        "pages": "555-559",
+        "pmc": "PMC4878690",
+        "pmid": "26610025",
+        "source_id": "van-kessel-2015-nature16459",
+        "source_url": "https://doi.org/10.1038/nature16459",
+        "title": "Complete nitrification by a single microorganism",
+        "volume": "528",
+        "year": 2015
+      },
+      {
+        "authors": [
+          "Holger Daims",
+          "Elena V. Lebedeva",
+          "Petra Pjevac",
+          "Ping Han",
+          "Craig Herbold",
+          "Mads Albertsen",
+          "Nico Jehmlich",
+          "Marton Palatinszky",
+          "Julia Vierheilig",
+          "Alexandr Bulaev",
+          "Rasmus H. Kirkegaard",
+          "Martin von Bergen",
+          "Thomas Rattei",
+          "Bernd Bendinger",
+          "Per H. Nielsen",
+          "Michael Wagner"
+        ],
+        "doi": "10.1038/nature16461",
+        "evidence_role": "independent_primary_mechanism_support",
+        "evidence_summary": "The paper describes nitrification as oxidation of ammonia via nitrite to nitrate and experimentally characterizes a Nitrospira organism encoding and expressing both ammonia- and nitrite-oxidation pathways.",
+        "journal": "Nature",
+        "pages": "504-509",
+        "pmc": "PMC5152751",
+        "pmid": "26610024",
+        "source_id": "daims-2015-nature16461",
+        "source_url": "https://doi.org/10.1038/nature16461",
+        "title": "Complete nitrification by Nitrospira bacteria",
+        "volume": "528",
+        "year": 2015
+      }
+    ],
+    "status": "candidate_ready_for_human_review"
+  },
+  "candidate_payload_sha256": "0b7f444bf34becee4967e42b91b87758aeb1780befac57a74b6b325d7522f15d",
+  "schema_version": "ecobiome-scientific-assertion-candidate-package-v1"
+}

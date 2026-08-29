@@ -1,0 +1,35 @@
+{
+  "decision_payload": {
+    "decision": "revise",
+    "decision_id": "decision-g7a-rate2u-snapshot-manifest-contract-v1",
+    "decision_source": {
+      "accepted_recommendation": "manifest contract = revise; parent_manifest_sha256 nullable only for legacy_root; add sqlite/python/schema/promotion-engine identities",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "replacement_contract": {
+      "active_pointer_update_authorized": false,
+      "canonical_payload_sha256": "67b73c0a1cc4d514c146b7d09a042720721a4c1e68074f0c7e7680bd08fa7b74",
+      "schema_version": "ecobiome-scientific-foundation-snapshot-manifest-v1-reviewed",
+      "snapshot_creation_authorized": false
+    },
+    "reviewed_at": "2026-08-26T21:32:44+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "revision_effects": {
+      "cross_runtime_byte_identity_claimed": false,
+      "derived_snapshot_parent_manifest_required": true,
+      "legacy_root_parent_manifest_nullable": true,
+      "real_v6_write_authorized": false,
+      "runtime_identity_required": true
+    },
+    "source_candidate": {
+      "rate_2t_manifest_contract_sha256": "8675774056188fce62c7c29cf816238d155871bf69aaa79ee85e8b1567b2cf20"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "17ed6f4d14f504f331c15a3b1b5c32bcdb3e649aa18da695756483a11bc2f0b5",
+  "schema_version": "ecobiome-snapshot-manifest-contract-human-review-decision-v1"
+}

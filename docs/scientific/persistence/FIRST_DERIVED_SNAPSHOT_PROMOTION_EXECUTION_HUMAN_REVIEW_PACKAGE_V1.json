@@ -1,0 +1,22 @@
+{
+  "review_package_payload": {
+    "execution_plan": {
+      "decision": "revise",
+      "decision_payload_sha256": "c204071ea181d6387350841ff9ea8955b908396a44a8463decb9039988da4398",
+      "source_payload_sha256": "e538a2627336969b86aeeed0d0dabf2773fe71be1135dec7b09b5eb4d464d052"
+    },
+    "next_gate": "RATE-3C_REPLAY_MANIFEST_AND_PROMOTION_ENGINE_CANDIDATE",
+    "promotion_engine_contract": {
+      "decision": "revise",
+      "decision_payload_sha256": "cc960686dab49d96fa50cc0df6808a2646fcd86cf0bcd777448e1ac58ece608e",
+      "source_payload_sha256": "21917d539e76222e50a1af3fdf9a013b1ea3de13dc9b34419b45ea55ea8128ac"
+    },
+    "reviewed_at": "2026-08-27T00:25:00+02:00",
+    "reviewer": "human_user_current_conversation",
+    "revision_boundary_payload_sha256": "7e45dad9ee2e3f6601e6fc4d55052e5de52e9175514d06ac6c9241366066f2b2",
+    "schema_version": "ecobiome-first-derived-snapshot-promotion-execution-human-review-package-v1",
+    "snapshot_creation_authorized": false,
+    "status": "human_review_completed"
+  },
+  "review_package_payload_sha256": "e9ea006f687ac1ae46e59871bc00a0a6bc25d6bc8fe49225bd7f3e2a467e6abb"
+}

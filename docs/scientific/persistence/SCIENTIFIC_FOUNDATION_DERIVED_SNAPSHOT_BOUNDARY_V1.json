@@ -1,0 +1,110 @@
+{
+  "boundary_payload": {
+    "authorization_boundaries": {
+      "design_acceptance_authorizes_active_pointer_change": false,
+      "design_acceptance_authorizes_numeric_rate_model": false,
+      "design_acceptance_authorizes_real_v6_write": false,
+      "design_acceptance_authorizes_schema_migration": false,
+      "design_acceptance_authorizes_snapshot_creation": false
+    },
+    "baseline": {
+      "database_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "mutation_allowed": false,
+      "rename_as_v7_on_data_only_change": false,
+      "role": "immutable_reference_snapshot",
+      "schema_design_sha256": "e0c732320b8bf901de3fd285ffcc41b74db8f1e0a227df89e0428e893e4f9181",
+      "schema_version": 6
+    },
+    "decision_question": "Where should reviewed scientific evidence become durable without mutating the frozen Scientific Foundation V6 baseline?",
+    "g7a_first_durable_snapshot_scope": {
+      "independence_state": {
+        "independent_support_origin_count": null,
+        "pairwise": "partially_independent",
+        "per_link": "unresolved"
+      },
+      "knowledge_synthesis_created": false,
+      "numeric_rate_model_authorized": false,
+      "parent_database_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "process_scientific_support_materialized": false,
+      "required_scientific_replay": [
+        "reviewed nitrite entity PubChem CID 946",
+        "reviewed ammonia-to-nitrite scientific assertion",
+        "two frozen Nature primary sources and evidence chain",
+        "RATE-2I human claim reviews",
+        "RATE-2K reviewed assertion-claim links",
+        "two stable-policy EvidenceAssessments under ecobiome-evidence-assessment-1"
+      ],
+      "schema_version": 6,
+      "source_artifact_requirements": [
+        {
+          "doi": "10.1038/nature16459",
+          "network_refetch_as_promotion_input": false,
+          "raw_xml_sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112"
+        },
+        {
+          "doi": "10.1038/nature16461",
+          "network_refetch_as_promotion_input": false,
+          "raw_xml_sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941"
+        }
+      ],
+      "stable_assessment_policy": {
+        "policy_sha256": "ff95c9aa278772d7bf58a17dcd93fe386795dc6320f42a6f911873cc1128e59b",
+        "policy_version": "ecobiome-evidence-assessment-1"
+      }
+    },
+    "manifest_contract": {
+      "canonical_sha256": "8675774056188fce62c7c29cf816238d155871bf69aaa79ee85e8b1567b2cf20"
+    },
+    "next_gate": "RATE-2U_EVIDENCE_FOUNDATION_PERSISTENCE_BOUNDARY_HUMAN_REVIEW",
+    "promotion_protocol": [
+      "verify exact immutable parent database SHA-256 and schema identity",
+      "obtain reviewed source artifacts from external CAS by frozen SHA-256; do not depend on live network refetch for promotion",
+      "copy parent snapshot to isolated staging database",
+      "replay only reviewed and explicitly authorized entity, assertion, source, claim, review, link and assessment rows",
+      "perform all database mutations transactionally on staging only",
+      "validate runtime schema identity, quick_check and foreign keys",
+      "run full repository regression gates against the staged result",
+      "close database and compute final database SHA-256",
+      "publish create-only under content-addressed snapshot directory and write canonical sidecar manifest",
+      "optionally update active pointer atomically only under a separate activation authorization",
+      "never modify or delete the parent snapshot during promotion"
+    ],
+    "recommended_architecture": {
+      "active_pointer_separate_from_scientific_content": true,
+      "content_addressed_snapshot_storage": true,
+      "data_snapshot_identity_separate_from_schema_version": true,
+      "in_place_parent_mutation": false,
+      "name": "immutable_derived_snapshot_series",
+      "principle": "Every durable scientific promotion creates a new immutable database snapshot descended from a verified parent snapshot.",
+      "same_schema_allowed": true,
+      "small_canonical_manifest_required": true
+    },
+    "rejected_default_options": [
+      {
+        "option": "mutate_frozen_v6",
+        "reason": "Destroys the frozen reference boundary and invalidates the established V6 byte identity."
+      },
+      {
+        "option": "call_data_only_append_v7",
+        "reason": "Schema version and data-state version are distinct; adding reviewed rows does not constitute Schema V7."
+      },
+      {
+        "option": "git_commit_sqlite_or_primary_fulltext",
+        "reason": "Large mutable/scientific source bytes belong in external data/CAS storage, while Git records policies, manifests and cryptographic identities."
+      },
+      {
+        "option": "overlay_database_with_broken_cross_db_foreign_keys",
+        "reason": "A sparse overlay weakens the existing single-database FK and repository contracts."
+      }
+    ],
+    "schema_version": "ecobiome-scientific-foundation-derived-snapshot-boundary-v1",
+    "snapshot_reproducibility": {
+      "byte_for_byte_replay_required": false,
+      "canonical_payload_bindings_required": true,
+      "logical_scientific_replay_exact_required": true,
+      "reason": "Authorized persistence metadata such as materialization timestamps may differ between runs; each published snapshot is nevertheless immutable and content-addressed by its own database SHA-256."
+    },
+    "status": "pending_human_review"
+  },
+  "boundary_payload_sha256": "7cc40c48504639d13b9f1b20596a55796b73f93a75e10ff581b5a078b57e808a"
+}

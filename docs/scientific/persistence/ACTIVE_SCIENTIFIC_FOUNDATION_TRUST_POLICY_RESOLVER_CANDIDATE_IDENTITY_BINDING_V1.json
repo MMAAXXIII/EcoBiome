@@ -1,0 +1,24 @@
+{
+  "identity_binding_payload": {
+    "accepted_persistent_snapshot_database_sha256": "2bc6d8524c529ebb52ce5c5a9b3b44f879dcdf9b62b5d6c8d2153443259dfde9",
+    "candidate_parent": "aa275615ef916df33bdfde3fd18420fc8afaa2de",
+    "candidate_repo_head": "dcba80f30030529eddcb38db27a09c104e32468e",
+    "candidate_tree": "03f18f1486e1854a1c4db2fdf5e39b307833033c",
+    "consumer_migration_plan_payload_sha256": "a580cc8d0ac8b95142c327b64abdc6d0336ba5295725b82413391f48d933ccab",
+    "next_gate": "RATE-3N_ACTIVE_FOUNDATION_TRUST_POLICY_AND_MIGRATION_PLAN_HUMAN_REVIEW",
+    "persistent_active_pointer_created": false,
+    "persistent_scientific_state_mutated": false,
+    "rate_3l_human_review_decision_sha256": "d41216db8cafd4256c67808de0cc75972e2f92b56f2b7a0507e331ae2e296648",
+    "rate_3l_review_commit_repo_head": "aa275615ef916df33bdfde3fd18420fc8afaa2de",
+    "resolver_module_git_blob_sha1": "5e9ec03d05303e4ed26959cac5b0a41aba0b6f87",
+    "resolver_module_path": "src/ecobiome/knowledge_persistence/active_foundation_v1.py",
+    "resolver_module_sha256": "58ee76d2a163ae844b8b8c89653e65a70be475acb1a8ed3bf61aa974b56cd2e9",
+    "resolver_tests_sha256": "d4b5dd231e2858175357864ccc46c250144d352443e7dfb178bd46f3dafa3492",
+    "role_aware_consumer_audit_payload_sha256": "e675d2b6a2194cb59af93e00056173b48ba7af90f4ce190ba070ac380b83e494",
+    "runtime_consumer_migration_performed": false,
+    "schema_version": "ecobiome-active-scientific-foundation-trust-policy-resolver-candidate-identity-binding-v1",
+    "status": "candidate_identity_bound",
+    "trust_policy_contract_payload_sha256": "6005177695e1495e887a986e4db2686badd64655cbe06b5974720afc3db9885f"
+  },
+  "identity_binding_payload_sha256": "a1dd518069737b051e3031e9a466afc18741009675406c6ecf2beeb4e62054e3"
+}

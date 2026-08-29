@@ -31,11 +31,13 @@ def build_parser() -> argparse.ArgumentParser:
         default=8,
     )
 
+    from ecobiome.cli.nitrogen_demo import add_nitrogen_demo_parser
     from ecobiome.cli.replay_events import add_replay_events_parser
     from ecobiome.cli.water_level import add_water_level_parser
 
     add_water_level_parser(subparsers)
     add_replay_events_parser(subparsers)
+    add_nitrogen_demo_parser(subparsers)
 
     return parser
 
@@ -97,6 +99,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         from ecobiome.cli.replay_events import replay_events_command
 
         return replay_events_command(args)
+
+    if args.command == "nitrogen-demo":
+        from ecobiome.cli.nitrogen_demo import nitrogen_demo_command
+
+        return nitrogen_demo_command(args)
 
     parser.print_help()
     return 0

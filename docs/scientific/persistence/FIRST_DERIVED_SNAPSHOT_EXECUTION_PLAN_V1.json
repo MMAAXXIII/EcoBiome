@@ -1,0 +1,164 @@
+{
+  "execution_plan_payload": {
+    "authorization": {
+      "active_pointer_update_authorized": false,
+      "knowledge_synthesis_authorized": false,
+      "numeric_rate_model_authorized": false,
+      "real_v6_write_authorized": false,
+      "schema_migration_authorized": false,
+      "snapshot_creation_authorized": false
+    },
+    "basis": {
+      "cas_contract_decision_sha256": "487b6efbbcf9c79ad4ec55a332f90eb598d1343c635a42dfb31d3fd0b7e06acd",
+      "cas_contract_sha256": "1319bcaf8cb599c5888b82a37dbd941bc483de1370fa802e9e69a1737241b1ac",
+      "promotion_engine_contract_sha256": "21917d539e76222e50a1af3fdf9a013b1ea3de13dc9b34419b45ea55ea8128ac",
+      "promotion_plan_decision_sha256": "8f0ee6980f1bdd4a14659f0ce47aa3df9395898305837c7f688eb0c75fecf986",
+      "promotion_plan_sha256": "e7ed080b299b9da325ad056d31155a860fb9a03c64bc72420d2d113aa324cb7a",
+      "rate_2z_r4_execution_payload_sha256": "b180f4cc1dc1c5ded7f1c2de571d020b998691d1c63f1586392bddabbed7e478",
+      "snapshot_manifest_contract_sha256": "67b73c0a1cc4d514c146b7d09a042720721a4c1e68074f0c7e7680bd08fa7b74"
+    },
+    "execution_preconditions": [
+      "promotion engine implementation reviewed and code identity frozen",
+      "this execution plan and engine contract human-reviewed",
+      "separate explicit human authorization for snapshot creation",
+      "both CAS artifacts continue to verify exactly",
+      "frozen V6 parent remains byte-identical",
+      "repo remains on reviewed execution head"
+    ],
+    "independence_boundary": {
+      "independent_support_origin_count": null,
+      "knowledge_synthesis_materialization": false,
+      "pairwise_reviewed_status": "partially_independent",
+      "pairwise_status_not_copied_into_per_link_rows": true,
+      "per_link_evidence_assessment_independence_status": "unresolved"
+    },
+    "next_gate": "RATE-3B_FIRST_DERIVED_SNAPSHOT_PROMOTION_EXECUTION_HUMAN_REVIEW",
+    "parent": {
+      "database_sha256": "76381b5a76f0dd34668634357b3fa4657ff650351235ad85acc8b6fdb421997f",
+      "kind": "legacy_root",
+      "manifest_sha256": null,
+      "observed_table_counts": {
+        "acquisition_jobs": 0,
+        "assertion_claim_links": 2,
+        "claim_evidence_links": 16,
+        "claim_review_events": 10,
+        "evidence_assessments": 0,
+        "knowledge_sources": 9,
+        "knowledge_syntheses": 0,
+        "raw_artifacts": 0,
+        "representations": 5,
+        "retrievals": 0,
+        "scientific_assertion_revisions": 2,
+        "scientific_assertions": 2,
+        "scientific_entities": 6,
+        "scientific_entity_identifiers": 6,
+        "scientific_entity_revisions": 6,
+        "segments": 5,
+        "source_assessments": 0,
+        "source_claims": 10,
+        "source_evidence": 5,
+        "source_lineage_edges": 0
+      },
+      "schema_design_sha256": "e0c732320b8bf901de3fd285ffcc41b74db8f1e0a227df89e0428e893e4f9181",
+      "schema_version": 6
+    },
+    "replay_dependency_order": [
+      "scientific_entities",
+      "scientific_entity_revisions",
+      "scientific_entity_identifiers",
+      "scientific_assertions",
+      "scientific_assertion_revisions",
+      "knowledge_sources",
+      "acquisition_jobs",
+      "retrievals",
+      "raw_artifacts",
+      "representations",
+      "segments",
+      "source_evidence",
+      "source_claims",
+      "claim_evidence_links",
+      "claim_review_events",
+      "source_assessments",
+      "assertion_claim_links",
+      "evidence_assessments"
+    ],
+    "replay_scope": {
+      "expected_final_table_counts": {
+        "acquisition_jobs": 2,
+        "assertion_claim_links": 4,
+        "claim_evidence_links": 18,
+        "claim_review_events": 12,
+        "evidence_assessments": 2,
+        "knowledge_sources": 11,
+        "knowledge_syntheses": 0,
+        "raw_artifacts": 2,
+        "representations": 7,
+        "retrievals": 2,
+        "scientific_assertion_revisions": 3,
+        "scientific_assertions": 3,
+        "scientific_entities": 7,
+        "scientific_entity_identifiers": 7,
+        "scientific_entity_revisions": 7,
+        "segments": 7,
+        "source_assessments": 2,
+        "source_claims": 12,
+        "source_evidence": 7,
+        "source_lineage_edges": 0
+      },
+      "expected_table_delta": {
+        "acquisition_jobs": 2,
+        "assertion_claim_links": 2,
+        "claim_evidence_links": 2,
+        "claim_review_events": 2,
+        "evidence_assessments": 2,
+        "knowledge_sources": 2,
+        "knowledge_syntheses": 0,
+        "raw_artifacts": 2,
+        "representations": 2,
+        "retrievals": 2,
+        "scientific_assertion_revisions": 1,
+        "scientific_assertions": 1,
+        "scientific_entities": 1,
+        "scientific_entity_identifiers": 1,
+        "scientific_entity_revisions": 1,
+        "segments": 2,
+        "source_assessments": 2,
+        "source_claims": 2,
+        "source_evidence": 2,
+        "source_lineage_edges": 0
+      },
+      "explicitly_excluded": [
+        "source_lineage_edges",
+        "knowledge_syntheses",
+        "ProcessScientificSupport persistence",
+        "RateModel persistence",
+        "active pointer update"
+      ],
+      "semantic_description": "reviewed nitrite entity; reviewed ammonia-to-nitrite assertion; two primary Nature evidence chains; claim reviews; reviewed assertion links; two stable-policy EvidenceAssessments",
+      "source_artifacts": [
+        {
+          "artifact_key": "sha256:fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "key": "nature16459",
+          "sha256": "fa8e4aff5b391665b1e40ab0dfbab102342e2b7b8a063d8462223610b26f3112",
+          "size_bytes": 153875
+        },
+        {
+          "artifact_key": "sha256:0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "key": "nature16461",
+          "sha256": "0dcc84cb40ce5009d1cf7443c6a75c9e7eb788f2773bb4e9ad9a14ba2c4d9941",
+          "size_bytes": 194672
+        }
+      ]
+    },
+    "schema_version": "ecobiome-first-derived-snapshot-execution-plan-v1",
+    "status": "pending_human_review",
+    "target_storage": {
+      "database_filename": "scientific-foundation.sqlite3",
+      "directory": "<final-database-sha256>",
+      "immutable_create_only": true,
+      "logical_root": "EcoBiome-data/scientific-foundation-snapshots",
+      "manifest_filename": "snapshot-manifest.json"
+    }
+  },
+  "execution_plan_payload_sha256": "e538a2627336969b86aeeed0d0dabf2773fe71be1135dec7b09b5eb4d464d052"
+}

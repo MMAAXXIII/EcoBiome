@@ -1,0 +1,99 @@
+{
+  "review_payload": {
+    "evaluation_scope_candidate": {
+      "canonical_payload": {
+        "parameter_match_mode": "contains_exact_required",
+        "process_id": "ammonia_oxidation_to_nitrite_extent_v1",
+        "process_version": "1",
+        "required_parameter_bindings": [
+          {
+            "expected_value": "total_ammonia_nitrogen",
+            "json_pointer": "/source_component_id"
+          },
+          {
+            "expected_value": "nitrite_nitrogen",
+            "json_pointer": "/target_component_id"
+          }
+        ],
+        "role": "mechanism",
+        "schema_version": "ecobiome-process-scientific-evaluation-scope-v1"
+      },
+      "canonical_payload_sha256": "72cc77fa3ccec09b16b99f00fa999be94df637e72490d2832e985486cd54a7de"
+    },
+    "human_review_decision_template": {
+      "acceptance_checks": {
+        "evaluation_scope_verified": false,
+        "interpretive_alignment_class_verified": false,
+        "mechanism_claim_wording_verified": false,
+        "mechanism_source_lineage_verified": false,
+        "nh3_substrate_semantics_verified": false,
+        "no_kinetic_strength_increase_verified": false,
+        "reservoir_accounting_bridge_verified": false,
+        "tan_semantics_verified": false
+      },
+      "allowed_decisions": [
+        "accept",
+        "reject",
+        "revise"
+      ],
+      "decision": "pending",
+      "rationale": null,
+      "review_artifact_sha256": null,
+      "reviewed_at": null,
+      "reviewer_id": null
+    },
+    "materialization_requirements": {
+      "alignment_policy_identity_required": true,
+      "all_acceptance_checks_true_required": true,
+      "evaluation_scope_sha256_required": "72cc77fa3ccec09b16b99f00fa999be94df637e72490d2832e985486cd54a7de",
+      "human_accept_decision_required": true,
+      "persisted_scientific_assertion_ref_required": true,
+      "process_scientific_support_attachable_now": false
+    },
+    "mechanism_candidate_ref": {
+      "candidate_id": "candidate-g7a-ammonia-to-nitrite-mechanism-v1",
+      "candidate_payload_sha256": "0b7f444bf34becee4967e42b91b87758aeb1780befac57a74b6b325d7522f15d",
+      "file_sha256": "db74896dde9f0c28f67cf7f4b2adff6c25c498ab34b4666ecbf83e65d32052f1"
+    },
+    "persistence_state": {
+      "alignment_review_persisted": false,
+      "mechanism_assertion_persisted": false,
+      "scientific_foundation_v6_write": false
+    },
+    "process_definition_ref": {
+      "canonical_payload_sha256": "fb34a9f83decc88d1b66ed1d1c806c769c851d5604bd9201b5a8c66bbfc4b2e5",
+      "process_id": "ammonia_oxidation_to_nitrite_extent_v1",
+      "process_version": "1",
+      "required_scientific_assertion_roles": [
+        "mechanism"
+      ]
+    },
+    "proposed_alignment": {
+      "alignment_class": "interpretive_mechanism_support",
+      "epistemic_class": "interpretive_support",
+      "evidence_state": "candidate_pending_human_review",
+      "reason": "Primary literature directly supports ammonia oxidation to nitrite, while RATE-1F transfers elemental N from an aggregate TAN-N reservoir. The reservoir-to-reactive-species mapping is therefore interpretive.",
+      "role": "mechanism",
+      "support_materialization_status": "blocked_pending_human_review_and_persisted_assertion_ref"
+    },
+    "review_package_id": "review-g7a-ammonia-to-nitrite-mechanism-alignment-v1",
+    "scientific_boundaries": {
+      "kinetic_form_reviewed": false,
+      "kinetic_parameter_reviewed": false,
+      "mnyoro_parameter_unit_conflict_resolved": false,
+      "numeric_rate_model_authorized": false,
+      "scientific_foundation_write_authorized": false,
+      "tan_equals_nh3": false,
+      "tan_equals_nh4": false
+    },
+    "semantic_bridge_candidate_ref": {
+      "bridge_kind": "reservoir_to_reactive_species_accounting",
+      "candidate_id": "candidate-g7a-tan-to-ammonia-mechanism-semantic-bridge-v1",
+      "candidate_payload_sha256": "cbed8df87f5493284c72351705c1236970d6cd9fecbbf10baa422149e11c7572",
+      "file_sha256": "8519329171972054e69b7c070309ca617a36732f5ddbe5d03f6f5319281b4940"
+    },
+    "status": "pending_human_review"
+  },
+  "review_payload_sha256": "4460d608d544cad1555ee8cd79ee3c6f09aa2f0c5fea5b2e0eb99c504f7ea602",
+  "schema_version": "ecobiome-mechanism-alignment-review-package-v1"
+}

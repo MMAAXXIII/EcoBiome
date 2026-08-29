@@ -1,0 +1,32 @@
+{
+  "decision_payload": {
+    "accepted_effects": {
+      "active_pointer_update_authorized": false,
+      "exact_complete_byte_sha256_required": true,
+      "filesystem_cas_put_required": true,
+      "local_recovery_preferred_before_network": true,
+      "numeric_rate_model_authorized": false,
+      "post_put_verify_required": true,
+      "real_v6_write_authorized": false,
+      "snapshot_creation_authorized": false
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2y-primary-source-cas-materialization-plan-v1",
+    "decision_source": {
+      "accepted_recommendation": "materialization plan = accept; retain local recovery first, exact complete-byte SHA-256 admission, repository CAS implementation, fail-closed mismatch semantics, and separate snapshot-creation authorization",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "reviewed_at": "2026-08-26T22:48:01+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2x_materialization_plan_payload_sha256": "929799c55b5efd4c185cf9455e0515e087347d2ebd73ad6437734af478916c81"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "aa1a8b35d0da3b009b09f5c977c7db71f45e3b75f9fe53cd9797d297acefa63c",
+  "schema_version": "ecobiome-primary-source-cas-materialization-plan-human-review-decision-v1"
+}

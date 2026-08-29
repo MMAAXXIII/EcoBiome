@@ -1,0 +1,42 @@
+{
+  "decision_payload": {
+    "accepted_in_principle": [
+      "replay_manifest_structure",
+      "replay_scope_32_rows",
+      "knowledge_sources_delta_plus_3_dependency_closure",
+      "knowledge_syntheses_delta_zero",
+      "source_lineage_edges_delta_zero",
+      "exact_raw_CAS_source_identities",
+      "protected_source_text_reconstruction_model",
+      "two_commit_candidate_and_identity_binding_pattern",
+      "atomic_complete_pair_publication_objective"
+    ],
+    "authorization": {
+      "active_pointer_update": false,
+      "derived_representation_CAS_write": false,
+      "knowledge_synthesis": false,
+      "numeric_rate_model": false,
+      "real_v6_write": false,
+      "remote_git_write": false,
+      "schema_migration": false,
+      "scientific_staging_database_creation": false,
+      "snapshot_creation": false
+    },
+    "decision": "revise",
+    "next_gate": "RATE-3E_PROMOTION_ENGINE_CORRECTIONS_AND_SYNTHETIC_END_TO_END_CANDIDATE",
+    "rate_3c_final_repo_head": "c2e90d179cc1d6bca8b28ec0598e2126a46b210e",
+    "rate_3c_r3_bundle_sha256": "4ff0fe538db6fd83be774513a05bbdf48c4d575e37a6ab58fc4d0640c67f457e",
+    "required_revisions": [
+      "catch_ArtifactMissingError_only_for_missing_derived_CAS_materialization",
+      "transport_and_verify_replay_manifest_payload_sha256_explicitly",
+      "enforce_reviewed_execution_authorization_and_full_identity_binding_before_effects",
+      "replace_invalid_Windows_directory_FlushFileBuffers_contract_with_supported_write_through_publication_strategy",
+      "add_end_to_end_promotion_path_tests"
+    ],
+    "reviewed_at": "2026-08-27T01:49:35+02:00",
+    "reviewer": "human_user_current_conversation",
+    "schema_version": "ecobiome-first-derived-snapshot-promotion-rate-3d-human-review-decision-v1",
+    "source_review_sha256": "4bd59507fbdedc570449ad658d404b12d7cdfa16b11ef6cdb51372346ccb5fc8"
+  },
+  "decision_payload_sha256": "b29915795b57f36c62a3a883d1599065bf0a8a3bccc4f03c3e6e5080723e2598"
+}

@@ -1,0 +1,32 @@
+{
+  "decision_payload": {
+    "accepted_effects": {
+      "active_pointer_update_authorized": false,
+      "data_state_version_separate_from_schema_version": true,
+      "frozen_v6_mutation_forbidden": true,
+      "live_network_refetch_as_promotion_input_forbidden": true,
+      "numeric_rate_model_authorized": false,
+      "recommended_architecture": "immutable_derived_snapshot_series",
+      "schema_migration_authorized": false,
+      "snapshot_creation_authorized": false
+    },
+    "decision": "accept",
+    "decision_id": "decision-g7a-rate2u-derived-snapshot-boundary-v1",
+    "decision_source": {
+      "accepted_recommendation": "snapshot boundary = accept; preserve immutable derived snapshot architecture and all persistence/activation authorization boundaries",
+      "kind": "explicit_user_acceptance",
+      "literal": "accept"
+    },
+    "reviewed_at": "2026-08-26T21:32:44+02:00",
+    "reviewer": {
+      "identifier": "human_user_current_conversation",
+      "kind": "human_user"
+    },
+    "source_candidate": {
+      "rate_2t_boundary_payload_sha256": "7cc40c48504639d13b9f1b20596a55796b73f93a75e10ff581b5a078b57e808a"
+    },
+    "status": "human_review_completed"
+  },
+  "decision_payload_sha256": "796d7f2e2130efada77a914a7fd85f243b38788e06c0e283b479d0909981f990",
+  "schema_version": "ecobiome-derived-snapshot-boundary-human-review-decision-v1"
+}
