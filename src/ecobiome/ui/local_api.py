@@ -13,10 +13,10 @@ from urllib.parse import parse_qs, urlparse
 from uuid import UUID
 
 from ecobiome.dashboard import build_project_dashboard
-from ecobiome.knowledge_persistence.active_foundation_runtime_config_v1 import (
+from ecobiome.knowledge_persistence.active_foundation_runtime_config_v2 import (
     resolve_default_scientific_foundation_v1,
 )
-from ecobiome.knowledge_persistence.active_foundation_v1 import (
+from ecobiome.knowledge_persistence.active_foundation_v2 import (
     ResolvedScientificFoundationV1,
 )
 from ecobiome.reasoning.human_readable_nitrogen_explanation_v1 import (

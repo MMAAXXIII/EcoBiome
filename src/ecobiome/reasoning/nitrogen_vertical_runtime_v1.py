@@ -5,7 +5,7 @@ import hashlib
 import sqlite3
 from pathlib import Path
 
-from ecobiome.knowledge_persistence.active_foundation_v1 import (
+from ecobiome.knowledge_persistence.active_foundation_v2 import (
     ResolvedScientificFoundationV1,
 )
 from ecobiome.knowledge_persistence.sqlite_store import (
