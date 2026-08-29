@@ -1,11 +1,12 @@
-# PASSATION ECOBIOME — G7A RATE-5L
+# PASSATION ECOBIOME — G7A RATE-5L / RATE-5L-R1
 
 ## Dormant nitrite zero-order evidence candidate implementation V1
 
-**Gate:** `RATE-5L_DORMANT_NITRITE_ZERO_ORDER_EVIDENCE_CANDIDATE_IMPLEMENTATION_V1`  
+**Gate initial:** `RATE-5L_DORMANT_NITRITE_ZERO_ORDER_EVIDENCE_CANDIDATE_IMPLEMENTATION_V1`  
+**Correction gate:** `RATE-5L-R1_SCIENTIFIC_CONTEXT_IDENTITY_AND_KINETIC_ASSAY_SCOPE_CORRECTION`  
 **Base:** `main@a6931417bb02644157bac27a159a6dad4da060e1`  
 **Branch:** `agent/g7a-rate-5l-nitrite-zero-order-evidence-candidate-v1`  
-**Status:** `PASS_IMPLEMENTED_CI_GREEN_PENDING_HUMAN_REVIEW`
+**Status:** `R1_IMPLEMENTED_PENDING_RATE_5M_REAUDIT`
 
 ## 1. Purpose
 
@@ -13,7 +14,7 @@ RATE-5L preserves a bounded second-stage nitrification evidence candidate for
 `nitrite_oxidation_to_nitrate` without promoting it to an executable
 `RateModelV1`.
 
-The exact zero-order nitrite constant is kept as evidence only:
+The exact zero-order nitrite constant is retained as evidence only:
 
 - value: `139`
 - unit: `g NO2-N/m3-media/d`
@@ -21,6 +22,13 @@ The exact zero-order nitrite constant is kept as evidence only:
 - kinetic order: zero order
 
 No ecosystem rate is calculated and no state is mutated.
+
+RATE-5L-R1 corrects two merge-readiness blockers identified by RATE-5M:
+
+1. the scientific evidence context is now identity-bearing in the candidate
+   canonical payload;
+2. temperature, dissolved oxygen, pH, and alkalinity from experiment 1 are no
+   longer used as kinetic-assay applicability guards.
 
 ## 2. Source identities
 
@@ -34,11 +42,10 @@ Associated SSRN preprint:
 - peer reviewed: `false`
 - exact parameter observed: `true`
 
-The preprint explicitly labels itself as not peer reviewed. In its results it
-reports zero-order nitrite kinetics of `139, 391, 458, and 479 g/m3/d` for
-plastic beads, ceramic beads, coconut shells, and polyurethane foam,
-respectively. Its methods define zero-order kinetics from concentration values
-above `1.0 mg N/L`.
+The preprint reports zero-order nitrite kinetics of `139, 391, 458, and 479
+g/m3/d` for plastic beads, ceramic beads, coconut shells, and polyurethane
+foam, respectively. Its methods define zero-order kinetics from concentration
+values above `1.0 mg N/L`.
 
 ### Peer-reviewed continuity source
 
@@ -51,135 +58,146 @@ Final publication:
 - DOI: `10.1016/j.jwpe.2024.106549`
 - peer reviewed: `true`
 - exact `139` parameter independently verified in final article body by
-  RATE-5L: `false`
+  RATE-5L/R1: `false`
 
-Therefore the final paper is represented only as publication-continuity
-evidence. It is not used to impersonate an exact reviewed numeric support.
+The final paper remains publication-continuity evidence only. It is not used
+to impersonate an exact reviewed numeric support.
 
-## 3. Source re-audit correction relative to RATE-5K planning
+## 3. Carrier identity correction preserved
 
-RATE-5K planning provisionally referenced `RK Bioelements Heavy` for the
-plastic carrier. RATE-5L re-audited the attached primary preprint before
-writing code.
-
-The source-supported description is:
+The available preprint supports:
 
 `15 mm commercial polypropylene plastic beads`
 
-The paper also shows and labels the material as `Plastic beads` in Figure 2.
-It does not establish the exact product identity `RK Bioelements Heavy` in the
-available source text or figure.
-
-RATE-5L therefore **does not** carry the provisional RK identity forward.
-Instead it freezes:
+It does not establish the exact product identity `RK Bioelements Heavy`.
+RATE-5L/R1 therefore freezes:
 
 `15_mm_commercial_polypropylene_plastic_beads`
 
-and tests that `RK_Bioelements_Heavy`, generic polypropylene media,
-polyurethane foam, and other carriers fail closed.
+and continues to reject RK/generic carrier substitution.
 
-This correction prevents cross-paper carrier identity stitching.
+## 4. Directly supported assay context
 
-## 4. Experimental context preserved
+The candidate preserves the following assay/context facts as canonical
+identity-bearing information:
 
-The evidence candidate preserves these bounded context facts:
-
-- freshwater RAS context;
-- twelve upflow biofilters with media fixed between perforated plates;
-- fixed-bed upflow interpretation;
-- `15 mm commercial polypropylene plastic beads`;
+- freshwater context;
+- fixed-bed upflow biofilters with media held between perforated plates;
+- exact source-supported plastic carrier description;
 - 20 L media filling per biofilter;
-- water velocity exactly `12 m/h`;
+- water velocity `12 m/h`;
 - water flow `1500 L/h`;
 - air flow `5.0 L/min`;
-- six-week startup with fish followed by kinetic tests during weeks 7-8;
-- nitrite spike around `5 mg/L` for the kinetic assay;
-- zero-order threshold strictly above `1.0 mg NO2-N/L`.
+- six-week startup with fish followed by weeks 7-8 without fish;
+- closed-loop performance tests;
+- nitrite spike approximately `5 mg NO2-N/L`;
+- zero-order threshold strictly `> 1.0 mg NO2-N/L`.
 
-The reported study-level RAS envelope is preserved conservatively as an
-applicability fence:
+The runtime evidence-context object contains only the directly supported
+matching dimensions used by RATE-5L/R1:
 
-- temperature: `15.0–16.8 °C`
-- dissolved oxygen: `9.2–10.8 mg/L`
-- pH: `7.0–7.4`
+- water type;
+- biofilter mode;
+- carrier identity;
+- water velocity;
+- nitrite concentration relative to the zero-order threshold;
+- source-specific maturity context.
 
-These ranges are not represented as universal biological tolerances and are
-not claimed to be exact kinetic-assay-specific bounds.
+## 5. RATE-5L-R1 environmental scope correction
 
-Alkalinity is retained only as context:
+The preprint states that the following ranges were measured biweekly during
+**experiment 1**:
 
-- mean: `125 mg/L as CaCO3`
-- SD: `8.6 mg/L as CaCO3`
-- hard guard: `false`
+- temperature: `15.0–16.8 °C`;
+- dissolved oxygen: `9.2–10.8 mg/L`;
+- pH: `7.0–7.4`.
 
-## 5. Implementation boundary
+It also reports experiment-1 alkalinity around:
 
-RATE-5L adds exactly four files:
+- mean `125 mg/L as CaCO3`;
+- SD `8.6 mg/L as CaCO3`.
 
-1. `src/ecobiome/simulation/mnyoro2024_nitrite_zero_order_evidence_candidate_v1.py`
-2. `tests/test_mnyoro2024_nitrite_zero_order_evidence_candidate_v1.py`
-3. `tests/fixtures/rate_models/mnyoro2024_nitrite_zero_order_evidence_candidate_v1.json`
-4. `docs/handoffs/PASSATION_ECOBIOME_G7A_RATE_5L_DORMANT_NITRITE_ZERO_ORDER_EVIDENCE_CANDIDATE_IMPLEMENTATION_V1.md`
+Before the later kinetic phase, fish were removed and approximately 90% of the
+system water was exchanged. The available RATE-5L artifact does not directly
+bind exact temperature, dissolved oxygen, pH, or alkalinity values to the
+closed-loop nitrite spike that produced the `139` parameter.
 
-No pre-existing source file is modified.
+RATE-5L-R1 therefore classifies these environmental values as:
 
-The implementation intentionally does **not** import or construct:
+`experiment_1_reference_environment`
 
-- `RateScientificSupportV1`
-- `RateParameterV1`
-- `RateModelDefinitionV1`
-- `RateEvaluationV1`
-- `EcosystemStateV1`
-- `MaterialBalance`
+with:
 
-The candidate exposes documentary parameter identity and evidence-context
-assessment only.
+`hard_guard = false`
 
-## 6. Epistemic fail-closed invariants
+They remain in the candidate canonical identity as documentary source context,
+but they cannot establish kinetic-assay applicability.
+
+## 6. Fail-closed applicability status
+
+RATE-5L previously allowed the positive status:
+
+`within_evidence_context`
+
+when all fences passed.
+
+RATE-5L-R1 removes that claim. A context matching every directly supported
+assay dimension now returns only:
+
+`assay_context_match_environment_unresolved`
+
+This means:
+
+- directly supported assay/context dimensions match;
+- exact kinetic-assay environmental binding remains unresolved;
+- no full applicability claim is made;
+- no numerical rate execution is authorized.
+
+A directly contradicted context still returns:
+
+`outside_evidence_context`
+
+with explicit blocking reason codes.
+
+## 7. Canonical scientific-context binding
+
+The candidate canonical payload now includes an `evidence_context` object with:
+
+- exact assay-context categorical identities;
+- exact `12 m/h` velocity;
+- strict zero-order threshold `> 1.0 mg NO2-N/L`;
+- maturity context;
+- explicit `unresolved_exact_kinetic_assay_environment` state;
+- experiment-1 reference T/DO/pH/alkalinity values marked non-guarding.
+
+Changing any of these scientific context dimensions changes the candidate
+canonical SHA-256.
+
+This closes the RATE-5M identity blocker where two different applicability
+contexts could previously share the same candidate identity.
+
+## 8. Epistemic fail-closed invariants
 
 The evidence bundle rejects all of the following:
 
 - marking the SSRN preprint as peer reviewed;
 - removing `exact_parameter_observed=True` from the preprint role;
-- claiming that the final publication directly exposes the exact `139`
-  parameter;
+- claiming that the final publication directly exposes the exact `139`;
 - changing the frozen preprint artifact SHA-256;
 - changing the final publication DOI;
 - assigning either source to the wrong role;
-- supplying a frozen final-body artifact SHA that RATE-5L does not possess.
+- supplying a final-body artifact SHA that RATE-5L/R1 does not possess.
 
-The candidate itself hardcodes:
+The candidate hardcodes:
 
-- `execution_authorized = false`
-- `production_authorized = false`
+- `execution_authorized = false`;
+- `production_authorized = false`.
 
 The numeric parameter is not constructor-configurable.
 
-## 7. Applicability behavior
+## 9. Explicitly absent capabilities
 
-The evidence-context assessment returns only:
-
-- `within_evidence_context`
-- `outside_evidence_context`
-
-It deliberately does not use the `RateApplicabilityResultV1` status
-`applicable`.
-
-Blocking fences include:
-
-- water type;
-- fixed-bed upflow reactor mode;
-- exact source-supported carrier description;
-- exact `12 m/h` study velocity;
-- nitrite strictly `> 1.0 mg NO2-N/L`;
-- reported temperature, dissolved-oxygen, and pH study envelope;
-- source-specific maturity context.
-
-No interpolation or portable carrier generalization is allowed.
-
-## 8. Explicitly absent capabilities
-
-RATE-5L contains no:
+RATE-5L/R1 contains no:
 
 - numerical ecosystem rate evaluation;
 - `rate_decimal` output;
@@ -193,44 +211,33 @@ RATE-5L contains no:
 - runtime policy mutation;
 - production activation.
 
-## 9. Validation and test matrix
+It does not import or construct:
 
-The dedicated test file covers:
+- `RateScientificSupportV1`;
+- `RateParameterV1`;
+- `RateModelDefinitionV1`;
+- `RateEvaluationV1`;
+- `EcosystemStateV1`;
+- `MaterialBalance`.
 
-- frozen fixture identities;
-- canonical SHA determinism;
-- parameter value/unit/basis identity sensitivity;
-- exact preprint SHA rejection on mismatch;
-- exact final DOI rejection on mismatch;
-- anti-escalation checks for preprint/final publication roles;
-- no hidden context defaults;
-- strict `>1.0 mg/L` zero-order threshold;
-- exact `12 m/h` hydraulic fence;
-- inclusive environmental envelope boundaries;
-- fail-closed carrier/reactor/maturity checks;
-- explicit rejection of `RK Bioelements Heavy` substitution;
-- absence of execution/integration fields;
-- absence of `evaluate_*` numerical rate callables;
-- absence of imports from generic RateModel contracts.
+## 10. R1 test additions
 
-A temporary isolated harness using the repository canonical serialization
-behavior executed the dedicated test file before the GitHub CI run:
+The dedicated tests now verify that:
 
-`34 passed`
+- candidate identity contains the canonical evidence context;
+- changing carrier, reactor mode, velocity, threshold, maturity, unresolved
+  environment state, or experiment-1 reference values changes candidate SHA;
+- T/DO/pH are absent from the runtime assay-context input;
+- experiment-1 T/DO/pH/alkalinity are explicitly non-guarding reference data;
+- a fully matching direct assay context still returns
+  `assay_context_match_environment_unresolved` rather than
+  `within_evidence_context`;
+- existing source identity, anti-escalation, carrier-substitution, and
+  no-execution protections remain enforced.
 
-GitHub Python CI subsequently validated the complete repository after the
-RATE-5L Ruff corrections:
+## 11. Control-plane statement
 
-- Ruff: `All checks passed!`
-- mypy: `Success: no issues found in 262 source files`
-- pytest: `735 passed, 2 skipped`
-
-The companion Frontend CI also completed successfully. The RATE-5L repository
-head therefore has green Python and frontend CI before human review.
-
-## 10. Control-plane statement
-
-RATE-5L does not touch the Scientific Foundation control plane.
+RATE-5L/R1 does not touch the Scientific Foundation control plane.
 
 Expected unchanged identities remain those frozen at RATE-5B:
 
@@ -241,31 +248,26 @@ Expected unchanged identities remain those frozen at RATE-5B:
 - runtime policy file SHA-256:
   `5f3a1afc0a9290882bb49e95e294786ba3be5af0ee8d7453141a5f184a2e64c5`
 
-Remote GitHub implementation cannot independently certify the user's local
-external pointer/policy files; local post-merge verification remains required.
+Remote GitHub work cannot independently certify the user's local external
+pointer/policy files; local post-merge verification remains required.
 
-## 11. Gate result
-
-Current state after source re-audit, implementation, and CI validation:
+## 12. Current gate result
 
 ```text
-ECOBIOME_G7A_RATE_5L
-DORMANT_NITRITE_ZERO_ORDER_EVIDENCE_CANDIDATE_IMPLEMENTATION_V1
+ECOBIOME_G7A_RATE_5L_R1
+SCIENTIFIC_CONTEXT_IDENTITY_AND_KINETIC_ASSAY_SCOPE_CORRECTION
 
 implementation = COMPLETE
-source_reaudit = PASS_WITH_CARRIER_IDENTITY_CORRECTION
-dedicated_isolated_tests = 34_PASS
-repository_ruff = PASS
-repository_mypy = PASS_262_SOURCE_FILES
-repository_pytest = 735_PASS_2_SKIPPED
-frontend_CI = PASS
-repository_CI = PASS
-human_review = PENDING
-merge_authorized = FALSE
-production_activation = FALSE
+canonical_context_binding = IMPLEMENTED
+kinetic_assay_environment_scope = CORRECTED_FAIL_CLOSED
+exact_139_preprint_parameter = UNCHANGED
+carrier_identity = SOURCE_SUPPORTED_PLASTIC_BEADS_ONLY
+numeric_rate_execution = ABSENT
 scientific_foundation_mutation = FALSE
 control_plane_mutation = FALSE
+merge_authorized = FALSE
+next_step = RATE_5M_REAUDIT_AFTER_CI
 ```
 
-RATE-5L is `PASS_IMPLEMENTED_CI_GREEN_PENDING_HUMAN_REVIEW`. Merge remains a
-separate explicit human decision.
+The PR must remain draft until the corrected head is green and RATE-5M is
+re-audited.
